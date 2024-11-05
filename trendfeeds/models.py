@@ -28,7 +28,7 @@ class Imagemnoticias(models.Model):
 
 class Categorianoticias(models.Model):
     noticia = models.OneToOneField(Noticias, on_delete=models.CASCADE)  
-    #O OneToOneField é para determinar que as imagens da quela determinada noticia so podem se relacionar a uma noticia, como uma foregein key com unique true
+    #O OneToOneField é para determinar que por exepmlo: as imagens da quela determinada noticia so podem se relacionar a uma noticia, como uma foregein key com unique true
 
     #O parâmetro on_delete é obrigatório para campos de relacionamento (ForeignKey, OneToOneField, e ManyToManyField) no Django. Ele define o que deve acontecer com o objeto relacionado se o objeto pai for deletado.
 
