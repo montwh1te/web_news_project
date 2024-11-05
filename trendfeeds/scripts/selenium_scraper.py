@@ -233,7 +233,7 @@ try:
        
         nome_arquivo = f"{titulo_formatado_semespaco}.html"
         # Define o nome do arquivo HTML e o conteúdo HTML
-        caminho_arquivo = os.path.join(templates, nome_arquivo)
+        caminho_arquivo = os.path.join("../templates", nome_arquivo)
         html_content = render_to_string(
             'modelo.html',{
             'title_text': title_text,
