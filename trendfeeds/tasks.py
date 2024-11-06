@@ -230,34 +230,11 @@ def coletar_noticias():
         
 def formatar_texto(arquivo_nome):
     
-    print(f"Recebendo título: {arquivo_nome}")
     nome_arquivo = arquivo_nome
-    
-    # Caminho para o arquivo HTML na pasta templates
     file_path = f'trendfeeds/templates/html/{nome_arquivo}.html'
     
-    # Verificação se o arquivo existe
-    if os.path.exists(file_path):
-        print(f"Arquivo encontrado: {file_path}")
-        with open(file_path, 'r', encoding='utf-8') as file:
-            p_content = file.read()
-    else:
-        print(f"Arquivo não encontrado: {file_path}")
-        return ""
-        
-    # Parsear o conteúdo HTML com BeautifulSoup
-    soup = BeautifulSoup(p_content, 'lxml')
-
-    # Busca a primeira tag <p> (já que só há uma)
-    p_tag = soup.find('p')
-
-    # Atribui ao text o conteúdo da tag <p>
-    if p_tag:
-        text = p_tag.get_text()
-        print(text)
-    else:
-        text = ""
-        print("Não foi encontrada nenhuma tag <p> no conteúdo.")
+    if verificar_caminho(arquivo_nome, file_path):
+        text = captar_tag(file_path)
 
     # Remove tags HTML (se existirem outras tags no conteúdo)
     text = re.sub(r'<[^>]+>', '', text)
@@ -270,5 +247,37 @@ def formatar_texto(arquivo_nome):
     # Retorna o texto como valor da função
     return text
 
+def verificar_caminho(arquivo_nome, file_path):
+    
+    print('-'*10,'VERIFICANDO A EXISTÊNCIA DO ARQUIVO','-'*10,'\n')
+    print(f"Recebendo título: {arquivo_nome}")
+    
+    # Verificação se o arquivo existe
+    if os.path.exists(file_path):
+        print(f"Arquivo encontrado: {file_path}\n")
+        return True
+    else:
+        print(f"Arquivo não encontrado: {file_path}\n")
+        return ""
+    
+def captar_tag(file_path):
+    
+    with open(file_path, 'r', encoding='utf-8') as file:
+            p_content = file.read()
+            print(f'Arquivo criado!({file_path})')
+    # Parsear o conteúdo HTML com BeautifulSoup
+    soup = BeautifulSoup(p_content, 'lxml')
+
+    # Busca a primeira tag <p> (já que só há uma)
+    p_tag = soup.find('p')
+
+    # Atribui ao text o conteúdo da tag <p>
+    if p_tag:
+        text = p_tag.get_text()
+    else:
+        text = ""
+        print("Não foi encontrada nenhuma tag <p> no conteúdo.")
+    return text
+    
 def iniciar_scheduler():
     pass
