@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    {% load static %}
+    {% load media %}
+    <link rel="stylesheet" href="{% static 'trendfeeds/css/styles.css' %}">
+</head>
+<body>
+    <header>
+        <!--- class navbar é para definir que é uma navbar -->
+
+        <!--- navbar-expand-lg não define o tamanho da navbar, mas controla a expansão dos itens do menu (itens do navbarNav) em telas grandes (lg, a partir de 992px). A navbar estará expandida em lg e maior, mas colapsada em telas menores.-->
+
+        <!--- navbar-light e bg-light se refere ao estilo da navbar, nvbar-light para as cores dos textos fiquerem pretos e bg-light para o  background ficar claro(branco) -->
+
+        <!--- navbar-custom é o que eu defino no css, sem bootstrap -->
+
+        <!--- d-flex é display flex e o justify content é isso mesmo(do d-flex) -->
+
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-custom d-flex justify-content-sm-around">
+
+            <!-- Esquerda: Nome do site e dropdown dos times -->
+            <div class="d-flex align-items-center">
+
+
+                <a class="navbar-brand p-2 nome-site" href="#">site noticias</a>
+
+                <!-- navbar-brand é para definir que é a 'logo' do site -->
+                
+                <!-- p-2 se refere ao padding, "p-2 - (by default) for classes that set the margin or padding to $spacer * .5" -->
+
+
+               
+            </div>
+
+            <!-- Centro: Itens do menu -->
+
+            <div class="d-flex justify-content-center" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                    
+                        <!-- nav-item para especificar que é um item da navbar -->
+    
+                        <!-- dropdown por conta do menu dropdwon de escolher os times -->
+    
+    
+                        <div class="nav-link dropdown-toggle d-flex align-items-center" id="dropdownTimes" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    
+                            <!-- nav-link ja da as funcionalidades de link, como por exemplo o hover e o activate -->
+    
+                            <!-- dropdown-toggle se refere a funcionalidade do usuario poder escolher entre os itens do dropdown -->
+    
+                            <!-- role="button" seria basicamente dizermos para o html tratar essa div como se fosse um botao, melhora a acessibilidade dos usuarios -->
+    
+                            <!-- data-toggle="dropdown" uma funcionalidade do bootstrap que ativa o dropdown quando ele é clicado() -->
+    
+                            <!-- aria-haspopup="true": Especifica que o elemento possui um submenu ou "popup" ao ser clicado, mas não ativa o dropdown em si; é um atributo de acessibilidade, útil para leitores de tela informarem que este item tem um menu associado. -->
+    
+                            <!-- aria-expanded="false" isso é para definirmos que quando abrirmos o site o dropdown como padrao estara fechado, e quando clicarmos ele sera aberto -->
+    
+    
+                            <img src="{% static 'trendfeeds/media/pngegg (5).png' %}" alt="Ícone do Time" style="width: 30px; height: 30px;">
+    
+    
+    
+                        </div>
+    
+    
+                        
+                        <div class="dropdown-menu p-3" aria-labelledby="dropdownTimes">
+    
+                            <!-- aria-labelledby: Identifica o elemento (ou elementos) que rotula o elemento atual. -->
+    
+                            <div class="d-flex flex-wrap">
+    
+                                <!-- Imagens dos times -->
+    
+                                <a class="dropdown-item p-2" href="#"><img src="{% static 'trendfeeds/media/pngegg (5).png' %}path/to/time1.png" alt="Time 1" style="width: 50px; height: 50px;"></a>
+    
+                                <a class="dropdown-item p-2" href="#"><img src="path/to/time2.png" alt="Time 2" style="width: 50px; height: 50px;"></a>
+    
+                                <a class="dropdown-item p-2" href="#"><img src="path/to/time3.png" alt="Time 3" style="width: 50px; height: 50px;"></a>
+    
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="#">Início</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Sobre</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Serviços</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Contato</a></li>
+
+                </ul>
+            </div>
+
+            <!-- Direita: Barra de pesquisa -->
+
+            <div class="d-flex align-items-center">
+                <form class="form-inline">
+
+                    <!-- form-inline basicamente para dizer que o from ficara na horizontal -->
+
+                    <input class="form-control mr-sm-2" type="search" placeholder="Pesquisar" aria-label="Pesquisar">
+
+                    <!-- form-control para manter o formulario responsivo basicamente -->
+
+                    <!-- mr-sm-2: 
+
+                        mr: Representa "margin-right", aplicando margem à direita do elemento.
+
+                        sm: Refere-se ao breakpoint "small" (pequeno), que em Bootstrap significa uma largura de tela mínima de 576 pixels. Isso quer dizer que a margem especificada será aplicada apenas quando a tela for igual ou maior a 576 pixels de largura.
+                        
+                        2: Define o valor da margem no sistema de escala de Bootstrap, que vai de 0 a 5. Cada número é equivalente a um múltiplo da variável base de espaçamento do Bootstrap (normalmente 0.25rem, então 2 é 0.5rem).
+                    -->
+                    
+
+                    <button class="btn my-2 my-sm-0" type="submit"><img src="pngwing.com (3).png" alt="lupa" style="width: 30px; height: 30px;"></button>
+
+
+                    <!-- m significa margin e y significa que é tanto para o top quanto para o bottom -->
+                    
+
+                </form>
+            </div>
+
+
+            <!-- mais direita: icone login -->
+
+            
+            <div class="d-flex align-items-center">
+                <button class="btn my-2 my-sm-0" type="submit"><img src="login.png" alt="lupa" style="width: 30px; height: 30px;"></button>
+            </div>
+
+
+        </nav>
+    </header>
+
+
+    <main class="d-flex container-fluid justify-content-center">
+        <div class="row d-flex flex-nowrap justify-content-center noticias-recentes-banner-principal">
+            
+            <div class= "col-6 col-md-3  noticia-mais-recente">
+                <!-- Conteúdo da notícia mais recente -->
+                <img class="img-fluid imagem-principal-banner" src="vini.jpg" alt="noticia-mais-recente" style="border-radius: 20px;">
+                <div class= "d-flex flex-column container-fluid justify-content-start descricao-noticia-mais-recente ">
+                    <p class="titulo-noticia-mais-recente">Com volta de Vinicius Junior, Brasil é convocado para enfrentar Venezuela e Uruguai</p>
+                    <p class="resumo-noticia-mais-recente">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+                </div>
+            </div>
+
+            <div class="d-flex flex-wrap container-fluid justify-content-center noticias-recentes-div">
+                <div class="col-6 col-md-3 noticia-recente">
+                    <!-- Conteúdo da segunda notícia -->
+                    <img class="img-fluid imagem-principal-banner" src="noticia2.jpg" alt="noticia-recente" style="border-radius: 20px;">
+                    <div class= "d-flex flex-wrap-column container-fluid justify-content-start descricao-noticia-mais-recente ">
+                        <p class="titulo-noticia-recente">Capitão, Gerson se reinventa e ganha espaço na Seleção</p>
+                    </div>
+                </div>
+        
+                <div class="col-6 col-md-3 noticia-recente">
+                    <!-- Conteúdo da terceira notícia -->
+                    <img class="img-fluid imagem-principal-banner" src="noticia3.jpg" alt="noticia-recente" style="border-radius: 20px;">
+                    <div class= "d-flex flex-wrap-column container-fluid justify-content-start descricao-noticia-mais-recente ">
+                        <p class="titulo-noticia-recente">EUA vencem Inglaterra e ficam com 3º lugar do Mundial Feminino Sub-17</p>
+                    </div>
+                </div>
+    
+                <div class="col-6 col-md-3 noticia-recente">
+                    <!-- Conteúdo da terceira notícia -->
+                    <img class="img-fluid imagem-principal-banner" src="noticia4.jpg" alt="noticia-recente" style="border-radius: 20px;">
+                    <div class= "d-flex flex-wrap-column container-fluid justify-content-start descricao-noticia-mais-recente ">
+                        <p class="titulo-noticia-recente">Com quatro clubes garantidos, Brasil é recordista no Mundial</p>
+                    </div>
+                </div>
+    
+                <div class="col-6 col-md-3 noticia-recente">
+                    <!-- Conteúdo da terceira notícia -->
+                    <img class="img-fluid imagem-principal-banner" src="noticia5.jpg" alt="noticia-recente" style="border-radius: 20px;">
+                    <div class= "d-flex flex-wrap-column container-fluid justify-content-start descricao-noticia-mais-recente ">
+                        <p class="titulo-noticia-recente">Garrincha elimina e encanta Chile</p>
+                    </div>
+                </div>
+            </div>
+
+
+    
+            
+    
+        </div>
+    </main>
+
+
+
+    <!-- JavaScript do Bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

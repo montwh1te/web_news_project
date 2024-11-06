@@ -19,7 +19,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 #Usamos no sleep para parar e processar o codigo
 
-from models import Noticias
+from trendfeeds.models import Noticias
 #Importa a classe notcia do models para salvar as informacoes nessa tabela(noticias)
 
 from django.template.loader import render_to_string
@@ -30,7 +30,10 @@ import os
 
 import django
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'trendfeeds.settings') 
+# Define o caminho para o arquivo de configurações
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'web_news.settings')
+
+# Configura o Django com base no arquivo settings.py
 django.setup()
 
 def coletar_noticias():
@@ -103,11 +106,19 @@ def coletar_noticias():
             
 
         
-            if "/video" or "/jogo" or "/playlist" in link_noticia:
+            if "/video" in link_noticia:
                 # Verifica se o link contém
                 print(f"Notícia {i+1} contém algo no link, pulando...")
                 continue 
                 # Pula a notícia se o link contiver 
+
+            if "/jogo" in link_noticia:
+                print(f"Notícia {i+1} contém algo no link, pulando...")
+                continue 
+
+            if "/playlist" in link_noticia:
+                print(f"Notícia {i+1} contém algo no link, pulando...")
+                continue 
         
             if link_noticia in processed_urls:
                 print(f"Notícia {i+1} já processada, pulando...")
@@ -157,20 +168,22 @@ def coletar_noticias():
         
             
             titulo_formatado = re.sub(r'[\\/*?:"<>|]', "", title_text)
-            content_text_formatado = re.sub(r'[\\/*?:"<>|✅]', "", content_text)
+            content_text_formatado = re.sub(r'[\\/*?:"<>|✅]+ [^\n]+', "", content_text)
+            content_text_formatado = re.sub(r'+ [^\n]+', "", content_text_formatado)
+            content_text_formatado = re.sub(r'Por Redação do ge — [^\n]*?(horas|minutos|dia)(?:[^a-zA-Z]|$)', "", content_text_formatado)
             # Formata o título e o conteúdo para criação do arquivo
 
             titulo_formatado_semespaco =  titulo_formatado.replace(" ", "_")
             # Tira os espacos e coloca _
-        
+
+
             nome_arquivo = f"{titulo_formatado_semespaco}.html"
             # Define o nome do arquivo HTML e o conteúdo HTML
-            caminho_arquivo = os.path.join("../templates", nome_arquivo)
-            html_content = render_to_string(
-                'modelo.html',{
+            caminho_arquivo = os.path.join('trendfeeds/templates/html', nome_arquivo)
+            html_content = render_to_string('html/modelo.html', {
                 'title_text': title_text,
                 'content_text': content_text_formatado
-                })
+            })
 
 
             with open(caminho_arquivo, "w", encoding="utf-8") as file:
