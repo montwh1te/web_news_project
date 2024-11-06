@@ -233,21 +233,19 @@ def formatar_texto(arquivo_nome):
     nome_arquivo = arquivo_nome
     file_path = f'trendfeeds/templates/html/{nome_arquivo}.html'
     
-    if verificar_caminho(arquivo_nome, file_path):
-        text = captar_tag(file_path)
+    if __verificar_caminho(arquivo_nome, file_path):
+        text = __captar_tag(file_path)
 
     # Remove tags HTML (se existirem outras tags no conteúdo)
     text = re.sub(r'<[^>]+>', '', text)
-    print(text)
 
     # Remove frases com "+" no início
     text = re.sub(r'\+ [^\n]+', '', text)  
-    print(text)
     
     # Retorna o texto como valor da função
     return text
 
-def verificar_caminho(arquivo_nome, file_path):
+def __verificar_caminho(arquivo_nome, file_path):
     
     print('-'*10,'VERIFICANDO A EXISTÊNCIA DO ARQUIVO','-'*10,'\n')
     print(f"Recebendo título: {arquivo_nome}")
@@ -255,12 +253,14 @@ def verificar_caminho(arquivo_nome, file_path):
     # Verificação se o arquivo existe
     if os.path.exists(file_path):
         print(f"Arquivo encontrado: {file_path}\n")
+        print('-'*30)
         return True
     else:
         print(f"Arquivo não encontrado: {file_path}\n")
+        print('-'*30)
         return ""
     
-def captar_tag(file_path):
+def __captar_tag(file_path):
     
     with open(file_path, 'r', encoding='utf-8') as file:
             p_content = file.read()
