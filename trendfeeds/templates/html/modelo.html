@@ -33,7 +33,7 @@
       {% block content %}
         <article class="noticia-detalhada">
             <h1 class="noticia-titulo mt-4">{{ title_text }}</h1>
-            <p class="noticia-conteudo">{{ content_text }}</p>
+            {{ content_text | safe }}
         </article>
       {% endblock content %}
     </main>
