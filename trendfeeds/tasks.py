@@ -19,6 +19,8 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 #Usamos no sleep para parar e processar o codigo
 
+from bs4 import BeautifulSoup
+
 from trendfeeds.models import Noticias
 #Importa a classe notcia do models para salvar as informacoes nessa tabela(noticias)
 
@@ -62,10 +64,10 @@ def coletar_noticias():
         #Acessa o url principal
 
         for i in range(10):  
-        # Limitar a 5 notícias
+        # Limitar a 10 notícias
     
             noticias = WebDriverWait(driver, 20).until(
-
+                # erro no catching CORRIGIR
                 EC.presence_of_all_elements_located((By.CLASS_NAME, 'feed-post-body'))
                 # Esse é um método utilizado com WebDriverWait para aguardar até que um elemento esteja presente no DOM, independentemente de estar visível.
 
@@ -131,7 +133,7 @@ def coletar_noticias():
 
             print(f"Notícia {i+1}: {titulo_noticia}")
             print(f"Link: {link_noticia}")
-            #printa o numero da ordem da noticia que ele pegou com o titulo e o link dela
+            # printa o numero da ordem da noticia que ele pegou com o titulo e o link dela
 
             driver.get(link_noticia)
             # Acessa a página da notícia
@@ -148,7 +150,7 @@ def coletar_noticias():
                 print(f"Erro ao capturar o título da notícia {i+1}, pulando...")
                 driver.get(url_principal)
                 time.sleep(2)
-                #Essa linha faz uma pausa fixa de 2 segundos antes de seguir para a próxima linha de código.
+                # Essa linha faz uma pausa fixa de 2 segundos antes de seguir para a próxima linha de código.
                 continue
 
         
@@ -162,26 +164,40 @@ def coletar_noticias():
                 print(f"Erro ao capturar o conteudo da notícia {i+1}, pulando...")
                 driver.get(url_principal)
                 time.sleep(2)
-                #Essa linha faz uma pausa fixa de 2 segundos antes de seguir para a próxima linha de código.
-                #Diferente do 'WebDriverWait(driver, 10)' que faz uma pausa direto no navegador
-                continue
+                # Essa linha faz uma pausa fixa de 2 segundos antes de seguir para a próxima linha de código.
+                # Diferente do 'WebDriverWait(driver, 10)' que faz uma pausa direto no navegador
+                continue 
         
+            titulo_formatado_semespaco = re.sub(r'[\\/*?:"<>|]', "", title_text)
+            titulo_formatado_semespaco = titulo_formatado_semespaco.replace(" ", "_")  # Já substitui os espaços por "_"
+
+            # Arquivo HTML criado para transformação do texto
+            nome_arquivo = f"{titulo_formatado_semespaco}.html"
+            caminho_arquivo = os.path.join('trendfeeds/templates/html', nome_arquivo)
+            html_content = f"""
+            <html>
+                <article class="noticia-detalhada">
+                    <h1 class="noticia-titulo mt-4">{title_text}</h1>
+                    <p class="noticia-conteudo">{content_text}</p>
+                </article>
+            </html>
+            """
             
+            # Salvar o conteúdo no arquivo HTML
+            with open(caminho_arquivo, 'w', encoding='utf-8') as file:
+                file.write(html_content)
+            print(f"Arquivo HTML criado com sucesso: {caminho_arquivo}")
+            
+           
             titulo_formatado = re.sub(r'[\\/*?:"<>|]', "", title_text)
-            content_text_formatado = re.sub(r'[\\/*?:"<>|✅]+ [^\n]+', "", content_text)
-            content_text_formatado = re.sub(r'+ [^\n]+', "", content_text_formatado)
-            content_text_formatado = re.sub(r'Por Redação do ge — [^\n]*?(horas|minutos|dia)(?:[^a-zA-Z]|$)', "", content_text_formatado)
-            # Formata o título e o conteúdo para criação do arquivo
+            content_text_formatado = formatar_texto(titulo_formatado_semespaco)
 
-            titulo_formatado_semespaco =  titulo_formatado.replace(" ", "_")
-            # Tira os espacos e coloca _
-
-
+            # Arquivo HTML final já com o texto transformado
             nome_arquivo = f"{titulo_formatado_semespaco}.html"
             # Define o nome do arquivo HTML e o conteúdo HTML
             caminho_arquivo = os.path.join('trendfeeds/templates/html', nome_arquivo)
             html_content = render_to_string('html/modelo.html', {
-                'title_text': title_text,
+                'title_text': titulo_formatado,
                 'content_text': content_text_formatado
             })
 
@@ -196,12 +212,12 @@ def coletar_noticias():
             
             print(f"Arquivo HTML criado com sucesso: {nome_arquivo}")
 
-
+            """
             # Salva no banco de dados
             Noticias.objects.create(
                 titulo=titulo_formatado,
                 descricao=content_text_formatado,
-            )
+            ) """
 
             
             driver.get(url_principal)
@@ -212,5 +228,47 @@ def coletar_noticias():
         driver.quit()
         #Fecha todas as janelas e encerra o processo do Chrome iniciado pelo Selenium, liberando os recursos do sistema.
         
+def formatar_texto(arquivo_nome):
+    
+    print(f"Recebendo título: {arquivo_nome}")
+    nome_arquivo = arquivo_nome
+    
+    # Caminho para o arquivo HTML na pasta templates
+    file_path = f'trendfeeds/templates/html/{nome_arquivo}.html'
+    
+    # Verificação se o arquivo existe
+    if os.path.exists(file_path):
+        print(f"Arquivo encontrado: {file_path}")
+        with open(file_path, 'r', encoding='utf-8') as file:
+            p_content = file.read()
+    else:
+        print(f"Arquivo não encontrado: {file_path}")
+        return ""
+        
+    # Parsear o conteúdo HTML com BeautifulSoup
+    soup = BeautifulSoup(p_content, 'lxml')
+
+    # Busca a primeira tag <p> (já que só há uma)
+    p_tag = soup.find('p')
+
+    # Atribui ao text o conteúdo da tag <p>
+    if p_tag:
+        text = p_tag.get_text()
+        print(text)
+    else:
+        text = ""
+        print("Não foi encontrada nenhuma tag <p> no conteúdo.")
+
+    # Remove tags HTML (se existirem outras tags no conteúdo)
+    text = re.sub(r'<[^>]+>', '', text)
+    print(text)
+
+    # Remove frases com "+" no início
+    text = re.sub(r'\+ [^\n]+', '', text)  
+    print(text)
+    
+    # Retorna o texto como valor da função
+    return text
+
 def iniciar_scheduler():
     pass
