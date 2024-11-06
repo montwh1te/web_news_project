@@ -168,9 +168,9 @@ def coletar_noticias():
         
             
             titulo_formatado = re.sub(r'[\\/*?:"<>|]', "", title_text)
-            content_text_formatado = re.sub(r'[\\/*?:"<>|✅]+ [^\n]+', "", content_text)
-            content_text_formatado = re.sub(r'+ [^\n]+', "", content_text_formatado)
-            content_text_formatado = re.sub(r'Por Redação do ge — [^\n]*?(horas|minutos|dia)(?:[^a-zA-Z]|$)', "", content_text_formatado)
+            content_text_formatado = re.sub(r'[\\/*?:"<>|✅]', "", content_text)
+            content_text_formatado = re.sub(r'\+ [^\n]+', "", content_text_formatado)
+            content_text_formatado = re.sub(r'Por Redação do ge — [^\n]*(horas|minutos|dia)(?:[^a-zA-Z]|$)', "", content_text_formatado)
             # Formata o título e o conteúdo para criação do arquivo
 
             titulo_formatado_semespaco =  titulo_formatado.replace(" ", "_")
