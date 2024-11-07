@@ -27,6 +27,9 @@ from trendfeeds.models import Noticias
 from django.template.loader import render_to_string
 #serve para o modelo.html saber oque colocar dentro do bloco, no caso(titulo e conteudo)
 
+from django.utils.safestring import mark_safe
+#marcação para forçar as tags no html em vez de str
+
 import os
 #os.path.join adapta o caminho corretamente.
 
@@ -224,6 +227,9 @@ def formatar_texto(arquivo_nome):
     # Remove frases com "+" no início
     text = re.sub(r'\+ [^\n]+', '', text)  
     
+    paragrafos = __dividir_por_pontos_finais(text, 3)
+    text = __criar_html_com_paragrafos(paragrafos)
+    
     # Retorna o texto como valor da função
     return text
 
@@ -260,6 +266,36 @@ def __captar_tag(file_path):
         text = ""
         print("Não foi encontrada nenhuma tag <p> no conteúdo.")
     return text
+    
+def __dividir_por_pontos_finais(texto, num_pontos_finais):
+    # Divide o texto com base nos pontos finais
+    sentencas = texto.split('.')
+    paragrafo_atual = ""
+    paragrafos = []
+    
+    for i in range(0, len(sentencas), num_pontos_finais):
+        # Adiciona num_pontos sentenças ao parágrafo atual, mas verifica o limite da lista
+        paragrafo_atual = '. '.join(sentencas[i:i + num_pontos_finais]).strip() + '.'
+        
+        # Adiciona o parágrafo ao resultado final, se não estiver vazio
+        if paragrafo_atual.strip():
+            paragrafos.append(paragrafo_atual)
+        paragrafo_atual = ""  # Reseta para o próximo parágrafo
+    
+    return paragrafos
+
+def __criar_html_com_paragrafos(paragrafos):
+    
+    html_content = ""
+    
+    # Cria as tags <p> para cada parágrafo
+    for paragrafo in paragrafos:
+        html_content += f"<p class='noticia-conteudo'>{paragrafo}</p>\n"
+        
+    # Quando for retornar ou renderizar o HTML no Django
+    html_content = mark_safe(html_content) 
+    
+    return html_content
     
 def iniciar_scheduler():
     pass
