@@ -62,21 +62,30 @@ def coletar_noticias():
     processed_urls = set()  
     # Conjunto para armazenar URLs processadas e evitar duplicidade
     
+    current_scroll_position = 0  # posicao inicial de rolagem
+    scroll_increment = 300  # incremento de posicao do scroll
+    contador = 0  # contador de noticias
+    
     try:
         
         driver.get(url_principal)  
-            #Acessa o url principal
+            # Acessa o url principal
             
-        for i in range(10):
-        
-            noticias = WebDriverWait(driver, 20).until(EC.presence_of_all_elements_located((By.CLASS_NAME, 'feed-post-body'))
-                # Esse é um método utilizado com WebDriverWait para aguardar até que um elemento esteja presente no DOM, independentemente de estar visível.
-
-                #Ele é aplicado ao nível do driver (navegador), o que significa que ele procura globalmente na página, sem restrição a um elemento específico.
-
-                #Esse método é útil para casos em que o carregamento do elemento pode demorar (como o título principal da página), e você quer garantir que ele esteja disponível antes de prosseguir.
+        for i in range(30):
+                  
+            criado = 'nao'
+            
+            time.sleep(2)
+            current_scroll_position += scroll_increment
+            driver.execute_script(f"window.scrollTo(0, {current_scroll_position});")
+            time.sleep(2)
+            
+            WebDriverWait(driver, 20).until(
+                EC.presence_of_element_located((By.CLASS_NAME, 'feed-post-body'))
             )
-            # Obtém as notícias da página
+            noticias = driver.find_elements(By.CLASS_NAME, 'feed-post-body')
+            
+            print(len(noticias))
             
             noticia = noticias[i]
             # Seleciona a notícia atual
@@ -188,6 +197,7 @@ def coletar_noticias():
             with open(caminho_arquivo, 'w', encoding='utf-8') as file:
                 file.write(html_content)
             print(f"Arquivo HTML criado com sucesso: {caminho_arquivo}")
+            criado = 'sim'
             
         
             titulo_formatado = re.sub(r'[\\/*?:"<>|]', "", title_text)
@@ -202,6 +212,12 @@ def coletar_noticias():
                 'title_text': titulo_formatado,
                 'content_text': content_text_formatado
             })
+            
+            if criado == 'sim':
+                contador += 1
+                
+            if contador == 8:
+                break
 
             with open(caminho_arquivo, "w", encoding="utf-8") as file:
                 file.write(html_content)
@@ -227,7 +243,8 @@ def coletar_noticias():
                 
     finally:
         driver.quit()
-        #Fecha todas as janelas e encerra o processo do Chrome iniciado pelo Selenium, liberando os recursos do sistema.
+        # Fecha todas as janelas e encerra o processo do Chrome iniciado pelo Selenium, liberando os recursos do sistema.
+    
         
 def formatar_texto(arquivo_nome):
     
