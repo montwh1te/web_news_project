@@ -1,7 +1,12 @@
 import re
 #O re permite encontrar padrões de texto complexos. Por exemplo, buscar números, palavras específicas, ou padrões de formatação (como e-mails, CEPs, etc.).Usamos la no titulo formatado
 
-from selenium import webdriver
+
+
+import requests
+
+
+from selenium import webdriver 
 #o webdriver, você ganha acesso a diferentes "drivers" específicos para cada navegador (como Chrome, Firefox, Edge, etc.) e pode controlar o navegador por meio de comandos no código.
 
 from selenium.webdriver.chrome.service import Service
@@ -158,6 +163,7 @@ def coletar_noticias():
                     # Pega a descricao da noticia
                 )
                 content_text = content_element.text
+                
             except:
                 print(f"Erro ao capturar o conteudo da notícia {i+1}, pulando...")
                 driver.get(url_principal)
@@ -165,13 +171,53 @@ def coletar_noticias():
                 # Essa linha faz uma pausa fixa de 2 segundos antes de seguir para a próxima linha de código.
                 # Diferente do 'WebDriverWait(driver, 10)' que faz uma pausa direto no navegador
                 continue 
-    
+
             titulo_formatado_semespaco = re.sub(r'[\\/*?:"<>|]', "", title_text)
-            titulo_formatado_semespaco = titulo_formatado_semespaco.replace(" ", "_")  # Já substitui os espaços por "_"
+            titulo_formatado_semespaco = titulo_formatado_semespaco.replace(" ", "_")  
+            # Já substitui os espaços por "_"
+
+
+            seletor_css_imagem = "amp-img"  
+            # Substitua pelo seletor correto
+        
+            diretorio_imagens = "./media/"
+            # Criar a pasta se ela não existir
+
+            os.makedirs(diretorio_imagens, exist_ok=True)
+            nome_arquivo_imagem = os.path.join(diretorio_imagens, f"{titulo_formatado_semespaco}.jpg")
+
+            try:
+                # Encontra todas as imagens com o seletor especificado
+                imagens_elementos = driver.find_elements(By.CSS_SELECTOR, seletor_css_imagem)
+                
+                # Itera sobre cada imagem encontrada
+                for i, imagem_elemento in enumerate(imagens_elementos):
+                    url_imagem = imagem_elemento.get_attribute("src")
+                    
+                    # Formatar o nome do arquivo para incluir o índice
+                    nome_arquivo_imagem = os.path.join(diretorio_imagens, f"{titulo_formatado_semespaco}_{i}.jpg")
+                    
+                    # Faz o download da imagem usando requests
+                    resposta_imagem = requests.get(url_imagem, stream=True)
+                    resposta_imagem.raise_for_status()
+
+                    # Salva a imagem no disco
+                    with open(nome_arquivo_imagem, 'wb') as file:
+                        for chunk in resposta_imagem.iter_content(1024):
+                            file.write(chunk)
+
+                    print(f"Imagem {i} salva como {nome_arquivo_imagem}")
+
+            except Exception as e:
+                print(f"Erro ao baixar as imagens: {e}")
+
+
+    
+            
 
             # Arquivo HTML criado para transformação do texto
             nome_arquivo = f"{titulo_formatado_semespaco}.html"
-            caminho_arquivo = os.path.join('trendfeeds/templates/html', nome_arquivo)
+            caminho_arquivo = os.path.join('trendfeeds/templates', nome_arquivo)
             html_content = f"""
             <html>
                 <article class="noticia-detalhada">
@@ -195,8 +241,8 @@ def coletar_noticias():
             nome_arquivo = f"{titulo_formatado_semespaco}.html"
             
             # Define o nome do arquivo HTML e o conteúdo HTML
-            caminho_arquivo = os.path.join('trendfeeds/templates/html', nome_arquivo)
-            html_content = render_to_string('html/modelo.html', {
+            caminho_arquivo = os.path.join('trendfeeds/templates', nome_arquivo)
+            html_content = render_to_string('templates/modelo.html', {
                 'title_text': titulo_formatado,
                 'content_text': content_text_formatado
             })

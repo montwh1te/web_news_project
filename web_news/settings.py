@@ -50,13 +50,10 @@ MIDDLEWARE = [
 ]
 
 # Configurações de template
-
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'trendfeeds', 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'trendfeeds', 'templates')],  # Ajuste para a pasta de templates
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -64,11 +61,12 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media',  
+
             ],
         },
     },
 ]
-
 
 # Timezone e Internacionalização
 LANGUAGE_CODE = 'en-us'
@@ -77,7 +75,24 @@ USE_I18N = True
 USE_TZ = True
 
 # Arquivos estáticos
+# Configuração do caminho para arquivos estáticos
 STATIC_URL = '/static/'
+
+# Diretórios adicionais onde o Django vai procurar arquivos estáticos
+STATICFILES_DIRS = [
+    BASE_DIR / "static",  # Diretório global de arquivos estáticos
+    
+    # Se os arquivos estáticos estão dentro de um app (exemplo: trendfeeds/static)
+    BASE_DIR / "trendfeeds/static",  
+]
+# Arquivos estáticos coletados para produção
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Pasta onde os arquivos estáticos serão coletados para produção
+
+# Arquivos de mídia
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Definição de chave primária
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+ROOT_URLCONF = 'web_news.urls'

@@ -6,7 +6,7 @@
     <title>Home</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     {% load static %}
-    <link rel="stylesheet" href="{% static 'trendfeeds/static/css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'trendfeeds/css/index.css' %}">
 </head>
 <body>
     <header>
@@ -63,7 +63,7 @@
                             <!-- aria-expanded="false" isso é para definirmos que quando abrirmos o site o dropdown como padrao estara fechado, e quando clicarmos ele sera aberto -->
     
     
-                            <img src="pngegg (5).png" alt="Ícone do Time" style="width: 30px; height: 30px;">
+                            <img src="/media/brasao.png" alt="Ícone do Time" style="width: 30px; height: 30px;">
     
     
     
@@ -79,11 +79,11 @@
     
                                 <!-- Imagens dos times -->
     
-                                <a class="dropdown-item p-2" href="#"><img src="media/time1.png" alt="Time 1" style="width: 50px; height: 50px;"></a>
+                                <a class="dropdown-item p-2" href="#"><img src="./media/time1.png" alt="Time 1" style="width: 50px; height: 50px;"></a>
     
-                                <a class="dropdown-item p-2" href="#"><img src="path/to/time2.png" alt="Time 2" style="width: 50px; height: 50px;"></a>
+                                <a class="dropdown-item p-2" href="#"><img src="/media/time2.png" alt="Time 2" style="width: 50px; height: 50px;"></a>
     
-                                <a class="dropdown-item p-2" href="#"><img src="path/to/time3.png" alt="Time 3" style="width: 50px; height: 50px;"></a>
+                                <a class="dropdown-item p-2" href="#"><img src="/media/time3.png" alt="Time 3" style="width: 50px; height: 50px;"></a>
     
                             </div>
                         </div>
@@ -117,7 +117,7 @@
                     -->
                     
 
-                    <button class="btn my-2 my-sm-0" type="submit"><img src="pngwing.com (3).png" alt="lupa" style="width: 30px; height: 30px;"></button>
+                    <button class="btn my-2 my-sm-0" type="submit"><img src="/media/pngwing.com (3).png" alt="lupa" style="width: 30px; height: 30px;"></button>
 
 
                     <!-- m significa margin e y significa que é tanto para o top quanto para o bottom -->
@@ -131,7 +131,7 @@
 
             
             <div class="d-flex align-items-center">
-                <button class="btn my-2 my-sm-0" type="submit"><img src="login.png" alt="lupa" style="width: 30px; height: 30px;"></button>
+                <button class="btn my-2 my-sm-0" type="submit"><img src="/media/login.png" alt="lupa" style="width: 30px; height: 30px;"></button>
             </div>
 
 
@@ -144,7 +144,7 @@
             
             <div class= "col-6 col-md-3  noticia-mais-recente">
                 <!-- Conteúdo da notícia mais recente -->
-                <img class="img-fluid imagem-principal-banner" src="vini.jpg" alt="noticia-mais-recente" style="border-radius: 20px;">
+                <img class="img-fluid imagem-principal-banner" src="/media/vini.jpg" alt="noticia-mais-recente" style="border-radius: 20px;">
                 <div class= "d-flex flex-column container-fluid justify-content-start descricao-noticia-mais-recente ">
                     <p class="titulo-noticia-mais-recente">Com volta de Vinicius Junior, Brasil é convocado para enfrentar Venezuela e Uruguai</p>
                     <p class="resumo-noticia-mais-recente">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
@@ -154,7 +154,7 @@
             <div class="d-flex flex-wrap container-fluid justify-content-center noticias-recentes-div">
                 <div class="col-6 col-md-3 noticia-recente">
                     <!-- Conteúdo da segunda notícia -->
-                    <img class="img-fluid imagem-principal-banner" src="noticia2.jpg" alt="noticia-recente" style="border-radius: 20px;">
+                    <img class="img-fluid imagem-principal-banner" src="/media/noticia2.jpg" alt="noticia-recente" style="border-radius: 20px;">
                     <div class= "d-flex flex-wrap-column container-fluid justify-content-start descricao-noticia-mais-recente ">
                         <p class="titulo-noticia-recente">Capitão, Gerson se reinventa e ganha espaço na Seleção</p>
                     </div>
@@ -162,7 +162,7 @@
         
                 <div class="col-6 col-md-3 noticia-recente">
                     <!-- Conteúdo da terceira notícia -->
-                    <img class="img-fluid imagem-principal-banner" src="noticia3.jpg" alt="noticia-recente" style="border-radius: 20px;">
+                    <img class="img-fluid imagem-principal-banner" src="/media/noticia3.jpg" alt="noticia-recente" style="border-radius: 20px;">
                     <div class= "d-flex flex-wrap-column container-fluid justify-content-start descricao-noticia-mais-recente ">
                         <p class="titulo-noticia-recente">EUA vencem Inglaterra e ficam com 3º lugar do Mundial Feminino Sub-17</p>
                     </div>
@@ -170,7 +170,7 @@
     
                 <div class="col-6 col-md-3 noticia-recente">
                     <!-- Conteúdo da terceira notícia -->
-                    <img class="img-fluid imagem-principal-banner" src="noticia4.jpg" alt="noticia-recente" style="border-radius: 20px;">
+                    <img class="img-fluid imagem-principal-banner" src="/media/noticia4.jpg" alt="noticia-recente" style="border-radius: 20px;">
                     <div class= "d-flex flex-wrap-column container-fluid justify-content-start descricao-noticia-mais-recente ">
                         <p class="titulo-noticia-recente">Com quatro clubes garantidos, Brasil é recordista no Mundial</p>
                     </div>
@@ -178,7 +178,7 @@
     
                 <div class="col-6 col-md-3 noticia-recente">
                     <!-- Conteúdo da terceira notícia -->
-                    <img class="img-fluid imagem-principal-banner" src="noticia5.jpg" alt="noticia-recente" style="border-radius: 20px;">
+                    <img class="img-fluid imagem-principal-banner" src="/media/noticia5.jpg" alt="noticia-recente" style="border-radius: 20px;">
                     <div class= "d-flex flex-wrap-column container-fluid justify-content-start descricao-noticia-mais-recente ">
                         <p class="titulo-noticia-recente">Garrincha elimina e encanta Chile</p>
                     </div>
