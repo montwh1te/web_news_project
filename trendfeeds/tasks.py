@@ -99,41 +99,29 @@ def coletar_noticias():
                 #find_element realiza a busca a partir de um elemento pai específico, ou seja, ele só pesquisa dentro do elemento noticia.
 
                 #Isso é útil quando você quer restringir a busca ao escopo de um elemento específico (neste caso, uma notícia específica).
-                print(f"Notícia {i + 1} marcada como Tempo Real, pulando...")
-                continue  
-                # Pula essa notícia se for "tempo real"
+                print(f"Notícia {i+1} marcada como Tempo Real, pulando...")
+                continue
             except:
-                pass 
-                # Se não tiver marcador, continua
+                    pass
 
-
-            
             try:
                 link_noticia = noticia.find_element(By.CLASS_NAME, 'feed-post-link').get_attribute('href')
                 titulo_noticia = noticia.find_element(By.CSS_SELECTOR, 'a.feed-post-link p').text.strip()
-                # Captura o link e o título da notícia
+                    # Captura o link e o título da notícia
             except:
-                print(f"Erro ao capturar link ou título da notícia {i + 1}, pulando...")
+                print(f"Erro ao capturar link ou título da notícia {i+1}, pulando...")
                 continue
-            
 
-        
-            if "/video" in link_noticia:
-                # Verifica se o link contém
-                print(f"Notícia {i + 1} contém algo no link, pulando...")
-                continue 
+           
+
+            if any(substring in link_noticia for substring in ["/video", "/jogo", "/playlist"]):
+                    # Verifica se o link contém algum desses paramatros
+                print(f"Notícia {i+1} contém um link que será ignorado.")
+                continue
                 # Pula a notícia se o link contiver 
 
-            if "/jogo" in link_noticia:
-                print(f"Notícia {i + 1} contém algo no link, pulando...")
-                continue 
-
-            if "/playlist" in link_noticia:
-                print(f"Notícia {i + 1} contém algo no link, pulando...")
-                continue 
-        
             if link_noticia in processed_urls:
-                print(f"Notícia {i + 1} já processada, pulando...")
+                print(f"Notícia {i+1} já processada, pulando...")
                 # Verifica se o link já foi processado
                 continue
             else:
@@ -141,14 +129,14 @@ def coletar_noticias():
                 # Adiciona o link ao conjunto de URLs processadas  
 
 
-            print(f"Notícia {i + 1}: {titulo_noticia}")
+            print(f"Notícia {i+1}: {titulo_noticia}")
             print(f"Link: {link_noticia}")
             # printa o numero da ordem da noticia que ele pegou com o titulo e o link dela
 
             driver.get(link_noticia)
             # Acessa a página da notícia
-        
-        
+    
+    
             try:
                 title_element = WebDriverWait(driver, 10).until(
                     EC.presence_of_element_located((By.CLASS_NAME, 'content-head__title'))
@@ -157,7 +145,7 @@ def coletar_noticias():
                 title_text = title_element.text
                 # Pega somente o texto do titulo
             except:
-                print(f"Erro ao capturar o título da notícia {i + 1}, pulando...")
+                print(f"Erro ao capturar o título da notícia {i+1}, pulando...")
                 driver.get(url_principal)
                 time.sleep(2)
                 # Essa linha faz uma pausa fixa de 2 segundos antes de seguir para a próxima linha de código.
@@ -171,13 +159,13 @@ def coletar_noticias():
                 )
                 content_text = content_element.text
             except:
-                print(f"Erro ao capturar o conteudo da notícia {i + 1}, pulando...")
+                print(f"Erro ao capturar o conteudo da notícia {i+1}, pulando...")
                 driver.get(url_principal)
                 time.sleep(2)
                 # Essa linha faz uma pausa fixa de 2 segundos antes de seguir para a próxima linha de código.
                 # Diferente do 'WebDriverWait(driver, 10)' que faz uma pausa direto no navegador
                 continue 
-        
+    
             titulo_formatado_semespaco = re.sub(r'[\\/*?:"<>|]', "", title_text)
             titulo_formatado_semespaco = titulo_formatado_semespaco.replace(" ", "_")  # Já substitui os espaços por "_"
 
@@ -236,11 +224,11 @@ def coletar_noticias():
                 descricao=content_text_formatado,
             ) """
 
-            
+        
             driver.get(url_principal)
             time.sleep(2)
             # Retorna à página principal e aguarda o carregamento
-                
+    
     finally:
         driver.quit()
         # Fecha todas as janelas e encerra o processo do Chrome iniciado pelo Selenium, liberando os recursos do sistema.
