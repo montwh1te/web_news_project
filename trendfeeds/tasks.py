@@ -52,6 +52,7 @@ django.setup()
 # Inicializa o Django, tornando disponíveis suas funcionalidades para o script atual.
 
 def coletar_noticias():
+    
     service = Service('')  
     # Configura o Service para especificar o caminho do driver do Chrome.
 
@@ -311,73 +312,92 @@ def formatar_texto(arquivo_nome):
     paragrafos = __dividir_por_pontos_finais(text, 3)
     # Divide o texto em parágrafos de tamanho controlado
     
-    
     text = __criar_html_com_paragrafos(paragrafos)
     # Converte os parágrafos formatados em HTML com tags <p>
-    
-    return text
 
+    return text
 
 
 
 
 def __verificar_caminho(arquivo_nome, file_path):
-    
+   
     print('-'*10,'VERIFICANDO A EXISTÊNCIA DO ARQUIVO','-'*10,'\n')
+    # Exibe uma mensagem de verificação do arquivo
     print(f"Recebendo título: {arquivo_nome}")
     
-    # Verificação se o arquivo existe
     if os.path.exists(file_path):
+        # Verifica se o arquivo existe no caminho especificado
         print(f"Arquivo encontrado: {file_path}\n")
         print('-'*30)
-        return True
+        return True  
+        # Retorna True se o arquivo existir
     else:
         print(f"Arquivo não encontrado: {file_path}\n")
         print('-'*30)
-        return ""
-    
+        return ""  
+        # Retorna uma string vazia se o arquivo não existir
+
 
 
 
 def __captar_tag(file_path):
-    text = ""  # Valor padrão caso não encontre a tag <p>
+   
+    text = ""
+    # Define uma string vazia para armazenar o conteúdo da tag <p>
+    
     with open(file_path, 'r', encoding='utf-8') as file:
-        p_content = file.read()
-        print(f'Arquivo criado!({file_path})')
+        # Abre o arquivo HTML para leitura
+        p_content = file.read()  
+        # Lê o conteúdo do arquivo
+        print(f'Arquivo criado!({file_path})')  
+        # Indica que o arquivo foi lido
         
-    # Parsear o conteúdo HTML com BeautifulSoup
     soup = BeautifulSoup(p_content, 'lxml')
+    # Usa BeautifulSoup para analisar o conteúdo HTML
 
-    # Busca a primeira tag <p> (já que só há uma)
     p_tag = soup.find('p')
+    # Busca a primeira tag <p> no HTML
 
-    # Atribui ao text o conteúdo da tag <p> se a tag for encontrada
     if p_tag:
-        text = p_tag.get_text()
+        # Se a tag <p> foi encontrada, armazena o texto
+        text = p_tag.get_text()  
+        # Extrai o texto da tag <p>
     else:
-        print("Não foi encontrada nenhuma tag <p> no conteúdo.")
-        
-    return text
+        print("Não foi encontrada nenhuma tag <p> no conteúdo.")  
+        # Indica que a tag <p> está ausente
+
+    return text  
+    # Retorna o texto extraído
 
 
 
 
 def __dividir_por_pontos_finais(texto, num_pontos_finais):
-    # Divide o texto com base nos pontos finais
+
     sentencas = texto.split('.')
-    paragrafo_atual = ""
-    paragrafos = []
+    # Divide o texto em sentenças com base nos pontos finais (.)
+    paragrafo_atual = ""  
+    # Armazena as sentenças temporárias para formar parágrafos
+    paragrafos = []  
+    # Lista que armazenará parágrafos completos
+    
     
     for i in range(0, len(sentencas), num_pontos_finais):
-        # Adiciona num_pontos sentenças ao parágrafo atual, mas verifica o limite da lista
-        paragrafo_atual = '. '.join(sentencas[i:i + num_pontos_finais]).strip() + '.'
+        # Itera através das sentenças agrupando-as em parágrafos
         
-        # Adiciona o parágrafo ao resultado final, se não estiver vazio
+        paragrafo_atual = '. '.join(sentencas[i:i + num_pontos_finais]).strip() + '.'
+        # Junta as sentenças no limite especificado (num_pontos_finais)
+        
         if paragrafo_atual.strip():
+            # Adiciona o parágrafo formatado à lista final 
             paragrafos.append(paragrafo_atual)
-        paragrafo_atual = ""  # Reseta para o próximo parágrafo
+             # Ignora parágrafos vazios
+        paragrafo_atual = ""
+        # Reseta para o próximo parágrafo  
     
-    return paragrafos
+    return paragrafos 
+    # Retorna a lista de parágrafos
 
 
 
@@ -385,15 +405,18 @@ def __dividir_por_pontos_finais(texto, num_pontos_finais):
 def __criar_html_com_paragrafos(paragrafos):
     
     html_content = ""
+    # Inicializa uma string para armazenar o HTML final
     
-    # Cria as tags <p> para cada parágrafo
     for paragrafo in paragrafos:
+        # Itera sobre cada parágrafo e insere tags <p>
         html_content += f"<p class='noticia-conteudo'>{paragrafo}</p>\n"
         
-    # Quando for retornar ou renderizar o HTML no Django
-    html_content = mark_safe(html_content) 
+    html_content = mark_safe(html_content)
+    # Marca o conteúdo como seguro para renderização em HTML no Django  
+    # Evita a conversão de tags HTML em texto plano
     
-    return html_content
+    return html_content  
+    # Retorna o conteúdo HTML formatado
     
 
 
