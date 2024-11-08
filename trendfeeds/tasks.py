@@ -71,7 +71,7 @@ def coletar_noticias():
     current_scroll_position = 0  
     # Variável que rastreia a posição atual de rolagem na página.
 
-    scroll_increment = 300  
+    scroll_increment = 550  
     # Define a quantidade de pixels para rolar a cada incremento.
 
     contador = 0  
@@ -253,7 +253,7 @@ def coletar_noticias():
             # Marca a notícia como criada.
 
             titulo_formatado = re.sub(r'[\\/*?:"<>|]', "", title_text)
-            content_text_formatado = formatar_texto(titulo_formatado_semespaco)
+            content_text_formatado = formatar_texto(titulo_formatado_semespaco, imagens_elementos, titulo_formatado_semespaco)
             # Formata o título e o conteúdo da notícia para exibição.
 
             caminho_arquivo = os.path.join('trendfeeds/templates', nome_arquivo)
@@ -286,7 +286,7 @@ def coletar_noticias():
 
 
 
-def formatar_texto(arquivo_nome):
+def formatar_texto(arquivo_nome, imagens_elementos, titulo_formatado_semespaco):
    
     nome_arquivo = arquivo_nome
     file_path = f'trendfeeds/templates/{nome_arquivo}.html'
@@ -303,11 +303,35 @@ def formatar_texto(arquivo_nome):
     if text: 
         # Remove tags HTML e outras formatações indesejadas
         # Só executa se 'text' não for vazio
-        text = re.sub(r'<[^>]+>', '', text) 
+        text = re.sub(r'<[^>]+>', '', text)
         # Remove todas as tags HTML presentes
+            
+        text = re.sub(r'\+ [^\n]+', '', text)  
+        # Remove frases que começam com "+"
+        
+        # Remove frases que começam com qualquer emoji
+        emoji_pattern = re.compile(
+            r'^[\U0001F600-\U0001F64F]'  # Emojis de carinhas
+            r'|^[\U0001F300-\U0001F5FF]'  # Símbolos e pictogramas diversos
+            r'|^[\U0001F680-\U0001F6FF]'  # Símbolos de transporte e mapas
+            r'|^[\U0001F700-\U0001F77F]'  # Símbolos alquímicos
+            r'|^[\U0001F780-\U0001F7FF]'  # Símbolos geométricos adicionais
+            r'|^[\U0001F800-\U0001F8FF]'  # Símbolos de seta suplementares
+            r'|^[\U0001F900-\U0001F9FF]'  # Emojis de mão, gestos e pessoas
+            r'|^[\U0001FA00-\U0001FA6F]'  # Objetos variados
+            r'|^[\U0001FA70-\U0001FAFF]'  # Emojis de símbolos adicionais
+            r'|^[\U00002700-\U000027BF]'  # Dingbats
+            r'|^[\U0001F1E0-\U0001F1FF]'  # Bandeiras de países
+            , flags=re.MULTILINE
+        )
 
-    text = re.sub(r'\+ [^\n]+', '', text)  
-    # Remove frases que começam com "+"
+        # Aplica o padrão ao texto para remover linhas que começam com qualquer emoji
+        text = emoji_pattern.sub('', text)
+        
+        text = re.sub(r'^Veja.*também$', '', text, flags=re.MULTILINE)
+        # Remove frases que começam com "Veja" e terminam com "também"
+    
+    text = __adicionar_imagens(text, imagens_elementos, titulo_formatado_semespaco)
 
     paragrafos = __dividir_por_pontos_finais(text, 3)
     # Divide o texto em parágrafos de tamanho controlado
@@ -375,6 +399,11 @@ def __captar_tag(file_path):
 
 def __dividir_por_pontos_finais(texto, num_pontos_finais):
 
+    img_tags = re.findall(r'<img.*?>', texto)
+    # Substitui as tags <img> temporariamente por um marcador único sem pontos.
+    for i, tag in enumerate(img_tags):
+        texto = texto.replace(tag, f"[[IMG_TAG_{i}]]")
+
     sentencas = texto.split('.')
     # Divide o texto em sentenças com base nos pontos finais (.)
     paragrafo_atual = ""  
@@ -382,20 +411,29 @@ def __dividir_por_pontos_finais(texto, num_pontos_finais):
     paragrafos = []  
     # Lista que armazenará parágrafos completos
     
-    
     for i in range(0, len(sentencas), num_pontos_finais):
-        # Itera através das sentenças agrupando-as em parágrafos
+    # Itera através das sentenças agrupando-as em parágrafos
         
         paragrafo_atual = '. '.join(sentencas[i:i + num_pontos_finais]).strip() + '.'
         # Junta as sentenças no limite especificado (num_pontos_finais)
         
-        if paragrafo_atual.strip():
-            # Adiciona o parágrafo formatado à lista final 
+        if "Foto:" in paragrafo_atual:
+            paragrafos.append(paragrafo_atual)  # Adiciona o parágrafo
+            paragrafo_atual = ""  # Reseta para o próximo parágrafo
+        elif paragrafo_atual.strip():
+            # Adiciona o parágrafo formatado à lista final
             paragrafos.append(paragrafo_atual)
-             # Ignora parágrafos vazios
+             
         paragrafo_atual = ""
         # Reseta para o próximo parágrafo  
-    
+        
+    # Junta os parágrafos de volta em uma string
+    for i, tag in enumerate(img_tags):
+        paragrafos = [paragrafo.replace(f"[[IMG_TAG_{i}]]", tag) for paragrafo in paragrafos]
+    # Restaura as tags <img> substituindo os marcadores originais.
+
+
+        
     return paragrafos 
     # Retorna a lista de parágrafos
 
@@ -418,6 +456,29 @@ def __criar_html_com_paragrafos(paragrafos):
     return html_content  
     # Retorna o conteúdo HTML formatado
     
+    
+def __adicionar_imagens(text, image_names, title):
+    lines = text.split('\n')
+    new_text = []
+    image_index = 0
+
+    # ARRUMAR AQUI DESCRICAO DE IMAGENS
+
+    for line in lines:
+        # Se encontrar uma linha com "Foto:", substitui a linha de forma a incluir a tag <img> dentro da mesma <p>
+        if "Foto:" in line and image_index < len(image_names):
+            # Tag <img> dentro da mesma <p> que a descrição
+            img_tag = f'<div class="div-imagem"><img class="noticia-imagem" src="../media/{title}_{image_index}.jpg"></div>'
+            new_line = f"{img_tag}{line}"
+            new_text.append(new_line)
+            image_index += 1
+        else:
+            new_text.append(line)  # Adiciona as linhas que não contêm "Foto:"
+            
+    final_text = '\n'.join(new_text)
+    # Junta todas as linhas de volta em uma única string
+    
+    return final_text
 
 
 
