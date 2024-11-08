@@ -299,11 +299,11 @@ def formatar_texto(arquivo_nome):
         # Remove tags HTML (se existirem outras tags no conteúdo)
         text = re.sub(r'<[^>]+>', '', text)
 
-        # Remove frases com "+" no início
-        text = re.sub(r'\+ [^\n]+', '', text)
-        
-        paragrafos = __dividir_por_pontos_finais(text, 3)
-        text = __criar_html_com_paragrafos(paragrafos)
+    # Remove frases com "+" no início
+    text = re.sub(r'\+ [^\n]+', '', text)  
+    
+    paragrafos = __dividir_por_pontos_finais(text, 3)
+    text = __criar_html_com_paragrafos(paragrafos)
     
     return text
 
