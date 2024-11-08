@@ -172,18 +172,52 @@ def coletar_noticias():
                 continue
 
             try:
+                # Aguarda e coleta o conteúdo principal da notícia
                 content_element = WebDriverWait(driver, 10).until(
                     EC.presence_of_element_located((By.CLASS_NAME, 'mc-body'))
                 )
-                # Aguarda e coleta o conteúdo principal da notícia.
                 content_text = content_element.text
+
+                # Lista das classes a serem removidas do conteúdo principal
+                classes_para_remover = [
+                    'content-unordered-list', 
+                    'content-publication-data__from', 
+                    'next-article__wrapper-header-title',
+                    'js-next-article-desktop-link', 
+                    'glbComentarios-initCommentButton', 
+                    'shadow-video-flow-video-infocategory',
+                    'visually-hidden', 
+                    'content-votetitle', 
+                    'content-vote__row', 
+                    'shadow-video-flow-video-info__title',
+                    'ellipsis-overflowing-child', 
+                    'shadow-video-flow-video-infoissued', 
+                    'entitieslist-itemLink',
+                    'content-publication-data__updated'
+
+                ]
+
+                
+                for class_name in classes_para_remover:
+                    try:
+                        elemento_para_remover = content_element.find_element(By.CLASS_NAME, class_name)
+                        # Itera sobre cada classe e tenta remover o texto correspondente, se encontrado
+                        content_text = content_text.replace(elemento_para_remover.text, "")
+                    except:
+                        pass  
+                    # Continua se o elemento não for encontrado
+                    
+                try:
+                    elemento_para_remover = content_element.find_element(By.CSS_SELECTOR, "time")
+                except:
+                    pass
             except:
-                print(f"Erro ao capturar o conteudo da notícia {i+1}, pulando...")
-                # Exibe mensagem de erro caso o conteúdo não seja encontrado.
+                print(f"Erro ao capturar o conteúdo da notícia {i+1}, pulando...")
                 driver.get(url_principal)
-                # Retorna à página principal.
                 time.sleep(2)
-                continue 
+                continue
+
+           
 
             titulo_formatado_semespaco = re.sub(r'[\\/*?:"<>|]', "", title_text).replace(" ", "_")
             # Formata o título removendo caracteres especiais e substituindo espaços por "_".
