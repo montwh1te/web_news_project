@@ -286,26 +286,37 @@ def coletar_noticias():
 
 
 def formatar_texto(arquivo_nome):
+   
     nome_arquivo = arquivo_nome
-    file_path = f'trendfeeds/templates/html/{nome_arquivo}.html'
+    file_path = f'trendfeeds/templates/{nome_arquivo}.html'
+     # Define o nome do arquivo e o caminho para buscá-lo
     
     if __verificar_caminho(arquivo_nome, file_path):
-        text = __captar_tag(file_path)  # Captura o conteúdo da tag <p>
+         # Verifica se o arquivo existe e captura o conteúdo se disponível
+        text = __captar_tag(file_path)  
+        # Captura o conteúdo da tag <p> no arquivo HTML
     else:
-        text = ""  # Define um valor padrão caso o arquivo não seja encontrado
+        text = ""  
+        # Define o texto como vazio caso o arquivo não seja encontrado
 
-    # Verifica se 'text' está vazio antes de aplicar as operações de substituição
-    if text:
-        # Remove tags HTML (se existirem outras tags no conteúdo)
-        text = re.sub(r'<[^>]+>', '', text)
+    if text: 
+        # Remove tags HTML e outras formatações indesejadas
+        # Só executa se 'text' não for vazio
+        text = re.sub(r'<[^>]+>', '', text) 
+        # Remove todas as tags HTML presentes
 
-    # Remove frases com "+" no início
     text = re.sub(r'\+ [^\n]+', '', text)  
-    
+    # Remove frases que começam com "+"
+
     paragrafos = __dividir_por_pontos_finais(text, 3)
+    # Divide o texto em parágrafos de tamanho controlado
+    
+    
     text = __criar_html_com_paragrafos(paragrafos)
+    # Converte os parágrafos formatados em HTML com tags <p>
     
     return text
+
 
 
 
