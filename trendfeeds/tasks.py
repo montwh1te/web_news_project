@@ -1,223 +1,238 @@
 import re
-#O re permite encontrar padrões de texto complexos. Por exemplo, buscar números, palavras específicas, ou padrões de formatação (como e-mails, CEPs, etc.).Usamos la no titulo formatado
-
-
+# O módulo 're' é usado para trabalhar com expressões regulares em Python, permitindo encontrar e manipular padrões específicos no texto.
 
 import requests
-
+# O módulo 'requests' é utilizado para realizar requisições HTTP, permitindo que o código baixe imagens e conteúdo da web.
 
 from selenium import webdriver 
-#o webdriver, você ganha acesso a diferentes "drivers" específicos para cada navegador (como Chrome, Firefox, Edge, etc.) e pode controlar o navegador por meio de comandos no código.
+# Importa o webdriver do Selenium, que permite automatizar o controle de navegadores da web, como o Chrome e Firefox.
 
 from selenium.webdriver.chrome.service import Service
-#Service para definir o caminho do driver do chrome
+# Service é usado para especificar o caminho do driver do navegador (Chrome neste caso) para controlar o Chrome.
 
 from selenium.webdriver.common.by import By
-#O by é usado quando vamos procurar o elemento html pela class, id...
+# O 'By' é uma classe que permite localizar elementos na página web com diferentes métodos, como By.CLASS_NAME, By.ID, etc.
 
 from selenium.webdriver.support.ui import WebDriverWait
-#O WebDriverWait é usado para dizer quanto tempo ele deve esperar para fazer determinada acao
+# WebDriverWait é uma função que permite definir o tempo máximo que o Selenium deve aguardar para que um determinado elemento apareça.
 
 from selenium.webdriver.support import expected_conditions as EC
-#EC verificar se tal elemento esta presente no dom
+# EC (expected_conditions) contém métodos para verificar a presença ou visibilidade de elementos no DOM, como EC.presence_of_element_located.
 
 import time
-#Usamos no sleep para parar e processar o codigo
+# O módulo 'time' oferece funções relacionadas a tempo, como 'sleep', que permite pausas no código por um tempo especificado.
 
 from bs4 import BeautifulSoup
+# BeautifulSoup é uma biblioteca para análise de HTML, usada aqui para facilitar a extração de dados de arquivos HTML.
 
 from trendfeeds.models import Noticias
-#Importa a classe notcia do models para salvar as informacoes nessa tabela(noticias)
+# Importa a classe 'Noticias' do models do Django, o que permite salvar notícias em uma tabela do banco de dados.
 
 from django.template.loader import render_to_string
-#serve para o modelo.html saber oque colocar dentro do bloco, no caso(titulo e conteudo)
+# render_to_string é usado para renderizar templates do Django em uma string HTML, facilitando a geração de conteúdo dinâmico.
 
 from django.utils.safestring import mark_safe
-#marcação para forçar as tags no html em vez de str
+# mark_safe é usado para garantir que uma string seja tratada como HTML, evitando a conversão de tags em texto.
+# ex: "<p>Esta é uma notícia <b>importante</b>.</p>"
+# viraria com o mark_safe:  "&lt;p&gt;Esta é uma notícia &lt;b&gt;importante&lt;/b&gt;.&lt;/p&gt;"
 
 import os
-#os.path.join adapta o caminho corretamente.
+# O módulo 'os' oferece funções para interagir com o sistema operacional, como 'os.path.join' para manipulação de caminhos de arquivos.
 
 import django
+# O módulo 'django' é necessário para configurar o ambiente do Django fora do servidor padrão, permitindo manipulação de modelos e templates.
 
-# Define o caminho para o arquivo de configurações
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'web_news.settings')
+# DJANGO_SETTINGS_MODULE = Define o caminho para o arquivo de configurações
+# web_news.settings = Configura o Django para que ele use as configurações especificadas no arquivo 'web_news.settings'.
+#DJANGO_SETTINGS_MODULE é o nome da variável de ambiente que o Django usa para localizar o arquivo de configurações do projeto. Quando você executa comandos Django (como python manage.py runserver), essa variável já está configurada. No entanto, para scripts independentes, você precisa configurá-la manualmente.
 
-# Configura o Django com base no arquivo settings.py
 django.setup()
+# Configura o Django com base no arquivo settings.py
+# Inicializa o Django, tornando disponíveis suas funcionalidades para o script atual.
 
 def coletar_noticias():
-    
     service = Service('')  
-    # caminho driver do google
+    # Configura o Service para especificar o caminho do driver do Chrome.
 
     options = webdriver.ChromeOptions()
-    # Esta linha cria uma instância de ChromeOptions, que permite definir opções personalizadas para o navegador Chrome.
-
-    #       options.add_argument("--headless")                  # Executa o Chrome sem abrir a interface
-    #       options.add_argument("--disable-gpu")               # Desabilita o uso de GPU (recomendado para alguns sistemas)
-    #       options.add_argument("--window-size=1920,1080")     # Define o tamanho da janela
+    # Instancia as opções do navegador Chrome, permitindo configurações adicionais.
 
     driver = webdriver.Chrome(service=service, options=options)
-    #Função: Esta linha inicializa o navegador Chrome, aplicando as configurações definidas em service e options.
+    # Inicializa o navegador Chrome com o Service e opções especificadas, abrindo o navegador para navegação automatizada.
 
     url_principal = 'https://ge.globo.com/'  
-    # URL da página principal do GE
+    # Define a URL da página principal do GE (Globo Esporte), onde as notícias serão coletadas.
 
     processed_urls = set()  
-    # Conjunto para armazenar URLs processadas e evitar duplicidade
-    
-    current_scroll_position = 0  # posicao inicial de rolagem
-    scroll_increment = 300  # incremento de posicao do scroll
-    contador = 0  # contador de noticias
-    
+    # Define um conjunto vazio para armazenar URLs já processadas, evitando duplicatas.
+
+    current_scroll_position = 0  
+    # Variável que rastreia a posição atual de rolagem na página.
+
+    scroll_increment = 300  
+    # Define a quantidade de pixels para rolar a cada incremento.
+
+    contador = 0  
+    # Contador para rastrear o número de notícias processadas.
+
     try:
-        
         driver.get(url_principal)  
-            # Acessa o url principal
+        # Acessa a página inicial do GE no navegador.
+
+        for i in range(30):  
+            # Limita o loop para processar até 30 notícias, rolando a página quando necessário.
             
-        for i in range(30):
-                  
-            criado = 'nao'
-            
+            criado = 'nao'  
+            # Marca se um arquivo foi criado para controle no contador.
+
             time.sleep(2)
+            # Pausa o código por 2 segundos para permitir o carregamento da página.
+
             current_scroll_position += scroll_increment
+            # Incrementa a posição atual de rolagem pela quantidade especificada em scroll_increment.
+
             driver.execute_script(f"window.scrollTo(0, {current_scroll_position});")
+            # Rola a página para baixo para carregar mais conteúdo.
+
             time.sleep(2)
-            
+            # Pausa o código por 2 segundos para garantir o carregamento dos elementos após a rolagem.
+
             WebDriverWait(driver, 20).until(
                 EC.presence_of_element_located((By.CLASS_NAME, 'feed-post-body'))
             )
+            # Aguarda até que elementos com a classe 'feed-post-body' estejam presentes na página.
+
             noticias = driver.find_elements(By.CLASS_NAME, 'feed-post-body')
-            
-            print(len(noticias))
-            
+            # Coleta todos os elementos com a classe 'feed-post-body', que representam as notícias na página.
+
+            #print(len(noticias))
+            # Exibe o número de notícias coletadas na iteração atual para controle.
+
             noticia = noticias[i]
-            # Seleciona a notícia atual
-        
+            # Seleciona a notícia atual com base no índice do loop.
+
             try:
                 tempo_real = noticia.find_element(By.CLASS_NAME, 'bstn-aovivo-label')
-                # Verifica se a notícia possui o marcador "tempo real" (a class) que é um jogo ao vivo
+                # Verifica se a notícia é ao vivo, marcada com a classe 'bstn-aovivo-label'.
 
-                #Esse método é usado para procurar um elemento específico dentro de um contexto existente. No seu caso, noticia.find_element(...) procura o elemento dentro do elemento noticia.
-
-                #find_element realiza a busca a partir de um elemento pai específico, ou seja, ele só pesquisa dentro do elemento noticia.
-
-                #Isso é útil quando você quer restringir a busca ao escopo de um elemento específico (neste caso, uma notícia específica).
                 print(f"Notícia {i+1} marcada como Tempo Real, pulando...")
+                # Mensagem para indicar que a notícia ao vivo foi ignorada.
                 continue
             except:
-                    pass
+                pass
+                # Se a notícia não for ao vivo, passa para a próxima etapa.
 
             try:
                 link_noticia = noticia.find_element(By.CLASS_NAME, 'feed-post-link').get_attribute('href')
+                # Coleta o link da notícia.
+
                 titulo_noticia = noticia.find_element(By.CSS_SELECTOR, 'a.feed-post-link p').text.strip()
-                    # Captura o link e o título da notícia
+                # Coleta o título da notícia e remove espaços extras.
             except:
                 print(f"Erro ao capturar link ou título da notícia {i+1}, pulando...")
+                # Caso ocorra erro na captura de link ou título, a notícia é ignorada.
                 continue
-
-           
 
             if any(substring in link_noticia for substring in ["/video", "/jogo", "/playlist"]):
-                    # Verifica se o link contém algum desses paramatros
                 print(f"Notícia {i+1} contém um link que será ignorado.")
+                # Ignora notícias com links que contenham "/video", "/jogo" ou "/playlist".
                 continue
-                # Pula a notícia se o link contiver 
 
             if link_noticia in processed_urls:
                 print(f"Notícia {i+1} já processada, pulando...")
-                # Verifica se o link já foi processado
+                # Ignora notícias cujos links já foram processados.
                 continue
             else:
                 processed_urls.add(link_noticia)
-                # Adiciona o link ao conjunto de URLs processadas  
-
+                # Adiciona o link da notícia ao conjunto de URLs processadas.
 
             print(f"Notícia {i+1}: {titulo_noticia}")
             print(f"Link: {link_noticia}")
-            # printa o numero da ordem da noticia que ele pegou com o titulo e o link dela
+            # Exibe o número, título e link da notícia que está sendo processada.
 
             driver.get(link_noticia)
-            # Acessa a página da notícia
-    
-    
+            # Acessa o link da notícia para coletar mais detalhes.
+
             try:
                 title_element = WebDriverWait(driver, 10).until(
                     EC.presence_of_element_located((By.CLASS_NAME, 'content-head__title'))
                 )
-                # Captura o título da página da notícia
+                # Aguarda e coleta o título completo da notícia.
+
                 title_text = title_element.text
-                # Pega somente o texto do titulo
+                # Armazena o texto do título para posterior processamento.
             except:
                 print(f"Erro ao capturar o título da notícia {i+1}, pulando...")
+                # Exibe mensagem de erro se o título não for encontrado.
                 driver.get(url_principal)
+                # Retorna à página principal caso ocorra um erro.
                 time.sleep(2)
-                # Essa linha faz uma pausa fixa de 2 segundos antes de seguir para a próxima linha de código.
                 continue
 
-        
             try:
                 content_element = WebDriverWait(driver, 10).until(
                     EC.presence_of_element_located((By.CLASS_NAME, 'mc-body'))
-                    # Pega a descricao da noticia
                 )
+                # Aguarda e coleta o conteúdo principal da notícia.
                 content_text = content_element.text
-                
             except:
                 print(f"Erro ao capturar o conteudo da notícia {i+1}, pulando...")
+                # Exibe mensagem de erro caso o conteúdo não seja encontrado.
                 driver.get(url_principal)
+                # Retorna à página principal.
                 time.sleep(2)
-                # Essa linha faz uma pausa fixa de 2 segundos antes de seguir para a próxima linha de código.
-                # Diferente do 'WebDriverWait(driver, 10)' que faz uma pausa direto no navegador
                 continue 
 
-            titulo_formatado_semespaco = re.sub(r'[\\/*?:"<>|]', "", title_text)
-            titulo_formatado_semespaco = titulo_formatado_semespaco.replace(" ", "_")  
-            # Já substitui os espaços por "_"
+            titulo_formatado_semespaco = re.sub(r'[\\/*?:"<>|]', "", title_text).replace(" ", "_")
+            # Formata o título removendo caracteres especiais e substituindo espaços por "_".
 
+            seletor_css_imagem = "amp-img"
+            # Define o seletor para identificar as imagens no HTML da notícia.
 
-            seletor_css_imagem = "amp-img"  
-            # Substitua pelo seletor correto
-        
             diretorio_imagens = "./media/"
-            # Criar a pasta se ela não existir
+            # Define o diretório onde as imagens serão salvas.
 
             os.makedirs(diretorio_imagens, exist_ok=True)
+            # Cria o diretório se ele não existir.
+
             nome_arquivo_imagem = os.path.join(diretorio_imagens, f"{titulo_formatado_semespaco}.jpg")
+            # Define o nome do arquivo da imagem com base no título formatado.
 
             try:
-                # Encontra todas as imagens com o seletor especificado
                 imagens_elementos = driver.find_elements(By.CSS_SELECTOR, seletor_css_imagem)
-                
-                # Itera sobre cada imagem encontrada
+                # Coleta todos os elementos de imagem com o seletor CSS especificado.
+
                 for i, imagem_elemento in enumerate(imagens_elementos):
                     url_imagem = imagem_elemento.get_attribute("src")
+                    # Captura a URL da imagem.
                     
-                    # Formatar o nome do arquivo para incluir o índice
                     nome_arquivo_imagem = os.path.join(diretorio_imagens, f"{titulo_formatado_semespaco}_{i}.jpg")
-                    
-                    # Faz o download da imagem usando requests
-                    resposta_imagem = requests.get(url_imagem, stream=True)
-                    resposta_imagem.raise_for_status()
+                    # Define o nome do arquivo para salvar a imagem.
 
-                    # Salva a imagem no disco
+                    resposta_imagem = requests.get(url_imagem, stream=True)
+                    # Baixa a imagem.
+
+                    resposta_imagem.raise_for_status()
+                    # Verifica se o download foi bem-sucedido.
+
                     with open(nome_arquivo_imagem, 'wb') as file:
+                    #Essa linha abre (ou cria, se não existir) um arquivo para escrita binária ('wb') com o nome especificado em nome_arquivo_imagem.
+                    #O modo 'wb' é importante para imagens e outros arquivos binários (como PDFs) porque garante que o conteúdo será escrito no formato binário correto, preservando a estrutura dos dados.
+
                         for chunk in resposta_imagem.iter_content(1024):
                             file.write(chunk)
-
                     print(f"Imagem {i} salva como {nome_arquivo_imagem}")
 
             except Exception as e:
                 print(f"Erro ao baixar as imagens: {e}")
 
-
-    
-            
-
-            # Arquivo HTML criado para transformação do texto
             nome_arquivo = f"{titulo_formatado_semespaco}.html"
+            # Define o nome do arquivo HTML com base no título formatado.
+
             caminho_arquivo = os.path.join('trendfeeds/templates', nome_arquivo)
+            # Define o caminho completo do arquivo HTML.
+
             html_content = f"""
             <html>
                 <article class="noticia-detalhada">
@@ -226,79 +241,74 @@ def coletar_noticias():
                 </article>
             </html>
             """
-            
-            # Salvar o conteúdo no arquivo HTML
+            # Cria o conteúdo HTML para a notícia.
+
             with open(caminho_arquivo, 'w', encoding='utf-8') as file:
                 file.write(html_content)
+            # Salva o HTML da notícia no diretório especificado.
+
             print(f"Arquivo HTML criado com sucesso: {caminho_arquivo}")
             criado = 'sim'
-            
-        
+            # Marca a notícia como criada.
+
             titulo_formatado = re.sub(r'[\\/*?:"<>|]', "", title_text)
             content_text_formatado = formatar_texto(titulo_formatado_semespaco)
+            # Formata o título e o conteúdo da notícia para exibição.
 
-            # Arquivo HTML final já com o texto transformado
-            nome_arquivo = f"{titulo_formatado_semespaco}.html"
-            
-            # Define o nome do arquivo HTML e o conteúdo HTML
             caminho_arquivo = os.path.join('trendfeeds/templates', nome_arquivo)
-            html_content = render_to_string('templates/modelo.html', {
+            html_content = render_to_string('modelo.html', {
                 'title_text': titulo_formatado,
                 'content_text': content_text_formatado
             })
-            
+            # Renderiza o template 'modelo.html' com o conteúdo da notícia.
+
             if criado == 'sim':
                 contador += 1
-                
-            if contador == 8:
+            # Incrementa o contador se o arquivo foi criado.
+
+            if contador == 10:
                 break
+            # Encerra o loop após processar 8 notícias.
 
             with open(caminho_arquivo, "w", encoding="utf-8") as file:
                 file.write(html_content)
-            #"w" (write): Abre o arquivo para escrita. Se o arquivo já existir, "w" sobrescreve o conteúdo existente. Se o arquivo não existir, ele será criado.
+            # Salva o conteúdo renderizado no HTML.
 
-            #"a" (append): Abre o arquivo para acrescentar conteúdo no final. Se o arquivo não existir, ele será criado. O "a" é útil para adicionar conteúdo a um arquivo existente sem sobrescrever.
-
-            #"r" (read): Abre o arquivo para leitura. O arquivo precisa existir; caso contrário, um erro será gerado.
-            
-            print(f"Arquivo HTML criado com sucesso: {nome_arquivo}")
-
-            """
-            # Salva no banco de dados
-            Noticias.objects.create(
-                titulo=titulo_formatado,
-                descricao=content_text_formatado,
-            ) """
-
-        
             driver.get(url_principal)
             time.sleep(2)
-            # Retorna à página principal e aguarda o carregamento
-    
+            # Retorna à página principal e aguarda o carregamento.
+
     finally:
         driver.quit()
-        # Fecha todas as janelas e encerra o processo do Chrome iniciado pelo Selenium, liberando os recursos do sistema.
+        # Fecha o navegador e libera recursos.
     
-        
+
+
+
 def formatar_texto(arquivo_nome):
-    
     nome_arquivo = arquivo_nome
     file_path = f'trendfeeds/templates/html/{nome_arquivo}.html'
     
     if __verificar_caminho(arquivo_nome, file_path):
-        text = __captar_tag(file_path)
+        text = __captar_tag(file_path)  # Captura o conteúdo da tag <p>
+    else:
+        text = ""  # Define um valor padrão caso o arquivo não seja encontrado
 
-    # Remove tags HTML (se existirem outras tags no conteúdo)
-    text = re.sub(r'<[^>]+>', '', text)
+    # Verifica se 'text' está vazio antes de aplicar as operações de substituição
+    if text:
+        # Remove tags HTML (se existirem outras tags no conteúdo)
+        text = re.sub(r'<[^>]+>', '', text)
 
-    # Remove frases com "+" no início
-    text = re.sub(r'\+ [^\n]+', '', text)  
+        # Remove frases com "+" no início
+        text = re.sub(r'\+ [^\n]+', '', text)
+        
+        paragrafos = __dividir_por_pontos_finais(text, 3)
+        text = __criar_html_com_paragrafos(paragrafos)
     
-    paragrafos = __dividir_por_pontos_finais(text, 3)
-    text = __criar_html_com_paragrafos(paragrafos)
-    
-    # Retorna o texto como valor da função
     return text
+
+
+
 
 def __verificar_caminho(arquivo_nome, file_path):
     
@@ -315,25 +325,32 @@ def __verificar_caminho(arquivo_nome, file_path):
         print('-'*30)
         return ""
     
+
+
+
 def __captar_tag(file_path):
-    
+    text = ""  # Valor padrão caso não encontre a tag <p>
     with open(file_path, 'r', encoding='utf-8') as file:
-            p_content = file.read()
-            print(f'Arquivo criado!({file_path})')
+        p_content = file.read()
+        print(f'Arquivo criado!({file_path})')
+        
     # Parsear o conteúdo HTML com BeautifulSoup
     soup = BeautifulSoup(p_content, 'lxml')
 
     # Busca a primeira tag <p> (já que só há uma)
     p_tag = soup.find('p')
 
-    # Atribui ao text o conteúdo da tag <p>
+    # Atribui ao text o conteúdo da tag <p> se a tag for encontrada
     if p_tag:
         text = p_tag.get_text()
     else:
-        text = ""
         print("Não foi encontrada nenhuma tag <p> no conteúdo.")
+        
     return text
-    
+
+
+
+
 def __dividir_por_pontos_finais(texto, num_pontos_finais):
     # Divide o texto com base nos pontos finais
     sentencas = texto.split('.')
@@ -351,6 +368,9 @@ def __dividir_por_pontos_finais(texto, num_pontos_finais):
     
     return paragrafos
 
+
+
+
 def __criar_html_com_paragrafos(paragrafos):
     
     html_content = ""
@@ -364,5 +384,8 @@ def __criar_html_com_paragrafos(paragrafos):
     
     return html_content
     
+
+
+
 def iniciar_scheduler():
     pass
