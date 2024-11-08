@@ -294,6 +294,10 @@ def formatar_texto(arquivo_nome):
     # Remove frases com "+" no início
     text = re.sub(r'\+ [^\n]+', '', text)  
     
+    # Remove frases que começam com emoji
+    # text = re.sub(r'^[\U0001F300-\U0001FAFF][^\n]*', '', text, flags=re.MULTILINE)
+    # agora com imagem ele entrega ele executa função como se fosse um texto, ou seja, ele retorna na função captar_tag um valor str '', entao tipo, as funções de filtro não funcionam, gera erro no código e então interrompe.
+    
     paragrafos = __dividir_por_pontos_finais(text, 3)
     text = __criar_html_com_paragrafos(paragrafos)
     
