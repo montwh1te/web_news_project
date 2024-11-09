@@ -25,7 +25,7 @@ import time
 from bs4 import BeautifulSoup
 # BeautifulSoup é uma biblioteca para análise de HTML, usada aqui para facilitar a extração de dados de arquivos HTML.
 
-from trendfeeds.models import Noticias
+from trendfeeds.models import Noticias, Categorianoticias, Imagemnoticias
 # Importa a classe 'Noticias' do models do Django, o que permite salvar notícias em uma tabela do banco de dados.
 
 from django.template.loader import render_to_string
@@ -35,6 +35,13 @@ from django.utils.safestring import mark_safe
 # mark_safe é usado para garantir que uma string seja tratada como HTML, evitando a conversão de tags em texto.
 # ex: "<p>Esta é uma notícia <b>importante</b>.</p>"
 # viraria com o mark_safe:  "&lt;p&gt;Esta é uma notícia &lt;b&gt;importante&lt;/b&gt;.&lt;/p&gt;"
+
+from colorama import Fore, Style, init
+
+from django.utils import timezone
+
+from django.core.files import File  # Import necessário para manipulação de arquivos
+
 
 import os
 # O módulo 'os' oferece funções para interagir com o sistema operacional, como 'os.path.join' para manipulação de caminhos de arquivos.
@@ -51,123 +58,83 @@ django.setup()
 # Configura o Django com base no arquivo settings.py
 # Inicializa o Django, tornando disponíveis suas funcionalidades para o script atual.
 
+# Inicializa o colorama
+init(autoreset=True)
+
+from django.core.files import File  # Import necessário para manipulação de arquivos
+driver = None
+
 def coletar_noticias():
-    
-    service = Service('')  
-    # Configura o Service para especificar o caminho do driver do Chrome.
-
+    service = Service('')
     options = webdriver.ChromeOptions()
-    # Instancia as opções do navegador Chrome, permitindo configurações adicionais.
-
     driver = webdriver.Chrome(service=service, options=options)
-    # Inicializa o navegador Chrome com o Service e opções especificadas, abrindo o navegador para navegação automatizada.
 
-    url_principal = 'https://ge.globo.com/'  
-    # Define a URL da página principal do GE (Globo Esporte), onde as notícias serão coletadas.
-
-    processed_urls = set()  
-    # Define um conjunto vazio para armazenar URLs já processadas, evitando duplicatas.
-
-    current_scroll_position = 0  
-    # Variável que rastreia a posição atual de rolagem na página.
-
-    scroll_increment = 550  
-    # Define a quantidade de pixels para rolar a cada incremento.
-
-    contador = 0  
-    # Contador para rastrear o número de notícias processadas.
+    url_principal = 'https://ge.globo.com/'
+    processed_urls = set()
+    current_scroll_position = 0
+    scroll_increment = 550
+    contador = 0
 
     try:
-        driver.get(url_principal)  
-        # Acessa a página inicial do GE no navegador.
+        driver.get(url_principal)
 
-        for i in range(30):  
-            # Limita o loop para processar até 30 notícias, rolando a página quando necessário.
-            
-            criado = 'nao'  
-            # Marca se um arquivo foi criado para controle no contador.
-
+        for i in range(30):
+            criado = 'nao'
             time.sleep(2)
-            # Pausa o código por 2 segundos para permitir o carregamento da página.
-
             current_scroll_position += scroll_increment
-            # Incrementa a posição atual de rolagem pela quantidade especificada em scroll_increment.
-
             driver.execute_script(f"window.scrollTo(0, {current_scroll_position});")
-            # Rola a página para baixo para carregar mais conteúdo.
-
             time.sleep(2)
-            # Pausa o código por 2 segundos para garantir o carregamento dos elementos após a rolagem.
 
             WebDriverWait(driver, 20).until(
                 EC.presence_of_element_located((By.CLASS_NAME, 'feed-post-body'))
             )
-            # Aguarda até que elementos com a classe 'feed-post-body' estejam presentes na página.
 
             noticias = driver.find_elements(By.CLASS_NAME, 'feed-post-body')
-            # Coleta todos os elementos com a classe 'feed-post-body', que representam as notícias na página.
-
             #print(len(noticias))
-            # Exibe o número de notícias coletadas na iteração atual para controle.
 
             noticia = noticias[i]
-            # Seleciona a notícia atual com base no índice do loop.
 
             try:
                 tempo_real = noticia.find_element(By.CLASS_NAME, 'bstn-aovivo-label')
-                # Verifica se a notícia é ao vivo, marcada com a classe 'bstn-aovivo-label'.
-
-                print(f"Notícia {i+1} marcada como Tempo Real, pulando...")
-                # Mensagem para indicar que a notícia ao vivo foi ignorada.
+                print(Fore.YELLOW + f"Notícia {i+1} marcada como Tempo Real, pulando...")
                 continue
             except:
                 pass
-                # Se a notícia não for ao vivo, passa para a próxima etapa.
 
             try:
                 link_noticia = noticia.find_element(By.CLASS_NAME, 'feed-post-link').get_attribute('href')
-                # Coleta o link da notícia.
-
                 titulo_noticia = noticia.find_element(By.CSS_SELECTOR, 'a.feed-post-link p').text.strip()
-                # Coleta o título da notícia e remove espaços extras.
             except:
-                print(f"Erro ao capturar link ou título da notícia {i+1}, pulando...")
-                # Caso ocorra erro na captura de link ou título, a notícia é ignorada.
+                print(Fore.RED + f"Erro ao capturar link ou título da notícia {i+1}, pulando...")
                 continue
 
-            if any(substring in link_noticia for substring in ["/video", "/jogo", "/playlist"]):
-                print(f"Notícia {i+1} contém um link que será ignorado.")
-                # Ignora notícias com links que contenham "/video", "/jogo" ou "/playlist".
+            if any(substring in link_noticia for substring in ["/video", "/jogo", "/playlist"]) or link_noticia in processed_urls:
+                print(Fore.CYAN + f"Notícia {i+1} contém um link que será ignorado.")
                 continue
 
-            if link_noticia in processed_urls:
-                print(f"Notícia {i+1} já processada, pulando...")
-                # Ignora notícias cujos links já foram processados.
-                continue
-            else:
-                processed_urls.add(link_noticia)
-                # Adiciona o link da notícia ao conjunto de URLs processadas.
-
-            print(f"Notícia {i+1}: {titulo_noticia}")
-            print(f"Link: {link_noticia}")
-            # Exibe o número, título e link da notícia que está sendo processada.
+            processed_urls.add(link_noticia)
+            print(Fore.GREEN + f"Notícia {i+1}: {titulo_noticia}")
+            print(Fore.BLUE + f"Link: {link_noticia}")
 
             driver.get(link_noticia)
-            # Acessa o link da notícia para coletar mais detalhes.
+
+            times = [
+                "flamengo", "palmeiras", "são paulo", "corinthians", "vasco da gama",
+                "fluminense", "internacional", "grêmio", "cruzeiro", "atlético mineiro",
+                "santos", "botafogo", "atlético paranaense", "sport recife", "bahia",
+                "ceará", "fortaleza", "vitória", "chapecoense", "américa mineiro", "goiás",
+                "avaí", "botafogo sp", "figueirense", "coritiba", "náutico", "ponte preta",
+                "cuiabá", "bragantino"
+            ]
 
             try:
                 title_element = WebDriverWait(driver, 10).until(
                     EC.presence_of_element_located((By.CLASS_NAME, 'content-head__title'))
                 )
-                # Aguarda e coleta o título completo da notícia.
-
                 title_text = title_element.text
-                # Armazena o texto do título para posterior processamento.
             except:
-                print(f"Erro ao capturar o título da notícia {i+1}, pulando...")
-                # Exibe mensagem de erro se o título não for encontrado.
+                print(Fore.RED + f"Erro ao capturar o título da notícia {i+1}, pulando...")
                 driver.get(url_principal)
-                # Retorna à página principal caso ocorra um erro.
                 time.sleep(2)
                 continue
 
@@ -209,64 +176,70 @@ def coletar_noticias():
                     
                 try:
                     elemento_para_remover = content_element.find_element(By.CSS_SELECTOR, "time")
+                
                 except:
                     pass
+
+                preview_content = pegar_resumo(content_text)
+                print(Fore.GREEN + f"Preview da notícia: {preview_content}")
             except:
                 print(f"Erro ao capturar o conteúdo da notícia {i+1}, pulando...")
                 driver.get(url_principal)
                 time.sleep(2)
                 continue
 
-           
 
             titulo_formatado_semespaco = re.sub(r'[\\/*?:"<>|]', "", title_text).replace(" ", "_")
-            # Formata o título removendo caracteres especiais e substituindo espaços por "_".
-
-            seletor_css_imagem = "amp-img"
-            # Define o seletor para identificar as imagens no HTML da notícia.
-
             diretorio_imagens = "./media/"
-            # Define o diretório onde as imagens serão salvas.
-
             os.makedirs(diretorio_imagens, exist_ok=True)
-            # Cria o diretório se ele não existir.
-
-            nome_arquivo_imagem = os.path.join(diretorio_imagens, f"{titulo_formatado_semespaco}.jpg")
-            # Define o nome do arquivo da imagem com base no título formatado.
 
             try:
-                imagens_elementos = driver.find_elements(By.CSS_SELECTOR, seletor_css_imagem)
-                # Coleta todos os elementos de imagem com o seletor CSS especificado.
-
-                for i, imagem_elemento in enumerate(imagens_elementos):
+                imagens_elementos = driver.find_elements(By.CSS_SELECTOR, "amp-img")
+                imagem_urls = []
+                for j, imagem_elemento in enumerate(imagens_elementos):
                     url_imagem = imagem_elemento.get_attribute("src")
-                    # Captura a URL da imagem.
-                    
-                    nome_arquivo_imagem = os.path.join(diretorio_imagens, f"{titulo_formatado_semespaco}_{i}.jpg")
-                    # Define o nome do arquivo para salvar a imagem.
-
+                    nome_arquivo_imagem = os.path.join(diretorio_imagens, f"{titulo_formatado_semespaco}_{j}.jpg")
                     resposta_imagem = requests.get(url_imagem, stream=True)
-                    # Baixa a imagem.
-
                     resposta_imagem.raise_for_status()
-                    # Verifica se o download foi bem-sucedido.
-
                     with open(nome_arquivo_imagem, 'wb') as file:
-                    #Essa linha abre (ou cria, se não existir) um arquivo para escrita binária ('wb') com o nome especificado em nome_arquivo_imagem.
-                    #O modo 'wb' é importante para imagens e outros arquivos binários (como PDFs) porque garante que o conteúdo será escrito no formato binário correto, preservando a estrutura dos dados.
-
                         for chunk in resposta_imagem.iter_content(1024):
                             file.write(chunk)
-                    print(f"Imagem {i} salva como {nome_arquivo_imagem}")
+                    imagem_urls.append(nome_arquivo_imagem)
+                    print(Fore.GREEN + f"Imagem {j} salva como {nome_arquivo_imagem}")
 
             except Exception as e:
-                print(f"Erro ao baixar as imagens: {e}")
+                print(Fore.RED + f"Erro ao baixar as imagens: {e}")
 
-            nome_arquivo = f"{titulo_formatado_semespaco}.html"
-            # Define o nome do arquivo HTML com base no título formatado.
+            titulo_formatado = re.sub(r'[\\/*?:"<>|]', "", title_text)
+           
+            try:
+                time_encontrado = None
+                for clube in times:
+                    if clube in titulo_formatado.lower():
+                        time_encontrado = clube
+                        time_encontrado = time_encontrado.strip().lower()
+                        break
 
+                if time_encontrado:
+                    categoria, created = Categorianoticias.objects.get_or_create(nomecategoria=time_encontrado)
+                else:
+                    categoria, created = Categorianoticias.objects.get_or_create(nomecategoria="outro")
+
+            except Exception as e:
+                print(Fore.RED + f"Erro ao associar a categoria: {e}")
+
+            data_publicacao = timezone.now()
+
+            try:
+                autor_element = driver.find_element(By.CLASS_NAME, 'content-author__name')
+                autor_text = autor_element.text
+            except:
+                autor_text = "Desconhecido"
+
+            titulo_truncado = titulo_formatado_semespaco[:10]
+            nome_arquivo = f"{titulo_truncado}.html"
             caminho_arquivo = os.path.join('trendfeeds/templates', nome_arquivo)
-            # Define o caminho completo do arquivo HTML.
+           
 
             html_content = f"""
             <html>
@@ -305,6 +278,29 @@ def coletar_noticias():
                 break
             # Encerra o loop após processar 8 notícias.
 
+            try:
+                noticia_modelo, created = Noticias.objects.update_or_create(
+                    titulo=titulo_truncado,
+                    defaults={
+                        'data_publicacao': data_publicacao,
+                        'descricao': preview_content,
+                        'autor': autor_text,
+                        'categoria': categoria
+                    }
+                )
+                print(Fore.GREEN + f"Notícia '{titulo_truncado}' {'criada' if created else 'atualizada'} no banco de dados com sucesso.")
+
+                # Limpa as imagens e insere novamente no banco de dados
+                Imagemnoticias.objects.filter(noticia=noticia_modelo).delete()
+                for imagem_url in imagem_urls:
+                    with open(imagem_url, 'rb') as img_file:
+                        Imagemnoticias.objects.create(noticia=noticia_modelo, imagem=File(img_file))
+
+            except Exception as e:
+                print(Fore.RED + f"Erro ao criar/atualizar a notícia: {e}")
+
+           
+
             with open(caminho_arquivo, "w", encoding="utf-8") as file:
                 file.write(html_content)
             # Salva o conteúdo renderizado no HTML.
@@ -315,9 +311,14 @@ def coletar_noticias():
 
     finally:
         driver.quit()
-        # Fecha o navegador e libera recursos.
-    
 
+
+# Função para extrair as 3 primeiras frases
+def pegar_resumo(content_text, num_frases=3):
+    # Divide o conteúdo em frases com base no ponto final
+    frases = content_text.split('.')
+    # Retorna as primeiras 'num_frases' frases
+    return '. '.join(frases[:num_frases]) + ('.' if len(frases) > num_frases else '')
 
 
 def formatar_texto(arquivo_nome, imagens_elementos, titulo_formatado_semespaco):

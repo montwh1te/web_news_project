@@ -6,9 +6,11 @@
     <title>Home</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     {% load static %}
-    <link rel="stylesheet" href="{% static 'trendfeeds/css/index.css' %}">
+    <link rel="stylesheet" href="{% static 'trendfeeds/css/index_trendfeeds.css' %}">
+
 </head>
 <body>
+ 
     <header>
         <!--- class navbar é para definir que é uma navbar -->
 
@@ -131,7 +133,7 @@
 
             
             <div class="d-flex align-items-center">
-                <button class="btn my-2 my-sm-0" type="submit"><img src="/media/login.png" alt="lupa" style="width: 30px; height: 30px;"></button>
+                <button class="btn my-2 my-sm-0" type="submit"><a href="{% url 'registro' %}"><img src="/media/login.png" alt="lupa" style="width: 30px; height: 30px;"></a></button>
             </div>
 
 

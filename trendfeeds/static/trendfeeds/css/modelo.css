@@ -1,0 +1,73 @@
+body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.navbar-custom {
+    padding: 15px 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.hero {
+    background: url('/static/images/hero-bg.jpg') no-repeat center center;
+    background-size: cover;
+}
+
+.hero h1 {
+    font-size: 3.5rem;
+    font-weight: bold;
+}
+
+.noticia-titulo {
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.noticia-conteudo {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #555;
+    margin-top: 20px;
+}
+
+.noticia-imagem {
+    border-radius: 15px;
+    max-height: 400px;
+    object-fit: cover;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.card-img-top {
+    border-radius: 15px;
+    object-fit: cover;
+    height: 200px;
+}
+
+footer {
+    background-color: #f8f9fa;
+    border-top: 1px solid #eaeaea;
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+footer p {
+    margin: 0;
+}
+
+/* Card and responsive adjustments */
+@media (max-width: 768px) {
+    .noticia-detalhada {
+        padding: 15px;
+    }
+
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .card-img-top {
+        height: 150px;
+    }
+}
