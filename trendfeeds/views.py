@@ -8,8 +8,6 @@ from django.template import TemplateDoesNotExist
 from django.utils.text import slugify
 
 
-
-
 def home(request):
     ultima_noticia = Noticias.objects.all().order_by('-id').first()
     outras_noticias = Noticias.objects.all().order_by('-data_publicacao')[1:5]  # Outras notícias
