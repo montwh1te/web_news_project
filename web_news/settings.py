@@ -53,21 +53,22 @@ MIDDLEWARE = [
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'trendfeeds', 'templates')],  # Ajuste para a pasta de templates
-        'APP_DIRS': True,
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates/html'),
+            os.path.join(BASE_DIR, 'templates/html/noticias'),
+            ],  # Diretório de templates
+        'APP_DIRS': True,  # Isso permite que o Django procure também em pastas de templates dentro dos apps
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'django.template.context_processors.media',  
-
+                'django.template.context_processors.media',
             ],
         },
     },
 ]
-
 # Timezone e Internacionalização
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'

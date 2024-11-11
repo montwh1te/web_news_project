@@ -1,12 +1,23 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
-from .models import Usuarios
-from .forms import RegistrationForm, LoginForm 
+from .models import Usuarios, Noticias
+from .forms import RegistrationForm, LoginForm
+from django.template.loader import get_template
+from django.template import TemplateDoesNotExist
 
-# Função da página inicial
+
+
 def home(request):
-    return render(request, 'index.html')
+    ultima_noticia = Noticias.objects.all().order_by('-id').first()
+    outras_noticias = Noticias.objects.all().order_by('-data_publicacao')[1:5]  # Outras notícias
+    
+    # Verificando se a última notícia e outras notícias possuem slug
+    if ultima_noticia and not ultima_noticia.slug:
+        ultima_noticia.slug = slugify(ultima_noticia.titulo)
+        ultima_noticia.save()
+
+    return render(request, 'html/index.html', {'ultima_noticia': ultima_noticia, 'outras_noticias': outras_noticias})
 
 # Função de registro (consolidada para evitar duplicação)
 def registro(request):
@@ -43,3 +54,12 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('home')
+
+
+def detalhes_noticia(request, slug):
+    noticia = get_object_or_404(Noticias, slug=slug)
+    
+    # Gerar o nome do template com base no slug
+    template_name = f'noticias/{noticia.slug}.html'
+    
+    return render(request, template_name, {'noticia': noticia})

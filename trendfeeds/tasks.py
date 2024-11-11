@@ -25,7 +25,7 @@ import time
 from bs4 import BeautifulSoup
 # BeautifulSoup é uma biblioteca para análise de HTML, usada aqui para facilitar a extração de dados de arquivos HTML.
 
-from trendfeeds.models import Noticias, Categorianoticias, Imagemnoticias
+from trendfeeds.models import Noticias, CategoriaNoticias, ImagemNoticias
 # Importa a classe 'Noticias' do models do Django, o que permite salvar notícias em uma tabela do banco de dados.
 
 from django.template.loader import render_to_string
@@ -42,6 +42,7 @@ from django.utils import timezone
 
 from django.core.files import File  # Import necessário para manipulação de arquivos
 
+import unicodedata
 
 import os
 # O módulo 'os' oferece funções para interagir com o sistema operacional, como 'os.path.join' para manipulação de caminhos de arquivos.
@@ -118,14 +119,6 @@ def coletar_noticias():
 
             driver.get(link_noticia)
 
-            times = [
-                "flamengo", "palmeiras", "são paulo", "corinthians", "vasco da gama",
-                "fluminense", "internacional", "grêmio", "cruzeiro", "atlético mineiro",
-                "santos", "botafogo", "atlético paranaense", "sport recife", "bahia",
-                "ceará", "fortaleza", "vitória", "chapecoense", "américa mineiro", "goiás",
-                "avaí", "botafogo sp", "figueirense", "coritiba", "náutico", "ponte preta",
-                "cuiabá", "bragantino"
-            ]
 
             try:
                 title_element = WebDriverWait(driver, 10).until(
@@ -188,8 +181,17 @@ def coletar_noticias():
                 time.sleep(2)
                 continue
 
+            titulo_normalizado = unicodedata.normalize('NFD', title_text)
+         
+            titulo_sem_acento = ''.join([c for c in titulo_normalizado if unicodedata.category(c) != 'Mn'])
+            
+            titulo_sem_pontuacao = re.sub(r'[{}%@#$%^&*()!<>:"/\\|+_=,.?;^~`-]', '', titulo_sem_acento)
 
-            titulo_formatado_semespaco = re.sub(r'[\\/*?:"<>|]', "", title_text).replace(" ", "_")
+            titulo_formatado_semespaco = re.sub(r'[\\/*?:"<>|]', "", titulo_sem_pontuacao).replace(" ", "_")
+
+           
+
+            titulo_truncado = titulo_formatado_semespaco[:200].lower()
             diretorio_imagens = "./media/"
             os.makedirs(diretorio_imagens, exist_ok=True)
 
@@ -198,7 +200,7 @@ def coletar_noticias():
                 imagem_urls = []
                 for j, imagem_elemento in enumerate(imagens_elementos):
                     url_imagem = imagem_elemento.get_attribute("src")
-                    nome_arquivo_imagem = os.path.join(diretorio_imagens, f"{titulo_formatado_semespaco}_{j}.jpg")
+                    nome_arquivo_imagem = os.path.join(diretorio_imagens, f"{titulo_truncado}_{j}.jpg")
                     resposta_imagem = requests.get(url_imagem, stream=True)
                     resposta_imagem.raise_for_status()
                     with open(nome_arquivo_imagem, 'wb') as file:
@@ -211,7 +213,16 @@ def coletar_noticias():
                 print(Fore.RED + f"Erro ao baixar as imagens: {e}")
 
             titulo_formatado = re.sub(r'[\\/*?:"<>|]', "", title_text)
-           
+
+            times = [
+                "flamengo", "palmeiras", "são paulo", "corinthians", "vasco da gama",
+                "fluminense", "internacional", "grêmio", "cruzeiro", "atlético mineiro",
+                "santos", "botafogo", "atlético paranaense", "sport recife", "bahia",
+                "ceará", "fortaleza", "vitória", "chapecoense", "américa mineiro", "goiás",
+                "avaí", "botafogo sp", "figueirense", "coritiba", "náutico", "ponte preta",
+                "cuiabá", "bragantino"
+            ]
+
             try:
                 time_encontrado = None
                 for clube in times:
@@ -221,9 +232,9 @@ def coletar_noticias():
                         break
 
                 if time_encontrado:
-                    categoria, created = Categorianoticias.objects.get_or_create(nomecategoria=time_encontrado)
+                    categoria, created = CategoriaNoticias.objects.get_or_create(nomecategoria=time_encontrado)
                 else:
-                    categoria, created = Categorianoticias.objects.get_or_create(nomecategoria="outro")
+                    categoria, created = CategoriaNoticias.objects.get_or_create(nomecategoria="outro")
 
             except Exception as e:
                 print(Fore.RED + f"Erro ao associar a categoria: {e}")
@@ -236,9 +247,10 @@ def coletar_noticias():
             except:
                 autor_text = "Desconhecido"
 
-            titulo_truncado = titulo_formatado_semespaco[:10]
+          
+
             nome_arquivo = f"{titulo_truncado}.html"
-            caminho_arquivo = os.path.join('trendfeeds/templates', nome_arquivo)
+            caminho_arquivo = os.path.join('trendfeeds/templates/html/noticias', nome_arquivo)
            
 
             html_content = f"""
@@ -263,8 +275,8 @@ def coletar_noticias():
             content_text_formatado = formatar_texto(titulo_formatado_semespaco, imagens_elementos, titulo_formatado_semespaco)
             # Formata o título e o conteúdo da notícia para exibição.
 
-            caminho_arquivo = os.path.join('trendfeeds/templates', nome_arquivo)
-            html_content = render_to_string('modelo.html', {
+            caminho_arquivo = os.path.join('trendfeeds/templates/html/noticias', nome_arquivo)
+            html_content = render_to_string('html/modelo.html', {
                 'title_text': titulo_formatado,
                 'content_text': content_text_formatado
             })
@@ -285,16 +297,17 @@ def coletar_noticias():
                         'data_publicacao': data_publicacao,
                         'descricao': preview_content,
                         'autor': autor_text,
-                        'categoria': categoria
+                        'categoria': categoria,
+                        'link':link_noticia
                     }
                 )
                 print(Fore.GREEN + f"Notícia '{titulo_truncado}' {'criada' if created else 'atualizada'} no banco de dados com sucesso.")
 
                 # Limpa as imagens e insere novamente no banco de dados
-                Imagemnoticias.objects.filter(noticia=noticia_modelo).delete()
+                ImagemNoticias.objects.filter(noticia=noticia_modelo).delete()
                 for imagem_url in imagem_urls:
                     with open(imagem_url, 'rb') as img_file:
-                        Imagemnoticias.objects.create(noticia=noticia_modelo, imagem=File(img_file))
+                        ImagemNoticias.objects.create(noticia=noticia_modelo, imagem=File(img_file))
 
             except Exception as e:
                 print(Fore.RED + f"Erro ao criar/atualizar a notícia: {e}")
@@ -324,7 +337,7 @@ def pegar_resumo(content_text, num_frases=3):
 def formatar_texto(arquivo_nome, imagens_elementos, titulo_formatado_semespaco):
    
     nome_arquivo = arquivo_nome
-    file_path = f'trendfeeds/templates/{nome_arquivo}.html'
+    file_path = f'trendfeeds/templates/html/noticias/{nome_arquivo}.html'
      # Define o nome do arquivo e o caminho para buscá-lo
     
     if __verificar_caminho(arquivo_nome, file_path):

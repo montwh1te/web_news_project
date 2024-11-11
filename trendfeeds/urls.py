@@ -4,10 +4,9 @@ from . import views
 # Supondo que suas views estão no mesmo app
 
 urlpatterns = [
-      path('admin/', admin.site.urls),
-      path('', views.home, name='home'),
-      path('registro/', views.registro, name='registro'),  # URL para registro
-      path('login/', views.login_view, name='login'),      # URL para login
-      path('logout/', views.logout_view, name='logout'),   # URL para logout
-      # Outras URLs
+    path('', views.home, name='home'),
+    path('registro/', views.registro, name='registro'),
+    path('login/', views.login_view, name='login'),
+    path('logout/', views.logout_view, name='logout'),
+    path('noticia/<slug:slug>/', views.detalhes_noticia, name='detalhes_noticia'),  # Corrigido para 'noticia/'
 ]
