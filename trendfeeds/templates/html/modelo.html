@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title_text }}</title>
+    <title>{% block title %}{% endblock title %}</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/trendfeeds/css/modelo.css">
     {% load static %}
@@ -31,32 +31,29 @@
 
     <!-- Hero Section -->
     <section class="hero bg-primary text-white text-center py-5">
-        <h1 class="display-4">{{ title_text }}</h1>
-        <p class="lead">{{ subtitle_text }}</p>
+        <h1 class="display-4">{% block main_title %}{% endblock main_title %}</h1>
     </section>
 
     <main class="container mt-4">
-        {% block content %}
         <article class="noticia-detalhada">
             <div class="row">
                 <div class="col-lg-8">
-                    <h2 class="noticia-titulo">{{ title_text }}</h2>
+                    <h2 class="noticia-titulo">{% block second_title %}{% endblock second_title %}</h2>
                     <div class="noticia-conteudo">
-                        {{ content_text | safe }}
+                        {% block main_content %}{% endblock main_content %}
                     </div>
                 </div>
                 <div class="col-lg-4">
                     <div class="card border-light shadow-sm mb-4">
-                        <img src="{{ image_url }}" class="card-img-top noticia-imagem" alt="Imagem da notícia">
+                        <!-- colocar aqui uma imagem aleatoria do banco de dados da própria noticia, ou a imagem de outra noticia com o link pra ela, e deixar fixed, enfim, decidir. A principio fica tudo pro banco de dados, entao  --> <img src="#" class="card-img-top noticia-imagem" alt="Imagem da notícia">
                         <div class="card-body">
-                            <h5 class="card-title">Destaque</h5>
-                            <p class="card-text">Texto extra ou uma citação de destaque pode ser exibido aqui.</p>
+                            <h5 class="card-title">###</h5><!-- bd -->
+                            <p class="card-text">###</p><!-- bd -->
                         </div>
                     </div>
                 </div>
             </div>
         </article>
-        {% endblock content %}
     </main>
 
     <footer class="text-center py-3 bg-light">
@@ -66,5 +63,6 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 </body>
 </html>
