@@ -35,11 +35,8 @@ class Noticias(models.Model):
 
 class ImagemNoticias(models.Model):
     noticia = models.ForeignKey(Noticias, on_delete=models.CASCADE, related_name="imagens")
-<<<<<<< HEAD
+
     imagem = models.ImageField( blank=True, null=True)
-=======
-    imagem = models.ImageField(upload_to='', blank=True, null=True)
->>>>>>> 8993ede5433b9804cbc86d28967ece93b63dc0a4
 
     def __str__(self):
         return f"Imagem da notícia: {self.noticia.titulo}"
