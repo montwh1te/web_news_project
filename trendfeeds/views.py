@@ -62,6 +62,6 @@ def detalhes_noticia(request, slug):
     noticia = get_object_or_404(Noticias, slug=slug)
     
     # Gerar o nome do template com base no slug
-    template_name = f'noticias/{noticia.slug}.html'
+    template_name = f'html/noticias/{noticia.slug}.html'
     
     return render(request, template_name, {'noticia': noticia})

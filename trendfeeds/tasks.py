@@ -62,7 +62,6 @@ django.setup()
 # Inicializa o colorama
 init(autoreset=True)
 
-from django.core.files import File  # Import necessário para manipulação de arquivos
 driver = None
 
 def coletar_noticias():
