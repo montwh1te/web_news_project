@@ -352,11 +352,19 @@ def coletar_noticias():
             titulo_formatado = re.sub(r'[\\/*?:"<>|]', "", title_text)
             second_title_formatado = None
             main_content_formatado = formatar_texto(titulo_formatado_semespaco, imagens_elementos, titulo_formatado_semespaco)
+<<<<<<< HEAD
             # Formata o título e o conteúdo da notícia para exibição.
 
             caminho_arquivo = os.path.join('trendfeeds/templates/html/noticias', nome_arquivo)
             # Atualiza o caminho do arquivo HTML da notícia.
 
+=======
+            
+            # Formata o título e o conteúdo da notícia para exibição.
+
+            caminho_arquivo = os.path.join('trendfeeds/templates/html/noticias', nome_arquivo)
+            
+>>>>>>> 8993ede5433b9804cbc86d28967ece93b63dc0a4
             html_content = f"""
     {{% extends "html/modelo.html" %}}
 
@@ -365,7 +373,11 @@ def coletar_noticias():
     {{% block second_title %}}{second_title_formatado}{{% endblock second_title %}}
     {{% block main_content %}}{main_content_formatado}{{% endblock main_content %}}
     """
+<<<<<<< HEAD
             # Renderiza o template 'modelo.html' com o conteúdo da notícia.
+=======
+            # Pega o "modelo.html" como base para desenvolvimento dos novos html's.
+>>>>>>> 8993ede5433b9804cbc86d28967ece93b63dc0a4
 
             if criado == 'sim':
                 contador += 1

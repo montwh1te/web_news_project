@@ -16,13 +16,13 @@ class CategoriaNoticias(models.Model):
     
 
 class Noticias(models.Model):
-    titulo = models.CharField(max_length=200, unique=True)
+    titulo = models.CharField(max_length=300, unique=True)
     descricao = models.TextField(max_length=7000)
     data_publicacao = models.DateField(auto_now_add=True)
     autor = models.CharField(max_length=100)
     link = models.URLField(default='https://ge.globo.com/')
     categoria = models.ForeignKey(CategoriaNoticias, on_delete=models.SET_NULL, null=True, blank=True)
-    slug = models.SlugField(max_length=200, unique=True, blank=True)
+    slug = models.SlugField(max_length=300, unique=True, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -35,7 +35,11 @@ class Noticias(models.Model):
 
 class ImagemNoticias(models.Model):
     noticia = models.ForeignKey(Noticias, on_delete=models.CASCADE, related_name="imagens")
+<<<<<<< HEAD
     imagem = models.ImageField( blank=True, null=True)
+=======
+    imagem = models.ImageField(upload_to='', blank=True, null=True)
+>>>>>>> 8993ede5433b9804cbc86d28967ece93b63dc0a4
 
     def __str__(self):
         return f"Imagem da notícia: {self.noticia.titulo}"
