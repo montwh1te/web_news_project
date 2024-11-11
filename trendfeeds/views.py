@@ -5,6 +5,8 @@ from .models import Usuarios, Noticias
 from .forms import RegistrationForm, LoginForm
 from django.template.loader import get_template
 from django.template import TemplateDoesNotExist
+from django.utils.text import slugify
+
 
 
 
