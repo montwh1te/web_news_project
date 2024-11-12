@@ -4,34 +4,34 @@ from .models import Usuarios
 
 class RegistrationForm(forms.ModelForm):
     username = forms.CharField(
-        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nome de Usuário'}),
+        widget=forms.TextInput(attrs={'placeholder': 'Nome de Usuário'}),
         label="Nome de Usuário",
         min_length=5,
         help_text="O nome de usuário deve ter pelo menos 5 caracteres."
     )
     email = forms.EmailField(
-        widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'E-mail'}),
+        widget=forms.EmailInput(attrs={'placeholder': 'E-mail'}),
         label="E-mail"
     )
     senha = forms.CharField(
-        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Senha'}),
+        widget=forms.PasswordInput(attrs={'placeholder': 'Senha'}),
         label="Senha",
         min_length=10,
         help_text="A senha deve ter pelo menos 10 caracteres."
     )
     confirmar_senha = forms.CharField(
-        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Confirmar Senha'}),
+        widget=forms.PasswordInput(attrs={'placeholder': 'Confirmar Senha'}),
         label="Confirmar Senha"
     )
     foto = forms.ImageField(
-        widget=forms.FileInput(attrs={'class': 'form-control-file'}),
+        widget=forms.FileInput(attrs={'placeholder': 'Foto de Perfil'}),
         label="Foto de Perfil",
         required=False
     )
 
     class Meta:
         model = Usuarios
-        fields = ['username', 'email', 'senha', 'foto'] # Personalização
+        fields = ['username', 'email', 'senha', 'foto']
         labels = {
             'username': 'Nome de Usuário',
             'email': 'E-mail',
@@ -59,10 +59,10 @@ class RegistrationForm(forms.ModelForm):
 
 class LoginForm(AuthenticationForm):
     username = forms.CharField(
-        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nome de Usuário'}),
+        widget=forms.TextInput(attrs={'placeholder': 'Nome de Usuário'}),
         label="Nome de Usuário"
     )
     password = forms.CharField(
-        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Senha'}),
+        widget=forms.PasswordInput(attrs={'placeholder': 'Senha'}),
         label="Senha"
     )

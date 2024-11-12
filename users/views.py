@@ -1,27 +1,22 @@
-from django.contrib.auth import logout, login, authenticate
-from django.shortcuts import render
+from django.contrib.auth import logout, login as auth_login, authenticate
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
 from .forms import RegistrationForm, LoginForm
 
-
-# Função de registro (consolidada para evitar duplicação)
 def registro(request):
     if request.method == 'POST':
-        form = RegistrationForm(request.POST, request.FILES)  # Incluindo request.FILES para upload de imagem
+        form = RegistrationForm(request.POST, request.FILES)
         if form.is_valid():
             user = form.save(commit=False)
-            user.set_password(form.cleaned_data['senha'])  # Define a senha corretamente
+            user.set_password(form.cleaned_data['senha'])
             user.save()
-            login(request, user)  # Login automático após o registro
-            return redirect('home')  # Redireciona para a página inicial após o registro
+            auth_login(request, user)  # Usa a função de login do Django com o alias 'auth_login'
+            return redirect('home')
     else:
         form = RegistrationForm()
-    return render(request, 'registro', {'form': form})
 
+    return render(request, "users/registro.html", {'form': form})
 
-# Função de login
-def login(request):
+def login_view(request):
     if request.method == 'POST':
         form = LoginForm(request, data=request.POST)
         if form.is_valid():
@@ -29,16 +24,14 @@ def login(request):
             password = form.cleaned_data.get('password')
             user = authenticate(request, username=username, password=password)
             if user is not None:
-                login(request, user)
+                auth_login(request, user)  # Usa a função de login do Django com o alias 'auth_login'
                 return redirect('home')
             else:
                 form.add_error(None, "Nome de usuário ou senha inválidos.")
     else:
         form = LoginForm()
-    return render(request, 'login.html', {'form': form})
+    return render(request, 'users/login.html', {'form': form})
 
-
-# Função de logout
-def logout(request):
+def logout_view(request):
     logout(request)
     return redirect('home')

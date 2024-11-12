@@ -58,6 +58,8 @@ TEMPLATES = [
         'DIRS': [
             os.path.join(BASE_DIR, 'templates/html'),
             os.path.join(BASE_DIR, 'templates/html/noticias'),
+            os.path.join(BASE_DIR, 'templates/users'),
+
             ],  # Diretório de templates
         'APP_DIRS': True,  # Isso permite que o Django procure também em pastas de templates dentro dos apps
         'OPTIONS': {

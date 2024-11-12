@@ -99,25 +99,23 @@
                   {% for field in form %}
                         <div class="form-group">
                               {{ field.label_tag }}
-
                               {% if field.name == "foto" %}
-                                  <!-- Campo de upload estilizado -->
-                                  <div class="custom-file">
-                                      {{ field|add_class:"custom-file-input" }} <!-- Adiciona o campo de upload de foto -->
-                                      <label class="custom-file-label" for="id_foto">Escolher Foto</label>
-                                  </div>
+                                    <div class="custom-file">
+                                    {{ field|add_class:"custom-file-input" }}
+                                    <label class="custom-file-label" for="id_foto">Escolher Foto</label>
+                                    </div>
                               {% else %}
-                                  {{ field }}
+                                    {{ field|add_class:"form-control" }}
                               {% endif %}
-
                               {% if field.help_text %}
-                                  <small class="form-text text-muted">{{ field.help_text }}</small>
+                                    <small class="form-text text-muted">{{ field.help_text }}</small>
                               {% endif %}
                               {% for error in field.errors %}
-                                  <div class="text-danger">{{ error }}</div>
+                                    <div class="text-danger">{{ error }}</div>
                               {% endfor %}
                         </div>
                   {% endfor %}
+
                   <button type="submit" class="btn btn-primary mt-3">Registrar</button>
             </form>
             <p class="login-link">Já tem uma conta? <a href="{% url 'login' %}">Entre!</a></p>
