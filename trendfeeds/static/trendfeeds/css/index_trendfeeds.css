@@ -81,3 +81,41 @@ main {
 .dropdown-item img:hover {
   transform: scale(1.1);
 }
+
+
+.user-info {
+  position: relative;
+  display: inline-block;
+}
+
+.user-photo {
+  cursor: pointer;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 35px;
+  right: 0;
+  background-color: #f9f9f9;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  z-index: 1;
+  border-radius: 8px;
+  width: 150px;
+}
+
+.user-info:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown-content a {
+  color: #333;
+  text-decoration: none;
+  padding: 8px 0;
+  display: block;
+}
+
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
