@@ -1,12 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
 from django.utils.text import slugify
-import re  
-
-
-class Usuarios(AbstractUser):
-    foto = models.ImageField(upload_to='usuarios/', blank=True, null=True)
-
+from users.models import Usuarios
 
 class CategoriaNoticias(models.Model):
     nomecategoria = models.CharField(max_length=50)
@@ -14,7 +8,6 @@ class CategoriaNoticias(models.Model):
     def __str__(self):
         return self.nomecategoria
     
-
 class Noticias(models.Model):
     titulo = models.CharField(max_length=300, unique=True)
     descricao = models.TextField(max_length=7000)
@@ -40,6 +33,7 @@ class ImagemNoticias(models.Model):
 
     def __str__(self):
         return f"Imagem da notícia: {self.noticia.titulo}"
+    
 
 class TimeFavorito(models.Model):
     usuario = models.OneToOneField(Usuarios, on_delete=models.CASCADE)
@@ -47,7 +41,8 @@ class TimeFavorito(models.Model):
 
     def __str__(self):
         return f"{self.usuario.username} - {self.time}"
-
+    
+    
 class InteracaoUsuario(models.Model):
     noticia = models.ForeignKey(Noticias, on_delete=models.CASCADE)
     usuario = models.ForeignKey(Usuarios, on_delete=models.CASCADE)

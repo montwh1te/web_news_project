@@ -32,11 +32,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_bootstrap5',
     'trendfeeds',
+    'users',
 ]
 
 # User model
-AUTH_USER_MODEL = 'trendfeeds.Usuarios'
+AUTH_USER_MODEL = 'users.Usuarios'
 
 # Middlewares
 MIDDLEWARE = [

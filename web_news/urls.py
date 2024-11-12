@@ -3,7 +3,8 @@ from django.conf.urls.static import static
 from django.urls import path, include
 
 urlpatterns = [
-    path('', include('trendfeeds.urls')),  # Inclui as rotas do app trendfeeds
+    path('', include('trendfeeds.urls')),  # Inclui as rotas do app locadora
+    path('', include('users.urls')),  # Inclui as rotas do app users
 ]
 
 # Adiciona URLs para arquivos de mídia em desenvolvimento
