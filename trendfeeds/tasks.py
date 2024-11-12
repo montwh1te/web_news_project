@@ -25,7 +25,7 @@ import time
 from bs4 import BeautifulSoup
 # BeautifulSoup é uma biblioteca para análise de HTML, usada aqui para facilitar a extração de dados de arquivos HTML.
 
-from trendfeeds.models import Noticias, CategoriaNoticias, ImagemNoticias
+from trendfeeds.models import Noticias, Categoria, CategoriaNoticias
 # Importa a classe 'Noticias' do models do Django, o que permite salvar notícias em uma tabela do banco de dados.
 
 from django.template.loader import render_to_string
@@ -42,6 +42,9 @@ from django.utils import timezone
 
 from django.core.files import File
 # Import necessário para manipulação e salvamento de arquivos de mídia no banco de dados.
+
+from django.db.models import Max
+# Importa a funcao necessaria para encontrar o id mais alto na tabela
 
 import unicodedata
 # O módulo 'unicodedata' permite normalizar textos, como remover acentos e caracteres especiais de strings.
@@ -96,6 +99,7 @@ def coletar_noticias():
     try:
         driver.get(url_principal)
         # Acessa a URL principal com o Selenium.
+
 
         for i in range(30):
             criado = 'nao'
@@ -244,12 +248,59 @@ def coletar_noticias():
 
 
 
+
+
+            try:
+                time_encontrado = None
+                categorias_encontradas = []
+                # Procura por categorias na lista de times com base no título da notícia
+                for clube in times:
+                    if clube in titulo_formatado_semespaco.lower():
+                        categorias_encontradas.append(clube.strip().lower())
+
+                for nome_categoria in categorias_encontradas or ["outro"]:
+                    categoria, _ = Categoria.objects.get_or_create(nomecategoria=nome_categoria)
+               
+                
+                data_publicacao = timezone.now()
+
+                autor_text = "Desconhecido"
+                try:
+                    autor_element = driver.find_element(By.CLASS_NAME, 'content-author__name')
+                    autor_text = autor_element.text
+                except:
+                    pass
+                
+                
+                # Cria ou atualiza a notícia e salva as imagens no banco de dados
+                noticia_modelo, created = Noticias.objects.update_or_create(
+                    titulo=titulo_truncado,
+                    defaults={
+                        'data_publicacao': data_publicacao,
+                        'descricao': preview_content,
+                        'autor': autor_text,
+                        'link': link_noticia
+                    }
+                )
+                
+                print(Fore.GREEN + f"Notícia '{titulo_truncado}' {'criada' if created else 'atualizada'} no banco de dados com sucesso.")
+                
+                novo_id_noticia = noticia_modelo.id  # Obtenha o ID gerado
+
+                CategoriaNoticias.objects.get_or_create(noticia=noticia_modelo, categoria=categoria)
+                print(Fore.GREEN + f"Notícia '{titulo_truncado}' associada com a categoria '{categoria.nomecategoria}'.")
+
+            except Exception as e:
+                print(Fore.RED + f"Erro ao criar/atualizar a notícia: {e}")
+
+
+
             try:
                 imagens_elementos = driver.find_elements(By.CSS_SELECTOR, "amp-img")
                 imagem_urls = []
                 for j, imagem_elemento in enumerate(imagens_elementos):
                     url_imagem = imagem_elemento.get_attribute("src")
-                    nome_arquivo_imagem = os.path.join(diretorio_imagens, f"{titulo_truncado}_{j}.jpg")
+                    nome_arquivo_imagem = os.path.join(diretorio_imagens, f"n_{novo_id_noticia}_{j}.jpg")
                     resposta_imagem = requests.get(url_imagem, stream=True)
                     resposta_imagem.raise_for_status()
 
@@ -261,58 +312,6 @@ def coletar_noticias():
 
             except Exception as e:
                 print(Fore.RED + f"Erro ao baixar as imagens: {e}")
-
-
-            try:
-                time_encontrado = None
-                for clube in times:
-                    if clube in titulo_formatado_semespaco.lower():
-                        time_encontrado = clube.strip().lower()
-                        break
-
-                categoria, _ = CategoriaNoticias.objects.get_or_create(
-                    nomecategoria=time_encontrado or "outro"
-                )
-                
-                data_publicacao = timezone.now()
-
-                autor_text = "Desconhecido"
-                try:
-                    autor_element = driver.find_element(By.CLASS_NAME, 'content-author__name')
-                    autor_text = autor_element.text
-                except:
-                    pass
-
-                # Cria ou atualiza a notícia e salva as imagens no banco de dados
-                noticia_modelo, created = Noticias.objects.update_or_create(
-                    titulo=titulo_truncado,
-                    defaults={
-                        'data_publicacao': data_publicacao,
-                        'descricao': preview_content,
-                        'autor': autor_text,
-                        'categoria': categoria,
-                        'link': link_noticia
-                    }
-                )
-                print(Fore.GREEN + f"Notícia '{titulo_truncado}' {'criada' if created else 'atualizada'} no banco de dados com sucesso.")
-                
-                # Agora, associa as imagens ao `noticia_modelo`
-                if noticia_modelo:
-                    ImagemNoticias.objects.filter(noticia=noticia_modelo).delete()
-                    for imagem_url in imagem_urls:
-                        with open(imagem_url, 'rb') as img_file:
-                            ImagemNoticias.objects.create(noticia=noticia_modelo, imagem=File(img_file))
-                else:
-                    print(Fore.RED + f"Erro: Não foi possível criar ou atualizar a notícia '{titulo_truncado}'.")
-
-            except Exception as e:
-                print(Fore.RED + f"Erro ao criar/atualizar a notícia: {e}")
-
-
-
-
-
-
 
 
 
@@ -383,20 +382,11 @@ def coletar_noticias():
                         'data_publicacao': data_publicacao,
                         'descricao': preview_content,
                         'autor': autor_text,
-                        'categoria': categoria,
                         'link': link_noticia
                     }
                 )
                 print(Fore.GREEN + f"Notícia '{titulo_truncado}' {'criada' if created else 'atualizada'} no banco de dados com sucesso.")
                 
-                if noticia_modelo:
-                    # Limpa as imagens antigas e insere as novas no banco de dados
-                    ImagemNoticias.objects.filter(noticia=noticia_modelo).delete()
-                    for imagem_url in imagem_urls:
-                        with open(imagem_url, 'rb') as img_file:
-                            ImagemNoticias.objects.create(noticia=noticia_modelo, imagem=File(img_file))
-                else:
-                    print(Fore.RED + f"Erro: Não foi possível criar ou atualizar a notícia '{titulo_truncado}'.")
 
             except Exception as e:
                 print(Fore.RED + f"Erro ao criar/atualizar a notícia: {e}")
@@ -594,7 +584,7 @@ def __criar_html_com_paragrafos(paragrafos):
 
 
 
-def __adicionar_imagens(text, image_names, title):
+def __adicionar_imagens(text, image_names, noticia_id):
     lines = text.split('\n')
     new_text = []
     image_index = 0
@@ -602,7 +592,7 @@ def __adicionar_imagens(text, image_names, title):
     for line in lines:
         # Ajuste para inserir a tag <img> com `MEDIA_URL`
         if "Foto:" in line and image_index < len(image_names):
-            img_tag = f'<div class="div-imagem"><img class="noticia-imagem" src="{settings.MEDIA_URL}{title}_{image_index}.jpg"></div>'
+            img_tag = f'<div class="div-imagem"><img class="noticia-imagem" src=".{settings.MEDIA_URL}n_{noticia_id}_{image_index}.jpg"></div>'
             new_line = f"{img_tag}{line}"
             new_text.append(new_line)
             image_index += 1

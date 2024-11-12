@@ -70,9 +70,8 @@
             <!-- Notícia principal -->
             <div class="col-6 col-md-3 noticia-mais-recente">
                 <a href="{% if ultima_noticia.slug %}{% url 'detalhes_noticia' ultima_noticia.slug %}{% else %}# {% endif %}">
-                    <img class="img-fluid imagem-principal-banner"  
-                        src="{% if ultima_noticia.imagens.all %}{{ ultima_noticia.imagens.all.0.imagem.url }}{% else %}{% get_media_prefix %}default_image.jpg{% endif %}" 
-                        alt="noticia-mais-recente" style="border-radius: 20px;">
+                    <img class="img-fluid imagem-principal-banner" src="{% get_media_prefix %}/n_{{ ultima_noticia.id }}_0.jpg"
+                    alt="noticia-mais-recente" style="border-radius: 20px;">
                 </a>
                 <div class="d-flex flex-column container-fluid justify-content-start descricao-noticia-mais-recente">
                     <a href="{% if ultima_noticia.slug %}{% url 'detalhes_noticia' ultima_noticia.slug %}{% else %}# {% endif %}">
@@ -87,9 +86,7 @@
                 {% for noticia in outras_noticias %}
                 <div class="col-6 col-md-3 noticia-recente">
                     <a href="{% url 'detalhes_noticia' noticia.slug %}">
-                        <img class="img-fluid imagem-principal-banner" 
-                             src="{% if noticia.imagens.all %}{{ noticia.imagens.all.0.imagem.url }}{% else %}{% get_media_prefix %}default_image.jpg{% endif %}" 
-                             alt="noticia-recente" style="border-radius: 20px;">
+                        <img class="img-fluid imagem-principal-banner" src="{% get_media_prefix %}/n_{{ noticia.id }}_0.jpg" alt="noticia-recente" style="border-radius: 20px;">
                     </a>
                     <div class="d-flex flex-wrap-column container-fluid justify-content-start descricao-noticia-mais-recente">
                         <p class="titulo-noticia-recente">{{ noticia.titulo|replace_underscore }}</p>
