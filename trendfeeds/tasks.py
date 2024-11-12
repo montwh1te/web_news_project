@@ -350,7 +350,7 @@ def coletar_noticias():
 
             titulo_formatado = re.sub(r'[\\/*?:"<>|]', "", title_text)
             second_title_formatado = None
-            main_content_formatado = formatar_texto(titulo_formatado_semespaco, imagens_elementos, titulo_formatado_semespaco)
+            main_content_formatado = formatar_texto(titulo_formatado_semespaco, imagens_elementos, novo_id_noticia)
 
             caminho_arquivo = os.path.join('trendfeeds/templates/html/noticias', nome_arquivo)
             # Atualiza o caminho do arquivo HTML da notícia.
@@ -413,7 +413,7 @@ def pegar_resumo(content_text, num_frases=3):
 
 
 
-def formatar_texto(arquivo_nome, imagens_elementos, titulo_formatado_semespaco):
+def formatar_texto(arquivo_nome, imagens_elementos, novo_id_noticia):
     nome_arquivo = arquivo_nome
     file_path = os.path.join('trendfeeds', 'templates', 'html', 'noticias', f'{arquivo_nome}.html')
     # Define o nome do arquivo e o caminho para buscá-lo
@@ -461,7 +461,7 @@ def formatar_texto(arquivo_nome, imagens_elementos, titulo_formatado_semespaco):
 
     # Remove tags HTML, formatações indesejadas e frases com emojis e "Veja...também".
     
-    text = __adicionar_imagens(text, imagens_elementos, titulo_formatado_semespaco)
+    text = __adicionar_imagens(text, imagens_elementos, novo_id_noticia)
     paragrafos = __dividir_por_pontos_finais(text, 3)
     text = __criar_html_com_paragrafos(paragrafos)
     return text
