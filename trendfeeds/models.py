@@ -6,7 +6,7 @@ from users.models import Usuarios
 
 
 class Categoria(models.Model):
-    nomecategoria = models.CharField(max_length=50)
+    nome_categoria = models.CharField(max_length=50)
 
     def __str__(self):
         return self.nomecategoria

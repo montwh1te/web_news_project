@@ -133,7 +133,7 @@ def coletar_noticias():
                 continue
             except:
                 pass
-
+            
             try:
                 link_noticia = noticia.find_element(By.CLASS_NAME, 'feed-post-link').get_attribute('href')
                 titulo_noticia = noticia.find_element(By.CSS_SELECTOR, 'a.feed-post-link p').text.strip()
@@ -235,33 +235,34 @@ def coletar_noticias():
             titulo_formatado = re.sub(r'[\\/*?:"<>|]', "", title_text)
             # Formata o título da notícia para uso futuro.
 
-
-            times = [
-                "flamengo", "palmeiras", "são paulo", "corinthians", "vasco da gama",
-                "fluminense", "internacional", "grêmio", "cruzeiro", "atlético mineiro",
-                "santos", "botafogo", "atlético paranaense", "sport recife", "bahia",
-                "ceará", "fortaleza", "vitória", "chapecoense", "américa mineiro", "goiás",
-                "avaí", "botafogo sp", "figueirense", "coritiba", "náutico", "ponte preta",
-                "cuiabá", "bragantino"
-            ]
+            times = {
+        "atletico_mg": ["atlético-mg", "galo"],
+        "atletico_pr": ["atlético-pr", "athletico", "furacão"],
+        "bahia": ["bahia", "esquadrão", "esquadrão de aço"],
+        "botafogo": ["botafogo", "fogão"],
+        "bragantino": ["bragantino", "red bull bragantino", "massa bruta"],
+        "corinthians": ["corinthians", "timão"],
+        "cruzeiro": ["cruzeiro", "raposa"],
+        "cuiaba": ["cuiabá", "dourado"],
+        "flamengo": ["flamengo", "fla", "urubu"],
+        "fluminense": ["fluminense", "flu", "tricolor das laranjeiras"],
+        "fortaleza": ["fortaleza", "leão do pici"],
+        "goias": ["goiás", "esmeraldino"],
+        "gremio": ["grêmio", "tricolor gaúcho", "imortal"],
+        "internacional": ["inter", "colorado"],
+        "palmeiras": ["palmeiras", "verdão"],
+        "santos": ["santos", "peixe"],
+        "sao_paulo": ["são paulo", "spfc", "tricolor paulista"],
+        "vasco": ["vasco", "vascão", "gigante da colina"],
+        "coritiba": ["coritiba", "coxa"],
+        "america_mg": ["américa-mg", "coelho"],
+        "selecao": ["seleção", "seleção brasileira", "canário", "canarinho"]
+                    }
+            
             # Lista de times para verificar se algum time está relacionado à notícia.
 
 
-
-
-
-            try:
-                time_encontrado = None
-                categorias_encontradas = []
-                # Procura por categorias na lista de times com base no título da notícia
-                for clube in times:
-                    if clube in titulo_formatado_semespaco.lower():
-                        categorias_encontradas.append(clube.strip().lower())
-
-                for nome_categoria in categorias_encontradas or ["outro"]:
-                    categoria, _ = Categoria.objects.get_or_create(nomecategoria=nome_categoria)
-               
-                
+            try:                
                 data_publicacao = timezone.now()
 
                 autor_text = "Desconhecido"
@@ -285,15 +286,36 @@ def coletar_noticias():
                 
                 print(Fore.GREEN + f"Notícia '{titulo_truncado}' {'criada' if created else 'atualizada'} no banco de dados com sucesso.")
                 
-                novo_id_noticia = noticia_modelo.id  # Obtenha o ID gerado
-
-                CategoriaNoticias.objects.get_or_create(noticia=noticia_modelo, categoria=categoria)
-                print(Fore.GREEN + f"Notícia '{titulo_truncado}' associada com a categoria '{categoria.nomecategoria}'.")
+                
+                
+                categorias_encontradas = []
+                # Procura por categorias na lista de times com base no título da notícia
+                
+                for clube, apelidos in times.items():
+                    if any(apelido in titulo_sem_pontuacao.lower() for apelido in apelidos):
+                        categorias_encontradas.append(clube)
+                        
+                print(f'Categorias encontradas: {categorias_encontradas}')
+                
+                if len(categorias_encontradas) == 0:
+                    
+                    print('Não foi possível relacionar nenhuma categoria!')
+                    categoria, _ = Categoria.objects.get_or_create(nome_categoria='outros')
+                    CategoriaNoticias.objects.get_or_create(noticia=noticia_modelo, categoria=categoria)
+                    
+                else:
+                    
+                    if categorias_encontradas:
+                        for nome_categoria in categorias_encontradas:
+                            categoria, _ = Categoria.objects.get_or_create(nome_categoria=nome_categoria)
+                            CategoriaNoticias.objects.get_or_create(noticia=noticia_modelo, categoria=categoria)
+                    
+                    print(Fore.GREEN + f"Notícia '{titulo_truncado}' associada com a categoria '{categoria.nome_categoria}'.")
 
             except Exception as e:
                 print(Fore.RED + f"Erro ao criar/atualizar a notícia: {e}")
-
-
+                
+            novo_id_noticia = noticia_modelo.id  # Obtenha o ID gerado
 
             try:
                 imagens_elementos = driver.find_elements(By.CSS_SELECTOR, "amp-img")
@@ -312,20 +334,9 @@ def coletar_noticias():
 
             except Exception as e:
                 print(Fore.RED + f"Erro ao baixar as imagens: {e}")
-
-
-
-            data_publicacao = timezone.now()
-            # Define a data de publicação como a data/hora atual.
-
-            try:
-                autor_element = driver.find_element(By.CLASS_NAME, 'content-author__name')
-                autor_text = autor_element.text
-                # Captura o nome do autor da notícia, se disponível.
-            except:
-                autor_text = "Desconhecido"
-                # Caso o autor não seja encontrado, define como "Desconhecido".
-
+                
+                
+                
             nome_arquivo = f"{titulo_truncado}.html"
             caminho_arquivo = os.path.join('trendfeeds/templates/html/noticias', nome_arquivo)
             # Define o nome do arquivo e o caminho para salvar o HTML da notícia.
@@ -339,7 +350,8 @@ def coletar_noticias():
             </html>
             """
             # Cria o conteúdo HTML para a notícia.
-
+            
+            
             with open(caminho_arquivo, 'w', encoding='utf-8') as file:
                 file.write(html_content)
             # Salva o HTML da notícia no diretório especificado.
@@ -357,6 +369,8 @@ def coletar_noticias():
 
             html_content = f"""
     {{% extends "html/modelo.html" %}}
+    {{% load static %}}
+    
 
     {{% block title %}}{titulo_formatado}{{% endblock title %}}
     {{% block main_title %}}{titulo_formatado}{{% endblock main_title %}}
@@ -374,23 +388,7 @@ def coletar_noticias():
             if contador == 10:
                 break
             # Encerra o loop após processar 8 notícias.
-
-            try:
-                noticia_modelo, created = Noticias.objects.update_or_create(
-                    titulo=titulo_truncado,
-                    defaults={
-                        'data_publicacao': data_publicacao,
-                        'descricao': preview_content,
-                        'autor': autor_text,
-                        'link': link_noticia
-                    }
-                )
-                print(Fore.GREEN + f"Notícia '{titulo_truncado}' {'criada' if created else 'atualizada'} no banco de dados com sucesso.")
-                
-
-            except Exception as e:
-                print(Fore.RED + f"Erro ao criar/atualizar a notícia: {e}")
-
+                                
 
             with open(caminho_arquivo, "w", encoding="utf-8") as file:
                 file.write(html_content)
@@ -592,7 +590,7 @@ def __adicionar_imagens(text, image_names, noticia_id):
     for line in lines:
         # Ajuste para inserir a tag <img> com `MEDIA_URL`
         if "Foto:" in line and image_index < len(image_names):
-            img_tag = f'<div class="div-imagem"><img class="noticia-imagem" src=".{settings.MEDIA_URL}n_{noticia_id}_{image_index}.jpg"></div>'
+            img_tag = f'<div class="div-imagem"><img class="noticia-imagem" src="{{% get_media_prefix %}}n_{noticia_id}_{image_index}.jpg"></div>'
             new_line = f"{img_tag}{line}"
             new_text.append(new_line)
             image_index += 1
