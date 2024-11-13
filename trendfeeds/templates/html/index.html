@@ -89,14 +89,14 @@
             <!-- Notícia principal -->
             <div class="col-12 col-md-6 noticia-mais-recente">
                 <a href="{% if ultima_noticia.slug %}{% url 'detalhes_noticia' ultima_noticia.slug %}{% else %}# {% endif %}">
-                    <img class="img-fluid imagem-principal-banner" src="{% get_media_prefix %}/n_{{ ultima_noticia.id }}_0.jpg"
+                    <img class="img-fluid imagem-principal-banner" src="{% get_media_prefix %}noticias/n_{{ ultima_noticia.id }}_0.jpg"
                     alt="noticia-mais-recente" style="border-radius: 20px;">
                 </a>
                 <div class="d-flex flex-column container-fluid justify-content-start descricao-noticia-mais-recente">
                     <a href="{% if ultima_noticia.slug %}{% url 'detalhes_noticia' ultima_noticia.slug %}{% else %}# {% endif %}">
-                        <p class="titulo-noticia-mais-recente">{{ ultima_noticia.titulo|replace_underscore }}</p>
+                        <p class="titulo-noticia-mais-recente">{{ ultima_noticia.descricao }}</p>
                     </a>
-                    <p class="resumo-noticia-mais-recente">{{ ultima_noticia.descricao|slice:":150" }}...</p>
+                    <p class="resumo-noticia-mais-recente">{{ ultima_noticia.descricao|slice:":350" }} ...</p>
                 </div>
             </div>
     
@@ -105,10 +105,10 @@
                 {% for noticia in outras_noticias %}
                 <div class="col-6 col-md-3 noticia-recente">
                     <a href="{% url 'detalhes_noticia' noticia.slug %}">
-                        <img class="img-fluid imagem-principal-banner-recente" src="{% get_media_prefix %}/n_{{ noticia.id }}_0.jpg" alt="noticia-recente" style="border-radius: 20px;">
+                        <img class="img-fluid imagem-principal-banner-recente" src="{% get_media_prefix %}/thumbs/thumb_n_{{ noticia.id }}.jpg" alt="noticia-recente" style="border-radius: 20px;">
                     </a>
                     <div class="d-flex flex-wrap-column container-fluid justify-content-start descricao-noticia-recente">
-                        <p class="titulo-noticia-recente">{{ noticia.titulo|replace_underscore }}</p>
+                        <p class="titulo-noticia-recente">{{ noticia.descricao | slice:":250" }} ...</p>
                     </div>
                 </div>
                 {% endfor %}
@@ -123,11 +123,11 @@
             <div class="col-12 col-md-6 col-lg-4 mb-4">
                 <div class="d-flex flex-column flex-md-row bg-white rounded shadow-sm">
                     <!-- Imagem -->
-                    <img class="img-thumbnail rounded-3" src="{% get_media_prefix %}/n_{{ noticia.id }}_0.jpg" alt="noticia" style="width: 25vw; height: 25vh; object-fit: cover;">
+                    <img class="img-thumbnail rounded-3" src="{% get_media_prefix %}/thumbs/thumb_n_{{ noticia.id }}.jpg" alt="noticia" style="width: 25vw; height: 25vh; object-fit: cover;">
                     <!-- Texto -->
                     <div class="p-3 d-flex flex-column justify-content-between">
-                        <h5 class="mb-2" style="font-size: 1.5rem; color: #333;">{{ noticia.titulo|replace_underscore }}</h5>
-                        <p class="text-muted" style="font-size: 1rem; color: #666;">{{ noticia.descricao|slice:":150" }}...</p>
+                        <h5 class="mb-2" style="font-size: 1.5rem; color: #333;">{{ noticia.descricao }}</h5>
+                        <p class="text-muted" style="font-size: 1rem; color: #666;">{{ noticia.descricao|slice:":150" }} ...</p>
                     </div>
                 </div>
             </div>

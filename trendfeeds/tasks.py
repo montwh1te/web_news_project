@@ -34,6 +34,9 @@ from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 # mark_safe é usado para garantir que uma string seja tratada como HTML, evitando a conversão de tags em texto.
 
+from PIL import Image
+# Importa a biblioteca Pillow para manipulação e redimensionamento de imagens
+
 from colorama import Fore, Style, init
 # 'colorama' ajuda a colorir as mensagens de saída do terminal, útil para distinguir avisos e erros ao processar notícias.
 
@@ -322,7 +325,7 @@ def coletar_noticias():
                 imagem_urls = []
                 for j, imagem_elemento in enumerate(imagens_elementos):
                     url_imagem = imagem_elemento.get_attribute("src")
-                    nome_arquivo_imagem = os.path.join(diretorio_imagens, f"n_{novo_id_noticia}_{j}.jpg")
+                    nome_arquivo_imagem = os.path.join(f'{diretorio_imagens}/noticias', f"n_{novo_id_noticia}_{j}.jpg")
                     resposta_imagem = requests.get(url_imagem, stream=True)
                     resposta_imagem.raise_for_status()
 
@@ -331,6 +334,14 @@ def coletar_noticias():
                             file.write(chunk)
                     imagem_urls.append(nome_arquivo_imagem)
                     print(Fore.GREEN + f"Imagem {j} salva como {nome_arquivo_imagem}")
+                    
+                    # Redimensiona a imagem e salva no diretório de miniaturas (thumbs)
+                    nome_arquivo_thumb = os.path.join(f'{diretorio_imagens}/thumbs', f"thumb_n_{novo_id_noticia}.jpg")
+                    with Image.open(nome_arquivo_imagem) as img:
+                        img.thumbnail((380, 215))  # Define o tamanho da miniatura
+                        img.save(nome_arquivo_thumb, "JPEG")  # Salva a miniatura como JPEG
+                    
+                    print(Fore.GREEN + f"Miniatura da imagem {j} salva como {nome_arquivo_thumb}")
 
             except Exception as e:
                 print(Fore.RED + f"Erro ao baixar as imagens: {e}")
@@ -404,10 +415,10 @@ def coletar_noticias():
 
 
 
-def pegar_resumo(content_text, num_frases=3):
-    frases = content_text.split('.')
-    return '. '.join(frases[:num_frases]) + ('.' if len(frases) > num_frases else '')
-    # Divide o conteúdo em frases e retorna as primeiras 3 (ou número especificado) frases com ponto final.
+def pegar_resumo(texto):
+    # Divide o texto na primeira ocorrência de quebra de linha e retorna apenas a primeira parte
+    primeira_linha = texto.split('\n', 1)[0]
+    return primeira_linha.strip()
 
 
 
@@ -590,8 +601,8 @@ def __adicionar_imagens(text, image_names, noticia_id):
     for line in lines:
         # Ajuste para inserir a tag <img> com `MEDIA_URL`
         if "Foto:" in line and image_index < len(image_names):
-            img_tag = f'<div class="div-imagem"><img class="noticia-imagem" src="{{% get_media_prefix %}}n_{noticia_id}_{image_index}.jpg"></div>'
-            new_line = f"{img_tag}{line}"
+            img_tag = f'<div class="div-imagem"><img class="noticia-imagem" src="{{% get_media_prefix %}}noticias/n_{noticia_id}_{image_index}.jpg"></div>'
+            new_line = f"{img_tag}<p class='foto-descricao'>{line}</p>"
             new_text.append(new_line)
             image_index += 1
         else:

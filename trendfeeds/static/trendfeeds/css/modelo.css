@@ -32,6 +32,10 @@ body {
     margin-top: 20px;
 }
 
+.foto-descricao {
+    font-size: 0.8rem;
+}
+
 .noticia-imagem {
     border-radius: 15px;
     max-height: 400px;
