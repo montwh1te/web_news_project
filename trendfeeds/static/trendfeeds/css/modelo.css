@@ -25,6 +25,12 @@ body {
     margin-bottom: 20px;
 }
 
+.area_usuario{
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+}
+
 .noticia-conteudo {
     font-size: 1.1rem;
     line-height: 1.8;

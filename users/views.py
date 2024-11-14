@@ -1,6 +1,8 @@
 from django.contrib.auth import logout, login as auth_login, authenticate
 from django.shortcuts import render, redirect
-from .forms import RegistrationForm, LoginForm
+from .forms import RegistrationForm, LoginForm, UsuarioUpdateForm, AlterarSenhaForm
+from .models import Usuarios
+from django.http import JsonResponse
 
 def registro(request):
     if request.method == 'POST':
@@ -24,7 +26,7 @@ def login_view(request):
             password = form.cleaned_data.get('password')
             user = authenticate(request, username=username, password=password)
             if user is not None:
-                auth_login(request, user)  # Usa a função de login do Django com o alias 'auth_login'
+                auth_login(request, user)  # Usa a função de login do Django com o 'auth_login'
                 return redirect('home')
             else:
                 form.add_error(None, "Nome de usuário ou senha inválidos.")
@@ -35,3 +37,38 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('home')
+
+def info_perfil(request, perfil_id):
+    user = Usuarios.objects.get(id = perfil_id)  # Recupera o usuário com o id do perfil
+    if request.method == 'POST':
+        form = UsuarioUpdateForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()  # Salva os dados atualizados no banco
+            return redirect('info_perfil', perfil_id=user.id)  # Redireciona para o perfil atualizado
+    else:
+        form = UsuarioUpdateForm(instance=user)  # Preenche o formulário com os dados do usuário
+
+    context = {'user': user, 'form': form}
+    return render(request, 'users/perfil.html', context)
+
+def alterar_senha(request):
+    if request.method == "POST":
+        form = AlterarSenhaForm(request.POST)
+        if form.is_valid():
+            senha_atual = form.cleaned_data['senha_atual']
+            senha_nova = form.cleaned_data['senha_nova']
+
+            # Verificar se a senha atual está correta
+            user = authenticate(username=request.user.username, password=senha_atual)
+            if user is not None:
+                # Alterar para a nova senha
+                user.set_password(senha_nova)
+                user.save()
+                return JsonResponse({'success': True})
+            else:
+                return JsonResponse({'success': False, 'error': 'Senha atual incorreta'})
+
+        # Se o formulário não for válido, retornar os erros
+        return JsonResponse({'success': False, 'errors': form.errors})
+
+    return JsonResponse({'success': False})

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informações da Conta</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Estilos principais */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .form-container {
+            width: 100%;
+            max-width: 400px;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .form-control-custom {
+            height: 44px;
+        }
+        h2 {
+            text-align: center;
+            color: #343a40;
+            margin-bottom: 20px;
+        }
+        .btn-primary {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .btn-custom{
+            background-color: #d7d7d78f;
+            margin-bottom: 20px;
+        }
+        
+        /* Definindo a animação de deslizar para baixo */
+        @keyframes slideDown {
+            from {
+                transform: translateY(-75px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Aplicando a animação ao modal */
+        .slide-down {
+            animation: slideDown 0.7s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <a href="{% url 'home' %}" style="text-align: center; padding-bottom: 10px;"><h5>Página Principal</h5></a>
+        <h2>Informações da Conta</h2>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="first_name">Primeiro Nome</label>
+                <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.first_name }}" required>
+            </div>
+            <div class="form-group">
+                <label for="last_name">Sobrenome</label>
+                <input type="text" class="form-control" id="last_name" name="last_name" value="{{ user.last_name }}" required>
+            </div>
+            <div class="form-group">
+                <label for="username">Nome de Usuário</label>
+                <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}" required>
+            </div>
+            <div class="form-group">
+                <label for="email">E-mail</label>
+                <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Senha</label>
+                <input type="password" class="form-control" id="password" name="password" value="{{ user.password }}" placeholder="Digite sua senha" disabled>
+            </div>
+
+            <!-- Botão para abrir o modal de alteração de senha -->
+            <button type="button" id="alterarSenhaBtn" class="btn btn-link btn-custom">Alterar Senha</button>
+
+            <!-- Campo para upload de imagem de perfil -->
+            <div class="form-group">
+                <label for="profile_picture">Imagem de Perfil:</label>
+                {% if user.foto %}
+                    <div><img src="{{ user.foto.url }}" alt="Foto de {{ user.username }}" class="img-thumbnail"></div>
+                {% else %}
+                    <p>Sem imagem de perfil</p>
+                {% endif %}
+                <input type="file" class="form-control form-control-custom" id="profile_picture" name="profile_picture">
+            </div>
+            <button type="submit" class="btn btn-primary">Atualizar Informações</button>
+        </form>
+    </div>
+
+    <!-- Modal de alteração de senha -->
+    <div id="senhaModal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Alterar Senha</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="alterarSenhaForm" method="POST">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="senha_atual">Senha Atual</label>
+                            <input type="password" class="form-control" id="senha_atual" name="senha_atual" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="senha_nova">Nova Senha</label>
+                            <input type="password" class="form-control" id="senha_nova" name="senha_nova" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmar_senha_nova">Confirmar Nova Senha</label>
+                            <input type="password" class="form-control" id="confirmar_senha_nova" name="confirmar_senha_nova" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Script para abrir o modal e enviar o formulário via AJAX -->
+    <script>
+        // Função para exibir o modal com a animação
+        document.getElementById('alterarSenhaBtn').addEventListener('click', function(event) {
+            event.preventDefault();
+            var modalContent = document.querySelector('#senhaModal .modal-content');
+            
+            // Adiciona a classe de animação
+            modalContent.classList.add('slide-down');
+            
+            // Mostra o modal
+            $('#senhaModal').modal('show');
+        });
+
+        // Remove a classe de animação quando o modal é fechado
+        $('#senhaModal').on('hidden.bs.modal', function () {
+            var modalContent = document.querySelector('#senhaModal .modal-content');
+            modalContent.classList.remove('slide-down');
+        });
+
+        // Abrir o modal ao clicar no botão "Alterar Senha"
+        document.getElementById('alterarSenhaBtn').addEventListener('click', function(event) {
+            event.preventDefault();
+            $('#senhaModal').modal('show');
+        });
+
+        // Enviar formulário de alteração de senha via AJAX
+        document.getElementById('alterarSenhaForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            $.ajax({
+                url: "{% url 'alterar_senha' %}",  // Substitua pela URL correta
+                type: "POST",
+                data: $(this).serialize(),
+                success: function(response) {
+                    if (response.success) {
+                        alert("Senha alterada com sucesso!");
+                        $('#senhaModal').modal('hide');
+                    } else {
+                        alert("Erro: " + (response.error || "Erro ao alterar a senha."));
+                    }
+                },
+                error: function() {
+                    alert("Ocorreu um erro ao tentar alterar a senha.");
+                }
+            });
+        });
+    </script>
+</body>
+</html>

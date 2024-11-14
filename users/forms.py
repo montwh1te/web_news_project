@@ -3,6 +3,18 @@ from django.contrib.auth.forms import AuthenticationForm
 from .models import Usuarios
 
 class RegistrationForm(forms.ModelForm):
+    first_name = forms.CharField(
+        widget=forms.TextInput(attrs={'placeholder': 'Primeiro nome'}),
+        label="Primeiro Nome",
+        min_length=1,
+        help_text="O primeiro nome não deve conter caracteres especiais"
+    )
+    last_name = forms.CharField(
+        widget=forms.TextInput(attrs={'placeholder': 'Sobrenome'}),
+        label="Sobrenome",
+        min_length=2,
+        help_text="O sobrenome não deve conter caracteres especiais"
+    )
     username = forms.CharField(
         widget=forms.TextInput(attrs={'placeholder': 'Nome de Usuário'}),
         label="Nome de Usuário",
@@ -31,10 +43,13 @@ class RegistrationForm(forms.ModelForm):
 
     class Meta:
         model = Usuarios
-        fields = ['username', 'email', 'senha', 'foto']
+        fields = ['first_name','last_name','username', 'email', 'senha', 'foto']
         labels = {
+            'first_name': 'Primeiro Nome',
+            'last_name': 'Sobrenome',
             'username': 'Nome de Usuário',
             'email': 'E-mail',
+            'password': 'Senha',
             'foto': 'Foto de Perfil'
         }
 
@@ -66,3 +81,38 @@ class LoginForm(AuthenticationForm):
         widget=forms.PasswordInput(attrs={'placeholder': 'Senha'}),
         label="Senha"
     )
+    
+class UsuarioUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Usuarios
+        fields = ['first_name', 'last_name', 'email', 'password', 'foto']
+        widgets = {
+            'senha': forms.PasswordInput(),
+        }
+
+class AlterarSenhaForm(forms.Form):
+    senha_atual = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+        label="Senha Atual",
+        required=True
+    )
+    senha_nova = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+        label="Nova Senha",
+        required=True
+    )
+    confirmar_senha_nova = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+        label="Confirmar Nova Senha",
+        required=True
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        senha_nova = cleaned_data.get("senha_nova")
+        confirmar_senha_nova = cleaned_data.get("confirmar_senha_nova")
+
+        if senha_nova and confirmar_senha_nova and senha_nova != confirmar_senha_nova:
+            raise forms.ValidationError("As novas senhas não coincidem.")
+
+        return cleaned_data
