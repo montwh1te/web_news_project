@@ -262,6 +262,32 @@ def coletar_noticias():
         "selecao": ["seleção", "seleção brasileira", "canário", "canarinho"]
                     }
             
+            # Dicionário de cores dos times
+            cores_times = {
+        "atletico_mg": "#000000",          # Preto
+        "atletico_pr": "#cc0000",          # Vermelho escuro
+        "bahia": "#0033cc",                # Azul escuro
+        "botafogo": "#000000",             # Preto
+        "bragantino": "#cc0000",           # Vermelho escuro
+        "corinthians": "#333333",          # Cinza escuro
+        "cruzeiro": "#003399",             # Azul
+        "cuiaba": "#009933",               # Verde
+        "flamengo": "#ff0000",             # Vermelho
+        "fluminense": "#990000",           # Bordô
+        "fortaleza": "#003399",            # Azul
+        "goias": "#009933",                # Verde
+        "gremio": "#0066cc",               # Azul claro
+        "internacional": "#cc0000",        # Vermelho escuro
+        "palmeiras": "#006633",            # Verde escuro
+        "santos": "#000000",               # Preto
+        "sao_paulo": "#cc0000",            # Vermelho escuro
+        "vasco": "#000000",                # Preto
+        "coritiba": "#009933",             # Verde
+        "america_mg": "#009933",           # Verde
+        "selecao": "#ffcc00"               # Amarelo
+            }
+
+            
             # Lista de times para verificar se algum time está relacionado à notícia.
 
 
@@ -371,23 +397,112 @@ def coletar_noticias():
             criado = 'sim'
             # Marca a notícia como criada.
 
-            titulo_formatado = re.sub(r'[\\/*?:"<>|]', "", title_text)
-            second_title_formatado = None
+            second_title_formatado = re.sub(r'[\\/*?:"<>|]', "", title_text)
             main_content_formatado = formatar_texto(titulo_formatado_semespaco, imagens_elementos, novo_id_noticia)
 
             caminho_arquivo = os.path.join('trendfeeds/templates/html/noticias', nome_arquivo)
             # Atualiza o caminho do arquivo HTML da notícia.
+           
+           
+            categoria_nome = categorias_encontradas[0] if categorias_encontradas else "Outros"
+            cor_categoria = cores_times.get(categoria_nome, "#cccccc")  # Cor padrão caso não encontre o time
+
+           
+
+
+
+            categoria_template_dir = 'trendfeeds/templates/html/categorias'
+             # Local para salvar as páginas de categoria
+
+            os.makedirs(categoria_template_dir, exist_ok=True)
+            # Cria o diretório de categorias se ele ainda não existir
+            
+
+            if categorias_encontradas:
+                for nome_categoria in categorias_encontradas:
+                    try:
+                        categoria, _ = Categoria.objects.get_or_create(nome_categoria=nome_categoria)
+                        CategoriaNoticias.objects.get_or_create(noticia=noticia_modelo, categoria=categoria)
+
+
+                        cores_times = {
+                            "atletico_mg": "#000000",          # Preto
+                            "atletico_pr": "#cc0000",          # Vermelho escuro
+                            "bahia": "#0033cc",                # Azul escuro
+                            "botafogo": "#000000",             # Preto
+                            "bragantino": "#cc0000",           # Vermelho escuro
+                            "corinthians": "#333333",          # Cinza escuro
+                            "cruzeiro": "#003399",             # Azul
+                            "cuiaba": "#009933",               # Verde
+                            "flamengo": "#ff0000",             # Vermelho
+                            "fluminense": "#990000",           # Bordô
+                            "fortaleza": "#003399",            # Azul
+                            "goias": "#009933",                # Verde
+                            "gremio": "#0066cc",               # Azul claro
+                            "internacional": "#cc0000",        # Vermelho escuro
+                            "palmeiras": "#006633",            # Verde escuro
+                            "santos": "#000000",               # Preto
+                            "sao_paulo": "#cc0000",            # Vermelho escuro
+                            "vasco": "#000000",                # Preto
+                            "coritiba": "#009933",             # Verde
+                            "america_mg": "#009933",           # Verde
+                            "selecao": "#ffcc00"               # Amarelo
+                        }
+                        
+                        # Define cor da categoria; se não encontrar, usa a cor padrão
+                        cor_categoria = cores_times.get(nome_categoria, "#cccccc")
+                        
+                        # Nome do arquivo da página de índice da categoria
+                        nome_arquivo_categoria = os.path.join(categoria_template_dir, f'index_{nome_categoria}.html')
+                        
+                        # Verifica se o arquivo existe; caso contrário, cria a página
+                        if not os.path.exists(nome_arquivo_categoria):
+                            html_categoria_content = f"""
+{{% extends "html/modelo_categoria.html" %}}
+{{% load static %}}
+
+{{% block title %}}{nome_categoria} - Notícias{{% endblock title %}}
+{{% block main_title %}}{nome_categoria} - Notícias{{% endblock main_title %}}
+{{% block cor_categoria %}}{cor_categoria}{{% endblock cor_categoria %}}
+
+<div class="categoria-listagem">
+    <h2>Últimas notícias sobre {nome_categoria}</h2>
+    <p>Aqui você encontrará todas as notícias sobre {nome_categoria}.</p>
+</div>
+                            """
+                            # Salva o arquivo HTML da categoria
+                            with open(nome_arquivo_categoria, "w", encoding="utf-8") as file:
+                                file.write(html_categoria_content)
+                            
+                            print(f"Página da categoria '{nome_categoria}' criada com sucesso em: {nome_arquivo_categoria}")
+                        else:
+                            print(f"A página da categoria '{nome_categoria}' já existe. Não será criada novamente.")
+
+                    except Exception as e:
+                        print(f"Erro ao criar a página da categoria '{nome_categoria}': {e}")
+            else:
+                # Se nenhuma categoria foi encontrada, atribui a categoria "Outros"
+                categoria, _ = Categoria.objects.get_or_create(nome_categoria="Outros")
+                CategoriaNoticias.objects.get_or_create(noticia=noticia_modelo, categoria=categoria)
+                print(f"Notícia '{titulo_truncado}' associada com a categoria 'Outros'.")
+
+
+
+
+
 
             html_content = f"""
-    {{% extends "html/modelo.html" %}}
-    {{% load static %}}
-    
+            
+{{% extends "html/modelo.html" %}}
+{{% load static %}}
 
-    {{% block title %}}{titulo_formatado}{{% endblock title %}}
-    {{% block main_title %}}{titulo_formatado}{{% endblock main_title %}}
-    {{% block second_title %}}{second_title_formatado}{{% endblock second_title %}}
-    {{% block main_content %}}{main_content_formatado}{{% endblock main_content %}}
-    """
+{{% block title %}}{categoria_nome}{{% endblock title %}}
+{{% block main_title %}}{categoria_nome}{{% endblock main_title %}}
+{{% block second_title %}}{second_title_formatado}{{% endblock second_title %}}
+{{% block main_content %}}{main_content_formatado}{{% endblock main_content %}}
+{{% block cor_categoria %}}{cor_categoria}{{% endblock cor_categoria %}}
+
+"""
             # Renderiza o template 'modelo.html' com o conteúdo da notícia.
 
             # Pega o "modelo.html" como base para desenvolvimento dos novos html's.

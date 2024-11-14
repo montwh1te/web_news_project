@@ -6,4 +6,10 @@ from . import views
 urlpatterns = [
     path('', views.home, name='home'),
     path('noticia/<slug:slug>/', views.detalhes_noticia, name='detalhes_noticia'),  # Corrigido para 'noticia/'
+    path('buscar_noticias/', views.buscar_noticias, name='buscar_noticias'),
+    path('buscar_noticias/', views.buscar_noticias, name='buscar_noticias'),
+    path('categoria/<str:nome_time>/', views.exibir_categoria, name='exibir_categoria'),
+
+
+
 ]

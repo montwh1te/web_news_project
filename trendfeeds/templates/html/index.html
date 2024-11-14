@@ -7,6 +7,71 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     {% load static %}
     <link rel="stylesheet" href="{% static 'trendfeeds/css/index_trendfeeds.css' %}">
+    <style>
+       
+        #search-bar {
+        width: 380px;
+        padding: 10px 15px;
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 25px;
+        transition: box-shadow 0.3s;
+        }
+
+        #search-bar:focus {
+        outline: none;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        #search-results {
+        position: absolute;
+        top: 100%;
+        /* left: -180px; */
+        width: 200%;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        margin-top: 19px;
+        padding: 0;
+        list-style: none;
+        max-height: 200px;
+        overflow-y: auto;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        z-index: 10;
+        }
+
+        .search-result-item {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+        }
+
+        .search-result-item:hover {
+        background-color: #f0f0f0;
+        }
+
+        .search-result-image {
+        width: 40px !important;
+        height: 40px !important;
+        margin-right: 10px !important;
+        border-radius: 4px !important;
+        object-fit: cover !important;
+        }
+
+        .search-result-text {
+        font-size: 1rem;
+        color: #333;
+        font-weight: 500;
+        }
+
+        .search-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+        }
+
+    </style>
 </head>
 <body>
 
@@ -25,14 +90,19 @@
                             <img src="{% get_media_prefix %}brasao.png" alt="Ícone do Time" style="width: 30px; height: 30px;">
                         </div>
                         
-                        <div class="dropdown-menu p-3" aria-labelledby="dropdownTimes">
+                        <div class="dropdown-menu p-1" aria-labelledby="dropdownTimes">
                             <div class="d-flex flex-wrap">
-                                <!-- Imagens dos times -->
-                                <a class="dropdown-item p-2" href="#"><img src="{% get_media_prefix %}time1.png" alt="Time 1" style="width: 50px; height: 50px;"></a>
-                                <a class="dropdown-item p-2" href="#"><img src="{% get_media_prefix %}time2.png" alt="Time 2" style="width: 50px; height: 50px;"></a>
-                                <a class="dropdown-item p-2" href="#"><img src="{% get_media_prefix %}time3.png" alt="Time 3" style="width: 50px; height: 50px;"></a>
+                                <!-- Iterando pelas categorias, excluindo 'Outros' -->
+                                {% for categoria in categorias %}
+                                    {% if categoria.nome_categoria != "Outros" %}
+                                        <a class="dropdown-item p-1 col-4" href="{% url 'exibir_categoria' categoria.nome_categoria|slugify %}">
+                                            <img src="{% get_media_prefix %}escudos/{{ categoria.nome_categoria|lower }}.png" alt="{{ categoria.nome_categoria }}" style="width: 35px; height: 35px;">
+                                        </a>
+                                    {% endif %}
+                                {% endfor %}
                             </div>
                         </div>
+                        
                     </li>
                     <li class="nav-item"><a class="nav-link" href="#">Início</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Sobre</a></li>
@@ -42,17 +112,13 @@
             </div>
 
             <!-- Direita: Barra de pesquisa -->
-            <div class="d-flex align-items-center">
-                <form class="form-inline">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Pesquisar" aria-label="Pesquisar">
-                    <button class="btn my-2 my-sm-0" type="submit">
-                        <img src="{% get_media_prefix %}pngwing.com (3).png" alt="lupa" style="width: 30px; height: 30px;">
-                    </button>
-                </form>
+            <div class="search-container">
+                <input id="search-bar" class="search-bar form-control mr-sm-2" type="search" placeholder="Pesquisar" aria-label="Pesquisar">
+                <ul id="search-results"></ul>
             </div>
 
 
-                  <!-- Direita: Foto do usuário com dropdown -->
+            <!-- Direita: Foto do usuário com dropdown -->
             <div class="dropdown">
             {% if request.user.is_authenticated %}
                     <!-- Ícone ou foto do usuário, que ao ser clicado abre o dropdown -->
@@ -72,8 +138,11 @@
             </div>
             {% else %}
                 <!-- Mostrar o botão de login e registro caso o usuário não esteja autenticado -->
-                <a class="nav-link" href="{% url 'login' %}">Login</a>
-                <a class="nav-link" href="{% url 'registro' %}">Registro</a>
+                 <div class="row d-flex flex-wrap justify-content-center">
+                    <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    <a class="nav-link" href="{% url 'registro' %}">Registro</a>
+                 </div>
+              
             {% endif %}
 
 
@@ -82,6 +151,7 @@
 
     {% load custom_filters %}
 
+    <p classs="ultimas_noticias">Últimas notícias</p>
     <main class="d-flex container-fluid justify-content-center">
         <div class="row d-flex flex-nowrap justify-content-center noticias-recentes-banner-principal">
             
@@ -92,9 +162,8 @@
                     alt="noticia-mais-recente" style="border-radius: 20px;">
                 </a>
                 <div class="d-flex flex-column container-fluid justify-content-start descricao-noticia-mais-recente">
-                    <a href="{% if ultima_noticia.slug %}{% url 'detalhes_noticia' ultima_noticia.slug %}{% else %}# {% endif %}">
-                        <p class="titulo-noticia-mais-recente">{{ ultima_noticia.descricao }}</p>
-                    </a>
+                    <p class="titulo-noticia-mais-recente">{{ ultima_noticia.descricao }}</p>
+                 
                     <p class="resumo-noticia-mais-recente">{{ ultima_noticia.descricao|slice:":350" }} ...</p>
                 </div>
             </div>
@@ -104,7 +173,7 @@
                 {% for noticia in outras_noticias %}
                 <div class="col-6 col-md-3 noticia-recente">
                     <a href="{% url 'detalhes_noticia' noticia.slug %}">
-                        <img class="img-fluid imagem-principal-banner-recente" src="{% get_media_prefix %}/thumbs/thumb_n_{{ noticia.id }}.jpg" alt="noticia-recente" style="border-radius: 20px;">
+                        <img class="img-fluid imagem-principal-banner-recente" src="{% get_media_prefix %}noticias/n_{{ noticia.id }}_0.jpg" alt="noticia-recente" style="border-radius: 20px;">
                     </a>
                     <div class="d-flex flex-wrap-column container-fluid justify-content-start descricao-noticia-recente">
                         <p class="titulo-noticia-recente">{{ noticia.descricao | slice:":250" }} ...</p>
@@ -120,15 +189,18 @@
         <div class="row">
             {% for noticia in todas_as_noticias %}
             <div class="col-12 col-md-6 col-lg-4 mb-4">
-                <div class="d-flex flex-column flex-md-row bg-white rounded shadow-sm">
-                    <!-- Imagem -->
-                    <img class="img-thumbnail rounded-3" src="{% get_media_prefix %}/thumbs/thumb_n_{{ noticia.id }}.jpg" alt="noticia" style="width: 25vw; height: 25vh; object-fit: cover;">
-                    <!-- Texto -->
-                    <div class="p-3 d-flex flex-column justify-content-between">
-                        <h5 class="mb-2" style="font-size: 1.5rem; color: #333;">{{ noticia.descricao }}</h5>
-                        <p class="text-muted" style="font-size: 1rem; color: #666;">{{ noticia.descricao|slice:":150" }} ...</p>
+                <a href="{% url 'detalhes_noticia' noticia.slug %}">
+                    <div class="d-flex flex-column flex-md-row bg-white rounded shadow-sm">
+                        <!-- Imagem --> 
+                        <img class="img-thumbnail rounded-3" src="{% get_media_prefix %}/thumbs/thumb_n_{{ noticia.id }}.jpg" alt="noticia" style="width: 25vw; height: 25vh; object-fit: cover;">
+                        <!-- Texto -->
+                    
+                        <div class="p-3 d-flex flex-column justify-content-between">
+                            <h5 class="mb-2" style="font-size: 1.5rem; color: #333;">{{ noticia.descricao }}</h5>
+                            <p class="text-muted" style="font-size: 1rem; color: #666;">{{ noticia.descricao|slice:":150" }} ...</p>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
             {% endfor %}
         </div>
@@ -138,5 +210,53 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+      document.getElementById('search-bar').addEventListener('input', function () {
+        let query = this.value;
+        if (query.length > 1) {
+            fetch(`/buscar_noticias/?q=${query}`)
+                .then(response => response.json())
+                .then(data => {
+                    const resultsContainer = document.getElementById('search-results');
+                    resultsContainer.innerHTML = '';
+
+                    if (data.results.length > 0) {
+                        data.results.forEach(item => {
+                            let li = document.createElement('li');
+                            li.classList.add('search-result-item');
+
+                            let img = document.createElement('img');
+                            img.src = item.imagem_url || "{% static 'locadora/images/default.png' %}";
+                            img.alt = `Imagem de ${item.titulo}`;
+                            img.classList.add('search-result-image');  // Aplica o estilo CSS
+
+                            let text = document.createElement('span');
+                            text.textContent = item.titulo;
+                            text.classList.add('search-result-text');
+
+                            li.appendChild(img);
+                            li.appendChild(text);
+
+                            li.addEventListener('click', function() {
+                                window.location.href = `/noticia/${item.slug}/`;
+                            });
+
+                            resultsContainer.appendChild(li);
+                        });
+                    } else {
+                        resultsContainer.innerHTML = '<li class="no-results">Nenhum resultado encontrado.</li>';
+                    }
+                });
+        } else {
+            document.getElementById('search-results').innerHTML = '';
+        }
+    });
+
+
+
+
+    </script>
+    
 </body>
 </html>
