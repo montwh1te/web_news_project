@@ -68,6 +68,15 @@
                               {% endfor %}
                         </div>
                   {% endfor %}
+
+                  {% if form.non_field_errors %}
+                        <div class="form-group text-danger">
+                              {% for error in form.non_field_errors %}
+                                  <p>{{ error }}</p>
+                              {% endfor %}
+                        </div>
+                  {% endif %}
+                  
                   <button type="submit" class="btn btn-primary mt-3">Entrar</button>
             </form>
             <p class="register-link">Não tem uma conta? <a href="{% url 'registro' %}">Se registre!</a></p>
@@ -76,5 +85,17 @@
       <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.6.0/dist/umd/popper.min.js"></script>
       <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+      <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                // Seleciona o elemento que contém a mensagem de erro
+                const erroMensagem = document.querySelector(".text-danger");
+        
+                // Verifica se a mensagem de erro existe e, se sim, personaliza o conteúdo
+                if (erroMensagem) {
+                    erroMensagem.textContent = "O nome de usuário ou senha estão incorretos. Verifique suas credenciais e tente novamente.";
+                }
+            });
+        </script>
 </body>
 </html>

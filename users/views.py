@@ -44,7 +44,7 @@ def info_perfil(request, perfil_id):
         form = UsuarioUpdateForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
             form.save()  # Salva os dados atualizados no banco
-            return redirect('info_perfil', perfil_id=user.id)  # Redireciona para o perfil atualizado
+            return redirect('home')  # Redireciona para o perfil atualizado
     else:
         form = UsuarioUpdateForm(instance=user)  # Preenche o formulário com os dados do usuário
 
@@ -64,10 +64,13 @@ def alterar_senha(request):
                 # Alterar para a nova senha
                 user.set_password(senha_nova)
                 user.save()
+                
+                # Deslogar o usuário para que ele faça login com a nova senha
+                logout(request)
                 return JsonResponse({'success': True})
             else:
                 return JsonResponse({'success': False, 'error': 'Senha atual incorreta'})
-
+            
         # Se o formulário não for válido, retornar os erros
         return JsonResponse({'success': False, 'errors': form.errors})
 

@@ -73,21 +73,26 @@
             }
 
             .custom-file-label {
-                  display: inline-block;
-                  width: 100%;
-                  padding: 10px;
-                  font-size: 16px;
-                  color: #6c757d;
-                  background-color: #e9ecef;
-                  border: 1px solid #ced4da;
-                  border-radius: 4px;
-                  cursor: pointer;
-                  text-align: center;
-                  position: relative;
+                  display: inline-block !important;
+                  width: 100% !important;
+                  padding: 6px 13px !important;
+                  font-size: 16px !important;
+                  color: #6c757d !important;
+                  background-color: #e9ecef !important;
+                  border: 1px solid #ced4da !important;
+                  border-radius: 4px !important;
+                  cursor: pointer !important;
+                  position: relative !important;
             }
 
             .custom-file-label:hover {
                   background-color: #ced4da;
+            }
+            
+            .text-danger{
+                  color: #dc3545 !important;
+                  font-size: 0.75rem;
+                  padding: 8px 0px 0px 3px;
             }
       </style>
 </head>
@@ -124,5 +129,22 @@
       <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.6.0/dist/umd/popper.min.js"></script>
       <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+      <script>
+            // Seleção do elemento input file e label associado
+            const fileInput = document.querySelector(".custom-file-input");
+            const fileLabel = document.querySelector(".custom-file-label");
+      
+            if (fileLabel) {
+                  // Texto inicial do label antes de qualquer arquivo ser escolhido
+                  fileLabel.textContent = "Escolha um arquivo";
+      
+                  // Atualiza o texto do label com o nome do arquivo selecionado
+                  fileInput.addEventListener("change", function() {
+                  const fileName = this.files.length > 0 ? this.files[0].name : "Escolha um arquivo";
+                  fileLabel.textContent = fileName;
+                  });
+            }
+      </script>
 </body>
 </html>

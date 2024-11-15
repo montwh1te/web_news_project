@@ -38,8 +38,9 @@
             font-weight: bold;
         }
         .btn-custom{
-            background-color: #d7d7d78f;
+            background-color: None;
             margin-bottom: 20px;
+            padding: 0;
         }
         
         /* Definindo a animação de deslizar para baixo */
@@ -54,9 +55,98 @@
             }
         }
 
-        /* Aplicando a animação ao modal */
+
+        /* Aplicando a animação ao modal (pop-up) */
         .slide-down {
             animation: slideDown 0.7s ease;
+        }
+
+
+        /* Aplicação de estilo ao modal (pop-up) */
+        .modal-content {
+        border-radius: 8px;
+        }
+        .modal-header {
+            background-color: #bfbfbf;
+            color: white;
+        }
+        .modal-body {
+            background-color: #f9f9f9;
+        }
+        .btn-custom2 {
+            background-color: #bfbfbf;
+            border-color: #bfbfbf;
+            color: rgb(244, 244, 244);
+            border: none;
+            border-color: none;
+        }
+        .btn-custom2:hover {
+            background-color: #9b9b9b;
+            color: #FFF;
+        }
+
+        /* Aplicação de estilo ao modal de confirmação de senha (pop-up) */
+        .modal-custom {
+            display: none;
+            position: fixed;
+            z-index: 10;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%; 
+            background-color: rgba(0, 0, 0, 0.5); 
+        }
+        .modal-content-custom {
+            background-color: #fff;
+            margin: 15% auto;
+            padding: 40px;
+            border: 0px solid #888;
+            width: 500px;
+            text-align: center;
+            border-radius: 10px;
+        }
+
+        .close-custom {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            cursor: pointer;
+        }
+
+        .close-custom:hover,
+        .close-custom:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        #redirectButton-custom {
+            margin: 24px;
+            padding: 10px 20px;
+            background-color: #bfbfbf;
+            width: 75%;
+            color: #f5f5f5;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        #redirectButton-custom:hover {
+            background-color: #9b9b9b;
+            color: #FFF;
+        }
+        #h2-custom{
+            text-align: center;
+            color: #343a40;
+            margin-bottom: 20px;
+            padding: 25px;
+        }
+        #p-custom{
+            margin-top: -27px;
+            margin-bottom: 1rem;
         }
     </style>
 </head>
@@ -64,7 +154,7 @@
     <div class="form-container">
         <a href="{% url 'home' %}" style="text-align: center; padding-bottom: 10px;"><h5>Página Principal</h5></a>
         <h2>Informações da Conta</h2>
-        <form method="POST" enctype="multipart/form-data">
+        <form method="POST" action="{% url 'info_perfil' perfil_id=user.id %}" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="form-group">
                 <label for="first_name">Primeiro Nome</label>
@@ -83,8 +173,8 @@
                 <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
             </div>
             <div class="form-group">
-                <label for="password">Senha</label>
-                <input type="password" class="form-control" id="password" name="password" value="{{ user.password }}" placeholder="Digite sua senha" disabled>
+                <label>Senha</label>
+                <input type="password" class="form-control" value="••••••" disabled>
             </div>
 
             <!-- Botão para abrir o modal de alteração de senha -->
@@ -92,25 +182,26 @@
 
             <!-- Campo para upload de imagem de perfil -->
             <div class="form-group">
-                <label for="profile_picture">Imagem de Perfil:</label>
+                <label for="foto">Imagem de Perfil:</label>
                 {% if user.foto %}
                     <div><img src="{{ user.foto.url }}" alt="Foto de {{ user.username }}" class="img-thumbnail"></div>
                 {% else %}
                     <p>Sem imagem de perfil</p>
                 {% endif %}
-                <input type="file" class="form-control form-control-custom" id="profile_picture" name="profile_picture">
+                <input type="file" class="form-control form-control-custom" id="foto" name="foto">
             </div>
             <button type="submit" class="btn btn-primary">Atualizar Informações</button>
         </form>
     </div>
 
     <!-- Modal de alteração de senha -->
-    <div id="senhaModal" class="modal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
+    <!-- Modal Personalizado -->
+    <div id="senhaModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="senhaModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Alterar Senha</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <div class="modal-header" style="background-color: #9b9b9b; color: white;">
+                    <h5 class="modal-title" id="senhaModalLabel">Alterar Senha</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -129,19 +220,53 @@
                             <label for="confirmar_senha_nova">Confirmar Nova Senha</label>
                             <input type="password" class="form-control" id="confirmar_senha_nova" name="confirmar_senha_nova" required>
                         </div>
-                        <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                        <button type="submit" class="btn btn-custom2 btn-block">Salvar Alterações</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 
+    <div id="successModal-custom" class="modal-custom" style="display:none;">
+        <div class="modal-content-custom">
+            <span class="close-custom" onclick="closeModal()">&times;</span>
+            <h2 id="h2-custom">Senha Alterada com Sucesso</h2>
+            <p id="p-custom">Você será redirecionado para a página de login.</p>
+            <button id="redirectButton-custom" onclick="redirectToLogin()">OK</button>
+        </div>
+    </div>
+
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Script para abrir o modal e enviar o formulário via AJAX -->
     <script>
-        // Função para exibir o modal com a animação
+        // Função para atualizar a imagem de perfil assim que o usuário selecionar uma nova foto
+        document.getElementById('foto').addEventListener('change', function(event) {
+            var reader = new FileReader();
+            
+            // Quando a leitura do arquivo estiver completa, atualizar a imagem no campo
+            reader.onload = function(e) {
+                var imgElement = document.querySelector("img"); // Seleciona a tag <img> existente
+                imgElement.src = e.target.result; // Atualiza a imagem com o novo arquivo
+            };
+
+            // Quando a leitura do arquivo estiver completa, atualizar o conteúdo do <p>
+            reader.onload = function(e) {
+            var pElement = document.querySelector("p"); // Seleciona a tag <p> existente
+            pElement.innerHTML = ''; // Limpa o conteúdo do <p> para substituir pela imagem
+
+            // Cria um novo elemento <img> e define o src como a imagem carregada
+            var img = document.createElement('img');
+            img.src = e.target.result; // Define a imagem com o novo arquivo
+            img.style.width = '100%'; // Ajuste de tamanho
+            pElement.appendChild(img); // Adiciona a imagem no <p>
+            };
+            
+            // Lê o arquivo selecionado como uma URL de dados
+            reader.readAsDataURL(event.target.files[0]);
+        });
+
+        // Função para exibir o modal de alteração de senha
         document.getElementById('alterarSenhaBtn').addEventListener('click', function(event) {
             event.preventDefault();
             var modalContent = document.querySelector('#senhaModal .modal-content');
@@ -152,32 +277,31 @@
             // Mostra o modal
             $('#senhaModal').modal('show');
         });
-
+        
         // Remove a classe de animação quando o modal é fechado
         $('#senhaModal').on('hidden.bs.modal', function () {
             var modalContent = document.querySelector('#senhaModal .modal-content');
             modalContent.classList.remove('slide-down');
         });
-
-        // Abrir o modal ao clicar no botão "Alterar Senha"
-        document.getElementById('alterarSenhaBtn').addEventListener('click', function(event) {
-            event.preventDefault();
-            $('#senhaModal').modal('show');
-        });
-
+    
         // Enviar formulário de alteração de senha via AJAX
         document.getElementById('alterarSenhaForm').addEventListener('submit', function(event) {
             event.preventDefault();
+            
             $.ajax({
                 url: "{% url 'alterar_senha' %}",  // Substitua pela URL correta
                 type: "POST",
                 data: $(this).serialize(),
                 success: function(response) {
                     if (response.success) {
-                        alert("Senha alterada com sucesso!");
                         $('#senhaModal').modal('hide');
+                        showModal();  // Mostra o modal de sucesso
                     } else {
-                        alert("Erro: " + (response.error || "Erro ao alterar a senha."));
+                        if (response.error) {
+                            alert(response.error);  // Exibe mensagem de erro da senha atual incorreta
+                        } else {
+                            alert("Erro ao alterar a senha. Verifique os campos e tente novamente.");
+                        }
                     }
                 },
                 error: function() {
@@ -185,6 +309,21 @@
                 }
             });
         });
-    </script>
+    
+        // Função para exibir o modal de sucesso
+        function showModal() {
+            document.getElementById('successModal-custom').style.display = 'block';  // Alterado para ID correto
+        }
+    
+        // Função para fechar o modal de sucesso
+        function closeModal() {
+            document.getElementById('successModal-custom').style.display = 'none';  // Alterado para ID correto
+        }
+    
+        // Função para redirecionar para a página de login
+        function redirectToLogin() {
+            window.location.href = "{% url 'login' %}";  // Redireciona para a página de login
+        }
+    </script>    
 </body>
 </html>
