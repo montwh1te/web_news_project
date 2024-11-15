@@ -42,6 +42,11 @@
             margin-bottom: 20px;
             padding: 0;
         }
+        .text-danger{
+            color: #dc3545 !important;
+            font-size: 0.75rem;
+            padding: 8px 0px 0px 3px;
+        }
         
         /* Definindo a animação de deslizar para baixo */
         @keyframes slideDown {
@@ -159,18 +164,30 @@
             <div class="form-group">
                 <label for="first_name">Primeiro Nome</label>
                 <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.first_name }}" required>
+                {% for error in form.first_name.errors %}
+                    <small class="text-danger">{{ error }}</small>
+                {% endfor %}
             </div>
             <div class="form-group">
                 <label for="last_name">Sobrenome</label>
                 <input type="text" class="form-control" id="last_name" name="last_name" value="{{ user.last_name }}" required>
+                {% for error in form.last_name.errors %}
+                    <small class="text-danger">{{ error }}</small>
+                {% endfor %}
             </div>
             <div class="form-group">
                 <label for="username">Nome de Usuário</label>
                 <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}" required>
+                {% for error in form.username.errors %}
+                    <small class="text-danger">{{ error }}</small>
+                {% endfor %}
             </div>
             <div class="form-group">
                 <label for="email">E-mail</label>
                 <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
+                {% for error in form.email.errors %}
+                    <small class="text-danger">{{ error }}</small>
+                {% endfor %}
             </div>
             <div class="form-group">
                 <label>Senha</label>
@@ -215,6 +232,7 @@
                         <div class="form-group">
                             <label for="senha_nova">Nova Senha</label>
                             <input type="password" class="form-control" id="senha_nova" name="senha_nova" required>
+                            <small class="text-danger">* A senha deve possuir mais de 7 caracteres. *</small>
                         </div>
                         <div class="form-group">
                             <label for="confirmar_senha_nova">Confirmar Nova Senha</label>
@@ -249,22 +267,30 @@
                 var imgElement = document.querySelector("img"); // Seleciona a tag <img> existente
                 imgElement.src = e.target.result; // Atualiza a imagem com o novo arquivo
             };
-
+            
+            // Lê o arquivo selecionado como uma URL de dados
+            reader.readAsDataURL(event.target.files[0]);
+        });
+        
+        document.getElementById('foto').addEventListener('change', function(event) {
+            var reader = new FileReader();
+            
             // Quando a leitura do arquivo estiver completa, atualizar o conteúdo do <p>
-            reader.onload = function(e) {
-            var pElement = document.querySelector("p"); // Seleciona a tag <p> existente
-            pElement.innerHTML = ''; // Limpa o conteúdo do <p> para substituir pela imagem
+                reader.onload = function(e) {
+                var pElement = document.querySelector("p"); // Seleciona a tag <p> existente
+                pElement.innerHTML = ''; // Limpa o conteúdo do <p> para substituir pela imagem
 
-            // Cria um novo elemento <img> e define o src como a imagem carregada
-            var img = document.createElement('img');
-            img.src = e.target.result; // Define a imagem com o novo arquivo
-            img.style.width = '100%'; // Ajuste de tamanho
-            pElement.appendChild(img); // Adiciona a imagem no <p>
+                // Cria um novo elemento <img> e define o src como a imagem carregada
+                var img = document.createElement('img');
+                img.src = e.target.result; // Define a imagem com o novo arquivo
+                img.style.width = '100%'; // Ajuste de tamanho
+                pElement.appendChild(img); // Adiciona a imagem no <p>
             };
             
             // Lê o arquivo selecionado como uma URL de dados
             reader.readAsDataURL(event.target.files[0]);
         });
+
 
         // Função para exibir o modal de alteração de senha
         document.getElementById('alterarSenhaBtn').addEventListener('click', function(event) {
