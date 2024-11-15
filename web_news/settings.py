@@ -73,7 +73,7 @@ TEMPLATES = [
     },
 ]
 # Timezone e Internacionalização
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'pt-br'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
@@ -100,3 +100,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'trendfeeds', 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 ROOT_URLCONF = 'web_news.urls'
+# settings.py
+API_FUTEBOL_KEY = 'live_2a8fa6e7d603888fb9656c01ac3240'

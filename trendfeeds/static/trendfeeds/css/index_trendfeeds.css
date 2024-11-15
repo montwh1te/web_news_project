@@ -2,59 +2,47 @@ body {
   background-color: #f8f9fa; /* Fundo leve */
   font-family: Arial, sans-serif;
   transition: 0.4s;
-
 }
 
 main {
   height: 100vh;
-  margin-top: 7%;
+  margin-top: 4%;
   transition: 0.4s;
   max-width: 85%;
-
-
 }
 
-.descricao-noticia-mais-recente{
+.descricao-noticia-mais-recente {
   height: 60%;
   width: 100%;
   transition: 0.4s;
-
- 
 }
-.titulo-noticia-mais-recente{
+.titulo-noticia-mais-recente {
   font-size: 2.1vw;
   margin-top: 4%;
   color: #333;
   transition: 0.4s;
-
-
+  font-weight: bolder;
 }
-.resumo-noticia-mais-recente{
+.resumo-noticia-mais-recente {
   font-size: 1vw;
   transition: 0.4s;
-
-
 }
-.titulo-noticia-recente{
+.titulo-noticia-recente {
   margin-top: 3%;
-  font-size: 1.0vw;
+  font-size: 1vw;
   transition: 0.4s;
   color: #333;
   text-decoration: none;
-
-
 }
 .noticia-mais-recente {
   height: 50%;
   width: 100%;
   transition: 0.4s;
-
 }
 .noticias-recentes-div {
   width: 50%;
   height: 90vh;
   transition: 0.4s;
-
 }
 
 .noticia-recente {
@@ -62,25 +50,20 @@ main {
   width: 50%;
   min-width: 50%;
   transition: 0.4s;
-
-
- 
 }
 
 .noticias-recentes-banner-principal {
   width: 95%;
   height: 100%;
   transition: 0.4s;
-
 }
 
 .navbar-custom {
-  padding: 15px 20px;
+  padding: 15px 7%;
   width: 100%;
   margin: auto;
   box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.222);
   transition: 0.4s;
-
 }
 
 /* Seta personalizada para o dropdown-toggle com div */
@@ -93,7 +76,6 @@ main {
   border-right: 0.3em solid transparent;
   border-left: 0.3em solid transparent;
   transition: 0.4s;
-
 }
 
 /* Ajustes para o dropdown com hover */
@@ -101,7 +83,6 @@ main {
   display: block;
   margin-top: 0;
   transition: 0.4s;
-
 }
 
 .dropdown-menu {
@@ -109,33 +90,27 @@ main {
   border-radius: 8px;
   padding: 10px;
   transition: 0.4s;
-
 }
 
 .dropdown-item img {
   transition: transform 0.2s ease;
   transition: 0.4s;
-
 }
 
 .dropdown-item img:hover {
   transform: scale(1.1);
   transition: 0.4s;
-
 }
-
 
 .user-info {
   position: relative;
   display: inline-block;
   transition: 0.4s;
-
 }
 
 .user-photo {
   cursor: pointer;
   transition: 0.4s;
-
 }
 
 .dropdown-content {
@@ -150,14 +125,11 @@ main {
   border-radius: 8px;
   width: 150px;
   transition: 0.4s;
-
-
 }
 
 .user-info:hover .dropdown-content {
   display: block;
   transition: 0.4s;
-
 }
 
 .dropdown-content a {
@@ -166,39 +138,34 @@ main {
   padding: 8px 0;
   display: block;
   transition: 0.4s;
-
 }
 
 .dropdown-content a:hover {
   background-color: #ddd;
   transition: 0.4s;
-
 }
 
-.imagem-principal-banner{
+.imagem-principal-banner {
   width: 100%;
   height: 100%;
   transition: 0.4s;
-
+  object-fit: cover;
 }
 
-.imagem-principal-banner-recente{
+.imagem-principal-banner-recente {
   width: 100%;
   height: 55%;
   transition: 0.4s;
   object-fit: cover;
-
-
 }
 
-.descricao-noticia-recente{
+.descricao-noticia-recente {
   height: 40%;
   transition: 0.4s;
 }
 
-
 /* Efeito de hover apenas na imagem */
-.noticia-mais-recente:hover .imagem-principal-banner, 
+.noticia-mais-recente:hover .imagem-principal-banner,
 .noticia-recente:hover .imagem-principal-banner-recente {
   transform: scale(1.05); /* Aumenta levemente o tamanho da imagem */
   transition: transform 0.3s ease, filter 0.3s ease; /* Animação suave */
@@ -206,19 +173,16 @@ main {
 }
 
 /* Efeito no texto ao passar o mouse */
-.noticia-mais-recente .titulo-noticia-mais-recente, 
+.noticia-mais-recente .titulo-noticia-mais-recente,
 .noticia-recente .titulo-noticia-recente {
   transition: opacity 0.3s ease; /* Anima a opacidade */
   opacity: 1; /* Opacidade inicial do texto */
 }
 
-.noticia-mais-recente:hover .titulo-noticia-mais-recente, 
+.noticia-mais-recente:hover .titulo-noticia-mais-recente,
 .noticia-recente:hover .titulo-noticia-recente {
   opacity: 0.8; /* Reduz a opacidade do texto ao passar o mouse */
 }
-
-
-
 
 .todas-noticias {
   background-color: #f9f9f9; /* Cor de fundo suave */
@@ -289,22 +253,20 @@ main {
   padding-bottom: 15px; /* Espaço entre a descrição e o final do card */
 }
 
-
-
 /* Estilo para os links de títulos de notícias */
 .titulo-noticia-mais-recente a,
 .titulo-noticia-recente a,
 .todas-noticias a {
-    color: #000; /* Define a cor preta para os links */
-    text-decoration: none; /* Remove o sublinhado */
+  color: #000; /* Define a cor preta para os links */
+  text-decoration: none; /* Remove o sublinhado */
 }
 
 /* Garante que não haja sublinhado ao passar o mouse */
 .titulo-noticia-mais-recente a:hover,
 .titulo-noticia-recente a:hover,
 .todas-noticias a:hover {
-    color: #000; /* Mantém a cor preta no hover */
-    text-decoration: none; /* Garante que o sublinhado nunca apareça */
+  color: #000; /* Mantém a cor preta no hover */
+  text-decoration: none; /* Garante que o sublinhado nunca apareça */
 }
 
 /* Estilo para todos os links na página */
@@ -318,7 +280,6 @@ a:hover {
   color: #000 !important; /* Cor preta no hover */
   text-decoration: none; /* Garante que o sublinhado nunca apareça */
 }
-
 
 .noticias-recentes-div a {
   color: #000; /* Cor preta para links na seção de outras notícias */
@@ -393,7 +354,202 @@ a:hover {
   align-items: center;
 }
 
-.ultimas_noticias{
-  font-size: 2vw;
-  margin-right: 20%;
+#dropdownTimes {
+  margin: -5%;
 }
+
+
+
+
+
+
+
+
+
+
+/* Estilo Geral para a Tabela */
+.table {
+  width: 90% !important;
+  margin: 20px auto;
+  border-collapse: collapse;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  height: 80%;
+  margin-right: 10%;
+}
+
+
+/* Corpo */
+.table tbody tr {
+  background-color: #f9f9f9;
+  transition: all 0.2s ease-in-out;
+}
+
+
+.table tbody td {
+  padding: 12px;
+  text-align: center;
+  font-size: 15px;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Efeito ao Passar o Mouse */
+.table tbody tr:hover {
+  background-color: #e2f0ff;
+  transform: scale(1.02);
+  cursor: pointer;
+}
+
+/* Personalização de Colunas */
+.table tbody td:first-child {
+  font-weight: bold;
+  color: #007bff;
+}
+
+.table tbody td:last-child {
+  font-weight: bold;
+  color: #dc3545;
+}
+
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .table {
+    font-size: 14px;
+  }
+
+  .table thead {
+    display: none;
+  }
+
+  .table tbody td {
+    display: block;
+    text-align: right;
+    padding-left: 50%;
+    position: relative;
+  }
+
+  .table tbody td:before {
+    content: attr(data-label);
+    position: absolute;
+    left: 0;
+    width: 50%;
+    padding-left: 10px;
+    font-weight: bold;
+    text-align: left;
+    color: #007bff;
+  }
+}
+
+
+
+
+
+/* Alterando a cor dos nomes dos times para preto */
+.table tbody td span {
+  color: #000; /* Nomes dos times em preto */
+}
+
+/* Remover a escala de cinza das linhas e aplicar nas colunas */
+.table tbody tr:nth-child(even) {
+  background-color: #f9f9f9; /* Linha clara */
+}
+
+.table tbody tr:nth-child(odd) {
+  background-color: #f1f1f1; /* Linha um pouco mais escura */
+}
+
+/* Cabeçalho da tabela com fundo transparente */
+.table thead tr {
+  background-color: transparent; /* Fundo transparente */
+  color: #000; /* Texto do cabeçalho em preto */
+}
+
+.table thead th {
+  padding: 12px;
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 2px solid #f4f4f4;
+}
+
+
+
+
+
+
+
+
+/* Estilo geral para a lista de jogos */
+.jogos-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Espaço entre os jogos */
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Estilo para cada card de jogo */
+.jogo-card {
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+/* Efeito de hover no card */
+.jogo-card:hover {
+  transform: scale(1.05);
+}
+
+/* Cabeçalho do card com o nome dos times */
+.jogo-header h4 {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+/* Detalhes do jogo (data) */
+.jogo-details small {
+  display: block;
+  text-align: center;
+  font-size: 14px;
+  color: #555;
+}
+
+/* Estilo para o texto quando não há jogos disponíveis */
+.jogo-card p {
+  text-align: center;
+  font-size: 16px;
+  color: #888;
+}
+
+
+.caixa{
+  width: 80%;
+}
+
+
+.div-tabela-brasileiro{
+  width: 60%;
+}
+
+
+.titulo_brasileriao{
+  font-size: 5vh;
+  color: #333;
+  font-weight: bolder;
+  margin-left: 1%;
+  margin-bottom: 2%;
+}
+
+.div_brasileirao{
+  width: 100%;
+}
+
+
