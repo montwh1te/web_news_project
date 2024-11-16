@@ -95,7 +95,7 @@
                             <div class="d-flex flex-wrap justify-content-center align-items-center">
                                 <!-- Iterando pelas categorias, excluindo 'Outros' -->
                                 {% for categoria in categorias %}
-                                    {% if categoria.nome_categoria != "Outros" %}
+                                    {% if categoria.nome_categoria != "outros" %}
                                         <a class="dropdown-item p-1 col-3" href="{% url 'exibir_categoria' categoria.nome_categoria|slugify %}">
                                             <img src="{% get_media_prefix %}escudos/{{ categoria.nome_categoria|lower }}.png" alt="{{ categoria.nome_categoria }}" style="width: 35px; height: 35x;">
                                         </a>
@@ -113,8 +113,10 @@
             </div>
 
             <!-- Direita: Barra de pesquisa -->
-            <div class="search-container">
-                <input id="search-bar" class="search-bar form-control mr-sm-2" type="search" placeholder="Pesquisar" aria-label="Pesquisar">
+            <div class="search-container d-flex align-items-center">
+                <img src="{% get_media_prefix %}lupa.png" alt="lupa" style="width: 16px; height: 16px; margin-right: 8px;">
+                <input id="search-bar" class="form-control" type="search" placeholder="Pesquisar" aria-label="Pesquisar" style="padding-left: 40px;">
+
                 <ul id="search-results"></ul>
             </div>
 
@@ -237,7 +239,7 @@
         </div>
     
         <!-- Jogos com 40% da largura -->
-        <section class="container my-3" style="flex: 0 0 40%; padding-left: 15px;">
+        <section class="container my-3 d-flex flex-nowrap" style="flex: 0 0 40%; padding-left: 15px;">
             <div class="row justify-content-center">
                 {% if proximos_jogos %}
                     {% for jogo in proximos_jogos %}
@@ -249,15 +251,15 @@
                                         <img src="{% get_media_prefix %}escudos/{{ jogo.time_mandante.nome_popular|slugify_with_underscore }}.png" 
                                             alt="{{ jogo.time_mandante.nome_popular }}" 
                                             class="img-fluid" 
-                                            style="width: 40px; height: 40px;">
+                                            style="width: 45px;height: 45px;">
                                         <span class="mx-2">- x -</span>
                                         <img src="{% get_media_prefix %}escudos/{{ jogo.time_visitante.nome_popular|slugify_with_underscore }}.png" 
                                             alt="{{ jogo.time_visitante.nome_popular }}" 
                                             class="img-fluid" 
-                                            style="width: 40px; height: 40px;">
+                                            style="width: 45px;height: 45px;">
                                     </div>
                                     <p class="card-text mt-2">
-                                        {{ jogo.data_realizacao }}<br>{{ jogo.hora_realizacao }}
+                                        {{ jogo.data_realizacao }}<br>{{ jogo.hora_realizacao }}<br>{{jogo.status}}<br>{{jogo.estadio.nome_popular}}
                                     </p>
                                 </div>
                             </div>
@@ -269,26 +271,23 @@
             </div>
         </section>
     </div>
-    
-    <section class="todas-noticias container mt-4">
-        <h3 class="text-center mb-3">Mais Notícias</h3>
+
+    <section class="todas-noticias container-fluid mt-2" style="width: 80%; padding-top: 7%;">
+        <h3>Mais Notícias</h3>
         <div class="row">
-            {% for noticia in todas_as_noticias %}
-            <div class="col-12 col-md-6 col-lg-4 mb-4">
-                <a href="{% url 'detalhes_noticia' noticia.slug %}">
-                    <div class="d-flex flex-column flex-md-row bg-white rounded shadow-sm">
-                        <!-- Imagem --> 
-                        <img class="img-thumbnail rounded-3" src="{% get_media_prefix %}/thumbs/thumb_n_{{ noticia.id }}.jpg" alt="noticia" style="width: 25vw; height: 25vh; object-fit: cover;">
-                        <!-- Texto -->
-                    
-                        <div class="p-3 d-flex flex-column justify-content-between">
-                            <h5 class="mb-2" style="font-size: 1.5rem; color: #333;">{{ noticia.descricao }}</h5>
-                            <p class="text-muted" style="font-size: 1rem; color: #666;">{{ noticia.descricao|slice:":150" }} ...</p>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            {% endfor %}
+          {% for noticia in todas_as_noticias %}
+          <div class="col-12 mb-4">
+            <a href="{% url 'detalhes_noticia' noticia.slug %}" class="noticia-card" style="width: 100%;">
+              <!-- Imagem da notícia -->
+              <img src="{% get_media_prefix %}/thumbs/thumb_n_{{ noticia.id }}.jpg" alt="noticia" />
+              <!-- Conteúdo da notícia -->
+              <div class="noticia-conteudo">
+                <h5>{{ noticia.descricao }}</h5>
+                <p>{{ noticia.descricao|slice:":150" }} ...</p>
+              </div>
+            </a>
+          </div>
+          {% endfor %}
         </div>
     </section>
     

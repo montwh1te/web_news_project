@@ -185,19 +185,25 @@ main {
 }
 
 .todas-noticias {
-  background-color: #f9f9f9; /* Cor de fundo suave */
-  padding: 40px 0; /* Espaçamento interno */
-  border-radius: 8px; /* Bordas arredondadas */
+  background-color: #f9f9f9; /* Fundo suave */
+  padding: 40px 0;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column; /* As divs ficam uma embaixo da outra */
+  gap: 20px; /* Espaçamento entre as notícias */
 }
 
 .todas-noticias h3 {
-  font-size: 2rem; /* Tamanho maior para o título */
-  color: #333; /* Cor do texto do título */
+  font-size: 4vh;
+  color: #333;
   font-weight: 600;
-  text-transform: uppercase; /* Título em maiúsculas */
-  letter-spacing: 1px; /* Espaçamento entre letras */
-  margin-bottom: 30px;
-  text-align: center; /* Centralizando o título */
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 40px;
+  margin-bottom: 3%;
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.222);
+  text-align: left;
+  margin-left: 1%;
 }
 
 .todas-noticias .row {
@@ -214,6 +220,53 @@ main {
   max-width: 100%;
   box-sizing: border-box;
 }
+
+.noticia-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  background-color: #fff; /* Fundo branco */
+  border-radius: 10px; /* Bordas arredondadas */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+  overflow: hidden; /* Evita que os elementos saiam da div */
+  padding: 20px; /* Espaçamento interno */
+  height: 200px; /* Altura fixa para alinhamento */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animação suave no hover */
+}
+
+.noticia-card:hover {
+  transform: translateY(-5px); /* Move levemente para cima no hover */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Sombra mais destacada no hover */
+}
+
+.noticia-card img {
+  width: 20%; /* Ajusta a largura da imagem */
+  height: 100%; /* Altura da imagem igual à div */
+  object-fit: cover; /* Ajusta a imagem para cobrir o espaço */
+  border-radius: 8px; /* Bordas arredondadas */
+}
+
+.noticia-card .noticia-conteudo {
+  flex: 1; /* Faz o texto ocupar o restante do espaço */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Espaça o título e a descrição */
+}
+
+.noticia-card h5 {
+  font-size: 1.5rem; /* Tamanho do título */
+  color: #333;
+  font-weight: bold;
+  margin: 0;
+}
+
+.noticia-card p {
+  font-size: 1rem;
+  color: #666;
+  line-height: 1.5; /* Melhor espaçamento entre linhas */
+  margin: 0;
+}
+
 
 .todas-noticias .d-flex {
   display: flex;
@@ -541,11 +594,12 @@ a:hover {
 
 
 .titulo_brasileriao{
-  font-size: 5vh;
+  font-size: 4vh;
   color: #333;
   font-weight: bolder;
   margin-left: 1%;
-  margin-bottom: 2%;
+  margin-bottom: 3%;
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.222);
 }
 
 .div_brasileirao{
@@ -553,3 +607,21 @@ a:hover {
 }
 
 
+.search-container {
+  position: relative;
+}
+
+.search-container img {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px; /* Tamanho da lupa */
+  height: 16px;
+}
+
+#search-bar {
+  padding-left: 40px; /* Espaço para a lupa */
+  border-radius: 20px; /* Bordas arredondadas */
+  width: 100%;
+}
