@@ -111,8 +111,15 @@ def detalhes_noticia(request, slug):
         "america_mg": "#009933",           
         "selecao": "#ffcc00"
     }
-    
+    noticia = get_object_or_404(Noticias, slug=slug)
+
+    todas_as_noticias = Noticias.objects.all().order_by('-data_publicacao')
+
     cor_categoria = cores_times.get(categoria_nome.lower(), "#cccccc")  # usa a cor padrão se não encontrado
+
+    noticias_agrupadas = [
+        todas_as_noticias[i:i+3] for i in range(0, len(todas_as_noticias), 3)
+    ]
 
     # Gerar o nome do template com base no slug
     template_name = f'html/noticias/{noticia.slug}.html'
@@ -121,6 +128,8 @@ def detalhes_noticia(request, slug):
         'noticia': noticia, 
         'categoria_nome': categoria_nome,
         'cor_categoria': cor_categoria,
+        'noticia': noticia,
+        'noticias_agrupadas': noticias_agrupadas,
     })
 
 

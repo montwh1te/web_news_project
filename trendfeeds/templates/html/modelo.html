@@ -92,19 +92,51 @@
                         {% block main_content %}{% endblock main_content %}
                     </div>
                 </div>
-                <div class="col-lg-4">
-                    <div class="card border-light shadow-sm mb-4">
-                        <!-- colocar aqui uma imagem aleatoria do banco de dados da própria noticia, ou a imagem de outra noticia com o link pra ela, e deixar fixed, enfim, decidir. A principio fica tudo pro banco de dados, entao  --> <img src="#" class="card-img-top noticia-imagem" alt="Imagem da notícia">
-                        <div class="card-body">
-                            <h5 class="card-title">###</h5><!-- bd -->
-                            <p class="card-text">###</p><!-- bd -->
+                <div id="noticiasCarrossel" class="carousel slide" data-ride="carousel">
+                    <!-- Indicadores -->
+                    <ol class="carousel-indicators">
+                        {% for grupo in noticias_agrupadas %}
+                        <li data-target="#noticiasCarrossel" data-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %}></li>
+                        {% endfor %}
+                    </ol>
+                
+                    <!-- Slides -->
+                    <div class="carousel-inner">
+                        {% for grupo in noticias_agrupadas %}
+                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                            <div class="row">
+                                {% for noticia in grupo %}
+                                <div class="col-12 col-md-4">
+                                    <div class="card border-light shadow-sm">
+                                        <img src="{% get_media_prefix %}/thumbs/thumb_n_{{ noticia.id }}.jpg" class="card-img-top noticia-imagem" alt="Imagem da notícia">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ noticia.descricao }}</h5>
+                                            <p class="card-text">{{ noticia.descricao|slice:":150" }} ...</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
                         </div>
+                        {% endfor %}
                     </div>
+                
+                    <!-- Controles -->
+                    <a class="carousel-control-prev" href="#noticiasCarrossel" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Anterior</span>
+                    </a>
+                    <a class="carousel-control-next" href="#noticiasCarrossel" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Próximo</span>
+                    </a>
                 </div>
-            </div>
+                
+                
         </article>
     </main>
 
+   
     <footer class="text-center py-3 bg-light">
         <p class="mb-0">© 2024 site noticias - Todos os direitos reservados.</p>
     </footer>
