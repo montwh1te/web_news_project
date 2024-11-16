@@ -108,7 +108,9 @@
                                 {% for noticia in grupo %}
                                 <div class="col-12 col-md-4">
                                     <div class="card border-light shadow-sm">
-                                        <img src="{% get_media_prefix %}/thumbs/thumb_n_{{ noticia.id }}.jpg" class="card-img-top noticia-imagem" alt="Imagem da notícia">
+                                        <img src="{% get_media_prefix %}/thumbs/thumb_n_{{ noticia.id }}.jpg" 
+                                             class="card-img-top noticia-imagem" 
+                                             alt="Imagem da notícia">
                                         <div class="card-body">
                                             <h5 class="card-title">{{ noticia.descricao }}</h5>
                                             <p class="card-text">{{ noticia.descricao|slice:":150" }} ...</p>
