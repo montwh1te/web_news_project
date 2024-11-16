@@ -1,4 +1,4 @@
-import requests  # Adicione esta linha
+import requests
 from django.shortcuts import render, get_object_or_404
 from .models import Categoria, Noticias
 from django.utils.text import slugify

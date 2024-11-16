@@ -3,15 +3,11 @@ from django.utils.text import slugify
 from users.models import Usuarios
 
 
-
-
 class Categoria(models.Model):
     nome_categoria = models.CharField(max_length=50)
 
     def __str__(self):
         return self.nome_categoria
-
-
 
 
 class Noticias(models.Model):
@@ -47,16 +43,12 @@ class Noticias(models.Model):
         return f"/media/noticias/n_{self.id}_0.jpg"
 
 
-
-
 class CategoriaNoticias(models.Model):
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)  # Temporariamente permite null
     noticia = models.ForeignKey(Noticias, on_delete=models.CASCADE )
 
     def __str__(self):
         return f"Notícia ID {self.noticia.id} - Categoria ID {self.categoria.id}"
-
-
 
 
 class TimeFavorito(models.Model):

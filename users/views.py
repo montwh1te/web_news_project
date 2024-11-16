@@ -12,7 +12,7 @@ def registro(request):
             user.set_password(form.cleaned_data['senha'])
             user.save()
             auth_login(request, user)  # Usa a função de login do Django com o alias 'auth_login'
-            return redirect('home')
+            return redirect('time_favorito')
     else:
         form = RegistrationForm()
 
@@ -75,3 +75,6 @@ def alterar_senha(request):
         return JsonResponse({'success': False, 'errors': form.errors})
 
     return JsonResponse({'success': False})
+
+def time_favorito(request):
+    pass
