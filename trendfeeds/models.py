@@ -9,7 +9,7 @@ class Categoria(models.Model):
     nome_categoria = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.nomecategoria
+        return self.nome_categoria
 
 
 
@@ -40,6 +40,11 @@ class Noticias(models.Model):
 
     def __str__(self):
         return self.titulo
+    
+    @property
+    def imagem_url(self):
+        # Retorna o caminho da imagem baseado no ID da notícia
+        return f"/media/noticias/n_{self.id}_0.jpg"
 
 
 

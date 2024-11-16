@@ -74,8 +74,6 @@ from django.conf import settings
 driver = None
 # Define o driver do Selenium como None para poder ser inicializado mais adiante.
 
-
-
 def coletar_noticias():
     service = Service('')
     # Cria uma instância de Service para controlar o navegador Chrome pelo Selenium.
@@ -126,8 +124,14 @@ def coletar_noticias():
             noticias = driver.find_elements(By.CLASS_NAME, 'feed-post-body')
             # Encontra todos os elementos que contêm o conteúdo das notícias.
 
-            noticia = noticias[i]
-            # Seleciona a notícia atual para processamento.
+            try:
+                noticia = noticias[i]
+                # Seleciona a notícia atual para processamento.
+            except IndexError:
+                print(f"Erro: Índice {i} fora do alcance para a lista de notícias. Total disponível: {len(noticias)}")
+                continue
+                        
+           
 
             try:
                 tempo_real = noticia.find_element(By.CLASS_NAME, 'bstn-aovivo-label')
@@ -239,28 +243,55 @@ def coletar_noticias():
             # Formata o título da notícia para uso futuro.
 
             times = {
-        "atletico_mg": ["atlético-mg", "galo"],
-        "atletico_pr": ["atlético-pr", "athletico", "furacão"],
-        "bahia": ["bahia", "esquadrão", "esquadrão de aço"],
-        "botafogo": ["botafogo", "fogão"],
+        "atletico_mg": ["atletico-mg", "galo"],
+        "atletico_pr": ["atletico-pr", "athletico", "furacao"],
+        "bahia": ["bahia", "esquadrao", "esquadrao de aço"],
+        "botafogo": ["botafogo", "fogao"],
         "bragantino": ["bragantino", "red bull bragantino", "massa bruta"],
-        "corinthians": ["corinthians", "timão"],
+        "corinthians": ["corinthians", "timao"],
         "cruzeiro": ["cruzeiro", "raposa"],
-        "cuiaba": ["cuiabá", "dourado"],
+        "cuiaba": ["cuiaba", "dourado"],
         "flamengo": ["flamengo", "fla", "urubu"],
         "fluminense": ["fluminense", "flu", "tricolor das laranjeiras"],
-        "fortaleza": ["fortaleza", "leão do pici"],
-        "goias": ["goiás", "esmeraldino"],
-        "gremio": ["grêmio", "tricolor gaúcho", "imortal"],
+        "fortaleza": ["fortaleza", "leao do pici"],
+        "goias": ["goias", "esmeraldino"],
+        "gremio": ["gremio", "tricolor gaucho", "imortal"],
         "internacional": ["inter", "colorado"],
-        "palmeiras": ["palmeiras", "verdão"],
+        "palmeiras": ["palmeiras", "verdao"],
         "santos": ["santos", "peixe"],
-        "sao_paulo": ["são paulo", "spfc", "tricolor paulista"],
-        "vasco": ["vasco", "vascão", "gigante da colina"],
+        "sao_paulo": ["sao paulo", "spfc", "tricolor paulista"],
+        "vasco": ["vasco", "vascao", "gigante da colina"],
         "coritiba": ["coritiba", "coxa"],
-        "america_mg": ["américa-mg", "coelho"],
-        "selecao": ["seleção", "seleção brasileira", "canário", "canarinho"]
+        "america_mg": ["america-mg", "coelho"],
+        "selecao": ["selecao", "selecao brasileira", "canario", "canarinho"]
                     }
+            
+            # Dicionário de cores dos times
+            cores_times = {
+        "atletico_mg": "#000000",       # Preto
+        "atletico_pr": "#D81E05",       # Vermelho
+        "bahia": "#003DA5",             # Azul
+        "botafogo": "#000000",          # Preto
+        "bragantino": "#FF0000",        # Vermelho
+        "corinthians": "#000000",       # Preto
+        "cruzeiro": "#003087",          # Azul
+        "cuiaba": "#009739",            # Verde
+        "flamengo": "#A61B20",          # Vermelho
+        "fluminense": "#006847",        # Verde
+        "fortaleza": "#002D72",         # Azul
+        "goias": "#008C45",             # Verde
+        "gremio": "#00AEEF",            # Azul Celeste
+        "internacional": "#D6001C",     # Vermelho
+        "palmeiras": "#1E7A34",         # Verde
+        "santos": "#000000",            # Preto
+        "sao_paulo": "#DD0032",         # Vermelho
+        "vasco": "#000000",             # Preto
+        "coritiba": "#006847",          # Verde
+        "america_mg": "#006847",        # Verde
+        "selecao": "#FFCC29"            # Amarelo
+}
+
+
             
             # Lista de times para verificar se algum time está relacionado à notícia.
 
@@ -371,23 +402,112 @@ def coletar_noticias():
             criado = 'sim'
             # Marca a notícia como criada.
 
-            titulo_formatado = re.sub(r'[\\/*?:"<>|]', "", title_text)
-            second_title_formatado = None
+            second_title_formatado = re.sub(r'[\\/*?:"<>|]', "", title_text)
             main_content_formatado = formatar_texto(titulo_formatado_semespaco, imagens_elementos, novo_id_noticia)
 
             caminho_arquivo = os.path.join('trendfeeds/templates/html/noticias', nome_arquivo)
             # Atualiza o caminho do arquivo HTML da notícia.
+           
+           
+            categoria_nome = categorias_encontradas[0] if categorias_encontradas else "Outros"
+            cor_categoria = cores_times.get(categoria_nome, "#cccccc")  # Cor padrão caso não encontre o time
+
+           
+
+
+
+            categoria_template_dir = 'trendfeeds/templates/html/categorias'
+             # Local para salvar as páginas de categoria
+
+            os.makedirs(categoria_template_dir, exist_ok=True)
+            # Cria o diretório de categorias se ele ainda não existir
+            
+
+            if categorias_encontradas:
+                for nome_categoria in categorias_encontradas:
+                    try:
+                        categoria, _ = Categoria.objects.get_or_create(nome_categoria=nome_categoria)
+                        CategoriaNoticias.objects.get_or_create(noticia=noticia_modelo, categoria=categoria)
+
+
+                        cores_times = {
+                            "atletico_mg": "#000000",          # Preto
+                            "atletico_pr": "#cc0000",          # Vermelho escuro
+                            "bahia": "#0033cc",                # Azul escuro
+                            "botafogo": "#000000",             # Preto
+                            "bragantino": "#cc0000",           # Vermelho escuro
+                            "corinthians": "#333333",          # Cinza escuro
+                            "cruzeiro": "#003399",             # Azul
+                            "cuiaba": "#009933",               # Verde
+                            "flamengo": "#ff0000",             # Vermelho
+                            "fluminense": "#990000",           # Bordô
+                            "fortaleza": "#003399",            # Azul
+                            "goias": "#009933",                # Verde
+                            "gremio": "#0066cc",               # Azul claro
+                            "internacional": "#cc0000",        # Vermelho escuro
+                            "palmeiras": "#006633",            # Verde escuro
+                            "santos": "#000000",               # Preto
+                            "sao_paulo": "#cc0000",            # Vermelho escuro
+                            "vasco": "#000000",                # Preto
+                            "coritiba": "#009933",             # Verde
+                            "america_mg": "#009933",           # Verde
+                            "selecao": "#ffcc00"               # Amarelo
+                        }
+                        
+                        # Define cor da categoria; se não encontrar, usa a cor padrão
+                        cor_categoria = cores_times.get(nome_categoria, "#cccccc")
+                        
+                        # Nome do arquivo da página de índice da categoria
+                        nome_arquivo_categoria = os.path.join(categoria_template_dir, f'index_{nome_categoria}.html')
+                        
+                        # Verifica se o arquivo existe; caso contrário, cria a página
+                        if not os.path.exists(nome_arquivo_categoria):
+                            html_categoria_content = f"""
+{{% extends "html/modelo_categoria.html" %}}
+{{% load static %}}
+
+{{% block title %}}{nome_categoria} - Notícias{{% endblock title %}}
+{{% block main_title %}}{nome_categoria} - Notícias{{% endblock main_title %}}
+{{% block cor_categoria %}}{cor_categoria}{{% endblock cor_categoria %}}
+
+<div class="categoria-listagem">
+    <h2>Últimas notícias sobre {nome_categoria}</h2>
+    <p>Aqui você encontrará todas as notícias sobre {nome_categoria}.</p>
+</div>
+                            """
+                            # Salva o arquivo HTML da categoria
+                            with open(nome_arquivo_categoria, "w", encoding="utf-8") as file:
+                                file.write(html_categoria_content)
+                            
+                            print(f"Página da categoria '{nome_categoria}' criada com sucesso em: {nome_arquivo_categoria}")
+                        else:
+                            print(f"A página da categoria '{nome_categoria}' já existe. Não será criada novamente.")
+
+                    except Exception as e:
+                        print(f"Erro ao criar a página da categoria '{nome_categoria}': {e}")
+            else:
+                # Se nenhuma categoria foi encontrada, atribui a categoria "Outros"
+                categoria, _ = Categoria.objects.get_or_create(nome_categoria="Outros")
+                CategoriaNoticias.objects.get_or_create(noticia=noticia_modelo, categoria=categoria)
+                print(f"Notícia '{titulo_truncado}' associada com a categoria 'Outros'.")
+
+
+
+
+
 
             html_content = f"""
-    {{% extends "html/modelo.html" %}}
-    {{% load static %}}
-    
+            
+{{% extends "html/modelo.html" %}}
+{{% load static %}}
 
-    {{% block title %}}{titulo_formatado}{{% endblock title %}}
-    {{% block main_title %}}{titulo_formatado}{{% endblock main_title %}}
-    {{% block second_title %}}{second_title_formatado}{{% endblock second_title %}}
-    {{% block main_content %}}{main_content_formatado}{{% endblock main_content %}}
-    """
+{{% block title %}}{categoria_nome}{{% endblock title %}}
+{{% block main_title %}}{categoria_nome}{{% endblock main_title %}}
+{{% block second_title %}}{second_title_formatado}{{% endblock second_title %}}
+{{% block main_content %}}{main_content_formatado}{{% endblock main_content %}}
+{{% block cor_categoria %}}{cor_categoria}{{% endblock cor_categoria %}}
+
+"""
             # Renderiza o template 'modelo.html' com o conteúdo da notícia.
 
             # Pega o "modelo.html" como base para desenvolvimento dos novos html's.
