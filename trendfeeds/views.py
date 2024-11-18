@@ -8,6 +8,8 @@ from django.core.cache import cache
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from .forms import ComentarioForm
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 
 def obter_proximos_jogos():
@@ -46,6 +48,7 @@ def home(request):
 
     # Buscando todas as categorias, exceto a categoria 'Outros'.
     categorias = Categoria.objects.exclude(nome_categoria='Outros')
+    
 
     # Garantindo que a última notícia tenha um slug, caso não tenha, gerando e salvando um.
     if ultima_noticia and not ultima_noticia.slug:
@@ -89,34 +92,38 @@ def detalhes_noticia(request, slug):
     categoria = noticia.categorias.first()
     categoria_nome = categoria.nome_categoria if categoria else "Outros"
     
+  
     cores_times = {
-        "atletico_mg": "#000000",         
-        "atletico_pr": "#cc0000",          
-        "bahia": "#0033cc",              
-        "botafogo": "#000000",            
-        "bragantino": "#cc0000",          
-        "corinthians": "#333333",          
-        "cruzeiro": "#003399",            
-        "cuiaba": "#009933",              
-        "flamengo": "#ff0000",             
-        "fluminense": "#990000",        
-        "fortaleza": "#003399",            
-        "goias": "#009933",               
-        "gremio": "#0066cc",             
-        "internacional": "#cc0000",        
-        "palmeiras": "#006633",           
-        "santos": "#000000",            
-        "sao_paulo": "#cc0000",         
-        "vasco": "#000000",               
-        "coritiba": "#009933",             
-        "america_mg": "#009933",           
-        "selecao": "#ffcc00"
+       "atletico_mg": "#000000",       # Preto
+        "atletico_pr": "#D81E05",       # Vermelho
+        "bahia": "#003DA5",             # Azul
+        "botafogo": "#000000",          # Preto
+        "bragantino": "#FF0000",        # Vermelho
+        "corinthians": "#000000",       # Preto
+        "cruzeiro": "#003087",          # Azul
+        "cuiaba": "#009739",            # Verde
+        "flamengo": "#A61B20",          # Vermelho
+        "fluminense": "#006847",        # Verde
+        "fortaleza": "#002D72",         # Azul
+        "goias": "#008C45",             # Verde
+        "gremio": "#00AEEF",            # Azul Celeste
+        "internacional": "#D6001C",     # Vermelho
+        "palmeiras": "#1E7A34",         # Verde
+        "santos": "#000000",            # Preto
+        "sao_paulo": "#DD0032",         # Vermelho
+        "vasco": "#000000",             # Preto
+        "coritiba": "#006847",          # Verde
+        "america_mg": "#006847",        # Verde
+        "selecao": "#FFCC29"  
     }
     noticia = get_object_or_404(Noticias, slug=slug)
 
     todas_as_noticias = Noticias.objects.all().order_by('-data_publicacao')
 
     cor_categoria = cores_times.get(categoria_nome.lower(), "#cccccc")  # usa a cor padrão se não encontrado
+
+
+  
 
     noticias_agrupadas = [
         todas_as_noticias[i:i+3] for i in range(0, len(todas_as_noticias), 3)
@@ -125,14 +132,43 @@ def detalhes_noticia(request, slug):
     # Gerar o nome do template com base no slug
     template_name = f'html/noticias/{noticia.slug}.html'
 
+    comentarios = InteracaoUsuario.objects.filter(noticia=noticia).order_by('-id')
+
     return render(request, template_name, {
         'noticia': noticia, 
         'categoria_nome': categoria_nome,
         'cor_categoria': cor_categoria,
         'noticia': noticia,
         'noticias_agrupadas': noticias_agrupadas,
+        'comentarios': comentarios,
+        
     })
 
+def atualizar_like(request, slug):
+    noticia = get_object_or_404(Noticias, slug=slug)
+
+    if request.method == 'POST':
+        usuario = request.user
+        # Verifica se o usuário já deu o like
+        interacao, created = InteracaoUsuario.objects.get_or_create(noticia=noticia, usuario=usuario)
+
+        # Alterna o like (se já tiver dado like, remove o like)
+        if interacao.like == 1:
+            interacao.like = 0
+        else:
+            interacao.like = 1
+        
+        interacao.save()
+
+        # Atualiza a contagem de likes diretamente na tabela Noticias
+        like_count = InteracaoUsuario.objects.filter(noticia=noticia, like=1).count()
+        noticia.like_count = like_count
+        noticia.save()
+
+        # Retorna a nova contagem de likes
+        return JsonResponse({'like_count': like_count})
+    
+    return JsonResponse({'error': 'Invalid request'}, status=400)
 
 
 def salvar_comentario(request, noticia_id):
@@ -150,6 +186,12 @@ def salvar_comentario(request, noticia_id):
     return render(request, 'nome_do_template.html', {'form': form, 'noticia': noticia})
 
 
+
+
+
+
+
+
 def adicionar_comentario(request, noticia_id):
     if request.method == 'POST':
         # Recupera o comentário e a notícia
@@ -165,6 +207,13 @@ def adicionar_comentario(request, noticia_id):
         return redirect('detalhes_noticia', slug=noticia.slug)  # Redireciona de volta para a notícia
 
     return redirect('home')  # Caso não seja POST, redireciona para a home
+
+
+
+
+
+
+
 
 
 def buscar_noticias(request):

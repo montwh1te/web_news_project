@@ -11,5 +11,6 @@ urlpatterns = [
     path('categoria/<str:nome_time>/', views.exibir_categoria, name='exibir_categoria'),
     path('salvar-comentario/<int:noticia_id>/', views.salvar_comentario, name='salvar_comentario'),
     path('comentario/adicionar/<int:noticia_id>/', views.adicionar_comentario, name='adicionar_comentario'),
+    path('noticia/<slug:slug>/atualizar_like/', views.atualizar_like, name='atualizar_like'),
 
 ]

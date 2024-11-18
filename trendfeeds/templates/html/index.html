@@ -96,7 +96,7 @@
                                 <!-- Iterando pelas categorias, excluindo 'Outros' -->
                                 {% for categoria in categorias %}
                                     {% if categoria.nome_categoria != "outros" %}
-                                        <a class="dropdown-item p-1 col-3" href="{% url 'exibir_categoria' categoria.nome_categoria|slugify %}">
+                                        <a class="dropdown-item p-3 col-3" href="{% url 'exibir_categoria' categoria.nome_categoria|slugify %}">
                                             <img src="{% get_media_prefix %}escudos/{{ categoria.nome_categoria|lower }}.png" alt="{{ categoria.nome_categoria }}" style="width: 35px; height: 35x;">
                                         </a>
                                     {% endif %}
@@ -125,7 +125,7 @@
             <div class="dropdown">
             {% if request.user.is_authenticated %}
                     <!-- Ícone ou foto do usuário, que ao ser clicado abre o dropdown -->
-                    <a class="nav-link dropdown-toggle" href="#" role="button" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-top: -10%;">
                         {% if request.user.foto %}
                             <img src="{{ request.user.foto.url }}" alt="Foto de {{ request.user.username }}" class="rounded-circle" style="width: 40px; height: 40px;">
                         {% else %}

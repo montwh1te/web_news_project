@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
 from users.models import Usuarios
+from django.core.exceptions import ValidationError
 
 
 class Categoria(models.Model):
@@ -17,6 +18,7 @@ class Noticias(models.Model):
     autor = models.CharField(max_length=100)
     link = models.URLField(default='https://ge.globo.com/')
     slug = models.SlugField(max_length=255, unique=True, blank=True)
+    like_count = models.IntegerField(default=0)  # Contagem total de likes
 
    
     categorias = models.ManyToManyField(
@@ -63,7 +65,12 @@ class InteracaoUsuario(models.Model):
     noticia = models.ForeignKey(Noticias, on_delete=models.CASCADE)
     usuario = models.ForeignKey(Usuarios, on_delete=models.CASCADE)
     data_criacao = models.DateField(auto_now_add=True)
-    comentario = models.CharField(max_length=255, blank=True)
+    comentario = models.TextField(max_length=7000, blank=True)
+
+    def clean(self):
+        # Verificar se o usuário já deu um "like" nesta notícia
+        if self.like == 1 and InteracaoUsuario.objects.filter(usuario=self.usuario, noticia=self.noticia, like=1).exists():
+            raise ValidationError('Você já deu um Like nesta notícia.')
 
     def __str__(self):
         return f"{self.usuario.username} - {self.tipo} em {self.noticia.titulo}"
