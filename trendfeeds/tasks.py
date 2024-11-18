@@ -519,7 +519,7 @@ def coletar_noticias():
                 contador += 1
             # Incrementa o contador se o arquivo foi criado.
 
-            if contador == 10:
+            if contador == 340:
                 break
             # Encerra o loop após processar 8 notícias.
                                 

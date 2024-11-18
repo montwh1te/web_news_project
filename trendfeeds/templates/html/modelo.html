@@ -92,65 +92,73 @@
                         {% block main_content %}{% endblock main_content %}
                     </div>
                 </div>
+
+
                 <form id="likeForm" method="post" action="{% url 'atualizar_like' noticia.slug %}">
                     {% csrf_token %}
-                    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
-                    <label for="like" class="Btn">
+                    <button type="button" id="likeButton" class="Btn" data-url="{% url 'atualizar_like' noticia.slug %}">
                         <span class="leftContainer">
                             <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512" fill="#fff">
                                 <path d="M313.4 32.9c26 5.2 42.9 30.5 37.7 56.5l-2.3 11.4c-5.3 26.7-15.1 52.1-28.8 75.2H464c26.5 0 48 21.5 48 48c0 18.5-10.5 34.6-25.9 42.6C497 275.4 504 288.9 504 304c0 23.4-16.8 42.9-38.9 47.1c4.4 7.3 6.9 15.8 6.9 24.9c0 21.3-13.9 39.4-33.1 45.6c.7 3.3 1.1 6.8 1.1 10.4c0 26.5-21.5 48-48 48H294.5c-19 0-37.5-5.6-53.3-16.1l-38.5-25.7C176 420.4 160 390.4 160 358.3V320 272 247.1c0-29.2 13.3-56.7 36-75l7.4-5.9c26.5-21.2 44.6-51 51.2-84.2l2.3-11.4c5.2-26 30.5-42.9 56.5-37.7zM32 192H96c17.7 0 32 14.3 32 32V448c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32V224c0-17.7 14.3-32 32-32z"></path>
                             </svg>
-                            <span class="like">Like</span>
+                            <span id="likeText">{% if usuario_curtiu %}Descurtir{% else %}Curtir{% endif %}</span>
                         </span>
-                        <span class="likeCount">
-                            {{ noticia.like_count }}
-                        </span>
-                    </label>
+                        <span id="likeCount">{{ noticia.like_count }}</span>
+                    </button>
                 </form>
-
+                
+                
                 
                 <div class="comentarios-container container mt-4">
-                    {% for comentario in comentarios %}
+                    {% for interacao in comentarios %}
                         <div class="row align-items-center mb-4 p-3 shadow-sm rounded border bg-light">
                             <!-- Foto do usuário -->
                             <div class="col-2 text-center">
-                                <img src="{{ comentario.usuario.foto.url }}" 
-                                     alt="Foto de {{ comentario.usuario }}" 
-                                     class="rounded-circle img-fluid" 
-                                     style="max-width: 80px; height: auto;">
+                                {% if interacao.usuario.foto %}
+                                    <img src="{{ interacao.usuario.foto.url }}" 
+                                         alt="Foto de {{ interacao.usuario }}" 
+                                         class="rounded-circle img-fluid" 
+                                         style="max-width: 80px; height: auto;">
+                                {% else %}
+                                    <img src="{% static 'images/default-avatar.png' %}" 
+                                         alt="Foto padrão" 
+                                         class="rounded-circle img-fluid" 
+                                         style="max-width: 80px; height: auto;">
+                                {% endif %}
                             </div>
-                            <!-- Nome e Comentário -->
+                            <!-- Nome e Interação -->
                             <div class="col-10">
-                                <h5 class="mb-1">{{ comentario.usuario }}</h5>
-                                <p class="mb-0 text-muted">{{ comentario.comentario }}</p>
+                                <h5 class="mb-1">{{ interacao.usuario.username }}</h5>
+                                {% if interacao.comentario %}
+                                    <p class="mb-0 text-muted">{{ interacao.comentario }}</p>
+                                {% endif %}
                             </div>
-            
                         </div>
                     {% empty %}
-                        <p class="text-center text-muted">Nenhum comentário ainda. Seja o primeiro a comentar!</p>
+                        <p class="text-center text-muted">Nenhuma interação ainda. Seja o primeiro a participar!</p>
                     {% endfor %}
                 </div>
                 
 
 
-
-
-
-
                 <div class="noticiasInteracao">
-                    <form method="POST" action="{% url 'adicionar_comentario' noticia.id %}">
-                        {% csrf_token %}
-                        <textarea 
-                            name="comentario" 
-                            id="comentarios" 
-                            rows="5" 
-                            class="form-control" 
-                            placeholder="Escreva seu comentário aqui..."
-                            required>
-                        </textarea>
-                        <button type="submit" class="btn btn-primary mt-2">Enviar Comentário</button>
+                        <form method="POST" action="{% url 'adicionar_comentario' noticia.id %}">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <textarea 
+                                    name="comentario" 
+                                    id="comentarios" 
+                                    rows="5" 
+                                    class="form-control" 
+                                    placeholder="Escreva seu comentário aqui..." 
+                                    required
+                                    style="resize: none;">
+                                </textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary mt-2">Enviar Comentário</button>
                     </form>
                 </div>
+                
 
                 <div id="noticiasCarrossel" class="carousel slide" data-ride="carousel">
                     <!-- Indicadores -->
@@ -207,30 +215,32 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
-        // Seleciona o formulário de like
-        const likeForm = document.getElementById('likeForm');
+        document.getElementById('likeButton').addEventListener('click', function(event) {
+            event.preventDefault(); // Evita o comportamento padrão do botão
     
-        likeForm.addEventListener('submit', function (event) {
-            event.preventDefault();  // Previne o envio normal do formulário
+            const url = this.dataset.url; // URL para enviar a requisição
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value; // CSRF token
     
-            fetch("{% url 'atualizar_like' noticia.slug %}", {
+            fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
-                },
-                body: JSON.stringify({
-                    like: 1 // Envia o like (você pode também pegar o valor de um checkbox ou botão)
-                })
+                    'X-CSRFToken': csrfToken
+                }
             })
             .then(response => response.json())
             .then(data => {
-                // Atualiza a contagem de likes
-                document.querySelector('.likeCount').textContent = data.like_count;
+                if (data.error) {
+                    console.error('Erro ao alternar o like:', data.error);
+                } else {
+                    // Atualiza o contador de likes
+                    document.getElementById('likeCount').textContent = data.like_count;
+    
+                    // Atualiza o texto do botão
+                    document.getElementById('likeText').textContent = data.liked ? 'Descurtir' : 'Curtir';
+                }
             })
-            .catch(error => {
-                console.error('Erro ao atualizar o like:', error);
-            });
+            .catch(error => console.error('Erro na requisição:', error));
         });
     </script>
 </body>

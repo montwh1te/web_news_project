@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 
 
 class Categoria(models.Model):
-    nome_categoria = models.CharField(max_length=50)
+    nome_categoria = models.CharField(max_length=50, default='outro')
 
     def __str__(self):
         return self.nome_categoria
@@ -46,9 +46,8 @@ class Noticias(models.Model):
 
 
 class CategoriaNoticias(models.Model):
-    categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)  # Temporariamente permite null
-    noticia = models.ForeignKey(Noticias, on_delete=models.CASCADE )
-
+    categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, null=True)  # Temporariamente permite null
+    noticia = models.ForeignKey(Noticias, on_delete=models.CASCADE, null=True)  # Permite null temporariamente
     def __str__(self):
         return f"Notícia ID {self.noticia.id} - Categoria ID {self.categoria.id}"
 
@@ -61,16 +60,18 @@ class TimeFavorito(models.Model):
         return f"{self.usuario.username} - {self.time}"
     
     
+
 class InteracaoUsuario(models.Model):
     noticia = models.ForeignKey(Noticias, on_delete=models.CASCADE)
     usuario = models.ForeignKey(Usuarios, on_delete=models.CASCADE)
     data_criacao = models.DateField(auto_now_add=True)
-    comentario = models.TextField(max_length=7000, blank=True)
+    comentario = models.TextField(max_length=7000, blank=True)  # Armazena comentários
+    like = models.BooleanField(default=False)  # Armazena likes
 
-    def clean(self):
-        # Verificar se o usuário já deu um "like" nesta notícia
-        if self.like == 1 and InteracaoUsuario.objects.filter(usuario=self.usuario, noticia=self.noticia, like=1).exists():
-            raise ValidationError('Você já deu um Like nesta notícia.')
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['noticia', 'usuario'], name='unique_interaction')
+        ]
 
     def __str__(self):
-        return f"{self.usuario.username} - {self.tipo} em {self.noticia.titulo}"
+        return f"{self.usuario.username} - Interação com {self.noticia.titulo}"

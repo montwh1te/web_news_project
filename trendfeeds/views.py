@@ -1,4 +1,5 @@
 import requests
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Categoria, Noticias, InteracaoUsuario
 from django.utils.text import slugify
@@ -6,7 +7,6 @@ from django.http import JsonResponse
 from .utils import obter_tabela_brasileirao
 from django.core.cache import cache
 from django.conf import settings
-from django.core.exceptions import ImproperlyConfigured
 from .forms import ComentarioForm
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -138,79 +138,112 @@ def detalhes_noticia(request, slug):
         'noticia': noticia, 
         'categoria_nome': categoria_nome,
         'cor_categoria': cor_categoria,
-        'noticia': noticia,
         'noticias_agrupadas': noticias_agrupadas,
         'comentarios': comentarios,
         
     })
-
+@login_required
 def atualizar_like(request, slug):
+    if request.method == 'POST':
+        # Obtém a notícia e o usuário
+        noticia = get_object_or_404(Noticias, slug=slug)
+        usuario = request.user
+
+        # Busca ou cria a interação
+        interacao, created = InteracaoUsuario.objects.get_or_create(
+            noticia=noticia,
+            usuario=usuario
+        )
+
+        # Alterna o estado do like
+        interacao.like = not interacao.like
+        interacao.save()
+
+        # Recalcula o contador de likes
+        noticia.like_count = InteracaoUsuario.objects.filter(noticia=noticia, like=True).count()
+        noticia.save()
+
+        return JsonResponse({
+            'like_count': noticia.like_count,
+            'liked': interacao.like
+        })
+
+    return JsonResponse({'error': 'Método inválido'}, status=400)
+
+
+
+@login_required
+def salvar_comentario(request, noticia_id):
+    noticia = get_object_or_404(Noticias, id=noticia_id)
+    if request.method == 'POST':
+        comentario_texto = request.POST.get('comentario')
+        if comentario_texto:
+            # Busca ou cria a interação
+            interacao, created = InteracaoUsuario.objects.get_or_create(
+                noticia=noticia,
+                usuario=request.user
+            )
+
+            # Atualiza o comentário
+            interacao.comentario = comentario_texto
+            interacao.save()
+
+        return redirect('detalhes_noticia', slug=noticia.slug)
+
+    return JsonResponse({'error': 'Método inválido'}, status=400)
+
+
+
+
+
+
+
+@login_required
+def adicionar_comentario(request, slug):
     noticia = get_object_or_404(Noticias, slug=slug)
 
     if request.method == 'POST':
-        usuario = request.user
-        # Verifica se o usuário já deu o like
-        interacao, created = InteracaoUsuario.objects.get_or_create(noticia=noticia, usuario=usuario)
-
-        # Alterna o like (se já tiver dado like, remove o like)
-        if interacao.like == 1:
-            interacao.like = 0
-        else:
-            interacao.like = 1
-        
-        interacao.save()
-
-        # Atualiza a contagem de likes diretamente na tabela Noticias
-        like_count = InteracaoUsuario.objects.filter(noticia=noticia, like=1).count()
-        noticia.like_count = like_count
-        noticia.save()
-
-        # Retorna a nova contagem de likes
-        return JsonResponse({'like_count': like_count})
-    
-    return JsonResponse({'error': 'Invalid request'}, status=400)
-
-
-def salvar_comentario(request, noticia_id):
-    noticia = get_object_or_404(Noticias, id=noticia_id)  # Busca a notícia pelo ID
-    if request.method == 'POST':
-        form = ComentarioForm(request.POST)
-        if form.is_valid():
-            comentario = form.save(commit=False)
-            comentario.usuario = request.user  # Associa o usuário logado
-            comentario.noticia = noticia  # Associa a notícia
-            comentario.save()
-            return redirect('detalhes_noticia', noticia_id=noticia.id)  # Redireciona para a página da notícia
-    else:
-        form = ComentarioForm()
-    return render(request, 'nome_do_template.html', {'form': form, 'noticia': noticia})
-
-
-
-
-
-
-
-
-def adicionar_comentario(request, noticia_id):
-    if request.method == 'POST':
-        # Recupera o comentário e a notícia
         comentario_texto = request.POST.get('comentario')
-        noticia = get_object_or_404(Noticias, id=noticia_id)
-        
-        # Cria a interação associando o comentário à notícia
-        InteracaoUsuario.objects.create(
-            usuario=request.user,
-            noticia=noticia,
-            comentario=comentario_texto
-        )
-        return redirect('detalhes_noticia', slug=noticia.slug)  # Redireciona de volta para a notícia
+        if comentario_texto:  # Garante que não há comentários vazios
+            InteracaoUsuario.objects.create(
+                usuario=request.user,
+                noticia=noticia,
+                comentario=comentario_texto
+            )
+        return redirect('detalhes_noticia', slug=slug)
 
-    return redirect('home')  # Caso não seja POST, redireciona para a home
+    return JsonResponse({'error': 'Método inválido'}, status=400)
 
 
+@login_required
 
+def interagir(request, slug):
+    noticia = get_object_or_404(Noticias, slug=slug)
+    usuario = request.user
 
+    if request.method == 'POST':
+        # Para comentários
+        if 'comentario' in request.POST:
+            comentario = request.POST.get('comentario')
+            InteracaoUsuario.objects.create(
+                usuario=usuario,
+                noticia=noticia,
+                comentario=comentario
+            )
+        # Para likes
+        if 'like' in request.POST:
+            interacao, created = InteracaoUsuario.objects.get_or_create(
+                usuario=usuario,
+                noticia=noticia
+            )
+            interacao.like = not interacao.like
+            interacao.save()
+
+            # Atualizar contagem de likes
+            noticia.like_count = InteracaoUsuario.objects.filter(noticia=noticia, like=True).count()
+            noticia.save()
+
+    return redirect('detalhes_noticia', slug=noticia.slug)
 
 
 
