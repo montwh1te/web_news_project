@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from .forms import RegistrationForm, LoginForm, UsuarioUpdateForm, AlterarSenhaForm
 from .models import Usuarios
 from django.http import JsonResponse
+from trendfeeds.models import TimeFavorito
 
 def registro(request):
     if request.method == 'POST':
@@ -12,6 +13,7 @@ def registro(request):
             user.set_password(form.cleaned_data['senha'])
             user.save()
             auth_login(request, user)  # Usa a função de login do Django com o alias 'auth_login'
+            TimeFavorito.objects.get_or_create(usuario=user, time='nenhum')
             return redirect('time_favorito')
     else:
         form = RegistrationForm()
@@ -77,4 +79,9 @@ def alterar_senha(request):
     return JsonResponse({'success': False})
 
 def time_favorito(request):
+    
+    # captar todos os times e seus respectivos nomes e descricao
+    times = []
+    
+    # selecionar time, e com base no nome formal, captar o nome_categoria da tabela categorias, relacionar o id nome_categoria a tabela TimeFavorito
     pass
