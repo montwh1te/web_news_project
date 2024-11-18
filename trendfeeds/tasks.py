@@ -230,6 +230,11 @@ def coletar_noticias():
             titulo_formatado_semespaco = re.sub(r'[\\/*?:"<>|]', "", titulo_sem_pontuacao).replace(" ", "_")
             # Formata o título para uso como identificador, substituindo espaços por underline.
 
+            titulo_formatado_semespaco = titulo_formatado_semespaco.replace("º", "o")
+            titulo_formatado_semespaco = titulo_formatado_semespaco.replace("ª", "a")
+            
+
+
             titulo_truncado = titulo_formatado_semespaco[:200].lower()
             # Trunca o título para 200 caracteres em minúsculas.
 
@@ -243,9 +248,9 @@ def coletar_noticias():
             # Formata o título da notícia para uso futuro.
 
             times = {
-        "atletico_mg": ["atletico-mg", "galo"],
-        "atletico_pr": ["atletico-pr", "athletico", "furacao"],
-        "bahia": ["bahia", "esquadrao", "esquadrao de aço"],
+        "atletico_mg": ["atleticomg", "galo"],
+        "atletico_pr": ["atleticopr", "athletico", "furacao"],
+        "bahia": ["bahia", "esquadrao", "esquadrao de aco"],
         "botafogo": ["botafogo", "fogao"],
         "bragantino": ["bragantino", "red bull bragantino", "massa bruta"],
         "corinthians": ["corinthians", "timao"],
@@ -262,7 +267,7 @@ def coletar_noticias():
         "sao_paulo": ["sao paulo", "spfc", "tricolor paulista"],
         "vasco": ["vasco", "vascao", "gigante da colina"],
         "coritiba": ["coritiba", "coxa"],
-        "america_mg": ["america-mg", "coelho"],
+        "america_mg": ["americamg", "coelho"],
         "selecao": ["selecao", "selecao brasileira", "canario", "canarinho"]
                     }
             
@@ -487,9 +492,7 @@ def coletar_noticias():
                         print(f"Erro ao criar a página da categoria '{nome_categoria}': {e}")
             else:
                 # Se nenhuma categoria foi encontrada, atribui a categoria "Outros"
-                categoria, _ = Categoria.objects.get_or_create(nome_categoria="Outros")
-                CategoriaNoticias.objects.get_or_create(noticia=noticia_modelo, categoria=categoria)
-                print(f"Notícia '{titulo_truncado}' associada com a categoria 'Outros'.")
+                print('Erro')
 
 
 

@@ -1,12 +1,13 @@
 import requests
-from django.shortcuts import render, get_object_or_404
-from .models import Categoria, Noticias
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Categoria, Noticias, InteracaoUsuario
 from django.utils.text import slugify
 from django.http import JsonResponse
 from .utils import obter_tabela_brasileirao
 from django.core.cache import cache
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
+from .forms import ComentarioForm
 
 
 def obter_proximos_jogos():
@@ -123,7 +124,7 @@ def detalhes_noticia(request, slug):
 
     # Gerar o nome do template com base no slug
     template_name = f'html/noticias/{noticia.slug}.html'
-    
+
     return render(request, template_name, {
         'noticia': noticia, 
         'categoria_nome': categoria_nome,
@@ -131,6 +132,39 @@ def detalhes_noticia(request, slug):
         'noticia': noticia,
         'noticias_agrupadas': noticias_agrupadas,
     })
+
+
+
+def salvar_comentario(request, noticia_id):
+    noticia = get_object_or_404(Noticias, id=noticia_id)  # Busca a notícia pelo ID
+    if request.method == 'POST':
+        form = ComentarioForm(request.POST)
+        if form.is_valid():
+            comentario = form.save(commit=False)
+            comentario.usuario = request.user  # Associa o usuário logado
+            comentario.noticia = noticia  # Associa a notícia
+            comentario.save()
+            return redirect('detalhes_noticia', noticia_id=noticia.id)  # Redireciona para a página da notícia
+    else:
+        form = ComentarioForm()
+    return render(request, 'nome_do_template.html', {'form': form, 'noticia': noticia})
+
+
+def adicionar_comentario(request, noticia_id):
+    if request.method == 'POST':
+        # Recupera o comentário e a notícia
+        comentario_texto = request.POST.get('comentario')
+        noticia = get_object_or_404(Noticias, id=noticia_id)
+        
+        # Cria a interação associando o comentário à notícia
+        InteracaoUsuario.objects.create(
+            usuario=request.user,
+            noticia=noticia,
+            comentario=comentario_texto
+        )
+        return redirect('detalhes_noticia', slug=noticia.slug)  # Redireciona de volta para a notícia
+
+    return redirect('home')  # Caso não seja POST, redireciona para a home
 
 
 def buscar_noticias(request):

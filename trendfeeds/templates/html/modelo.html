@@ -92,6 +92,24 @@
                         {% block main_content %}{% endblock main_content %}
                     </div>
                 </div>
+
+
+
+                <div class="noticiasInteracao">
+                    <form method="POST" action="{% url 'adicionar_comentario' noticia.id %}">
+                        {% csrf_token %}
+                        <textarea 
+                            name="comentario" 
+                            id="comentarios" 
+                            rows="5" 
+                            class="form-control" 
+                            placeholder="Escreva seu comentário aqui..."
+                            required>
+                        </textarea>
+                        <button type="submit" class="btn btn-primary mt-2">Enviar Comentário</button>
+                    </form>
+                </div>
+
                 <div id="noticiasCarrossel" class="carousel slide" data-ride="carousel">
                     <!-- Indicadores -->
                     <ol class="carousel-indicators">
