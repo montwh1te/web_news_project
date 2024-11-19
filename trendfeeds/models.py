@@ -62,9 +62,8 @@ class TimeFavorito(models.Model):
 class InteracaoUsuario(models.Model):
     noticia = models.ForeignKey(Noticias, on_delete=models.CASCADE)
     usuario = models.ForeignKey(Usuarios, on_delete=models.CASCADE)
-    tipo = models.CharField(choices=[('like', 'Like'), ('comentario', 'Comentario')], max_length=50)
     data_criacao = models.DateField(auto_now_add=True)
-    texto = models.CharField(max_length=255, blank=True)
+    comentario = models.CharField(max_length=255, blank=True)
 
     def __str__(self):
         return f"{self.usuario.username} - {self.tipo} em {self.noticia.titulo}"

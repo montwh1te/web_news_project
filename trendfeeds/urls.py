@@ -9,7 +9,7 @@ urlpatterns = [
     path('buscar_noticias/', views.buscar_noticias, name='buscar_noticias'),
     path('buscar_noticias/', views.buscar_noticias, name='buscar_noticias'),
     path('categoria/<str:nome_time>/', views.exibir_categoria, name='exibir_categoria'),
-
-
+    path('salvar-comentario/<int:noticia_id>/', views.salvar_comentario, name='salvar_comentario'),
+    path('comentario/adicionar/<int:noticia_id>/', views.adicionar_comentario, name='adicionar_comentario'),
 
 ]

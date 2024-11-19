@@ -86,3 +86,51 @@ footer p {
 .navbar-dark .navbar-nav .nav-link {
     color: rgb(255, 255, 255);
 }
+
+.carousel .carousel-item {
+    transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.card {
+    height: 100%; /* Garante que todas as cards tenham o mesmo tamanho */
+}
+
+.card-img-top {
+    height: 180px;
+    object-fit: cover; /* Ajusta a imagem ao tamanho do card */
+    border-radius: 8px;
+}
+
+.carousel-inner .row {
+    margin: 0; /* Remove espaços desnecessários entre as colunas */
+}
+
+/* Ajuste para as setas do carrossel */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: rgba(0, 0, 0, 0.5); /* Fundo semitransparente para melhor visibilidade */
+ /* Torna o ícone arredondado */
+    width: 50px; /* Tamanho personalizado */
+    height: 50px; /* Tamanho personalizado */
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    width: 5%; /* Ajusta a largura da área clicável */
+    z-index: 1; /* Garante que as setas fiquem acima das imagens */
+}
+
+/* Posiciona as setas para fora das imagens */
+.carousel-control-prev {
+    left: -5%; /* Move a seta da esquerda para fora da imagem */
+}
+
+.carousel-control-next {
+    right: -5%; /* Move a seta da direita para fora da imagem */
+}
+
+/* Efeito ao passar o mouse nas setas */
+.carousel-control-prev:hover .carousel-control-prev-icon,
+.carousel-control-next:hover .carousel-control-next-icon {
+    background-color: rgba(0, 0, 0, 0.8); /* Escurece o fundo no hover */
+}
