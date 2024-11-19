@@ -65,13 +65,18 @@ class InteracaoUsuario(models.Model):
     noticia = models.ForeignKey(Noticias, on_delete=models.CASCADE)
     usuario = models.ForeignKey(Usuarios, on_delete=models.CASCADE)
     data_criacao = models.DateField(auto_now_add=True)
-    comentario = models.TextField(max_length=7000, blank=True)  # Armazena comentários
     like = models.BooleanField(default=False)  # Armazena likes
 
     class Meta:
-        constraints = [
-            models.UniqueConstraint(fields=['noticia', 'usuario'], name='unique_interaction')
-        ]
+        unique_together = ('usuario', 'noticia')  # Garante que um usuário só pode dar um like por notícia
+
+
+
+class Comentario(models.Model):
+    usuario = models.ForeignKey(Usuarios, on_delete=models.CASCADE)
+    noticia = models.ForeignKey(Noticias, on_delete=models.CASCADE)
+    comentario = models.TextField()
+    data_criacao = models.DateTimeField(auto_now_add=True)  # Para ordenar os comentários
 
     def __str__(self):
-        return f"{self.usuario.username} - Interação com {self.noticia.titulo}"
+        return f"{self.usuario.username}: {self.comentario[:20]}..."

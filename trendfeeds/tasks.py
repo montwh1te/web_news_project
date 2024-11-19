@@ -471,8 +471,8 @@ def coletar_noticias():
 {{% extends "html/modelo_categoria.html" %}}
 {{% load static %}}
 
-{{% block title %}}{nome_categoria} - Notícias{{% endblock title %}}
-{{% block main_title %}}{nome_categoria} - Notícias{{% endblock main_title %}}
+{{% block title %}}{nome_categoria}{{% endblock title %}}
+{{% block main_title %}}{nome_categoria}{{% endblock main_title %}}
 {{% block cor_categoria %}}{cor_categoria}{{% endblock cor_categoria %}}
 
 <div class="categoria-listagem">

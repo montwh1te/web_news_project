@@ -1,7 +1,7 @@
 import requests
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Categoria, Noticias, InteracaoUsuario
+from .models import Categoria, Noticias, InteracaoUsuario, Comentario
 from django.utils.text import slugify
 from django.http import JsonResponse
 from .utils import obter_tabela_brasileirao
@@ -10,6 +10,7 @@ from django.conf import settings
 from .forms import ComentarioForm
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+import json
 
 
 def obter_proximos_jogos():
@@ -132,7 +133,7 @@ def detalhes_noticia(request, slug):
     # Gerar o nome do template com base no slug
     template_name = f'html/noticias/{noticia.slug}.html'
 
-    comentarios = InteracaoUsuario.objects.filter(noticia=noticia).order_by('-id')
+    comentarios = Comentario.objects.filter(noticia=noticia).order_by('-data_criacao')
 
     return render(request, template_name, {
         'noticia': noticia, 
@@ -145,7 +146,6 @@ def detalhes_noticia(request, slug):
 @login_required
 def atualizar_like(request, slug):
     if request.method == 'POST':
-        # Obtém a notícia e o usuário
         noticia = get_object_or_404(Noticias, slug=slug)
         usuario = request.user
 
@@ -194,25 +194,35 @@ def salvar_comentario(request, noticia_id):
 
 
 
-
-
-
-
 @login_required
 def adicionar_comentario(request, slug):
     noticia = get_object_or_404(Noticias, slug=slug)
 
     if request.method == 'POST':
-        comentario_texto = request.POST.get('comentario')
-        if comentario_texto:  # Garante que não há comentários vazios
-            InteracaoUsuario.objects.create(
+        try:
+            # Decodifica o JSON enviado pelo frontend
+            data = json.loads(request.body)
+            comentario_texto = data.get('comentario')
+        except json.JSONDecodeError:
+            return JsonResponse({'success': False, 'error': 'Dados inválidos enviados.'}, status=400)
+
+        if comentario_texto:
+            # Cria o comentário
+            Comentario.objects.create(
                 usuario=request.user,
                 noticia=noticia,
                 comentario=comentario_texto
             )
-        return redirect('detalhes_noticia', slug=slug)
+            return JsonResponse({
+                'success': True,
+                'username': request.user.username,
+                'comment': comentario_texto,
+            })
 
-    return JsonResponse({'error': 'Método inválido'}, status=400)
+        return JsonResponse({'success': False, 'error': 'Comentário vazio.'}, status=400)
+
+    return JsonResponse({'success': False, 'error': 'Método inválido.'}, status=400)
+
 
 
 @login_required
@@ -268,12 +278,17 @@ def buscar_noticias(request):
     
 
 
+from django.db.models import Max
+
 def exibir_categoria(request, nome_time):
     # Obtém a categoria correspondente ao nome do time ou exibe 404 se não existir
     categoria = get_object_or_404(Categoria, nome_categoria=nome_time)
 
-    # Filtra as notícias relacionadas à categoria usando 'categorias' em vez de 'categoria'
+    # Filtra as notícias relacionadas à categoria
     noticias = Noticias.objects.filter(categorias=categoria)
+
+    # Obtém a última notícia relacionada à categoria, baseada no campo de data de publicação
+    ultima_noticia = noticias.order_by('-id').first()  # Pega a notícia mais recente
 
     # Define o template dinâmico para a página de categoria
     template_name = f'html/categorias/index_{nome_time}.html'
@@ -282,9 +297,9 @@ def exibir_categoria(request, nome_time):
         'main_title': nome_time.capitalize(),
         'cor_categoria': getattr(categoria, 'cor_categoria', "#cccccc"),  # Define cor padrão caso não exista `cor_categoria`
         'noticias': noticias,
+        'ultima_noticia': ultima_noticia,  # Adiciona a última notícia ao contexto
     }
 
     return render(request, template_name, context)
-
 
 

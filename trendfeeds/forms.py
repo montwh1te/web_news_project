@@ -1,6 +1,7 @@
 from django import forms
-from .models import InteracaoUsuario
+from .models import Comentario
+
 class ComentarioForm(forms.ModelForm):
     class Meta:
-        model = InteracaoUsuario
-        fields = ['comentario']  # Só queremos o campo de comentário
+        model = Comentario
+        fields = ['comentario']  # Apenas o campo de comentário

@@ -16,7 +16,7 @@
         .categoria-badge {
             {% if categoria_nome|lower == 'outros' %}
                 background-color: transparent !important;
-                display: nonel !important;
+                display: none !important;
             {% else %}
                 background-color: var(--categoria-color);
             {% endif %}
@@ -51,12 +51,12 @@
             <div class="dropdown">
             {% if request.user.is_authenticated %}
                     <!-- Ícone ou foto do usuário, que ao ser clicado abre o dropdown -->
-                    <a class="nav-link dropdown-toggle" href="#" role="button" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        {% if request.user.foto %}
-                            <img src="{{ request.user.foto.url }}" alt="Foto de {{ request.user.username }}" class="rounded-circle" style="width: 40px; height: 40px;">
-                        {% else %}
-                            <img src="{% get_media_prefix %}login.png" alt="Foto de {{ request.user.username }}" class="rounded-circle" style="width: 40px; height: 40px;">
-                        {% endif %}
+                    <a class="nav-link dropdown-toggle" href="#" role="button" id="userDropdown" 
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                    data-foto="{% if request.user.foto %}{{ request.user.foto.url }}{% else %}{% static 'images/default-avatar.png' %}{% endif %}">
+                        <img src="{% if request.user.foto %}{{ request.user.foto.url }}{% else %}{% static 'images/default-avatar.png' %}{% endif %}" 
+                            alt="Foto de {{ request.user.username }}" 
+                            class="rounded-circle" style="width: 40px; height: 40px;">
                     </a>
 
                     <!-- Conteúdo do dropdown -->
@@ -81,86 +81,78 @@
     <!-- Hero Section -->
     <section class="categoria-badge hero text-white text-center py-1 {% if categoria_nome|lower == 'outros' %}d-none{% endif %}">
         <h1 class="display-4">{% block main_title %}{{ categoria_nome|default:"Notícia" }}{% endblock main_title %}</h1>
+        
     </section>
 
     <main class="container mt-4">
         <article class="noticia-detalhada" style=" margin-left: 10%; margin-right: 10%;">
             <div class="rowA">
-                <div class="col-lg-12">
+                <div class="col-lg-12" style="margin-bottom: 5%;">
                     <h2 class="noticia-titulo">{% block second_title %}{% endblock second_title %}</h2>
                     <div class="noticia-conteudo">
                         {% block main_content %}{% endblock main_content %}
                     </div>
+                    <form id="likeForm" method="post" action="{% url 'atualizar_like' noticia.slug %}">
+                        {% csrf_token %}
+                        <button type="button" id="likeButton" class="Btn" data-url="{% url 'atualizar_like' noticia.slug %}">
+                            <span class="leftContainer">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512" fill="#fff">
+                                    <path d="M313.4 32.9c26 5.2 42.9 30.5 37.7 56.5l-2.3 11.4c-5.3 26.7-15.1 52.1-28.8 75.2H464c26.5 0 48 21.5 48 48c0 18.5-10.5 34.6-25.9 42.6C497 275.4 504 288.9 504 304c0 23.4-16.8 42.9-38.9 47.1c4.4 7.3 6.9 15.8 6.9 24.9c0 21.3-13.9 39.4-33.1 45.6c.7 3.3 1.1 6.8 1.1 10.4c0 26.5-21.5 48-48 48H294.5c-19 0-37.5-5.6-53.3-16.1l-38.5-25.7C176 420.4 160 390.4 160 358.3V320 272 247.1c0-29.2 13.3-56.7 36-75l7.4-5.9c26.5-21.2 44.6-51 51.2-84.2l2.3-11.4c5.2-26 30.5-42.9 56.5-37.7zM32 192H96c17.7 0 32 14.3 32 32V448c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32V224c0-17.7 14.3-32 32-32z"></path>
+                                </svg>
+                                <span id="likeText">{% if usuario_curtiu %}Descurtir{% else %}Curtir{% endif %}</span>
+                            </span>
+                            <span id="likeCount" style="margin-left: 20%;">{{ noticia.like_count }}</span>
+                        </button>
+                    </form>
+                    
                 </div>
 
 
-                <form id="likeForm" method="post" action="{% url 'atualizar_like' noticia.slug %}">
-                    {% csrf_token %}
-                    <button type="button" id="likeButton" class="Btn" data-url="{% url 'atualizar_like' noticia.slug %}">
-                        <span class="leftContainer">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512" fill="#fff">
-                                <path d="M313.4 32.9c26 5.2 42.9 30.5 37.7 56.5l-2.3 11.4c-5.3 26.7-15.1 52.1-28.8 75.2H464c26.5 0 48 21.5 48 48c0 18.5-10.5 34.6-25.9 42.6C497 275.4 504 288.9 504 304c0 23.4-16.8 42.9-38.9 47.1c4.4 7.3 6.9 15.8 6.9 24.9c0 21.3-13.9 39.4-33.1 45.6c.7 3.3 1.1 6.8 1.1 10.4c0 26.5-21.5 48-48 48H294.5c-19 0-37.5-5.6-53.3-16.1l-38.5-25.7C176 420.4 160 390.4 160 358.3V320 272 247.1c0-29.2 13.3-56.7 36-75l7.4-5.9c26.5-21.2 44.6-51 51.2-84.2l2.3-11.4c5.2-26 30.5-42.9 56.5-37.7zM32 192H96c17.7 0 32 14.3 32 32V448c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32V224c0-17.7 14.3-32 32-32z"></path>
-                            </svg>
-                            <span id="likeText">{% if usuario_curtiu %}Descurtir{% else %}Curtir{% endif %}</span>
-                        </span>
-                        <span id="likeCount">{{ noticia.like_count }}</span>
-                    </button>
-                </form>
+            
+                <p class="comentarios" style="margin-top: 10%;" >COMENTÁRIOS</p>
                 
-                
-                
-                <div class="comentarios-container container mt-4">
-                    {% for interacao in comentarios %}
-                        <div class="row align-items-center mb-4 p-3 shadow-sm rounded border bg-light">
-                            <!-- Foto do usuário -->
-                            <div class="col-2 text-center">
-                                {% if interacao.usuario.foto %}
-                                    <img src="{{ interacao.usuario.foto.url }}" 
-                                         alt="Foto de {{ interacao.usuario }}" 
-                                         class="rounded-circle img-fluid" 
-                                         style="max-width: 80px; height: auto;">
-                                {% else %}
-                                    <img src="{% static 'images/default-avatar.png' %}" 
-                                         alt="Foto padrão" 
-                                         class="rounded-circle img-fluid" 
-                                         style="max-width: 80px; height: auto;">
-                                {% endif %}
-                            </div>
-                            <!-- Nome e Interação -->
-                            <div class="col-10">
-                                <h5 class="mb-1">{{ interacao.usuario.username }}</h5>
-                                {% if interacao.comentario %}
-                                    <p class="mb-0 text-muted">{{ interacao.comentario }}</p>
-                                {% endif %}
-                            </div>
+                <div id="comentariosContainer" class="comentarios-container container mt-4">
+                    {% for comentario in comentarios %}
+                    <div class="row align-items-center mb-4 p-3 shadow-sm rounded border bg-light">
+                        <div class="col-2 text-center">
+                            {% if comentario.usuario.foto %}
+                            <img class="usuario_foto" src="{{ comentario.usuario.foto.url }}" 
+                                 alt="Foto de {{ comentario.usuario.username }}" 
+                                 class="rounded-circle img-fluid" 
+                                 style="max-width: 80px; height: auto;">
+                            {% else %}
+                            <img src="{% static 'images/default-avatar.png' %}" 
+                                 alt="Foto padrão" 
+                                 class="rounded-circle img-fluid" 
+                                 style="max-width: 80px; height: auto;">
+                            {% endif %}
                         </div>
-                    {% empty %}
-                        <p class="text-center text-muted">Nenhuma interação ainda. Seja o primeiro a participar!</p>
+                        <div class="col-10">
+                            <h5 class="mb-1">{{ comentario.usuario.username }}</h5>
+                            <p class="mb-0 text-muted">{{ comentario.comentario }}</p>
+                        </div>
+                    </div>
                     {% endfor %}
                 </div>
-                
 
 
                 <div class="noticiasInteracao">
-                        <form method="POST" action="{% url 'adicionar_comentario' noticia.id %}">
-                            {% csrf_token %}
-                            <div class="form-group">
-                                <textarea 
-                                    name="comentario" 
-                                    id="comentarios" 
-                                    rows="5" 
-                                    class="form-control" 
-                                    placeholder="Escreva seu comentário aqui..." 
-                                    required
-                                    style="resize: none;">
-                                </textarea>
-                            </div>
-                            <button type="submit" class="btn btn-primary mt-2">Enviar Comentário</button>
+                    <form id="commentForm" method="post" action="{% url 'adicionar_comentario' noticia.slug %}">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <div class="d-flex flex-wrap mb-5">
+                            <textarea name="comentario" id="comentarioTextarea" rows="5"class="form-control" placeholder="Escreva seu comentário aqui..." required style="resize: none; border-radius: 20px; margin-top: 5%;width: 70%;"></textarea>
+                            <button type="submit" class="btn" style="margin-right: 10%;background-color: #dddddd;height: 5%;margin-top: 10%;display: flex;margin-left: 2%;">Enviar Comentário</button>
+                        </div>
+                        
                     </form>
+                    
                 </div>
                 
 
-                <div id="noticiasCarrossel" class="carousel slide" data-ride="carousel">
+                <p class="mais_noticias" style="margin-top: 10%;" >MAIS NOTÍCIAS</p>
+
+                <div id="noticiasCarrossel" class="carousel slide" data-ride="carousel" style="margin-top: 5%";>
                     <!-- Indicadores -->
                     <ol class="carousel-indicators">
                         {% for grupo in noticias_agrupadas %}
@@ -171,20 +163,25 @@
                     <!-- Slides -->
                     <div class="carousel-inner">
                         {% for grupo in noticias_agrupadas %}
+                        
                         <div class="carousel-item {% if forloop.first %}active{% endif %}">
                             <div class="row">
                                 {% for noticia in grupo %}
+                
                                 <div class="col-12 col-md-4">
-                                    <div class="card border-light shadow-sm">
-                                        <img src="{% get_media_prefix %}/thumbs/thumb_n_{{ noticia.id }}.jpg" 
-                                             class="card-img-top noticia-imagem" 
-                                             alt="Imagem da notícia">
-                                        <div class="card-body">
-                                            <h5 class="card-title">{{ noticia.descricao }}</h5>
-                                            <p class="card-text">{{ noticia.descricao|slice:":150" }} ...</p>
+                                    <a class="link_noticia" href="{% url 'detalhes_noticia' noticia.slug %}">
+                                        <div class="card border-light shadow-sm">
+                                            <img src="{% get_media_prefix %}/thumbs/thumb_n_{{ noticia.id }}.jpg" 
+                                                class="card-img-top noticia-imagem" 
+                                                alt="Imagem da notícia">
+                                            <div class="card-body">
+                                                <h5 class="card-title">{{ noticia.descricao }}</h5>
+                                                <p class="card-text">{{ noticia.descricao|slice:":150" }} ...</p>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </a>
                                 </div>
+                                
                                 {% endfor %}
                             </div>
                         </div>
@@ -215,33 +212,95 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
-        document.getElementById('likeButton').addEventListener('click', function(event) {
-            event.preventDefault(); // Evita o comportamento padrão do botão
-    
-            const url = this.dataset.url; // URL para enviar a requisição
-            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value; // CSRF token
-    
+        // Para o botão de "like"
+        document.getElementById("likeButton").addEventListener("click", function () {
+            const url = this.getAttribute("data-url");
+        
+            // Atualize o DOM instantaneamente
+            const likeText = document.getElementById("likeText");
+            const likeCount = document.getElementById("likeCount");
+            const isLiked = likeText.innerText === "Descurtir";
+        
+            likeText.innerText = isLiked ? "Curtir" : "Descurtir";
+            likeCount.innerText = isLiked ? parseInt(likeCount.innerText) - 1 : parseInt(likeCount.innerText) + 1;
+        
+            // Envia a requisição para o servidor
             fetch(url, {
-                method: 'POST',
+                method: "POST",
                 headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': csrfToken
-                }
+                    "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value,
+                },
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    console.error('Erro ao alternar o like:', data.error);
-                } else {
-                    // Atualiza o contador de likes
-                    document.getElementById('likeCount').textContent = data.like_count;
-    
-                    // Atualiza o texto do botão
-                    document.getElementById('likeText').textContent = data.liked ? 'Descurtir' : 'Curtir';
-                }
-            })
-            .catch(error => console.error('Erro na requisição:', error));
+                .then(response => response.json())
+                .then(data => {
+                    // Sincronize com os dados do servidor (opcional)
+                    likeText.innerText = data.liked ? "Descurtir" : "Curtir";
+                    likeCount.innerText = data.like_count;
+                })
+                .catch(error => {
+                    console.error("Erro ao atualizar o like:", error);
+                    likeText.innerText = isLiked ? "Descurtir" : "Curtir";
+                    likeCount.innerText = isLiked ? parseInt(likeCount.innerText) + 1 : parseInt(likeCount.innerText) - 1;
+                });
         });
+        
+        
+        
+
+        // Para o formulário de comentários
+        document.getElementById("commentForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+        
+            const url = this.getAttribute("action");
+            const comentarioTextarea = document.getElementById("comentarioTextarea");
+            const comentarioTexto = comentarioTextarea.value.trim();
+            const userPhotoUrl = document.getElementById("userDropdown").getAttribute("data-foto"); // Captura a foto do usuário
+        
+            if (!comentarioTexto) {
+                alert("O comentário não pode estar vazio!");
+                return;
+            }
+        
+            fetch(url, {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ comentario: comentarioTexto }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const comentariosContainer = document.getElementById("comentariosContainer");
+                        const newComment = `
+                            <div class="row align-items-center mb-4 p-3 shadow-sm rounded border bg-light">
+                                <div class="col-2 text-center">
+                                    <img src="${userPhotoUrl}" 
+                                         alt="Foto do usuário" 
+                                         class="rounded-circle img-fluid" 
+                                         style="max-width: 80px; height: auto;">
+                                </div>
+                                <div class="col-10">
+                                    <h5 class="mb-1">${data.username}</h5>
+                                    <p class="mb-0 text-muted">${data.comment}</p>
+                                </div>
+                            </div>
+                        `;
+                        comentariosContainer.insertAdjacentHTML('afterbegin', newComment);
+                        comentarioTextarea.value = ""; // Limpa o campo de comentário
+                    } else {
+                        alert("Erro ao adicionar comentário: " + data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error("Erro ao enviar comentário:", error);
+                });
+        });
+        
+        
+        
+        
     </script>
 </body>
 </html>
