@@ -82,6 +82,7 @@ def home(request):
     })
 
 
+
 def detalhes_noticia(request, slug):
     noticia = get_object_or_404(Noticias, slug=slug)
     
@@ -164,7 +165,7 @@ def adicionar_comentario(request, noticia_id):
         )
         return redirect('detalhes_noticia', slug=noticia.slug)  # Redireciona de volta para a notícia
 
-    return redirect('home')  # Caso não seja POST, redireciona para a home
+    return redirect('home')  # Caso não seja POST, redireciona para a home 
 
 
 def buscar_noticias(request):

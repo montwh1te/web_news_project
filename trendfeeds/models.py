@@ -5,6 +5,10 @@ from users.models import Usuarios
 
 class Categoria(models.Model):
     nome_categoria = models.CharField(max_length=50)
+    nome = models.CharField(max_length=20)
+    descricao = models.TextField()
+    cor = models.CharField(max_length=10)
+    serie = models.CharField(max_length=5)
 
     def __str__(self):
         return self.nome_categoria
@@ -53,7 +57,7 @@ class CategoriaNoticias(models.Model):
 
 class TimeFavorito(models.Model):
     usuario = models.OneToOneField(Usuarios, on_delete=models.CASCADE)
-    time = models.CharField(max_length=20)
+    time = models.ForeignKey(Categoria, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.usuario.username} - {self.time}"

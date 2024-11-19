@@ -97,6 +97,28 @@ def coletar_noticias():
     contador = 0
     # Contador para rastrear o número de notícias coletadas.
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     try:
         driver.get(url_principal)
         # Acessa a URL principal com o Selenium.
@@ -233,8 +255,6 @@ def coletar_noticias():
             titulo_formatado_semespaco = titulo_formatado_semespaco.replace("º", "o")
             titulo_formatado_semespaco = titulo_formatado_semespaco.replace("ª", "a")
             
-
-
             titulo_truncado = titulo_formatado_semespaco[:200].lower()
             # Trunca o título para 200 caracteres em minúsculas.
 
@@ -246,61 +266,20 @@ def coletar_noticias():
 
             titulo_formatado = re.sub(r'[\\/*?:"<>|]', "", title_text)
             # Formata o título da notícia para uso futuro.
-
-            times = {
-        "atletico_mg": ["atleticomg", "galo"],
-        "atletico_pr": ["atleticopr", "athletico", "furacao"],
-        "bahia": ["bahia", "esquadrao", "esquadrao de aco"],
-        "botafogo": ["botafogo", "fogao"],
-        "bragantino": ["bragantino", "red bull bragantino", "massa bruta"],
-        "corinthians": ["corinthians", "timao"],
-        "cruzeiro": ["cruzeiro", "raposa"],
-        "cuiaba": ["cuiaba", "dourado"],
-        "flamengo": ["flamengo", "fla", "urubu"],
-        "fluminense": ["fluminense", "flu", "tricolor das laranjeiras"],
-        "fortaleza": ["fortaleza", "leao do pici"],
-        "goias": ["goias", "esmeraldino"],
-        "gremio": ["gremio", "tricolor gaucho", "imortal"],
-        "internacional": ["inter", "colorado"],
-        "palmeiras": ["palmeiras", "verdao"],
-        "santos": ["santos", "peixe"],
-        "sao_paulo": ["sao paulo", "spfc", "tricolor paulista"],
-        "vasco": ["vasco", "vascao", "gigante da colina"],
-        "coritiba": ["coritiba", "coxa"],
-        "america_mg": ["americamg", "coelho"],
-        "selecao": ["selecao", "selecao brasileira", "canario", "canarinho"]
-                    }
+        
+            times = { 
+                     
+            # Times Série A 
+            "atletico_mg": ["atleticomg", "galo"], "athletico_pr": ["atleticopr", "athletico", "furacao"], "bahia": ["bahia", "esquadrao", "esquadrao de aco"], "botafogo": ["botafogo", "fogao"], "bragantino": ["bragantino", "red bull bragantino", "massa bruta"], "corinthians": ["corinthians", "timao"], "cruzeiro": ["cruzeiro", "raposa"], "cuiaba": ["cuiaba", "dourado"], "flamengo": ["flamengo", "fla", "urubu"], "fluminense": ["fluminense", "flu", "tricolor das laranjeiras"], "fortaleza": ["fortaleza", "leao do pici"], "gremio": ["gremio", "tricolor gaucho", "imortal"], "internacional": ["inter", "colorado"], "palmeiras": ["palmeiras", "verdao"], "sao_paulo": ["sao paulo", "spfc", "tricolor paulista"], "vasco": ["vasco", "vascao", "gigante da colina"], "juventude": ["juventude", "juve"], "criciuma": ["criciuma", "tigre"], "vitoria": ["vitoria", "leao da barra"], "atletico_go": ["atleticogo", "dragao"], 
             
-            # Dicionário de cores dos times
-            cores_times = {
-        "atletico_mg": "#000000",       # Preto
-        "atletico_pr": "#D81E05",       # Vermelho
-        "bahia": "#003DA5",             # Azul
-        "botafogo": "#000000",          # Preto
-        "bragantino": "#FF0000",        # Vermelho
-        "corinthians": "#000000",       # Preto
-        "cruzeiro": "#003087",          # Azul
-        "cuiaba": "#009739",            # Verde
-        "flamengo": "#A61B20",          # Vermelho
-        "fluminense": "#006847",        # Verde
-        "fortaleza": "#002D72",         # Azul
-        "goias": "#008C45",             # Verde
-        "gremio": "#00AEEF",            # Azul Celeste
-        "internacional": "#D6001C",     # Vermelho
-        "palmeiras": "#1E7A34",         # Verde
-        "santos": "#000000",            # Preto
-        "sao_paulo": "#DD0032",         # Vermelho
-        "vasco": "#000000",             # Preto
-        "coritiba": "#006847",          # Verde
-        "america_mg": "#006847",        # Verde
-        "selecao": "#FFCC29"            # Amarelo
-}
-
-
+            # Seleção Brasileira 
+            "selecao": ["selecao", "selecao brasileira", "canario", "canarinho"], 
             
+            # Times Série B
+            "ceara": ["ceara", "vozao"], "crb": ["crb"], "amazonas": ["amazonas", "onca pintada"], "operario_pr": ["operariopr", "operario", "fantasma"], "brusque": ["brusque", "maior do vale", "bruscao", "marreco"], "paysandu": ["paysandu", "papao"], "chapecoense": ["chapecoense", "chape"], "ituano": ["ituano", "galo de itu"], "mirassol": ["mirassol", "leao"], "novorizontino": ["novorizontino", "tigre do vale"], "ponte_preta": ["ponte preta", "macaca"], "sport": ["sport", "leao da ilha"], "vila_nova": ["vila nova", "tigre"], "avai": ["avai", "leao da ilha"], "botafogo_sp": ["botafogosp", "pantera"], "guarani": ["guarani", "bugre"], "goias": ["goias", "esmeraldino"], "santos": ["santos", "peixe"], "coritiba": ["coritiba", "coxa"], "america_mg": ["americamg", "coelho"], 
+            }
+
             # Lista de times para verificar se algum time está relacionado à notícia.
-
-
             try:                
                 data_publicacao = timezone.now()
 

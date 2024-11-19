@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from .forms import RegistrationForm, LoginForm, UsuarioUpdateForm, AlterarSenhaForm
 from .models import Usuarios
 from django.http import JsonResponse
-from trendfeeds.models import TimeFavorito
+from trendfeeds.models import Categoria, TimeFavorito
 
 def registro(request):
     if request.method == 'POST':
@@ -13,8 +13,6 @@ def registro(request):
             user.set_password(form.cleaned_data['senha'])
             user.save()
             auth_login(request, user)  # Usa a função de login do Django com o alias 'auth_login'
-            TimeFavorito.objects.get_or_create(usuario=user, time='nenhum')
-            return redirect('time_favorito')
     else:
         form = RegistrationForm()
 
@@ -79,9 +77,23 @@ def alterar_senha(request):
     return JsonResponse({'success': False})
 
 def time_favorito(request):
-    
-    # captar todos os times e seus respectivos nomes e descricao
-    times = []
-    
-    # selecionar time, e com base no nome formal, captar o nome_categoria da tabela categorias, relacionar o id nome_categoria a tabela TimeFavorito
-    pass
+    # Pega todos os times disponíveis na tabela Categoria
+    categorias = Categoria.objects.all()
+
+    if request.method == "POST":
+        # Pega o time favorito escolhido pelo usuário
+        categoria_id = request.POST.get("categoria")
+        categoria = Categoria.objects.get(id=categoria_id)
+        
+        # Verifica se o usuário já tem um time favorito
+        time_favorito, created = TimeFavorito.objects.get_or_create(usuario=request.user)
+        
+        # Associa o time favorito à categoria escolhida
+        time_favorito.categoria = categoria
+        time_favorito.save()
+        
+        return redirect('home')
+
+    # Contexto com todos os times
+    context = {'categorias': categorias}
+    return render(request, 'users/time_favorito.html', context)
