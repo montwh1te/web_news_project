@@ -197,7 +197,7 @@ def detalhes_noticia(request, slug):
     template_name = f'html/noticias/{noticia.slug}.html'
         # Define o nome do template com base no slug da notícia.
 
-
+    usuario_curtiu = InteracaoUsuario.objects.filter(noticia=noticia, usuario=request.user, like=True).exists()
     comentarios = Comentario.objects.filter(noticia=noticia).order_by('-data_criacao')
         # Obtém os comentários associados à notícia, ordenados por data de criação.
 
@@ -212,8 +212,11 @@ def detalhes_noticia(request, slug):
             # Notícias agrupadas para exibição.
         'comentarios': comentarios,  
             # Comentários da notícia.
-        'cor_categoria': cor_categoria
+        'cor_categoria': cor_categoria,
             #cor da categoria.
+        'usuario_curtiu': usuario_curtiu,  
+            # Passa o estado do like para o template
+
     })
 
 
@@ -221,41 +224,28 @@ def detalhes_noticia(request, slug):
 
 # **FUNÇÃO DO MODELO.HTML**
 # **FUNÇÃO DO LIKE**
+
 @login_required
 def atualizar_like(request, slug):
     if request.method == 'POST':
-        
         noticia = get_object_or_404(Noticias, slug=slug)
-            # Obtém a notícia associada ao slug ou retorna erro 404.
-        
         usuario = request.user
-            # Obtém o usuário autenticado.
-        
+
         interacao, created = InteracaoUsuario.objects.get_or_create(
             noticia=noticia,
             usuario=usuario
-        )   # Busca ou cria uma interação do usuário com a notícia.
-
-       
+        )
         interacao.like = not interacao.like
-            # Alterna o estado do like (curtido ou não curtido).
         interacao.save()
 
-        
         noticia.like_count = InteracaoUsuario.objects.filter(noticia=noticia, like=True).count()
-            # Recalcula o número total de likes na notícia.
         noticia.save()
 
-        # Retorna os dados do like em formato JSON.
         return JsonResponse({
-            'like_count': noticia.like_count,  
-                # Número total de likes.
-            'liked': interacao.like  
-                # Status do like (True/False).
+            'like_count': noticia.like_count,
+            'liked': interacao.like
         })
     return JsonResponse({'error': 'Método inválido'}, status=400)
-        # Retorna erro 400 para métodos não suportados.
-
 
 
 
@@ -263,41 +253,31 @@ def atualizar_like(request, slug):
 # **FUNÇÃO DO COMENTÁRIO**
 @login_required
 def adicionar_comentario(request, slug):
-    noticia = get_object_or_404(Noticias, slug=slug)
-        # Busca uma notícia pelo slug ou retorna um erro 404 caso não seja encontrada.
+    if request.method == 'POST':
+        noticia = get_object_or_404(Noticias, slug=slug)
 
-
-    if request.method == 'POST':  
-        # Garante que a requisição é do tipo POST.
         try:
-            # Decodifica o corpo da requisição (JSON) enviado pelo frontend.
             data = json.loads(request.body)
-            comentario_texto = data.get('comentario')  
-                # Obtém o texto do comentário do JSON.
+            comentario_texto = data.get('comentario')
         except json.JSONDecodeError:
-            # Retorna um erro JSON se os dados enviados forem inválidos.
             return JsonResponse({'success': False, 'error': 'Dados inválidos enviados.'}, status=400)
 
         if comentario_texto:
-            # Cria um novo comentário associado à notícia e ao usuário.
-            Comentario.objects.create(
+            comentario = Comentario.objects.create(
                 usuario=request.user,
                 noticia=noticia,
                 comentario=comentario_texto
             )
-                # Retorna uma resposta JSON confirmando o sucesso e os dados do comentário.
             return JsonResponse({
                 'success': True,
                 'username': request.user.username,
-                'comment': comentario_texto,
+                'comment': comentario.comentario,
+                'foto': request.user.foto.url if request.user.foto else '/static/images/default-avatar.png'
             })
-       
-        return JsonResponse({'success': False, 'error': 'Comentário vazio.'}, status=400)
-            # Retorna um erro JSON se o comentário estiver vazio.
 
-    
+        return JsonResponse({'success': False, 'error': 'Comentário vazio.'}, status=400)
+
     return JsonResponse({'success': False, 'error': 'Método inválido.'}, status=400)
-        # Retorna um erro JSON se o método da requisição for inválido.
 
 
 

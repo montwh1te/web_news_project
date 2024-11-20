@@ -142,7 +142,7 @@ footer p {
 .comentarios-container {
   max-width: 100%;
   margin: auto;
-  padding: 50px;
+  padding: 25px;
   background-color: #e7e7e7;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -159,74 +159,6 @@ footer p {
 
 .comentarios-container img {
   object-fit: cover;
-}
-
-.Btn {
-  width: 200px;
-  height: 35px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  border: none;
-  border-radius: 35px;
-  overflow: hidden;
-  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.089);
-  cursor: pointer;
-  background-color: #ffffff;
-}
-
-.leftContainer {
-  width: 60%;
-  height: 100%;
-  background-color: #0060ff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.leftContainer .like {
-  color: white;
-  font-weight: 600;
-}
-
-.likeCount {
-  width: 40%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #0060ff;
-  font-weight: 600;
-  position: relative;
-  background-color: white;
-}
-
-.likeCount::before {
-  height: 8px;
-  width: 8px;
-  position: absolute;
-  content: "";
-  background-color: rgb(255, 255, 255);
-  transform: rotate(45deg);
-  left: -4px;
-}
-
-.Btn:hover .leftContainer {
-  background-color: #1d4292;
-}
-
-.Btn:active .leftContainer {
-  background-color: #072b7a;
-}
-
-.Btn:active .leftContainer svg {
-  transform: scale(1.15);
-  transform-origin: top;
-}
-
-.link_noticia {
-  color: #333;
 }
 
 .card-title {
@@ -253,4 +185,158 @@ a:hover {
   font-size: 2.1vw;
   color: #333;
   font-weight: 600;
+}
+
+
+
+
+
+
+/* Mantém o estilo do botão de like */
+.like {
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+  margin-right: 10px; /* Espaço entre o botão e o contador */
+}
+
+.like input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+svg {
+  position: relative;
+  height: 50px;
+  width: 50px;
+  transition: all 0.3s;
+  fill: #e7e7e7;
+  ; /* Cor padrão */
+}
+
+svg:hover {
+  transform: scale(1.1) rotate(-10deg); /* Efeito de hover */
+}
+
+.container input:checked ~ svg {
+  fill: #2196F3; /* Cor ao curtir */
+}
+
+#likeCount {
+  font-size: 1.2rem;
+  color: #333;
+  margin-left: 10px; /* Ajuste adicional para espaçamento */
+}
+
+input{
+  display: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* From Uiverse.io by vinodjangid07 */ 
+.social-card {
+  height: fit-content;
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  background: rgb(255, 255, 255);
+  padding: 20px 25px;
+  border-radius: 14px;
+}
+.Btn {
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background-color: transparent;
+  position: relative;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.svgContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  backdrop-filter: blur(0px);
+  letter-spacing: 0.8px;
+  border-radius: 10px;
+  transition: all 0.3s;
+  border: 1px solid rgba(156, 156, 156, 0.466);
+  z-index: 2;
+}
+
+.BG {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #181818;
+  z-index: 1;
+  border-radius: 10px;
+  pointer-events: none;
+  transition: all 0.3s;
+  font-size: 0px;
+}
+.github .BG {
+  background: #181818;
+}
+.linkdin .BG {
+  background: #0077b5;
+}
+.whatsapp .BG {
+  background: #075e54;
+}
+.discord .BG {
+  background: #7289da;
+}
+.Btn:hover .BG {
+  transform: scale(1.5);
+  /* transform-origin: bottom; */
+  font-size: 20px;
+  color: white;
+}
+
+.Btn:hover .svgContainer {
+  border: 1px solid rgb(216, 216, 216);
+  background-color: rgb(209, 209, 209);
+  backdrop-filter: blur(4px);
+}
+
+
+.social-icons a {
+  text-decoration: none;
+  transition: transform 0.3s ease;
+}
+
+.social-icons a:hover {
+  transform: scale(1.2);
+}
+
+.social-icons i {
+  margin: 0 10px;
 }
