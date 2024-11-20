@@ -1,305 +1,366 @@
-import requests
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, get_object_or_404, redirect
-from .models import Categoria, Noticias, InteracaoUsuario, Comentario
-from django.utils.text import slugify
-from django.http import JsonResponse
-from .utils import obter_tabela_brasileirao
-from django.core.cache import cache
-from django.conf import settings
-from .forms import ComentarioForm
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-import json
+# BIBLIOTECAS PADRÃO**
+import json  
+    # Para manipulação de objetos JSON (decodificação e codificação de dados).
 
 
-def obter_proximos_jogos():
-    # Definindo a URL da API onde os dados dos próximos jogos serão obtidos.
-    url = "https://api.api-futebol.com.br/v1/campeonatos/10/rodadas/34"  # Substitua '34' pela rodada desejada dinamicamente, se necessário
-    
-    # Definindo os cabeçalhos da requisição, incluindo o token de autenticação para acessar a API.
-    headers = {
-        "Authorization": f"Bearer {settings.API_FUTEBOL_KEY}"  # Insira seu token da API aqui
-    }
 
-    try:
-        # Enviando a requisição HTTP para obter os dados da API.
-        response = requests.get(url, headers=headers)
-        # Verificando se a resposta da requisição foi bem-sucedida. Caso contrário, lança uma exceção.
-        response.raise_for_status()
-        # Retornando os dados JSON da resposta, especificamente a lista de partidas (proximos jogos).
-        return response.json().get('partidas', [])
-    except requests.exceptions.RequestException as e:
-        # Caso ocorra qualquer erro durante a requisição, imprime o erro e retorna uma lista vazia.
-        print(f"Erro ao buscar próximos jogos: {e}")
-        return []
+# **BIBLIOTECAS DE TERCEIROS**
+import requests  
+    # Para fazer requisições HTTP a APIs externas.
 
 
+
+# **IMPORTAÇÕES DO DJANGO**
+from django.contrib.auth.decorators import login_required  
+    # Para restringir acesso a usuários autenticados.
+from django.shortcuts import render, get_object_or_404, redirect  
+    # Funções para renderizar templates e redirecionar.
+from django.http import JsonResponse  
+    # Para enviar respostas JSON em requisições Ajax.
+from django.utils.text import slugify  
+    # Para gerar slugs a partir de strings.
+from django.core.cache import cache 
+    # Para armazenar e recuperar dados em cache.
+
+
+
+
+# **IMPORTAÇÕES DE MÓDULOS INTERNOS**
+from .models import Categoria, Noticias, InteracaoUsuario, Comentario  
+    # Importa os modelos definidos na aplicação para interagir com o banco de dados.
+from .utils import obter_tabela_brasileirao, obter_proximos_jogos     
+    # Importa duas funções, uma utilitária personalizada para obter a tabela do Brasileirão e outra para os próximos jogos do Brasileirão.
+
+
+
+
+
+# **FUNÇÃO DO INDEX.HTML**
 def home(request):
-    # Buscando a última notícia da base de dados, ordenada pela data de publicação (id crescente).
-    ultima_noticia = Noticias.objects.all().order_by('-data_publicacao').first()
-    # Buscando as 4 notícias seguintes, ordenadas pela data de publicação.
-    outras_noticias = Noticias.objects.all().order_by('-data_publicacao')[1:5]
+    ultima_noticia = Noticias.objects.all().order_by('-id').first()
+        # Obtém a última notícia publicada, ordenando pelo id em ordem decrescente.
+    outras_noticias = Noticias.objects.all().order_by('-id')[1:5]
+        # Obtém as próximas quatro notícias publicadas, excluindo a última.
 
-    # Excluindo as notícias que já foram buscadas (última notícia e as outras notícias).
-    ids_excluidos = [ultima_noticia.id] if ultima_noticia else []  # Lista contendo o ID da última notícia, se existir.
-    ids_excluidos += [noticia.id for noticia in outras_noticias]  # Adicionando os IDs das outras notícias a serem excluídas.
-    # Buscando todas as notícias restantes, exceto as já excluídas, e ordenando por data de publicação.
-    todas_as_noticias = Noticias.objects.exclude(id__in=ids_excluidos).order_by('-data_publicacao')
 
-    # Buscando todas as categorias, exceto a categoria 'Outros'.
-    categorias = Categoria.objects.exclude(nome_categoria='Outros')
+    # **Cria uma lista de IDs das notícias já selecionadas.**
+    ids_excluidos = [ultima_noticia.id] if ultima_noticia else []  
+        # Se `ultima_noticia` não for `None`, adiciona o ID da última notícia à lista `ids_excluidos`.
+        # Caso contrário, a lista será vazia ([]).
+    ids_excluidos += [noticia.id for noticia in outras_noticias]  
+        # Adiciona os IDs de todas as notícias em `outras_noticias` à lista `ids_excluidos`.
+
     
+    todas_as_noticias = Noticias.objects.exclude(id__in=ids_excluidos).order_by('-data_publicacao')
+        # Obtém todas as notícias restantes, excluindo os IDs acima.
+    categorias = Categoria.objects.exclude(nome_categoria='Outros')
+        # Obtém todas as categorias, excluindo a categoria "Outros".
 
-    # Garantindo que a última notícia tenha um slug, caso não tenha, gerando e salvando um.
+ 
     if ultima_noticia and not ultima_noticia.slug:
-        ultima_noticia.slug = slugify(ultima_noticia.titulo)  # Criando um slug baseado no título da notícia.
-        ultima_noticia.save()  # Salvando a última notícia com o novo slug.
+        # Verifica se existe uma última notícia e se ela ainda não tem um slug.
+        ultima_noticia.slug = slugify(ultima_noticia.titulo)
+            # Gera o slug a partir do título da notícia usando a função `slugify`.
+        ultima_noticia.save()
+            # Salva a notícia com o slug gerado no banco de dados.
 
-    # Buscando os dados da tabela do Brasileirão armazenados no cache (caso já exista).
+    
     tabela = cache.get('tabela_brasileirao')
+        # Busca a tabela do Brasileirão no cache.
     if not tabela:
         try:
-            # Caso não exista cache para a tabela, obtendo a tabela do Brasileirão por meio de uma função externa.
-            tabela = obter_tabela_brasileirao()  # Presumindo que você já tenha esta função definida.
-            # Armazenando os dados da tabela no cache por 1 hora (60 * 60 segundos).
+            
+            tabela = obter_tabela_brasileirao()
+                # Caso não exista no cache, busca a tabela usando uma função externa.
             cache.set('tabela_brasileirao', tabela, timeout=60 * 60)
+                # Armazena a tabela no cache por 1 hora.
         except Exception as e:
-            tabela = []  # Em caso de erro, definindo a tabela como uma lista vazia.
+            tabela = []
+                # Em caso de erro, define a tabela como uma lista vazia.
 
-    # Buscando os próximos jogos armazenados no cache.
+    
     proximos_jogos = cache.get('proximos_jogos')
+        # Busca os próximos jogos no cache.
     if not proximos_jogos:
-        # Caso não exista cache para os próximos jogos, obtendo os dados da API.
         proximos_jogos = obter_proximos_jogos()
-        # Armazenando os próximos jogos no cache por 1 hora (60 * 60 segundos).
+            # Caso não exista no cache, obtém os próximos jogos da API.
         cache.set('proximos_jogos', proximos_jogos, timeout=60 * 60)
+            # Armazena os próximos jogos no cache por 1 hora.
 
-    # Retornando a renderização da página inicial (index.html) com os dados buscados.
+
+    # **Renderiza a página inicial com os dados obtidos.**
     return render(request, 'html/index.html', {
-        'ultima_noticia': ultima_noticia,  # Passando a última notícia para o template.
-        'outras_noticias': outras_noticias,  # Passando as outras notícias para o template.
-        'todas_as_noticias': todas_as_noticias,  # Passando todas as notícias restantes para o template.
-        'categorias': categorias,  # Passando as categorias para o template.
-        'tabela': tabela,  # Passando a tabela do Brasileirão para o template.
-        'proximos_jogos': proximos_jogos,  # Passando os próximos jogos para o template.
+        'ultima_noticia': ultima_noticia,  
+            # Última notícia.
+        'outras_noticias': outras_noticias,  
+            # Outras quatro notícias.
+        'todas_as_noticias': todas_as_noticias,  
+            # Restante das notícias.
+        'categorias': categorias,  
+            # Categorias disponíveis.
+        'tabela': tabela,  
+            # Tabela do Brasileirão.
+        'proximos_jogos': proximos_jogos,  
+            # Próximos jogos.
     })
 
 
+
+
+
+# **FUNÇÃO DA BARRA DE PESQUISA**
+def buscar_noticias(request):
+    query = request.GET.get('q', '')  
+        # Obtém a string de busca a partir da URL.
+
+
+    if query:
+        
+
+        noticias = Noticias.objects.filter(descricao__icontains=query)
+            # Busca notícias cuja descrição contenha a string de busca (case-insensitive).
+            # Case-insensitive significa que a busca não faz distinção entre letras maiúsculas e minúsculas.
+        results = []  
+            # Inicializa uma lista para armazenar os resultados.
+
+
+        for noticia in noticias:
+            # Adiciona os dados relevantes de cada notícia à lista de resultados.
+            results.append({
+                'titulo': noticia.descricao,  
+                    # Descrição da notícia.
+                'slug': noticia.slug,  
+                    # Slug da notícia para redirecionamento.
+                'imagem_url': noticia.imagem_url,  
+                    # URL da imagem da notícia.
+            })
+
+        
+        return JsonResponse({'results': results})
+            # Retorna os resultados em formato JSON.
+            # converte para JSON usando JsonResponse, que é uma forma de retornar dados estruturados para o front-end.
+    else:
+        return JsonResponse({'results': []})
+            # Retorna uma lista vazia se nenhum termo de busca for fornecido
+
+
+
+
+
+# **FUNÇÃO DO MODELO.HTML**
+# **FUNÇÃO DA PÁGINA DE CADA NOTÍCIA**
 def detalhes_noticia(request, slug):
-    noticia = get_object_or_404(Noticias, slug=slug)
-    
-    # Obtém a primeira categoria e define uma cor para ela
+    noticia = get_object_or_404(Noticias, slug=slug)    
+        # Obtém uma notícia específica com base no slug ou retorna erro 404.
+
+
     categoria = noticia.categorias.first()
+        # Obtém a primeira categoria associada à notícia.
     categoria_nome = categoria.nome_categoria if categoria else "Outros"
+        # Define o nome da categoria, ou "Outros" se nenhuma for encontrada.
+
     
-  
-    cores_times = {
-       "atletico_mg": "#000000",       # Preto
-        "atletico_pr": "#D81E05",       # Vermelho
-        "bahia": "#003DA5",             # Azul
-        "botafogo": "#000000",          # Preto
-        "bragantino": "#FF0000",        # Vermelho
-        "corinthians": "#000000",       # Preto
-        "cruzeiro": "#003087",          # Azul
-        "cuiaba": "#009739",            # Verde
-        "flamengo": "#A61B20",          # Vermelho
-        "fluminense": "#006847",        # Verde
-        "fortaleza": "#002D72",         # Azul
-        "goias": "#008C45",             # Verde
-        "gremio": "#00AEEF",            # Azul Celeste
-        "internacional": "#D6001C",     # Vermelho
-        "palmeiras": "#1E7A34",         # Verde
-        "santos": "#000000",            # Preto
-        "sao_paulo": "#DD0032",         # Vermelho
-        "vasco": "#000000",             # Preto
-        "coritiba": "#006847",          # Verde
-        "america_mg": "#006847",        # Verde
-        "selecao": "#FFCC29"  
-    }
-    noticia = get_object_or_404(Noticias, slug=slug)
-
     todas_as_noticias = Noticias.objects.all().order_by('-data_publicacao')
-
-    cor_categoria = cores_times.get(categoria_nome.lower(), "#cccccc")  # usa a cor padrão se não encontrado
-
-
-  
-
+        # Obtém todas as notícias, ordenadas por data de publicação.
     noticias_agrupadas = [
-        todas_as_noticias[i:i+3] for i in range(0, len(todas_as_noticias), 3)
+        todas_as_noticias[i:i + 3] for i in range(0, len(todas_as_noticias), 3)
+            # Agrupa as notícias em grupos de três para exibição.
     ]
+    
+    cores_times = {
+        "atletico_mg": "#000000",      
+        "atletico_pr": "#D81E05",      
+        "bahia": "#003DA5",             
+        "botafogo": "#000000",         
+        "bragantino": "#FF0000",        
+        "corinthians": "#000000",       
+        "cruzeiro": "#003087",         
+        "cuiaba": "#009739",           
+        "flamengo": "#A61B20",         
+        "fluminense": "#006847",       
+        "fortaleza": "#002D72",        
+        "goias": "#008C45",            
+        "gremio": "#00AEEF",            
+        "internacional": "#D6001C",     
+        "palmeiras": "#1E7A34",         
+        "santos": "#000000",           
+        "sao_paulo": "#DD0032",         
+        "vasco": "#000000",             
+        "coritiba": "#006847",          
+        "america_mg": "#006847",        
+        "selecao": "#FFCC29"            
+    }
+        #Seleceiona a cor dos times para a pagina index_nomedotime.html
+    
+    cor_categoria = cores_times.get(categoria_nome.lower(), "#cccccc")
 
-    # Gerar o nome do template com base no slug
     template_name = f'html/noticias/{noticia.slug}.html'
+        # Define o nome do template com base no slug da notícia.
+
 
     comentarios = Comentario.objects.filter(noticia=noticia).order_by('-data_criacao')
+        # Obtém os comentários associados à notícia, ordenados por data de criação.
 
+
+    # Renderiza a página de detalhes da notícia com os dados fornecidos.
     return render(request, template_name, {
-        'noticia': noticia, 
-        'categoria_nome': categoria_nome,
-        'cor_categoria': cor_categoria,
-        'noticias_agrupadas': noticias_agrupadas,
-        'comentarios': comentarios,
-        
+        'noticia': noticia,  
+            # Dados da notícia.
+        'categoria_nome': categoria_nome, 
+            # Nome da categoria.
+        'noticias_agrupadas': noticias_agrupadas,  
+            # Notícias agrupadas para exibição.
+        'comentarios': comentarios,  
+            # Comentários da notícia.
+        'cor_categoria': cor_categoria
+            #cor da categoria.
     })
+
+
+
+
+# **FUNÇÃO DO MODELO.HTML**
+# **FUNÇÃO DO LIKE**
 @login_required
 def atualizar_like(request, slug):
     if request.method == 'POST':
+        
         noticia = get_object_or_404(Noticias, slug=slug)
+            # Obtém a notícia associada ao slug ou retorna erro 404.
+        
         usuario = request.user
-
-        # Busca ou cria a interação
+            # Obtém o usuário autenticado.
+        
         interacao, created = InteracaoUsuario.objects.get_or_create(
             noticia=noticia,
             usuario=usuario
-        )
+        )   # Busca ou cria uma interação do usuário com a notícia.
 
-        # Alterna o estado do like
+       
         interacao.like = not interacao.like
+            # Alterna o estado do like (curtido ou não curtido).
         interacao.save()
 
-        # Recalcula o contador de likes
+        
         noticia.like_count = InteracaoUsuario.objects.filter(noticia=noticia, like=True).count()
+            # Recalcula o número total de likes na notícia.
         noticia.save()
 
+        # Retorna os dados do like em formato JSON.
         return JsonResponse({
-            'like_count': noticia.like_count,
-            'liked': interacao.like
+            'like_count': noticia.like_count,  
+                # Número total de likes.
+            'liked': interacao.like  
+                # Status do like (True/False).
         })
-
     return JsonResponse({'error': 'Método inválido'}, status=400)
+        # Retorna erro 400 para métodos não suportados.
 
 
 
-@login_required
-def salvar_comentario(request, noticia_id):
-    noticia = get_object_or_404(Noticias, id=noticia_id)
-    if request.method == 'POST':
-        comentario_texto = request.POST.get('comentario')
-        if comentario_texto:
-            # Busca ou cria a interação
-            interacao, created = InteracaoUsuario.objects.get_or_create(
-                noticia=noticia,
-                usuario=request.user
-            )
 
-            # Atualiza o comentário
-            interacao.comentario = comentario_texto
-            interacao.save()
-
-        return redirect('detalhes_noticia', slug=noticia.slug)
-
-    return JsonResponse({'error': 'Método inválido'}, status=400)
-
-
-
+# **FUNÇÃO DO MODELO.HTML**
+# **FUNÇÃO DO COMENTÁRIO**
 @login_required
 def adicionar_comentario(request, slug):
     noticia = get_object_or_404(Noticias, slug=slug)
+        # Busca uma notícia pelo slug ou retorna um erro 404 caso não seja encontrada.
 
-    if request.method == 'POST':
+
+    if request.method == 'POST':  
+        # Garante que a requisição é do tipo POST.
         try:
-            # Decodifica o JSON enviado pelo frontend
+            # Decodifica o corpo da requisição (JSON) enviado pelo frontend.
             data = json.loads(request.body)
-            comentario_texto = data.get('comentario')
+            comentario_texto = data.get('comentario')  
+                # Obtém o texto do comentário do JSON.
         except json.JSONDecodeError:
+            # Retorna um erro JSON se os dados enviados forem inválidos.
             return JsonResponse({'success': False, 'error': 'Dados inválidos enviados.'}, status=400)
 
         if comentario_texto:
-            # Cria o comentário
+            # Cria um novo comentário associado à notícia e ao usuário.
             Comentario.objects.create(
                 usuario=request.user,
                 noticia=noticia,
                 comentario=comentario_texto
             )
+                # Retorna uma resposta JSON confirmando o sucesso e os dados do comentário.
             return JsonResponse({
                 'success': True,
                 'username': request.user.username,
                 'comment': comentario_texto,
             })
-
+       
         return JsonResponse({'success': False, 'error': 'Comentário vazio.'}, status=400)
+            # Retorna um erro JSON se o comentário estiver vazio.
 
-    return JsonResponse({'success': False, 'error': 'Método inválido.'}, status=400)
-
-
-
-@login_required
-
-def interagir(request, slug):
-    noticia = get_object_or_404(Noticias, slug=slug)
-    usuario = request.user
-
-    if request.method == 'POST':
-        # Para comentários
-        if 'comentario' in request.POST:
-            comentario = request.POST.get('comentario')
-            InteracaoUsuario.objects.create(
-                usuario=usuario,
-                noticia=noticia,
-                comentario=comentario
-            )
-        # Para likes
-        if 'like' in request.POST:
-            interacao, created = InteracaoUsuario.objects.get_or_create(
-                usuario=usuario,
-                noticia=noticia
-            )
-            interacao.like = not interacao.like
-            interacao.save()
-
-            # Atualizar contagem de likes
-            noticia.like_count = InteracaoUsuario.objects.filter(noticia=noticia, like=True).count()
-            noticia.save()
-
-    return redirect('detalhes_noticia', slug=noticia.slug)
-
-
-
-
-
-def buscar_noticias(request):
-    query = request.GET.get('q', '')
-    if query:
-        noticias = Noticias.objects.filter(descricao__icontains=query)
-        results = []
-
-        for noticia in noticias:
-            results.append({
-                'titulo': noticia.descricao,
-                'slug': noticia.slug,
-                'imagem_url': noticia.imagem_url,  # Chama a função imagem_url para pegar o caminho da imagem
-            })
-
-        return JsonResponse({'results': results})
-    else:
-        return JsonResponse({'results': []})
     
+    return JsonResponse({'success': False, 'error': 'Método inválido.'}, status=400)
+        # Retorna um erro JSON se o método da requisição for inválido.
 
 
-from django.db.models import Max
 
+
+# **FUNÇÃO DO MODELO_CATEGORIA.HTML**
+# **FUNÇÃO DOS PRÓXIMOS JOGOS DA CATEGORIA EXPECIFICA**
+def buscar_proximos_jogos(time_id):
+    # Define a URL da API para buscar os próximos jogos de um time específico.
+    api_url = f"https://api.futebol.com/v1/fixtures?team_id={time_id}&status=scheduled"
+    
+    # Define os cabeçalhos da requisição, incluindo o token de autenticação.
+    headers = {"Authorization": "Bearer live_2a8fa6e7d603888fb9656c01ac3240"}
+
+    # Envia a requisição para a API.
+    response = requests.get(api_url, headers=headers)
+
+    if response.status_code == 200:  # Verifica se a requisição foi bem-sucedida.
+        return response.json()  # Retorna os dados JSON com os próximos jogos.
+    else:
+        return []  # Retorna uma lista vazia em caso de erro.
+
+
+
+
+# **FUNÇÃO DO INDEX.HTML**
+# **FUNÇÃO DOS ÍCONES DOS TIMES, PARA A PAGINA DE CADA TIME**
 def exibir_categoria(request, nome_time):
-    # Obtém a categoria correspondente ao nome do time ou exibe 404 se não existir
+    # Busca a categoria pelo nome do time ou retorna erro 404.
     categoria = get_object_or_404(Categoria, nome_categoria=nome_time)
 
-    # Filtra as notícias relacionadas à categoria
-    noticias = Noticias.objects.filter(categorias=categoria)
+    # Filtra as notícias relacionadas à categoria, ordenadas por ID (mais recentes primeiro).
+    noticias = Noticias.objects.filter(categorias=categoria).order_by('-id')
 
-    # Obtém a última notícia relacionada à categoria, baseada no campo de data de publicação
-    ultima_noticia = noticias.order_by('-id').first()  # Pega a notícia mais recente
+    # Obtém a última notícia publicada (mais recente).
+    ultima_noticia = noticias.first()
 
-    # Define o template dinâmico para a página de categoria
+    # Obtém as próximas três notícias mais recentes, excluindo a última.
+    ultimas_tres_noticias = noticias[1:4]
+
+    # Obtém as notícias restantes, excluindo as quatro primeiras.
+    restantes_noticias = noticias[4:]
+
+    # Define o template dinâmico para exibir a categoria.
     template_name = f'html/categorias/index_{nome_time}.html'
 
+    # Define o contexto para renderizar o template.
     context = {
-        'main_title': nome_time.capitalize(),
-        'cor_categoria': getattr(categoria, 'cor_categoria', "#cccccc"),  # Define cor padrão caso não exista `cor_categoria`
-        'noticias': noticias,
-        'ultima_noticia': ultima_noticia,  # Adiciona a última notícia ao contexto
+        'main_title': nome_time,  # Nome do time como título principal.
+        'cor_categoria': getattr(categoria, 'cor_categoria', "#3333"),  # Cor associada à categoria (padrão se não definido).
+        'noticias': restantes_noticias,  # Notícias restantes.
+        'ultima_noticia': ultima_noticia,  # Última notícia publicada.
+        'ultimas_tres_noticias': ultimas_tres_noticias,  # Próximas três notícias mais recentes.
     }
 
+    # Renderiza a página da categoria com o contexto fornecido.
     return render(request, template_name, context)
+
+
+
+
+
+
+
+
 
 

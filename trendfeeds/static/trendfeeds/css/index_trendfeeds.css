@@ -267,7 +267,6 @@ main {
   margin: 0;
 }
 
-
 .todas-noticias .d-flex {
   display: flex;
   flex-direction: row; /* Layout em linha */
@@ -344,15 +343,6 @@ a:hover {
   text-decoration: none; /* Garante que o sublinhado nunca apareça */
 }
 
-#search-bar {
-  width: 300px;
-  padding: 10px 15px;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 25px;
-  transition: box-shadow 0.3s;
-}
-
 #search-bar:focus {
   outline: none;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -362,9 +352,8 @@ a:hover {
   position: absolute;
   top: 100%;
   left: 0;
-  width: 100%;
+  width: 235%;
   background-color: #fff;
-  border: 1px solid #ddd;
   border-radius: 8px;
   margin-top: 5px;
   padding: 0;
@@ -399,26 +388,12 @@ a:hover {
   font-size: 1rem;
   color: #333;
   font-weight: 500;
-}
-
-.search-container {
-  position: relative;
-  display: flex;
-  align-items: center;
+  margin-left: 10%;
 }
 
 #dropdownTimes {
   margin: -5%;
 }
-
-
-
-
-
-
-
-
-
 
 /* Estilo Geral para a Tabela */
 .table {
@@ -432,13 +407,11 @@ a:hover {
   margin-right: 10%;
 }
 
-
 /* Corpo */
 .table tbody tr {
   background-color: #f9f9f9;
   transition: all 0.2s ease-in-out;
 }
-
 
 .table tbody td {
   padding: 12px;
@@ -464,7 +437,6 @@ a:hover {
   font-weight: bold;
   color: #dc3545;
 }
-
 
 /* Responsividade */
 @media (max-width: 768px) {
@@ -495,10 +467,6 @@ a:hover {
   }
 }
 
-
-
-
-
 /* Alterando a cor dos nomes dos times para preto */
 .table tbody td span {
   color: #000; /* Nomes dos times em preto */
@@ -527,13 +495,6 @@ a:hover {
   border-bottom: 2px solid #f4f4f4;
   text-align: center;
 }
-
-
-
-
-
-
-
 
 /* Estilo geral para a lista de jogos */
 .jogos-container {
@@ -583,18 +544,15 @@ a:hover {
   color: #888;
 }
 
-
-.caixa{
+.caixa {
   width: 80%;
 }
 
-
-.div-tabela-brasileiro{
+.div-tabela-brasileiro {
   width: 60%;
 }
 
-
-.titulo_brasileriao{
+.titulo_brasileriao {
   font-size: 4vh;
   color: #333;
   font-weight: bolder;
@@ -603,10 +561,9 @@ a:hover {
   box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.222);
 }
 
-.div_brasileirao{
+.div_brasileirao {
   width: 100%;
 }
-
 
 .search-container {
   position: relative;

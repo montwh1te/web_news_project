@@ -1,173 +1,252 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+    <!-- Define o tipo de documento e a linguagem -->
     <meta charset="UTF-8">
+        <!-- Define a codificação de caracteres como UTF-8 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Configura o site para ser responsivo em dispositivos móveis -->
     <title>{% block title %}{{ categoria_nome|default:"Notícia" }} - {{ noticia.titulo }}{% endblock title %}</title>
+        <!-- Define o título da página, usando variáveis do Django template -->
     {% load static %}
-
+        <!-- Carrega a tag estática para gerenciar arquivos estáticos -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <!-- Link para os estilos do Bootstrap -->
     <link rel="stylesheet" href="/static/trendfeeds/css/modelo.css">
+        <!-- Link para o arquivo CSS personalizado -->
     <style>
         :root {
             --categoria-color: {% block cor_categoria %}#007bff{% endblock cor_categoria %};
+
+
+            /* Define uma variável CSS para a cor da categoria */
         }
         
         .categoria-badge {
             {% if categoria_nome|lower == 'outros' %}
                 background-color: transparent !important;
                 display: none !important;
+
+
+                /* Esconde o badge para a categoria "outros" */
             {% else %}
                 background-color: var(--categoria-color);
+
+
+                /* Define a cor do badge baseada na categoria */
             {% endif %}
         }
-        
     </style>
-    
 </head>
 
+
 <body>
-    
+    <!-- INÍCIO DO CORPO DO DOCUMENTO -->
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-custom d-flex justify-content-sm-around">
-            <!-- Esquerda: Nome do site e dropdown dos times -->
+            <!-- Criação do menu de navegação com classes do Bootstrap -->
+
+
+            <!-- EQUERDA: NOME DO SITE -->
             <div class="d-flex align-items-center">
                 <a class="navbar-brand p-2 nome-site" href="#">site noticias</a>
+                    <!-- Link para a página inicial com o nome do site -->
             </div>
 
-            <!-- Centro: Itens do menu -->
+
+
+
+            <!-- CENTRO: ITENS DO MENU -->
             <div class="d-flex justify-content-center" id="navbarNav">
                 <ul class="navbar-nav">
+                        <!-- Criação da lista de navegação -->
                     <li class="nav-item"><a class="nav-link" href="#">Início</a></li>
+                        <!-- Link para a página inicial -->
                     <li class="nav-item"><a class="nav-link" href="#">Sobre</a></li>
+                        <!-- Link para a página sobre -->
                     <li class="nav-item"><a class="nav-link" href="#">Serviços</a></li>
+                        <!-- Link para a página de serviços -->
                     <li class="nav-item"><a class="nav-link" href="#">Contato</a></li>
+                        <!-- Link para a página de contato -->
                 </ul>
             </div>
 
-          
+
+
 
             <!-- Direita: Foto do usuário com dropdown -->
             <div class="dropdown">
-            {% if request.user.is_authenticated %}
-                    <!-- Ícone ou foto do usuário, que ao ser clicado abre o dropdown -->
+                {% if request.user.is_authenticated %}
+                        <!-- Verifica se o usuário está autenticado -->
                     <a class="nav-link dropdown-toggle" href="#" role="button" id="userDropdown" 
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                     data-foto="{% if request.user.foto %}{{ request.user.foto.url }}{% else %}{% static 'images/default-avatar.png' %}{% endif %}">
+                            <!-- Adiciona a foto ou ícone do usuário -->
                         <img src="{% if request.user.foto %}{{ request.user.foto.url }}{% else %}{% static 'images/default-avatar.png' %}{% endif %}" 
                             alt="Foto de {{ request.user.username }}" 
                             class="rounded-circle" style="width: 40px; height: 40px;">
                     </a>
-
-                    <!-- Conteúdo do dropdown -->
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                            <!-- Dropdown com links para perfil e logout -->
                         <a href="{% url 'info_perfil' perfil_id=request.user.id %}"><span class="dropdown-item-text">{{ request.user.username }}</span></a>
                         <a class="dropdown-item text-danger" href="{% url 'logout' %}">Sair</a>
                     </div>
+                {% else %}
+                        <!-- Exibe opções de login e registro se o usuário não estiver autenticado -->
+                    <div class="row d-flex flex-wrap justify-content-center">
+                        <a class="nav-link text-dark" href="{% url 'login' %}">Login</a>
+                        <a class="nav-link text-dark" href="{% url 'registro' %}">Registro</a>
+                    </div>
+                {% endif %}
             </div>
-            {% else %}
-                <!-- Mostrar o botão de login e registro caso o usuário não esteja autenticado -->
-                 <div class="row d-flex flex-wrap justify-content-center">
-                    <a class="nav-link text-dark" href="{% url 'login' %}">Login</a>
-                    <a class="nav-link text-dark" href="{% url 'registro' %}">Registro</a>
-                 </div>
-              
-            {% endif %}
-
-
         </nav>
     </header>
 
-    <!-- Hero Section -->
-    <section class="categoria-badge hero text-white text-center py-1 {% if categoria_nome|lower == 'outros' %}d-none{% endif %}">
-        <h1 class="display-4">{% block main_title %}{{ categoria_nome|default:"Notícia" }}{% endblock main_title %}</h1>
-        
-    </section>
 
-    <main class="container mt-4">
-        <article class="noticia-detalhada" style=" margin-left: 10%; margin-right: 10%;">
-            <div class="rowA">
+
+
+    <!-- HERO SECTION -->
+    <section class="categoria-badge hero text-white text-center py-1 {% if categoria_nome|lower == 'outros' %}d-none{% endif %}">
+            <!-- Define uma seção de destaque baseada na categoria -->
+        <h1 class="display-4">{% block main_title %}{{ categoria_nome|default:"Notícia" }}{% endblock main_title %}</h1>
+    </section>
+    
+   
+
+
+    <!-- ÁREA PRINCIPAL -->
+    <main class="container mt-4"> 
+            <!-- Container principal para o artigo -->
+        <article class="noticia-detalhada" style="margin-left: 10%; margin-right: 10%;"> 
+                <!-- Container do artigo com margens laterais -->
+            <div class="rowA"> 
+                <!-- Linha de layout flexível para o conteúdo -->
                 <div class="col-lg-12" style="margin-bottom: 5%;">
+                    <!-- Coluna única para telas grandes, com margem inferior -->
+
+
+
+
+                    <!-- TÍTULO DA NOTÍCIA -->
                     <h2 class="noticia-titulo">{% block second_title %}{% endblock second_title %}</h2>
+                        <!-- Título do artigo, injetado dinamicamente usando o bloco `second_title` -->
+
+
+
+
+                    <!-- CONTEÚDO PRINCIPAL DA NOTÍCIA -->
                     <div class="noticia-conteudo">
                         {% block main_content %}{% endblock main_content %}
+                            <!-- Conteúdo principal do artigo, injetado pelo bloco `main_content` -->
                     </div>
+
+
+
+
+                    <!-- FORMULÁRIO DE LIKES -->
                     <form id="likeForm" method="post" action="{% url 'atualizar_like' noticia.slug %}">
                         {% csrf_token %}
+                            <!-- Token CSRF para proteger contra ataques de falsificação de solicitações -->
                         <button type="button" id="likeButton" class="Btn" data-url="{% url 'atualizar_like' noticia.slug %}">
+                                <!-- Botão estilizado para "Curtir/Descurtir", com URL configurada -->
                             <span class="leftContainer">
+                                    <!-- Contêiner para ícone e texto -->
                                 <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512" fill="#fff">
-                                    <path d="M313.4 32.9c26 5.2 42.9 30.5 37.7 56.5l-2.3 11.4c-5.3 26.7-15.1 52.1-28.8 75.2H464c26.5 0 48 21.5 48 48c0 18.5-10.5 34.6-25.9 42.6C497 275.4 504 288.9 504 304c0 23.4-16.8 42.9-38.9 47.1c4.4 7.3 6.9 15.8 6.9 24.9c0 21.3-13.9 39.4-33.1 45.6c.7 3.3 1.1 6.8 1.1 10.4c0 26.5-21.5 48-48 48H294.5c-19 0-37.5-5.6-53.3-16.1l-38.5-25.7C176 420.4 160 390.4 160 358.3V320 272 247.1c0-29.2 13.3-56.7 36-75l7.4-5.9c26.5-21.2 44.6-51 51.2-84.2l2.3-11.4c5.2-26 30.5-42.9 56.5-37.7zM32 192H96c17.7 0 32 14.3 32 32V448c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32V224c0-17.7 14.3-32 32-32z"></path>
+                                        <!-- SVG do ícone de "Curtir" -->
+                                    <path d="M313.4 32.9c26 5.2 42.9 30.5..."></path>
+                                        <!-- Caminho do desenho do ícone -->
                                 </svg>
                                 <span id="likeText">{% if usuario_curtiu %}Descurtir{% else %}Curtir{% endif %}</span>
+                                    <!-- Texto alterna entre "Curtir" e "Descurtir" com base no estado do usuário -->
                             </span>
                             <span id="likeCount" style="margin-left: 20%;">{{ noticia.like_count }}</span>
+                                <!-- Exibe a quantidade atual de curtidas -->
                         </button>
                     </form>
-                    
                 </div>
 
 
-            
-                <p class="comentarios" style="margin-top: 10%;" >COMENTÁRIOS</p>
-                
+
+
+                <!-- SEÇÃO DE COMENTÁRIOS -->
+                <p class="comentarios" style="margin-top: 10%;">COMENTÁRIOS</p>
+                    <!-- Título da seção de comentários -->
+
                 <div id="comentariosContainer" class="comentarios-container container mt-4">
+                        <!-- Contêiner para os comentários -->
                     {% for comentario in comentarios %}
                     <div class="row align-items-center mb-4 p-3 shadow-sm rounded border bg-light">
+                            <!-- Layout de linha para cada comentário, com borda e sombreamento -->
                         <div class="col-2 text-center">
+                                <!-- Coluna para a foto do usuário -->
                             {% if comentario.usuario.foto %}
                             <img class="usuario_foto" src="{{ comentario.usuario.foto.url }}" 
-                                 alt="Foto de {{ comentario.usuario.username }}" 
-                                 class="rounded-circle img-fluid" 
-                                 style="max-width: 80px; height: auto;">
+                                alt="Foto de {{ comentario.usuario.username }}" 
+                                class="rounded-circle img-fluid" 
+                                style="max-width: 80px; height: auto;">
+                                <!-- Foto do usuário, se disponível -->
                             {% else %}
                             <img src="{% static 'images/default-avatar.png' %}" 
-                                 alt="Foto padrão" 
-                                 class="rounded-circle img-fluid" 
-                                 style="max-width: 80px; height: auto;">
+                                alt="Foto padrão" 
+                                class="rounded-circle img-fluid" 
+                                style="max-width: 80px; height: auto;">
+                                <!-- Foto padrão se o usuário não tiver uma -->
                             {% endif %}
                         </div>
                         <div class="col-10">
+                                <!-- Coluna para o nome e comentário do usuário -->
                             <h5 class="mb-1">{{ comentario.usuario.username }}</h5>
+                                <!-- Nome do usuário -->
                             <p class="mb-0 text-muted">{{ comentario.comentario }}</p>
+                                <!-- Texto do comentário -->
                         </div>
                     </div>
                     {% endfor %}
+                        <!-- Fim do loop para exibir todos os comentários -->
                 </div>
 
 
+
+
+                <!-- FORMULÁRIO DE COMENTÁRIOS -->
                 <div class="noticiasInteracao">
                     <form id="commentForm" method="post" action="{% url 'adicionar_comentario' noticia.slug %}">
                         {% csrf_token %}
+                        <!-- Token CSRF para proteger o formulário -->
                         {{ form.as_p }}
+                        <!-- Exibe os campos do formulário de comentário -->
                         <div class="d-flex flex-wrap mb-5">
-                            <textarea name="comentario" id="comentarioTextarea" rows="5"class="form-control" placeholder="Escreva seu comentário aqui..." required style="resize: none; border-radius: 20px; margin-top: 5%;width: 70%;"></textarea>
-                            <button type="submit" class="btn" style="margin-right: 10%;background-color: #dddddd;height: 5%;margin-top: 10%;display: flex;margin-left: 2%;">Enviar Comentário</button>
+                            <!-- Contêiner flexível para o textarea e botão -->
+                            <textarea name="comentario" id="comentarioTextarea" rows="5" class="form-control" placeholder="Escreva seu comentário aqui..." required style="resize: none; border-radius: 20px; margin-top: 5%; width: 70%;"></textarea>
+                            <!-- Campo para o usuário escrever o comentário -->
+                            <button type="submit" class="btn" style="margin-right: 10%; background-color: #dddddd; height: 5%; margin-top: 10%; display: flex; margin-left: 2%;">Enviar Comentário</button>
+                            <!-- Botão para enviar o comentário -->
                         </div>
-                        
                     </form>
-                    
                 </div>
-                
 
-                <p class="mais_noticias" style="margin-top: 10%;" >MAIS NOTÍCIAS</p>
 
-                <div id="noticiasCarrossel" class="carousel slide" data-ride="carousel" style="margin-top: 5%";>
-                    <!-- Indicadores -->
+
+
+                <!-- NOTÍCIAS RELACIONADAS -->
+                <p class="mais_noticias" style="margin-top: 10%;">MAIS NOTÍCIAS</p>
+
+                <div id="noticiasCarrossel" class="carousel slide" data-ride="carousel" style="margin-top: 5%;">
+                        <!-- Carrossel de notícias -->
                     <ol class="carousel-indicators">
                         {% for grupo in noticias_agrupadas %}
                         <li data-target="#noticiasCarrossel" data-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %}></li>
+                            <!-- Indicadores para os grupos de notícias no carrossel -->
                         {% endfor %}
                     </ol>
-                
-                    <!-- Slides -->
+
                     <div class="carousel-inner">
+                            <!-- Contêiner para os itens do carrossel -->
                         {% for grupo in noticias_agrupadas %}
-                        
                         <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                <!-- Grupo de notícias no carrossel -->
                             <div class="row">
                                 {% for noticia in grupo %}
-                
                                 <div class="col-12 col-md-4">
                                     <a class="link_noticia" href="{% url 'detalhes_noticia' noticia.slug %}">
                                         <div class="card border-light shadow-sm">
@@ -181,14 +260,15 @@
                                         </div>
                                     </a>
                                 </div>
-                                
                                 {% endfor %}
+                                    <!-- Fim do loop para exibir notícias no grupo -->
                             </div>
                         </div>
                         {% endfor %}
+                            <!-- Fim do loop para exibir os grupos no carrossel -->
                     </div>
-                
-                    <!-- Controles -->
+
+                    <!-- CONTROLES DO CARROSEL -->
                     <a class="carousel-control-prev" href="#noticiasCarrossel" role="button" data-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                         <span class="sr-only">Anterior</span>
@@ -198,81 +278,148 @@
                         <span class="sr-only">Próximo</span>
                     </a>
                 </div>
-                
-                
+            </div>
         </article>
-    </main>
+</main>
 
-   
+
+
+
     <footer class="text-center py-3 bg-light">
         <p class="mb-0">© 2024 site noticias - Todos os direitos reservados.</p>
     </footer>
 
+
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <!-- Importa a biblioteca jQuery na versão "slim", que é mais leve e suficiente para manipulação do DOM. -->
+    
+
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <!-- Importa o Popper.js, uma biblioteca usada para gerenciamento de popups, como tooltips ou dropdowns. -->
+    
+
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Importa o JavaScript do Bootstrap para habilitar interatividade nos componentes como carrossel, dropdowns, etc. -->
+    
+
+
+
     <script>
-        // Para o botão de "like"
+        // PARA O BOTÃO DE LIKES
         document.getElementById("likeButton").addEventListener("click", function () {
+                // Adiciona um evento de clique ao botão de "like".
+    
             const url = this.getAttribute("data-url");
-        
+                // Obtém a URL configurada no atributo 'data-url' do botão.
+    
             // Atualize o DOM instantaneamente
             const likeText = document.getElementById("likeText");
+                // Seleciona o elemento de texto que exibe "Curtir" ou "Descurtir".
+    
             const likeCount = document.getElementById("likeCount");
+                // Seleciona o elemento que exibe a contagem de likes.
+    
             const isLiked = likeText.innerText === "Descurtir";
-        
+                // Verifica se o botão está atualmente no estado "Descurtir".
+    
             likeText.innerText = isLiked ? "Curtir" : "Descurtir";
+                // Atualiza o texto do botão para o estado oposto.
+                // O ponto de interrogação (?) é usado porque a estrutura em questão é um operador ternário. Ele substitui uma construção if-else tradicional e funciona da seguinte maneira:
+                // condição ? valor_se_verdadeiro : valor_se_falso
+
+    
             likeCount.innerText = isLiked ? parseInt(likeCount.innerText) - 1 : parseInt(likeCount.innerText) + 1;
-        
-            // Envia a requisição para o servidor
+                // Atualiza a contagem de likes no DOM de forma otimista.
+                // Se o likeCount.innerText for "5" (string), o parseInt o converte para o número 5. Assim, a soma aritmética com 1 resulta em 6, e não na concatenação de strings "51".
+    
+           
             fetch(url, {
+                    // Envia a requisição para o servidor
                 method: "POST",
+                    // Define o método HTTP como POST.
+    
                 headers: {
                     "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value,
+                        // Adiciona o token CSRF para proteger contra ataques CSRF.
                 },
             })
                 .then(response => response.json())
+                    // Converte a resposta do servidor para JSON.
+    
                 .then(data => {
-                    // Sincronize com os dados do servidor (opcional)
+                        // Sincronize com os dados do servidor (opcional)
                     likeText.innerText = data.liked ? "Descurtir" : "Curtir";
+                        // Atualiza o texto do botão com base na resposta do servidor.
+    
                     likeCount.innerText = data.like_count;
+                        // Atualiza a contagem de likes com o valor retornado pelo servidor.
                 })
                 .catch(error => {
                     console.error("Erro ao atualizar o like:", error);
+                        // Exibe no console qualquer erro na atualização.
+    
                     likeText.innerText = isLiked ? "Descurtir" : "Curtir";
+                        // Reverte o estado do texto em caso de erro.
+    
                     likeCount.innerText = isLiked ? parseInt(likeCount.innerText) + 1 : parseInt(likeCount.innerText) - 1;
+                        // Reverte a contagem de likes no DOM em caso de erro.
                 });
         });
-        
-        
-        
+    
 
-        // Para o formulário de comentários
+
+
+
+
+
+        // PARA O FORMULÁRIO DE COMENTÁRIOS
         document.getElementById("commentForm").addEventListener("submit", function (e) {
             e.preventDefault();
-        
+                // Evita o comportamento padrão de envio do formulário (recarregar a página).
+    
             const url = this.getAttribute("action");
+                // Obtém a URL configurada no atributo 'action' do formulário.
+    
             const comentarioTextarea = document.getElementById("comentarioTextarea");
+                // Seleciona o campo de texto onde o usuário digita o comentário.
+    
             const comentarioTexto = comentarioTextarea.value.trim();
-            const userPhotoUrl = document.getElementById("userDropdown").getAttribute("data-foto"); // Captura a foto do usuário
-        
+                // Remove espaços extras ao redor do texto digitado.
+    
+            const userPhotoUrl = document.getElementById("userDropdown").getAttribute("data-foto");
+                // Captura a URL da foto do usuário autenticado.
+    
             if (!comentarioTexto) {
                 alert("O comentário não pode estar vazio!");
+                    // Exibe um alerta caso o comentário esteja vazio.
                 return;
             }
-        
+    
             fetch(url, {
                 method: "POST",
+                    // Define o método HTTP como POST.
+    
                 headers: {
                     "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value,
+                        // Adiciona o token CSRF para proteger contra ataques CSRF.
+    
                     "Content-Type": "application/json",
+                        // Define o cabeçalho para indicar que o conteúdo enviado será JSON.
                 },
+    
                 body: JSON.stringify({ comentario: comentarioTexto }),
+                    // Envia o conteúdo do comentário no corpo da requisição.
             })
                 .then(response => response.json())
+                    // Converte a resposta do servidor para JSON.
+    
                 .then(data => {
                     if (data.success) {
+                         // Verifica se o comentário foi adicionado com sucesso.
+    
                         const comentariosContainer = document.getElementById("comentariosContainer");
+                            // Seleciona o contêiner onde os comentários são exibidos.
+    
                         const newComment = `
                             <div class="row align-items-center mb-4 p-3 shadow-sm rounded border bg-light">
                                 <div class="col-2 text-center">
@@ -287,20 +434,24 @@
                                 </div>
                             </div>
                         `;
+                        // Cria o HTML para o novo comentário com os dados retornados pelo servidor.
+    
                         comentariosContainer.insertAdjacentHTML('afterbegin', newComment);
-                        comentarioTextarea.value = ""; // Limpa o campo de comentário
+                            // Adiciona o novo comentário no início do contêiner.
+    
+                        comentarioTextarea.value = "";
+                            // Limpa o campo de texto do comentário após o envio.
                     } else {
                         alert("Erro ao adicionar comentário: " + data.error);
+                            // Exibe um alerta caso o servidor retorne um erro.
                     }
                 })
                 .catch(error => {
                     console.error("Erro ao enviar comentário:", error);
+                        // Exibe no console qualquer erro no envio do comentário.
                 });
         });
-        
-        
-        
-        
     </script>
 </body>
 </html>
+<!-- Finaliza o documento HTML -->

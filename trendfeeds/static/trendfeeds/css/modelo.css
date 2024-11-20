@@ -15,8 +15,8 @@ body {
 
 .hero h1 {
   font-size: 2rem;
-  /* font-weight: bold; */
 }
+
 .noticia-titulo {
   font-size: 3rem;
   font-weight: bold;
@@ -114,7 +114,6 @@ footer p {
     0,
     0.5
   ); /* Fundo semitransparente para melhor visibilidade */
-  /* Torna o ícone arredondado */
   width: 50px; /* Tamanho personalizado */
   height: 50px; /* Tamanho personalizado */
 }
@@ -148,7 +147,6 @@ footer p {
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
-
 
 .comentario {
   transition: transform 0.2s, box-shadow 0.2s;
@@ -227,34 +225,31 @@ footer p {
   transform-origin: top;
 }
 
-
-.link_noticia{
+.link_noticia {
   color: #333;
 }
 
-.card-title{
-  color: #333;
-  text-decoration: none;
-}
-
-.card-text{
+.card-title {
   color: #333;
   text-decoration: none;
 }
 
-a:hover{
+.card-text {
+  color: #333;
   text-decoration: none;
 }
 
+a:hover {
+  text-decoration: none;
+}
 
-.comentarios{
+.comentarios {
   font-size: 2.1vw;
   color: #333;
   font-weight: 600;
 }
 
-
-.mais_noticias{
+.mais_noticias {
   font-size: 2.1vw;
   color: #333;
   font-weight: 600;
