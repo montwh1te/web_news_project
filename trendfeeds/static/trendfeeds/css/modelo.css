@@ -1,136 +1,227 @@
 body {
-    background-color: #f8f9fa;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8f9fa;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .navbar-custom {
-    padding: 15px 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 15px 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .hero {
-    background: url('/static/images/hero-bg.jpg') no-repeat center center;
-    background-size: cover;
+  background: url("/static/images/hero-bg.jpg") no-repeat center center;
+  background-size: cover;
 }
 
 .hero h1 {
-    font-size: 2.0rem;
-    /* font-weight: bold; */
+  font-size: 2rem;
+  /* font-weight: bold; */
 }
 .noticia-titulo {
-    font-size: 3.0rem;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 20px;
-    margin-top: 10%;
-    margin-bottom: 5%;
+  font-size: 3rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+  margin-top: 10%;
+  margin-bottom: 5%;
 }
 
-.area_usuario{
-    display: flex;
-    flex-direction: row;
-    padding: 10px;
+.area_usuario {
+  display: flex;
+  flex-direction: row;
+  padding: 10px;
 }
 
 .noticia-conteudo {
-    font-size: 1.1rem;
-    line-height: 1.8;
-    color: #555;
-    margin-top: 50px;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #555;
+  margin-top: 50px;
 }
 
 .foto-descricao {
-    font-size: 0.8rem;
+  font-size: 0.8rem;
 }
 
 .noticia-imagem {
-    border-radius: 15px;
-    max-height: 400px;
-    object-fit: cover;
-    width: 100%;
-    margin-bottom: 15px;
+  border-radius: 15px;
+  max-height: 400px;
+  object-fit: cover;
+  width: 100%;
+  margin-bottom: 15px;
 }
 
 .card-img-top {
-    border-radius: 15px;
-    object-fit: cover;
-    height: 200px;
+  border-radius: 15px;
+  object-fit: cover;
+  height: 200px;
 }
 
 footer {
-    background-color: #f8f9fa;
-    border-top: 1px solid #eaeaea;
-    color: #6c757d;
-    font-size: 0.9rem;
+  background-color: #f8f9fa;
+  border-top: 1px solid #eaeaea;
+  color: #6c757d;
+  font-size: 0.9rem;
 }
 
 footer p {
-    margin: 0;
+  margin: 0;
 }
 
 /* Card and responsive adjustments */
 @media (max-width: 768px) {
-    .noticia-detalhada {
-        padding: 15px;
-    }
+  .noticia-detalhada {
+    padding: 15px;
+  }
 
-    .hero h1 {
-        font-size: 2.5rem;
-    }
+  .hero h1 {
+    font-size: 2.5rem;
+  }
 
-    .card-img-top {
-        height: 150px;
-    }
+  .card-img-top {
+    height: 150px;
+  }
 }
 
 .navbar-dark .navbar-nav .nav-link {
-    color: rgb(255, 255, 255);
+  color: rgb(255, 255, 255);
 }
 
 .carousel .carousel-item {
-    transition: transform 0.5s ease, opacity 0.5s ease;
+  transition: transform 0.5s ease, opacity 0.5s ease;
 }
 
 .card {
-    height: 100%; /* Garante que todas as cards tenham o mesmo tamanho */
+  height: 100%; /* Garante que todas as cards tenham o mesmo tamanho */
 }
 
 .card-img-top {
-    height: 180px;
-    object-fit: cover; /* Ajusta a imagem ao tamanho do card */
-    border-radius: 8px;
+  height: 180px;
+  object-fit: cover; /* Ajusta a imagem ao tamanho do card */
+  border-radius: 8px;
 }
 
 .carousel-inner .row {
-    margin: 0; /* Remove espaços desnecessários entre as colunas */
+  margin: 0; /* Remove espaços desnecessários entre as colunas */
 }
 
 /* Ajuste para as setas do carrossel */
 .carousel-control-prev-icon,
 .carousel-control-next-icon {
-    background-color: rgba(0, 0, 0, 0.5); /* Fundo semitransparente para melhor visibilidade */
- /* Torna o ícone arredondado */
-    width: 50px; /* Tamanho personalizado */
-    height: 50px; /* Tamanho personalizado */
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.5
+  ); /* Fundo semitransparente para melhor visibilidade */
+  /* Torna o ícone arredondado */
+  width: 50px; /* Tamanho personalizado */
+  height: 50px; /* Tamanho personalizado */
 }
 
 .carousel-control-prev,
 .carousel-control-next {
-    width: 5%; /* Ajusta a largura da área clicável */
-    z-index: 1; /* Garante que as setas fiquem acima das imagens */
+  width: 5%; /* Ajusta a largura da área clicável */
+  z-index: 1; /* Garante que as setas fiquem acima das imagens */
 }
 
 /* Posiciona as setas para fora das imagens */
 .carousel-control-prev {
-    left: -5%; /* Move a seta da esquerda para fora da imagem */
+  left: -5%; /* Move a seta da esquerda para fora da imagem */
 }
 
 .carousel-control-next {
-    right: -5%; /* Move a seta da direita para fora da imagem */
+  right: -5%; /* Move a seta da direita para fora da imagem */
 }
 
 /* Efeito ao passar o mouse nas setas */
 .carousel-control-prev:hover .carousel-control-prev-icon,
 .carousel-control-next:hover .carousel-control-next-icon {
-    background-color: rgba(0, 0, 0, 0.8); /* Escurece o fundo no hover */
+  background-color: rgba(0, 0, 0, 0.8); /* Escurece o fundo no hover */
+}
+
+.comentarios-container {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.comentario {
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.comentario:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.comentarios-container img {
+  object-fit: cover;
+}
+
+.Btn {
+  width: 140px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  border: none;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.089);
+  cursor: pointer;
+  background-color: transparent;
+}
+
+.leftContainer {
+  width: 60%;
+  height: 100%;
+  background-color: #0060ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.leftContainer .like {
+  color: white;
+  font-weight: 600;
+}
+
+.likeCount {
+  width: 40%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0060ff;
+  font-weight: 600;
+  position: relative;
+  background-color: white;
+}
+
+.likeCount::before {
+  height: 8px;
+  width: 8px;
+  position: absolute;
+  content: "";
+  background-color: rgb(255, 255, 255);
+  transform: rotate(45deg);
+  left: -4px;
+}
+
+.Btn:hover .leftContainer {
+  background-color: #1d4292;
+}
+
+.Btn:active .leftContainer {
+  background-color: #072b7a;
+}
+
+.Btn:active .leftContainer svg {
+  transform: scale(1.15);
+  transform-origin: top;
 }

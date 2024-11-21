@@ -32,7 +32,7 @@ def populate_initial_data(sender, **kwargs):
         ("atletico_go", "Atlético-GO", "#D81E05", "O Dragão de Goiás, com força crescente no cenário nacional e estadual.", "A"),
         
         # Seleção Brasileira
-        ("selecao", "Seleção Brasileira", "#FFCC00", "Conhecida como Canarinho, é a seleção mais bem-sucedida da história do futebol mundial, com cinco títulos de Copa do Mundo.", None),
+        ("selecao", "Seleção Brasileira", "#FFCC00", "Conhecida como Canarinho, é a seleção mais bem-sucedida da história do futebol mundial, com cinco títulos de Copa do Mundo.", 'None'),
         
         # Times Série B
         ("ceara", "Ceará", "#000000", "O Vozão é um dos grandes clubes do Nordeste, com uma torcida fiel e tradição regional.", "B"),

@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
 from users.models import Usuarios
+from django.core.exceptions import ValidationError
 
 
 class Categoria(models.Model):
@@ -21,6 +22,7 @@ class Noticias(models.Model):
     autor = models.CharField(max_length=100)
     link = models.URLField(default='https://ge.globo.com/')
     slug = models.SlugField(max_length=255, unique=True, blank=True)
+    like_count = models.IntegerField(default=0)  # Contagem total de likes
 
    
     categorias = models.ManyToManyField(
@@ -48,9 +50,8 @@ class Noticias(models.Model):
 
 
 class CategoriaNoticias(models.Model):
-    categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)  # Temporariamente permite null
-    noticia = models.ForeignKey(Noticias, on_delete=models.CASCADE )
-
+    categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, null=True)  # Temporariamente permite null
+    noticia = models.ForeignKey(Noticias, on_delete=models.CASCADE, null=True)  # Permite null temporariamente
     def __str__(self):
         return f"Notícia ID {self.noticia.id} - Categoria ID {self.categoria.id}"
 
@@ -63,11 +64,18 @@ class TimeFavorito(models.Model):
         return f"{self.usuario.username} - {self.time}"
     
     
+
 class InteracaoUsuario(models.Model):
     noticia = models.ForeignKey(Noticias, on_delete=models.CASCADE)
     usuario = models.ForeignKey(Usuarios, on_delete=models.CASCADE)
     data_criacao = models.DateField(auto_now_add=True)
-    comentario = models.CharField(max_length=255, blank=True)
+    comentario = models.TextField(max_length=7000, blank=True)  # Armazena comentários
+    like = models.BooleanField(default=False)  # Armazena likes
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['noticia', 'usuario'], name='unique_interaction')
+        ]
 
     def __str__(self):
-        return f"{self.usuario.username} - {self.tipo} em {self.noticia.titulo}"
+        return f"{self.usuario.username} - Interação com {self.noticia.titulo}"

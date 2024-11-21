@@ -1,4 +1,5 @@
 import requests
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Categoria, Noticias, InteracaoUsuario
 from django.utils.text import slugify
@@ -6,8 +7,9 @@ from django.http import JsonResponse
 from .utils import obter_tabela_brasileirao
 from django.core.cache import cache
 from django.conf import settings
-from django.core.exceptions import ImproperlyConfigured
 from .forms import ComentarioForm
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 
 def obter_proximos_jogos():
@@ -46,6 +48,7 @@ def home(request):
 
     # Buscando todas as categorias, exceto a categoria 'Outros'.
     categorias = Categoria.objects.exclude(nome_categoria='Outros')
+    
 
     # Garantindo que a última notícia tenha um slug, caso não tenha, gerando e salvando um.
     if ultima_noticia and not ultima_noticia.slug:
@@ -90,34 +93,38 @@ def detalhes_noticia(request, slug):
     categoria = noticia.categorias.first()
     categoria_nome = categoria.nome_categoria if categoria else "Outros"
     
+  
     cores_times = {
-        "atletico_mg": "#000000",         
-        "atletico_pr": "#cc0000",          
-        "bahia": "#0033cc",              
-        "botafogo": "#000000",            
-        "bragantino": "#cc0000",          
-        "corinthians": "#333333",          
-        "cruzeiro": "#003399",            
-        "cuiaba": "#009933",              
-        "flamengo": "#ff0000",             
-        "fluminense": "#990000",        
-        "fortaleza": "#003399",            
-        "goias": "#009933",               
-        "gremio": "#0066cc",             
-        "internacional": "#cc0000",        
-        "palmeiras": "#006633",           
-        "santos": "#000000",            
-        "sao_paulo": "#cc0000",         
-        "vasco": "#000000",               
-        "coritiba": "#009933",             
-        "america_mg": "#009933",           
-        "selecao": "#ffcc00"
+       "atletico_mg": "#000000",       # Preto
+        "atletico_pr": "#D81E05",       # Vermelho
+        "bahia": "#003DA5",             # Azul
+        "botafogo": "#000000",          # Preto
+        "bragantino": "#FF0000",        # Vermelho
+        "corinthians": "#000000",       # Preto
+        "cruzeiro": "#003087",          # Azul
+        "cuiaba": "#009739",            # Verde
+        "flamengo": "#A61B20",          # Vermelho
+        "fluminense": "#006847",        # Verde
+        "fortaleza": "#002D72",         # Azul
+        "goias": "#008C45",             # Verde
+        "gremio": "#00AEEF",            # Azul Celeste
+        "internacional": "#D6001C",     # Vermelho
+        "palmeiras": "#1E7A34",         # Verde
+        "santos": "#000000",            # Preto
+        "sao_paulo": "#DD0032",         # Vermelho
+        "vasco": "#000000",             # Preto
+        "coritiba": "#006847",          # Verde
+        "america_mg": "#006847",        # Verde
+        "selecao": "#FFCC29"  
     }
     noticia = get_object_or_404(Noticias, slug=slug)
 
     todas_as_noticias = Noticias.objects.all().order_by('-data_publicacao')
 
     cor_categoria = cores_times.get(categoria_nome.lower(), "#cccccc")  # usa a cor padrão se não encontrado
+
+
+  
 
     noticias_agrupadas = [
         todas_as_noticias[i:i+3] for i in range(0, len(todas_as_noticias), 3)
@@ -126,46 +133,121 @@ def detalhes_noticia(request, slug):
     # Gerar o nome do template com base no slug
     template_name = f'html/noticias/{noticia.slug}.html'
 
+    comentarios = InteracaoUsuario.objects.filter(noticia=noticia).order_by('-id')
+
     return render(request, template_name, {
         'noticia': noticia, 
         'categoria_nome': categoria_nome,
         'cor_categoria': cor_categoria,
-        'noticia': noticia,
         'noticias_agrupadas': noticias_agrupadas,
-    })
-
-
-
-def salvar_comentario(request, noticia_id):
-    noticia = get_object_or_404(Noticias, id=noticia_id)  # Busca a notícia pelo ID
-    if request.method == 'POST':
-        form = ComentarioForm(request.POST)
-        if form.is_valid():
-            comentario = form.save(commit=False)
-            comentario.usuario = request.user  # Associa o usuário logado
-            comentario.noticia = noticia  # Associa a notícia
-            comentario.save()
-            return redirect('detalhes_noticia', noticia_id=noticia.id)  # Redireciona para a página da notícia
-    else:
-        form = ComentarioForm()
-    return render(request, 'nome_do_template.html', {'form': form, 'noticia': noticia})
-
-
-def adicionar_comentario(request, noticia_id):
-    if request.method == 'POST':
-        # Recupera o comentário e a notícia
-        comentario_texto = request.POST.get('comentario')
-        noticia = get_object_or_404(Noticias, id=noticia_id)
+        'comentarios': comentarios,
         
-        # Cria a interação associando o comentário à notícia
-        InteracaoUsuario.objects.create(
-            usuario=request.user,
-            noticia=noticia,
-            comentario=comentario_texto
-        )
-        return redirect('detalhes_noticia', slug=noticia.slug)  # Redireciona de volta para a notícia
+    })
+@login_required
+def atualizar_like(request, slug):
+    if request.method == 'POST':
+        # Obtém a notícia e o usuário
+        noticia = get_object_or_404(Noticias, slug=slug)
+        usuario = request.user
 
-    return redirect('home')  # Caso não seja POST, redireciona para a home 
+        # Busca ou cria a interação
+        interacao, created = InteracaoUsuario.objects.get_or_create(
+            noticia=noticia,
+            usuario=usuario
+        )
+
+        # Alterna o estado do like
+        interacao.like = not interacao.like
+        interacao.save()
+
+        # Recalcula o contador de likes
+        noticia.like_count = InteracaoUsuario.objects.filter(noticia=noticia, like=True).count()
+        noticia.save()
+
+        return JsonResponse({
+            'like_count': noticia.like_count,
+            'liked': interacao.like
+        })
+
+    return JsonResponse({'error': 'Método inválido'}, status=400)
+
+
+
+@login_required
+def salvar_comentario(request, noticia_id):
+    noticia = get_object_or_404(Noticias, id=noticia_id)
+    if request.method == 'POST':
+        comentario_texto = request.POST.get('comentario')
+        if comentario_texto:
+            # Busca ou cria a interação
+            interacao, created = InteracaoUsuario.objects.get_or_create(
+                noticia=noticia,
+                usuario=request.user
+            )
+
+            # Atualiza o comentário
+            interacao.comentario = comentario_texto
+            interacao.save()
+
+        return redirect('detalhes_noticia', slug=noticia.slug)
+
+    return JsonResponse({'error': 'Método inválido'}, status=400)
+
+
+
+
+
+
+
+@login_required
+def adicionar_comentario(request, slug):
+    noticia = get_object_or_404(Noticias, slug=slug)
+
+    if request.method == 'POST':
+        comentario_texto = request.POST.get('comentario')
+        if comentario_texto:  # Garante que não há comentários vazios
+            InteracaoUsuario.objects.create(
+                usuario=request.user,
+                noticia=noticia,
+                comentario=comentario_texto
+            )
+        return redirect('detalhes_noticia', slug=slug)
+
+    return JsonResponse({'error': 'Método inválido'}, status=400)
+
+
+@login_required
+
+def interagir(request, slug):
+    noticia = get_object_or_404(Noticias, slug=slug)
+    usuario = request.user
+
+    if request.method == 'POST':
+        # Para comentários
+        if 'comentario' in request.POST:
+            comentario = request.POST.get('comentario')
+            InteracaoUsuario.objects.create(
+                usuario=usuario,
+                noticia=noticia,
+                comentario=comentario
+            )
+        # Para likes
+        if 'like' in request.POST:
+            interacao, created = InteracaoUsuario.objects.get_or_create(
+                usuario=usuario,
+                noticia=noticia
+            )
+            interacao.like = not interacao.like
+            interacao.save()
+
+            # Atualizar contagem de likes
+            noticia.like_count = InteracaoUsuario.objects.filter(noticia=noticia, like=True).count()
+            noticia.save()
+
+    return redirect('detalhes_noticia', slug=noticia.slug)
+
+
+
 
 
 def buscar_noticias(request):
