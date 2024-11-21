@@ -17,9 +17,7 @@ main {
 /* Notícia mais recente */
 .noticia-mais-recente {
   margin-bottom: 40px;
-  position: relative;
   overflow: hidden;
-  border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
@@ -73,10 +71,7 @@ main {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.noticia-item:hover {
-  transform: translateY(-10px); /* Levanta o card no hover */
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-}
+
 
 .noticia-item img {
   width: 15%;
@@ -99,9 +94,7 @@ main {
 }
 
 
-.noticia-item h3:hover {
-  text-decoration: underline;
-}
+
 
 .noticia-item p {
   font-size: 0.9rem;
