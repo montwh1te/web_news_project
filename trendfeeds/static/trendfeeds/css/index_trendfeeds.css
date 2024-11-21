@@ -4,7 +4,7 @@ body {
   transition: 0.4s;
 }
 body.dark-mode{
-  background-color: #000000;
+  background-color: #1a1a1a;
 }
 body.dark-mode .titulo-noticia-mais-recente {
   color: #d2d2d2; /* Cor para o título no modo escuro */
@@ -61,7 +61,7 @@ body.dark-mode .versus{
   color: #d2d2d2;
 }
 body.dark-mode .todas-noticias {
-  background-color: #000000;
+  background-color: #1a1a1a;
 }
 body.dark-mode .todas-noticias h3{
   color: #d2d2d2;
@@ -101,7 +101,29 @@ body.dark-mode::-webkit-scrollbar-thumb {
   background: #777; /* cor da barra de rolagem no modo escuro */
 }
 
-body.dark-mode::-webkit-scrollbar-thumb:hover {
+
+body.dark-mode .navbar-nav .dropdown-menu{
+  background-color: #000000;
+}
+
+body.dark-mode .dropdown-item:focus, .dropdown-item:hover {
+  color: #16181b;
+  text-decoration: none;
+  background-color: #000000;
+}
+
+body.dark-mode .nav-link.dropdown-toggle::after {
+  display: inline-block;
+  margin-left: 0.255em;
+  vertical-align: 0.255em;
+  content: "";
+  border-top: 0.3em solid rgb(255, 255, 255);
+  border-right: 0.3em solid transparent;
+  border-left: 0.3em solid transparent;
+  transition: 0.4s;
+}
+
+::-webkit-scrollbar-thumb:hover {
   background: #555; /* cor escura quando passa o mouse no modo escuro */
 }
 /* Barra de rolagem padrão */
