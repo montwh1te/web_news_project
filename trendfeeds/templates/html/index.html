@@ -96,7 +96,7 @@
             <!-- Outras opções do menu -->
             <li class="nav-item">
                 <a class="nav-link" href="#"> 
-                    <button id="dark-mode-toggle">Escuro</button>
+                    <button id="dark-mode-toggle">Claro</button>
                 </a>
             </li>
             <li class="nav-item"><a class="nav-link" href="#">Sobre</a></li>
@@ -540,7 +540,7 @@
             if (localStorage.getItem('dark-mode') === 'true') {
                 document.body.classList.add('dark-mode');
                 logo.src = "{% get_media_prefix %}brasao_branco.png"; // Mudando para o brasão branco
-                toggleButton.innerHTML = "Claro"; // Alterando o texto do botão
+                toggleButton.innerHTML = "Escuro"; // Alterando o texto do botão
             }
     
             // Evento de clique para alternar entre modos
