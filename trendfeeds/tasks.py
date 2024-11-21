@@ -256,7 +256,7 @@ def coletar_noticias():
                 "internacional": ["inter", "colorado", 271],
                 "palmeiras": ["palmeiras", "verdao", 272],
                 "santos": ["santos", "peixe", 277],
-                "sao_paulo": ["sao paulo", "spfc", "tricolor paulista", 274],
+                "sao_paulo": ["saopaulo", "spfc", "tricolor paulista", 274],
                 "vasco": ["vasco", "vascao", "gigante da colina", 268],
                 "coritiba": ["coritiba", "coxa", 278],
                 "america_mg": ["americamg", "coelho", 285],

@@ -168,20 +168,20 @@
                       <!-- Ícones de Redes Sociais -->
                     <div class="social-icons ml-4 d-flex align-items-center" style="margin-left: 70% !important;margin-top: -4%;">
                         <!-- WhatsApp -->
-                        <a href="https://wa.me/?text={{ request.build_absolute_uri }}" target="_blank" class="mx-2">
-                            <i class="fab fa-whatsapp" style="font-size: 1.5rem; color: #25D366;"></i>
+                        <a href="https://wa.me/555191801651" target="_blank" class="mx-2">
+                            <i class="fab fa-whatsapp" style="font-size: 1.5rem; transition: 0.4s;"></i>
                         </a>
                         <!-- Instagram -->
-                        <a href="https://www.instagram.com" target="_blank" class="mx-2">
-                            <i class="fab fa-instagram" style="font-size: 1.5rem; color: #C13584;"></i>
+                        <a href="https://www.instagram.com/gvbriel.espindola" target="_blank" class="mx-2">
+                            <i class="fab fa-instagram" style="font-size: 1.5rem; transition: 0.4s;"></i>
                         </a>
                         <!-- Facebook -->
                         <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" target="_blank" class="mx-2">
-                            <i class="fab fa-facebook" style="font-size: 1.5rem; color: #1877F2;"></i>
+                            <i class="fab fa-facebook" style="font-size: 1.5rem; transition: 0.4s;"></i>
                         </a>
                         <!-- Twitter -->
                         <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}" target="_blank" class="mx-2">
-                            <i class="fab fa-twitter" style="font-size: 1.5rem; color: #1DA1F2;"></i>
+                            <i class="fab fa-twitter" style="font-size: 1.5rem; transition: 0.4s;"></i>
                         </a>
                     </div>
                 </div>
@@ -247,9 +247,9 @@
                             <!-- Exibe os campos do formulário de comentário -->
                             <div class="d-flex flex-wrap mb-5">
                                 <!-- Contêiner flexível para o textarea e botão -->
-                                <textarea name="comentario" id="comentarioTextarea" rows="5" class="form-control" placeholder="Escreva seu comentário aqui..." required style="resize: none; border-radius: 20px; margin-top: 5%; width: 70%;"></textarea>
+                                <textarea name="comentario" id="comentarioTextarea" rows="2" class="form-control" placeholder="Escreva seu comentário aqui..." required style="resize: none; border-radius: 20px; margin-top: 4%; width: 70%;"></textarea>
                                 <!-- Campo para o usuário escrever o comentário -->
-                                <button type="submit" class="btn" style="margin-right: 10%; background-color: #dddddd; height: 5%; margin-top: 10%; display: flex; margin-left: 2%;">Enviar Comentário</button>
+                                <button type="submit" class="btn" style="margin-right: 10%;background-color: #dddddd;height: 5%;margin-top: 5%;display: flex;margin-left: 2%;">Enviar Comentário</button>
                                 <!-- Botão para enviar o comentário -->
                             </div>
                         </form>
@@ -257,9 +257,9 @@
                 {% else %}
                     <div class="d-flex flex-wrap mb-5">
                         <!-- Contêiner flexível para o textarea e botão -->
-                        <textarea name="comentario" id="comentarioTextarea" rows="5" class="form-control" placeholder="Faça login para comentar..." disabled required style="resize: none; border-radius: 20px; margin-top: 5%; width: 70%; user-selecÇ none;"></textarea>
+                        <textarea name="comentario" id="comentarioTextarea" rows="2" class="form-control" placeholder="Faça login para comentar..." disabled required style="resize: none; border-radius: 20px; margin-top: 4%; width: 70%; user-selecÇ none;"></textarea>
                         <!-- Campo para o usuário escrever o comentário -->
-                        <button type="submit" class="btn" disabled style="margin-right: 10%; background-color: #dddddd4d; height: 5%; margin-top: 10%; display: flex; margin-left: 2%;">Enviar Comentário</button>
+                        <button type="submit" class="btn" disabled style="margin-right: 10%;background-color: #dddddd;height: 5%;margin-top: 5%;display: flex;margin-left: 2%;">Enviar Comentário</button>
                         <!-- Botão para enviar o comentário -->
                     </div>
                 {% endif %}
