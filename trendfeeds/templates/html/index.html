@@ -1,338 +1,447 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<!-- Define o tipo de documento e o idioma da página -->
-<head>
-    <meta charset="UTF-8">
-        <!-- Define o conjunto de caracteres usado na página como UTF-8 -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!-- Define que a página será responsiva -->
+  <!-- Define o tipo de documento e o idioma da página -->
+  <head>
+    <meta charset="UTF-8" />
+    <!-- Define o conjunto de caracteres usado na página como UTF-8 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Define que a página será responsiva -->
     <title>Home</title>
-        <!-- Define o título da página -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-        <!-- Inclui o CSS do Bootstrap -->
+    <!-- Define o título da página -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <!-- Inclui o CSS do Bootstrap -->
     {% load static %}
-        <!-- Carrega a tag 'static' do Django para trabalhar com arquivos estáticos -->
+    <!-- Carrega a tag 'static' do Django para trabalhar com arquivos estáticos -->
     {% load custom_filters %}
-        <!-- Carrega filtros personalizados criados no Django -->
-    <link rel="stylesheet" href="{% static 'trendfeeds/css/index_trendfeeds.css' %}">
-        <!-- Inclui o arquivo CSS personalizado da aplicação -->
-</head>
-<body>
+    <!-- Carrega filtros personalizados criados no Django -->
+    <link
+      rel="stylesheet"
+      href="{% static 'trendfeeds/css/index_trendfeeds.css' %}"
+    />
+    <!-- Inclui o arquivo CSS personalizado da aplicação -->
+  </head>
+  <body>
     <!-- INÍCIO DO CORPO DO DOCUMENTO -->
     <header>
-    <!-- Define o cabeçalho do site -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-custom d-flex justify-content-sm-around">
+      <!-- Define o cabeçalho do site -->
+      <nav
+        class="navbar navbar-expand-lg navbar-custom d-flex justify-content-sm-around"
+      >
         <!-- Cria uma barra de navegação com classes Bootstrap e estilos adicionais -->
 
+        <!-- EQUERDA: NOME DO SITE -->
+        <div class="d-flex align-items-center">
+          <a class="navbar-brand p-2 nome-site" href="#">site noticias</a>
+          <!-- Define o nome do site como link -->
+        </div>
 
-            <!-- EQUERDA: NOME DO SITE -->
-            <div class="d-flex align-items-center">
-                <a class="navbar-brand p-2 nome-site" href="#">site noticias</a>
-                <!-- Define o nome do site como link -->
-            </div>
+        <!-- CENTRO: ITENS DO MENU E DROPDWON DOS TIMES -->
+        <div class="d-flex justify-content-center" id="navbarNav">
+          <!-- Centraliza os itens do menu -->
+          <ul class="navbar-nav">
+            <!-- Lista de itens da barra de navegação -->
+            <li class="nav-item dropdown">
+              <!-- Define um item do menu com dropdown -->
+              <div
+                class="nav-link dropdown-toggle d-flex align-items-center"
+                id="dropdownTimes"
+                role="button"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <!-- Ícone para abrir o dropdown -->
+                <img id="team-logo"
+                  src="{% get_media_prefix %}brasao.png"
+                  alt="Ícone do Time"
+                  style="width: 30px; height: 30px"
+                />
+                <!-- Mostra o ícone do time -->
+              </div>
 
-
-
-            
-            <!-- CENTRO: ITENS DO MENU E DROPDWON DOS TIMES -->
-            <div class="d-flex justify-content-center" id="navbarNav">
-                    <!-- Centraliza os itens do menu -->
-                <ul class="navbar-nav">
-                        <!-- Lista de itens da barra de navegação -->
-                    <li class="nav-item dropdown">
-                            <!-- Define um item do menu com dropdown -->
-                        <div class="nav-link dropdown-toggle d-flex align-items-center" id="dropdownTimes" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <!-- Ícone para abrir o dropdown -->
-                            <img src="{% get_media_prefix %}brasao.png" alt="Ícone do Time" style="width: 30px; height: 30px;">
-                                <!-- Mostra o ícone do time -->
-                        </div>
-                        
-                        <div class="dropdown-menu p-4" style=" width: 15vw;" aria-labelledby="dropdownTimes">
-                                <!-- Define o conteúdo do dropdown -->
-                            <div class="d-flex flex-wrap justify-content-center align-items-center">
-                                    <!-- Alinha os itens dentro do dropdown -->
-                                {% for categoria in categorias %}
-                                    <!-- Loop pelas categorias passadas pelo backend -->
-                                    {% if categoria.nome_categoria != "outros" %}
-                                        <!-- Exclui a categoria 'Outros' do loop -->
-                                        <a class="dropdown-item p-3 col-3" href="{% url 'exibir_categoria' categoria.nome_categoria|slugify %}">
-                                                <!-- Link para exibir as notícias da categoria -->
-                                            <img src="{% get_media_prefix %}escudos/{{ categoria.nome_categoria|lower }}.png" alt="{{ categoria.nome_categoria }}" style="width: 35px; height: 35x;">
-                                                <!-- Ícone do escudo do time -->
-                                        </a>
-                                    {% endif %}
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </li>
-
-
-                    <!-- Outras opções do menu -->
-                    <li class="nav-item"><a class="nav-link" href="#">Início</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Sobre</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Serviços</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Contato</a></li>
-                </ul>
-            </div>
-
-
-
-
-            <!-- DIREITA: BARRA DE PESQUISA -->
-            <div class="search-container d-flex align-items-center">
-                    <!-- Cria o contêiner para a barra de pesquisa -->
-                <img src="{% get_media_prefix %}lupa.png" alt="lupa" style="width: 16px; height: 16px; margin-right: 8px;">
-                    <!-- Ícone de lupa ao lado da barra de pesquisa -->
-                <input id="search-bar" class="form-control" type="search" placeholder="Pesquisar" aria-label="Pesquisar" style="padding-left: 40px;">
-                    <!-- Barra de pesquisa com placeholder -->
-                <ul id="search-results"></ul>
-                    <!-- Lista para exibir os resultados da pesquisa -->
-            </div>
-
-
-
-
-            <!-- MAIS A DIRETIA: INFORMAÇÕES DO USUÁRIO -->
-            <div class="dropdown">
-                {% if request.user.is_authenticated %}
-                    <!-- Verifica se o usuário está autenticado -->
-                    <a class="nav-link dropdown-toggle" href="#" role="button" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-top: -10%;">
-                            <!-- Foto ou ícone do usuário autenticado -->
-                        {% if request.user.foto %}
-                            <img src="{{ request.user.foto.url }}" alt="Foto de {{ request.user.username }}" class="rounded-circle" style="width: 40px; height: 40px;">
-                        {% else %}
-                            <img src="{% get_media_prefix %}login.png" alt="Foto de {{ request.user.username }}" class="rounded-circle" style="width: 40px; height: 40px;">
-                        {% endif %}
-                    </a>
-
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                            <!-- Opções no dropdown para usuários autenticados -->
-                        <a href="{% url 'info_perfil' perfil_id=request.user.id %}"><span class="dropdown-item-text">{{ request.user.username }}</span></a>
-                        <a class="dropdown-item text-danger" href="{% url 'logout' %}">Sair</a>
-                    </div>
-                {% else %}
-                    <!-- Opções para usuários não autenticados -->
-                <div class="row d-flex flex-wrap justify-content-center">
-                    <a class="nav-link" href="{% url 'login' %}">Login</a>
-                    <a class="nav-link" href="{% url 'registro' %}">Registro</a>
+              <div
+                class="dropdown-menu p-4"
+                style="width: 15vw"
+                aria-labelledby="dropdownTimes"
+              >
+                <!-- Define o conteúdo do dropdown -->
+                <div
+                  class="d-flex flex-wrap justify-content-center align-items-center"
+                >
+                  <!-- Alinha os itens dentro do dropdown -->
+                  {% for categoria in categorias %}
+                  <!-- Loop pelas categorias passadas pelo backend -->
+                  {% if categoria.nome_categoria != "outros" %}
+                  <!-- Exclui a categoria 'Outros' do loop -->
+                  <a
+                    class="dropdown-item p-3 col-3"
+                    href="{% url 'exibir_categoria' categoria.nome_categoria|slugify %}"
+                  >
+                    <!-- Link para exibir as notícias da categoria -->
+                    <img
+                      src="{% get_media_prefix %}escudos/{{ categoria.nome_categoria|lower }}.png"
+                      alt="{{ categoria.nome_categoria }}"
+                      style="width: 35px; height: 35x"
+                    />
+                    <!-- Ícone do escudo do time -->
+                  </a>
+                  {% endif %} {% endfor %}
                 </div>
-                {% endif %}
-            </div>
-        </nav>
+              </div>
+            </li>
+
+            <!-- Outras opções do menu -->
+            <li class="nav-item">
+                <a class="nav-link" href="#"> 
+                    <button id="dark-mode-toggle">Escuro</button>
+                </a>
+            </li>
+            <li class="nav-item"><a class="nav-link" href="#">Sobre</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Serviços</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Contato</a></li>
+          </ul>
+        </div>
+
+        <!-- DIREITA: BARRA DE PESQUISA -->
+        <div class="search-container d-flex align-items-center">
+          <!-- Cria o contêiner para a barra de pesquisa -->
+          <img id="lupa"
+            src="{% get_media_prefix %}lupa.png"
+            alt="lupa"
+            style="width: 16px; height: 16px; margin-right: 8px"
+          />
+          <!-- Ícone de lupa ao lado da barra de pesquisa -->
+          <input
+            id="search-bar"
+            class="form-control"
+            type="search"
+            placeholder="Pesquisar"
+            aria-label="Pesquisar"
+            style="padding-left: 40px"
+          />
+          <!-- Barra de pesquisa com placeholder -->
+          <ul id="search-results"></ul>
+          <!-- Lista para exibir os resultados da pesquisa -->
+        </div>
+
+        <!-- MAIS A DIRETIA: INFORMAÇÕES DO USUÁRIO -->
+        <div class="dropdown">
+          {% if request.user.is_authenticated %}
+          <!-- Verifica se o usuário está autenticado -->
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            role="button"
+            id="userDropdown"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+            style="margin-top: -10%"
+          >
+            <!-- Foto ou ícone do usuário autenticado -->
+            {% if request.user.foto %}
+            <img
+              src="{{ request.user.foto.url }}"
+              alt="Foto de {{ request.user.username }}"
+              class="rounded-circle"
+              style="width: 40px; height: 40px"
+            />
+            {% else %}
+            <img
+              src="{% get_media_prefix %}login.png"
+              alt="Foto de {{ request.user.username }}"
+              class="rounded-circle"
+              style="width: 40px; height: 40px"
+            />
+            {% endif %}
+          </a>
+
+          <div
+            class="dropdown-menu dropdown-menu-right"
+            aria-labelledby="userDropdown"
+          >
+            <!-- Opções no dropdown para usuários autenticados -->
+            <a href="{% url 'info_perfil' perfil_id=request.user.id %}"
+              ><span class="dropdown-item-text"
+                >{{ request.user.username }}</span
+              ></a
+            >
+            <a class="dropdown-item text-danger" href="{% url 'logout' %}"
+              >Sair</a
+            >
+          </div>
+          {% else %}
+          <!-- Opções para usuários não autenticados -->
+          <div class="row d-flex flex-wrap justify-content-center">
+            <a class="nav-link" href="{% url 'login' %}">Login</a>
+            <a class="nav-link" href="{% url 'registro' %}">Registro</a>
+          </div>
+          {% endif %}
+        </div>
+      </nav>
     </header>
 
-
-
-
     {% load custom_filters %}
-        <!-- Carrega os filtros personalizados disponíveis no projeto -->
-
-
-
+    <!-- Carrega os filtros personalizados disponíveis no projeto -->
 
     <main class="d-flex container-fluid justify-content-center">
-            <!-- Container principal centralizado -->
-        <div class="row d-flex flex-nowrap justify-content-center noticias-recentes-banner-principal">
-            <!-- Container para agrupar o banner de notícias recentes -->
-
-
-            <!-- Notícia principal -->
-            <div class="col-12 col-md-6 noticia-mais-recente">
-                    <!-- Espaço reservado para a notícia principal no layout -->
-                <a href="{% if ultima_noticia.slug %}{% url 'detalhes_noticia' ultima_noticia.slug %}{% else %}# {% endif %}">
-                        <!-- Link para a página de detalhes da notícia ou um "#" caso não haja slug -->
-                    <img class="img-fluid imagem-principal-banner" src="{% get_media_prefix %}noticias/n_{{ ultima_noticia.id }}_0.jpg"
-                    alt="noticia-mais-recente" style="border-radius: 20px;">
-                        <!-- Imagem da notícia principal com bordas arredondadas -->
-                </a>
-                <div class="d-flex flex-column container-fluid justify-content-start descricao-noticia-mais-recente">
-                        <!-- Container para descrição da notícia principal -->
-                    <a href="{% if ultima_noticia.slug %}{% url 'detalhes_noticia' ultima_noticia.slug %}{% else %}# {% endif %}">
-                            <!-- Link para a página de detalhes da notícia -->
-                        <p class="titulo-noticia-mais-recente">{{ ultima_noticia.descricao }}</p>
-                            <!-- Título ou descrição da notícia principal -->
-                        <p class="resumo-noticia-mais-recente">{{ ultima_noticia.descricao|slice:":350" }} ...</p>
-                            <!-- Resumo da notícia principal limitado a 350 caracteres -->
-                    </a>
-                </div>
-            </div>
+      <!-- Container principal centralizado -->
+      <div
+        class="row d-flex flex-nowrap justify-content-center noticias-recentes-banner-principal"
+      >
+        <!-- Container para agrupar o banner de notícias recentes -->
 
 
 
 
-            <!-- Outras notícias -->
-            <div class="d-flex flex-wrap container-fluid justify-content-center align-items-center noticias-recentes-div">
-                    <!-- Container para exibição de outras notícias -->
-                {% for noticia in outras_noticias %}
-                    <!-- Itera sobre a lista de outras notícias -->
-                <div class="col-6 col-md-3 noticia-recente">
-                        <!-- Configuração de layout para cada notícia -->
-                    <a href="{% url 'detalhes_noticia' noticia.slug %}">
-                            <!-- Link para a página de detalhes da notícia -->
-                        <img class="img-fluid imagem-principal-banner-recente" src="{% get_media_prefix %}noticias/n_{{ noticia.id }}_0.jpg" 
-                        alt="noticia-recente" style="border-radius: 20px;">
-                            <!-- Imagem da notícia com bordas arredondadas -->
-                    </a>
-                    <div class="d-flex flex-wrap-column container-fluid justify-content-start descricao-noticia-recente">
-                            <!-- Container para a descrição da notícia -->
-                        <a href="{% url 'detalhes_noticia' noticia.slug %}">
-                                <!-- Link para os detalhes da notícia -->
-                            <p class="titulo-noticia-recente">{{ noticia.descricao | slice:":250" }} ...</p>
-                                <!-- Exibe o título da notícia com resumo limitado a 250 caracteres -->
-                        </a>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-    </main>
-
-
-
-
-    <div class="d-flex container-fluid flex-wrap caixa" style="width: 80%;">
-            <!-- Container principal para o conteúdo do Campeonato Brasileiro -->
-        <div class="div_brasileirao"> <h2 class="titulo_brasileriao">CAMPEONATO BRASILEIRO</h2></div>
-            <!-- Título da seção do Campeonato Brasileiro -->
-        <div class="div-tabela-brasileiro container mt-7" style="flex: 0 0 60%; padding-right: 15px;">
-            <!-- Tabela com 60% da largura -->
-            <table class="table table-striped">
-                <!-- Configuração da tabela -->
-                <thead>
-                    <!-- Cabeçalho da tabela -->
-                    <tr>
-                            <!-- Define as colunas da tabela -->
-                        <th style="text-align: left;">Posição</th>
-                        <th>P</th>
-                        <th>J</th>
-                        <th>V</th>
-                        <th>E</th>
-                        <th>D</th>
-                        <th>GP</th>
-                        <th>GC</th>
-                        <th>SG</th>
-                    </tr>
-                </thead>
-                <tbody>
-                        <!-- Corpo da tabela -->
-                    {% for time in tabela %}
-                        <!-- Itera sobre os times na tabela -->
-                    <tr>
-                        <td>
-                                <!-- Define a célula para a posição -->
-                            <div class="d-flex align-items-center">
-                                    <!-- Alinha a posição e o nome do time -->
-                                <span class="mr-3" style="text-align: left; flex-shrink: 0;">{{ time.posicao }}</span>
-                                    <!-- Posição do time -->
-                                <span style="font-size: 1.1rem; font-weight: bold; text-transform: capitalize;">
-                                    {{ time.time.nome_popular }}
-                                        <!-- Nome popular do time -->
-                                </span>
-                            </div>
-                        </td>
-                        <td>{{ time.pontos }}</td>
-                            <!-- Pontos do time -->
-                        <td>{{ time.jogos }}</td>
-                            <!-- Jogos do time -->
-                        <td>{{ time.vitorias }}</td>
-                            <!-- Vitórias do time -->
-                        <td>{{ time.empates }}</td>
-                            <!-- Empates do time -->
-                        <td>{{ time.derrotas }}</td>
-                            <!-- Derrotas do time -->
-                        <td>{{ time.gols_pro }}</td>
-                            <!-- Gols pró do time -->
-                        <td>{{ time.gols_contra }}</td>
-                            <!-- Gols contra do time -->
-                        <td>{{ time.saldo_gols }}</td>
-                            <!-- Saldo de gols do time -->
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-
-
-
-        <!-- Jogos com 40% da largura -->
-        <section class="container my-3 d-flex flex-nowrap" style="flex: 0 0 40%; padding-left: 15px;">
-                <!-- Container para a seção de jogos -->
-            <div class="row justify-content-center">
-                {% if proximos_jogos %}
-                    <!-- Verifica se existem próximos jogos -->
-                {% for jogo in proximos_jogos %}
-                    <!-- Itera sobre os próximos jogos -->
-                <div class="col-6 d-flex justify-content-center my-2">
-                        <!-- Define o layout para cada jogo -->
-                    <div class="card text-center shadow-sm" style="max-width: 300px;width: 100%;">
-                            <!-- Estiliza o cartão de exibição -->
-                        <div class="card-body">
-                                <!-- Corpo do cartão -->
-                            <div class="d-flex align-items-center justify-content-center">
-                                    <!-- Container para os escudos dos times -->
-                                <img src="{% get_media_prefix %}escudos/{{ jogo.time_mandante.nome_popular|slugify_with_underscore }}.png" 
-                                    alt="{{ jogo.time_mandante.nome_popular }}" 
-                                    class="img-fluid" 
-                                    style="width: 45px;height: 45px;">
-                                    <!-- Escudo do time mandante -->
-                                <span class="mx-2">- x -</span>
-                                    <!-- Indicador de confronto -->
-                                <img src="{% get_media_prefix %}escudos/{{ jogo.time_visitante.nome_popular|slugify_with_underscore }}.png" 
-                                    alt="{{ jogo.time_visitante.nome_popular }}" 
-                                    class="img-fluid" 
-                                    style="width: 45px;height: 45px;">
-                                    <!-- Escudo do time visitante -->
-                            </div>
-                            <p class="card-text mt-2">
-                                    <!-- Detalhes do jogo -->
-                                {{ jogo.data_realizacao }}<br>{{ jogo.hora_realizacao }}<br>{{jogo.status}}<br>{{jogo.estadio.nome_popular}}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-                {% else %}
-                    <!-- Caso não existam jogos -->
-                <p class="text-center">Nenhum jogo disponível no momento.</p>
-                {% endif %}
-            </div>
-        </section>
-    </div>
-
-
-
-
-    <section class="todas-noticias container-fluid mt-2" style="width: 80%; padding-top: 7%;">
-            <!-- Seção para exibir uma lista de "Mais Notícias" -->
-        <h3>Mais Notícias</h3>
-            <!-- Título da seção -->
-        <div class="row">
-                <!-- Container para organizar as notícias em linhas -->
-            {% for noticia in todas_as_noticias %}
-                <!-- Itera sobre a lista de todas as notícias -->
-            <div class="col-12 mb-4">
-                    <!-- Configuração do layout para cada notícia -->
-                <a href="{% url 'detalhes_noticia' noticia.slug %}" class="noticia-card" style="width: 100%;">
-                        <!-- Link para os detalhes da notícia -->
-                        <!-- Imagem da notícia -->
-                    <img src="{% get_media_prefix %}/thumbs/thumb_n_{{ noticia.id }}.jpg" alt="noticia" />
-                        <!-- Container para o conteúdo textual da notícia -->
-                    <div class="noticia-conteudo">
-                        <h5>{{ noticia.descricao }}</h5>
-                            <!-- Exibe o título ou descrição da notícia -->
-                        <p>{{ noticia.descricao|slice:":150" }} ...</p>
-                            <!-- Exibe um resumo limitado a 150 caracteres -->
-                    </div>
-                </a>
-            </div>
-            {% endfor %}
-            <!-- Finaliza o loop de notícias -->
-        </div>
-    </section>
     
 
 
+        <!-- Notícia principal -->
+        <div class="col-12 col-md-6 noticia-mais-recente">
+          <!-- Espaço reservado para a notícia principal no layout -->
+          <a
+            href="{% if ultima_noticia.slug %}{% url 'detalhes_noticia' ultima_noticia.slug %}{% else %}# {% endif %}"
+          >
+            <!-- Link para a página de detalhes da notícia ou um "#" caso não haja slug -->
+            <img
+              class="img-fluid imagem-principal-banner"
+              src="{% get_media_prefix %}noticias/n_{{ ultima_noticia.id }}_0.jpg"
+              alt="noticia-mais-recente"
+              style="border-radius: 20px"
+            />
+            <!-- Imagem da notícia principal com bordas arredondadas -->
+          </a>
+          <div
+            class="d-flex flex-column container-fluid justify-content-start descricao-noticia-mais-recente"
+          >
+            <!-- Container para descrição da notícia principal -->
+            <a
+              href="{% if ultima_noticia.slug %}{% url 'detalhes_noticia' ultima_noticia.slug %}{% else %}# {% endif %}"
+            >
+              <!-- Link para a página de detalhes da notícia -->
+              <p class="titulo-noticia-mais-recente">
+                {{ ultima_noticia.descricao }}
+              </p>
+              <!-- Título ou descrição da notícia principal -->
+              <p class="resumo-noticia-mais-recente">
+                {{ ultima_noticia.descricao|slice:":350" }} ...
+              </p>
+              <!-- Resumo da notícia principal limitado a 350 caracteres -->
+            </a>
+          </div>
+        </div>
+
+        <!-- Outras notícias -->
+        <div
+          class="d-flex flex-wrap container-fluid justify-content-center align-items-center noticias-recentes-div"
+        >
+          <!-- Container para exibição de outras notícias -->
+          {% for noticia in outras_noticias %}
+          <!-- Itera sobre a lista de outras notícias -->
+          <div class="col-6 col-md-3 noticia-recente">
+            <!-- Configuração de layout para cada notícia -->
+            <a href="{% url 'detalhes_noticia' noticia.slug %}">
+              <!-- Link para a página de detalhes da notícia -->
+              <img
+                class="img-fluid imagem-principal-banner-recente"
+                src="{% get_media_prefix %}noticias/n_{{ noticia.id }}_0.jpg"
+                alt="noticia-recente"
+                style="border-radius: 20px"
+              />
+              <!-- Imagem da notícia com bordas arredondadas -->
+            </a>
+            <div
+              class="d-flex flex-wrap-column container-fluid justify-content-start descricao-noticia-recente"
+            >
+              <!-- Container para a descrição da notícia -->
+              <a href="{% url 'detalhes_noticia' noticia.slug %}">
+                <!-- Link para os detalhes da notícia -->
+                <p class="titulo-noticia-recente">
+                  {{ noticia.descricao | slice:":250" }} ...
+                </p>
+                <!-- Exibe o título da notícia com resumo limitado a 250 caracteres -->
+              </a>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </main>
+
+    <div class="d-flex container-fluid flex-wrap caixa" style="width: 80%">
+      <!-- Container principal para o conteúdo do Campeonato Brasileiro -->
+      <div class="div_brasileirao">
+        <h2 class="titulo_brasileriao">CAMPEONATO BRASILEIRO</h2>
+      </div>
+      <!-- Título da seção do Campeonato Brasileiro -->
+      <div
+        class="div-tabela-brasileiro container mt-7"
+        style="flex: 0 0 60%; padding-right: 15px"
+      >
+        <!-- Tabela com 60% da largura -->
+        <table class="table table-striped">
+          <!-- Configuração da tabela -->
+          <thead>
+            <!-- Cabeçalho da tabela -->
+            <tr>
+              <!-- Define as colunas da tabela -->
+              <th style="text-align: left">Posição</th>
+              <th>P</th>
+              <th>J</th>
+              <th>V</th>
+              <th>E</th>
+              <th>D</th>
+              <th>GP</th>
+              <th>GC</th>
+              <th>SG</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Corpo da tabela -->
+            {% for time in tabela %}
+            <!-- Itera sobre os times na tabela -->
+            <tr>
+              <td>
+                <!-- Define a célula para a posição -->
+                <div class="d-flex align-items-center">
+                  <!-- Alinha a posição e o nome do time -->
+                  <span class="mr-3" style="text-align: left; flex-shrink: 0"
+                    >{{ time.posicao }}</span
+                  >
+                  <!-- Posição do time -->
+                  <span
+                    style="
+                      font-size: 1.1rem;
+                      font-weight: bold;
+                      text-transform: capitalize;
+                    "
+                  >
+                    {{ time.time.nome_popular }}
+                    <!-- Nome popular do time -->
+                  </span>
+                </div>
+              </td>
+              <td>{{ time.pontos }}</td>
+              <!-- Pontos do time -->
+              <td>{{ time.jogos }}</td>
+              <!-- Jogos do time -->
+              <td>{{ time.vitorias }}</td>
+              <!-- Vitórias do time -->
+              <td>{{ time.empates }}</td>
+              <!-- Empates do time -->
+              <td>{{ time.derrotas }}</td>
+              <!-- Derrotas do time -->
+              <td>{{ time.gols_pro }}</td>
+              <!-- Gols pró do time -->
+              <td>{{ time.gols_contra }}</td>
+              <!-- Gols contra do time -->
+              <td>{{ time.saldo_gols }}</td>
+              <!-- Saldo de gols do time -->
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Jogos com 40% da largura -->
+      <section
+        class="container my-3 d-flex flex-nowrap"
+        style="flex: 0 0 40%; padding-left: 15px"
+      >
+        <!-- Container para a seção de jogos -->
+        <div class="row justify-content-center">
+          {% if proximos_jogos %}
+          <!-- Verifica se existem próximos jogos -->
+          {% for jogo in proximos_jogos %}
+          <!-- Itera sobre os próximos jogos -->
+          <div class="col-6 d-flex justify-content-center my-2">
+            <!-- Define o layout para cada jogo -->
+            <div
+              class="card text-center shadow-sm"
+              style="max-width: 300px; width: 100%"
+            >
+              <!-- Estiliza o cartão de exibição -->
+              <div class="card-body">
+                <!-- Corpo do cartão -->
+                <div class="d-flex align-items-center justify-content-center">
+                  <!-- Container para os escudos dos times -->
+                  <img
+                    src="{% get_media_prefix %}escudos/{{ jogo.time_mandante.nome_popular|slugify_with_underscore }}.png"
+                    alt="{{ jogo.time_mandante.nome_popular }}"
+                    class="img-fluid"
+                    style="width: 45px; height: 45px"
+                  />
+                  <!-- Escudo do time mandante -->
+                  <span class="mx-2 versus">- x -</span>
+                  <!-- Indicador de confronto -->
+                  <img
+                    src="{% get_media_prefix %}escudos/{{ jogo.time_visitante.nome_popular|slugify_with_underscore }}.png"
+                    alt="{{ jogo.time_visitante.nome_popular }}"
+                    class="img-fluid"
+                    style="width: 45px; height: 45px"
+                  />
+                  <!-- Escudo do time visitante -->
+                </div>
+                <p class="card-text mt-2">
+                  <!-- Detalhes do jogo -->
+                  {{ jogo.data_realizacao }}<br />{{ jogo.hora_realizacao }}<br />{{jogo.status}}<br />{{jogo.estadio.nome_popular}}
+                </p>
+              </div>
+            </div>
+          </div>
+          {% endfor %} {% else %}
+          <!-- Caso não existam jogos -->
+          <p class="text-center">Nenhum jogo disponível no momento.</p>
+          {% endif %}
+        </div>
+      </section>
+    </div>
+
+    <section
+      class="todas-noticias container-fluid mt-2"
+      style="width: 80%; padding-top: 7%"
+    >
+      <!-- Seção para exibir uma lista de "Mais Notícias" -->
+      <h3>Mais Notícias</h3>
+      <!-- Título da seção -->
+      <div class="row">
+        <!-- Container para organizar as notícias em linhas -->
+        {% for noticia in todas_as_noticias %}
+        <!-- Itera sobre a lista de todas as notícias -->
+        <div class="col-12 mb-4">
+          <!-- Configuração do layout para cada notícia -->
+          <a
+            href="{% url 'detalhes_noticia' noticia.slug %}"
+            class="noticia-card"
+            style="width: 100%"
+          >
+            <!-- Link para os detalhes da notícia -->
+            <!-- Imagem da notícia -->
+            <img
+              src="{% get_media_prefix %}/thumbs/thumb_n_{{ noticia.id }}.jpg"
+              alt="noticia"
+            />
+            <!-- Container para o conteúdo textual da notícia -->
+            <div class="noticia-conteudo">
+              <h5>{{ noticia.descricao }}</h5>
+              <!-- Exibe o título ou descrição da notícia -->
+              <p>{{ noticia.descricao|slice:":150" }} ...</p>
+              <!-- Exibe um resumo limitado a 150 caracteres -->
+            </div>
+          </a>
+        </div>
+        {% endfor %}
+        <!-- Finaliza o loop de notícias -->
+      </div>
+     
+
+    </section>
+
+    
 
     <!-- Inclusão de scripts necessários para o funcionamento do Bootstrap -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -343,91 +452,117 @@
     <!-- Importa o JavaScript do Bootstrap versão 4.5.2 -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Importa o JavaScript do Bootstrap versão 5.3.0 -->
-    
-
 
     <!-- Script necessário para a barra de pesquisas -->
     <script>
-        document.getElementById('search-bar').addEventListener('input', function () {
-        // Adiciona um evento ao campo de busca (search-bar) para capturar a entrada do usuário
-           
-            let query = this.value;
-             // Obtém o valor digitado no campo de busca
-          
-            if (query.length > 1) {
-                // Verifica se o tamanho da consulta é maior que 1 caractere
-             
-                fetch(`/buscar_noticias/?q=${query}`)
-                // Faz uma requisição para a URL "/buscar_noticias/" passando o parâmetro de busca
-                    .then(response => response.json())
-                    // Processa a resposta JSON retornada pelo servidor
-                    .then(data => {
-                       
-                        const resultsContainer = document.getElementById('search-results');
-                        // Seleciona o contêiner onde os resultados da busca serão exibidos
-                        resultsContainer.innerHTML = '';
-                        // Limpa os resultados anteriores
-    
-                        if (data.results.length > 0) {
-                            // Verifica se há resultados na busca
-                            data.results.forEach(item => {
-                                // Itera sobre os resultados
-                                let li = document.createElement('li');
-                                // Cria um elemento <li> para cada resultado
-                                li.classList.add('search-result-item');
-                                // Adiciona uma classe para estilização
-    
-                                let img = document.createElement('img');
-                                // Cria um elemento <img> para exibir a imagem do resultado
-                                img.src = item.imagem_url || "{% static 'locadora/images/default.png' %}";
-                                // Define a URL da imagem ou uma imagem padrão caso não exista
-                                img.alt = `Imagem de ${item.titulo}`;
-                                // Define o texto alternativo da imagem
-                                img.classList.add('search-result-image');
-                                // Adiciona uma classe CSS para estilizar a imagem
-    
-                                let text = document.createElement('span');
-                                // Cria um elemento <span> para exibir o título do resultado
-                                text.textContent = item.titulo;
-                                // Define o texto do título
-                                text.classList.add('search-result-text');
-                                // Adiciona uma classe CSS para estilizar o texto
-    
-                                li.appendChild(img);
-                                // Adiciona a imagem ao elemento <li>
-                                li.appendChild(text);
-                                // Adiciona o texto ao elemento <li>
-    
-                                li.addEventListener('click', function() {
-                                    // Adiciona um evento de clique ao item do resultado
-                                    window.location.href = `/noticia/${item.slug}/`;
-                                    // Redireciona o usuário para a página de detalhes da notícia
-                                });
-    
-                                resultsContainer.appendChild(li);
-                                // Adiciona o item do resultado ao contêiner de resultados
-                            });
-                        } else {
-    
-                            resultsContainer.innerHTML = '<li class="no-results">Nenhum resultado encontrado.</li>';
-                            // Caso não haja resultados, exibe uma mensagem ao usuário
-                        }
+      document
+        .getElementById("search-bar")
+        .addEventListener("input", function () {
+          // Adiciona um evento ao campo de busca (search-bar) para capturar a entrada do usuário
+
+          let query = this.value;
+          // Obtém o valor digitado no campo de busca
+
+          if (query.length > 1) {
+            // Verifica se o tamanho da consulta é maior que 1 caractere
+
+            fetch(`/buscar_noticias/?q=${query}`)
+              // Faz uma requisição para a URL "/buscar_noticias/" passando o parâmetro de busca
+              .then((response) => response.json())
+              // Processa a resposta JSON retornada pelo servidor
+              .then((data) => {
+                const resultsContainer =
+                  document.getElementById("search-results");
+                // Seleciona o contêiner onde os resultados da busca serão exibidos
+                resultsContainer.innerHTML = "";
+                // Limpa os resultados anteriores
+
+                if (data.results.length > 0) {
+                  // Verifica se há resultados na busca
+                  data.results.forEach((item) => {
+                    // Itera sobre os resultados
+                    let li = document.createElement("li");
+                    // Cria um elemento <li> para cada resultado
+                    li.classList.add("search-result-item");
+                    // Adiciona uma classe para estilização
+
+                    let img = document.createElement("img");
+                    // Cria um elemento <img> para exibir a imagem do resultado
+                    img.src =
+                      item.imagem_url ||
+                      "{% static 'locadora/images/default.png' %}";
+                    // Define a URL da imagem ou uma imagem padrão caso não exista
+                    img.alt = `Imagem de ${item.titulo}`;
+                    // Define o texto alternativo da imagem
+                    img.classList.add("search-result-image");
+                    // Adiciona uma classe CSS para estilizar a imagem
+
+                    let text = document.createElement("span");
+                    // Cria um elemento <span> para exibir o título do resultado
+                    text.textContent = item.titulo;
+                    // Define o texto do título
+                    text.classList.add("search-result-text");
+                    // Adiciona uma classe CSS para estilizar o texto
+
+                    li.appendChild(img);
+                    // Adiciona a imagem ao elemento <li>
+                    li.appendChild(text);
+                    // Adiciona o texto ao elemento <li>
+
+                    li.addEventListener("click", function () {
+                      // Adiciona um evento de clique ao item do resultado
+                      window.location.href = `/noticia/${item.slug}/`;
+                      // Redireciona o usuário para a página de detalhes da notícia
                     });
-            } else {
-                document.getElementById('search-results').innerHTML = '';
-                // Limpa os resultados caso a consulta seja muito curta
-            }
+
+                    resultsContainer.appendChild(li);
+                    // Adiciona o item do resultado ao contêiner de resultados
+                  });
+                } else {
+                  resultsContainer.innerHTML =
+                    '<li class="no-results">Nenhum resultado encontrado.</li>';
+                  // Caso não haja resultados, exibe uma mensagem ao usuário
+                }
+              });
+          } else {
+            document.getElementById("search-results").innerHTML = "";
+            // Limpa os resultados caso a consulta seja muito curta
+          }
         });
+    </script>
+    <script>
+        // Espera a página carregar completamente
+        window.onload = function() {
+            const toggleButton = document.getElementById('dark-mode-toggle');
+            const logo = document.getElementById('team-logo'); // Obtém o logo
+           
+            // Verificar se o modo escuro está ativado
+            if (localStorage.getItem('dark-mode') === 'true') {
+                document.body.classList.add('dark-mode');
+                logo.src = "{% get_media_prefix %}brasao_branco.png"; // Mudando para o brasão branco
+                toggleButton.innerHTML = "Claro"; // Alterando o texto do botão
+            }
+    
+            // Evento de clique para alternar entre modos
+            toggleButton.addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                const isDarkMode = document.body.classList.contains('dark-mode');
+                
+                // Alterar ícone e salvar a preferência no localStorage
+                if (isDarkMode) {
+                    toggleButton.innerHTML = "Escuro";
+                    logo.src = "{% get_media_prefix %}brasao_branco.png"; // Mudando para o brasão branco
+                    localStorage.setItem('dark-mode', 'true');
+                } else {
+                    toggleButton.innerHTML = "Claro";
+                    logo.src = "{% get_media_prefix %}brasao.png"; // Mudando para o brasão original
+                    localStorage.setItem('dark-mode', 'false');
+                }
+            });
+        }
     </script>
     
 
-
-
-    <footer class="text-center py-3 bg-light">
-        <!-- Rodapé do site -->
-        <p class="mb-0">© 2024 site noticias - Todos os direitos reservados.</p>
-        <!-- Texto de direitos reservados -->
-    </footer>
-</body>
+  </body>
 </html>
 <!-- Finaliza o documento HTML -->

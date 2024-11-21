@@ -3,6 +3,96 @@ body {
   font-family: Arial, sans-serif;
   transition: 0.4s;
 }
+body.dark-mode{
+  background-color: #000000;
+}
+body.dark-mode .titulo-noticia-mais-recente {
+  color: #d2d2d2; /* Cor para o título no modo escuro */
+}
+body.dark-mode .titulo-noticia-recente {
+  color: #d2d2d2; /* Cor para o título no modo escuro */
+}
+
+body.dark-mode .navbar-custom .nav-link {
+  color: #d2d2d2 !important; /* Cor do texto dos links da navbar no modo escuro */
+}
+
+body.dark-mode .navbar-custom{
+  box-shadow: 0px 1px 0px 0px rgba(255, 255, 255, 0.222);
+}
+body.dark-mode .navbar-custom .nome-site{
+  color: #d2d2d2 !important; /* Cor do texto dos links da navbar no modo escuro */
+}
+body.dark-mode .titulo_brasileriao{
+  color: #d2d2d2 !important; /* Cor do texto dos links da navbar no modo escuro */
+  box-shadow: 0px 1px 0px 0px rgba(255, 255, 255, 0.222);
+}
+body.dark-mode .table thead tr {
+  background-color: transparent;
+  color: #d2d2d2;
+}
+body.dark-mode .table thead th{
+  border-bottom: #f4f4f457;
+}
+body.dark-mode .table tbody td {
+  border-bottom: 1px solid #ffffff42;;
+}
+body.dark-mode .table tbody td span {
+  color: #d2d2d2;
+}
+body.dark-mode  .table tbody tr:nth-child(odd) {
+  background-color: #252525;
+}
+
+body.dark-mode  .table tbody tr:nth-child(even) {
+  background-color: #161616;;
+}
+body.dark-mode .table{
+  color: #d2d2d2;
+}
+body.dark-mode .card{
+  background-color: #000000;
+  border: 1px solid rgb(255 255 255 / 21%);
+}
+body.dark-mode .card-text:last-child{
+  color: #d2d2d2;
+}
+body.dark-mode .versus{
+  color: #d2d2d2;
+}
+body.dark-mode .todas-noticias {
+  background-color: #000000;
+}
+body.dark-mode .todas-noticias h3{
+  color: #d2d2d2;
+  box-shadow: 0px 1px 0px 0px rgba(255, 255, 255, 0.222);
+}
+
+body.dark-mode .noticia-card{
+  background-color: #000000;
+}
+
+body.dark-mode .noticia-card .noticia-conteudo h5{
+  color: #d2d2d2;
+}
+body.dark-mode .noticia-card .noticia-conteudo p{
+  color: #d2d2d2;
+}
+body.dark-mode .form-control{
+  background-color: #000000;
+  border: 1px solid #181818;
+}
+
+body.dark-mode  #search-results{
+  background-color: #000000;
+  color: #d2d2d2;
+}
+
+body.dark-mode  .search-result-item:hover{
+  background-color: #1a1a1a;
+  color: #d2d2d2;
+}
+
 
 main {
   height: 100vh;
@@ -16,6 +106,9 @@ main {
   width: 100%;
   transition: 0.4s;
 }
+
+
+
 .titulo-noticia-mais-recente {
   font-size: 2.1vw;
   margin-top: 4%;
@@ -23,6 +116,8 @@ main {
   transition: 0.4s;
   font-weight: bolder;
 }
+
+
 .resumo-noticia-mais-recente {
   font-size: 1vw;
   transition: 0.4s;
@@ -583,4 +678,14 @@ a:hover {
   padding-left: 40px; /* Espaço para a lupa */
   border-radius: 20px; /* Bordas arredondadas */
   width: 100%;
+}
+#dark-mode-toggle {
+  all: unset; /* Remove todas as estilizações padrão */
+  background: none; /* Remove o fundo */
+  border: none; /* Remove a borda */
+  padding: 0; /* Remove o padding */
+  text-align: left; /* Garante que o texto fique alinhado à esquerda */
+  font-family: inherit; /* Usa a fonte padrão do documento */
+  font-size: inherit; /* Usa o tamanho de fonte padrão */
+  color: inherit; /* Usa a cor do texto padrão */
 }
