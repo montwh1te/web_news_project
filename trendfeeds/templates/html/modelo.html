@@ -154,11 +154,12 @@
                                 <input type="checkbox" id="likeCheckbox" data-url="{% url 'atualizar_like' noticia.slug %}" {% if usuario_curtiu %}checked{% endif %}>
                                 <svg id="Glyph" version="1.1" viewBox="0 0 32 32" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M29.845,17.099l-2.489,8.725C26.989,27.105,25.804,28,24.473,28H11c-0.553,0-1-0.448-1-1V13  c0-0.215,0.069-0.425,0.198-0.597l5.392-7.24C16.188,4.414,17.05,4,17.974,4C19.643,4,21,5.357,21,7.026V12h5.002  c1.265,0,2.427,0.579,3.188,1.589C29.954,14.601,30.192,15.88,29.845,17.099z" id="XMLID_254_"></path><path d="M7,12H3c-0.553,0-1,0.448-1,1v14c0,0.552,0.447,1,1,1h4c0.553,0,1-0.448,1-1V13C8,12.448,7.553,12,7,12z   M5,25.5c-0.828,0-1.5-0.672-1.5-1.5c0-0.828,0.672-1.5,1.5-1.5c0.828,0,1.5,0.672,1.5,1.5C6.5,24.828,5.828,25.5,5,25.5z" id="XMLID_256_"></path></svg>
                             </label>
-                            <span id="likeCount" class="ml-2" style="font-size: 1.0rem;">{{ noticia.like_count }}</span>
+                            <span id="likeCount" class="ml-2" style="font-size: 1.0rem;margin-right: 90%;">{{ noticia.like_count }}</span>
                         </form>
                     {% else %}
                         <p>Faça login para curtir esta notícia.</p>
                         <svg id="Glyph" version="1.1" viewBox="0 0 32 32" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M29.845,17.099l-2.489,8.725C26.989,27.105,25.804,28,24.473,28H11c-0.553,0-1-0.448-1-1V13  c0-0.215,0.069-0.425,0.198-0.597l5.392-7.24C16.188,4.414,17.05,4,17.974,4C19.643,4,21,5.357,21,7.026V12h5.002  c1.265,0,2.427,0.579,3.188,1.589C29.954,14.601,30.192,15.88,29.845,17.099z" id="XMLID_254_"></path><path d="M7,12H3c-0.553,0-1,0.448-1,1v14c0,0.552,0.447,1,1,1h4c0.553,0,1-0.448,1-1V13C8,12.448,7.553,12,7,12z   M5,25.5c-0.828,0-1.5-0.672-1.5-1.5c0-0.828,0.672-1.5,1.5-1.5c0.828,0,1.5,0.672,1.5,1.5C6.5,24.828,5.828,25.5,5,25.5z" id="XMLID_256_"></path></svg>
+                        <span id="likeCount1" class="ml-2" style="font-size: 1.0rem;margin-right: 90%;">{{ noticia.like_count }}</
                     {% endif %}
 
 
@@ -198,63 +199,77 @@
 
                 <!-- SEÇÃO DE COMENTÁRIOS -->
                 <p class="comentarios" style="margin-top: 10%;">COMENTÁRIOS</p>
-                    <!-- Título da seção de comentários -->
 
-                    <div id="comentariosContainer" class="comentarios-container container mt-4">
-                        {% if comentarios %}
-                            <!-- Exibe os comentários -->
-                            {% for comentario in comentarios %}
-                            <div class="row align-items-center mb-4 p-3 shadow-sm rounded border bg-light">
-                                <div class="col-2 text-center">
-                                    {% if comentario.usuario.foto %}
-                                    <img class="usuario_foto" src="{{ comentario.usuario.foto.url }}" 
-                                        alt="Foto de {{ comentario.usuario.username }}" 
-                                        class="rounded-circle img-fluid" 
-                                        style="max-width: 80px; height: auto;">
-                                    {% else %}
-                                    <img src="{% static 'images/default-avatar.png' %}" 
-                                        alt="Foto padrão" 
-                                        class="rounded-circle img-fluid" 
-                                        style="max-width: 80px; height: auto;">
-                                    {% endif %}
-                                </div>
-                                <div class="col-10">
-                                    <h5 class="mb-1">{{ comentario.usuario.username }}</h5>
-                                    <p class="mb-0 text-muted">{{ comentario.comentario }}</p>
-                                </div>
+                <div id="comentariosContainer" class="comentarios-container container mt-4">
+                    {% if comentarios %}
+                        <!-- Exibe os comentários -->
+                        {% for comentario in comentarios %}
+                        <div class="row align-items-center mb-4 p-3 shadow-sm rounded border bg-light">
+                            <div class="col-2 text-center">
+                                {% if comentario.usuario.foto %}
+                                <img class="usuario_foto" src="{{ comentario.usuario.foto.url }}" 
+                                    alt="Foto de {{ comentario.usuario.username }}" 
+                                    class="rounded-circle img-fluid" 
+                                    style="max-width: 80px; height: auto;">
+                                {% else %}
+                                <img src="{% static 'images/default-avatar.png' %}" 
+                                    alt="Foto padrão" 
+                                    class="rounded-circle img-fluid" 
+                                    style="max-width: 80px; height: auto;">
+                                {% endif %}
                             </div>
-                            {% endfor %}
-                        {% else %}
-                            <!-- Exibe a mensagem se não houver comentários -->
+                            <div class="col-10">
+                                <h5 class="mb-1">{{ comentario.usuario.username }}</h5>
+                                <p class="mb-0 text-muted">{{ comentario.comentario }}</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <!-- Condição para mensagens sem comentários -->
+                        {% if request.user.is_authenticated %}
                             <div class="row align-items-center mb-4 p-3 shadow-sm rounded border bg-light">
                                 <div class="col-10">
                                     <p class="mb-0 text-muted">Seja o primeiro a comentar!</p>
                                 </div>
                             </div>
+                        {% else %}
+                            <div class="row align-items-center mb-4 p-3 shadow-sm rounded border bg-light">
+                                <div class="col-10">
+                                    <p class="mb-0 text-muted">Faça login para ser o primeiro a comentar!</p>
+                                </div>
+                            </div>
                         {% endif %}
-                    </div>
-                        <!-- Fim do loop para exibir todos os comentários -->
+                    {% endif %}
                 </div>
-
 
 
 
                 <!-- FORMULÁRIO DE COMENTÁRIOS -->
-                <div class="noticiasInteracao">
-                    <form id="commentForm" method="post" action="{% url 'adicionar_comentario' noticia.slug %}">
-                        {% csrf_token %}
-                        <!-- Token CSRF para proteger o formulário -->
-                        {{ form.as_p }}
-                        <!-- Exibe os campos do formulário de comentário -->
-                        <div class="d-flex flex-wrap mb-5">
-                            <!-- Contêiner flexível para o textarea e botão -->
-                            <textarea name="comentario" id="comentarioTextarea" rows="5" class="form-control" placeholder="Escreva seu comentário aqui..." required style="resize: none; border-radius: 20px; margin-top: 5%; width: 70%;"></textarea>
-                            <!-- Campo para o usuário escrever o comentário -->
-                            <button type="submit" class="btn" style="margin-right: 10%; background-color: #dddddd; height: 5%; margin-top: 10%; display: flex; margin-left: 2%;">Enviar Comentário</button>
-                            <!-- Botão para enviar o comentário -->
-                        </div>
-                    </form>
-                </div>
+                {% if request.user.is_authenticated %}
+                    <div class="noticiasInteracao">
+                        <form id="commentForm" method="post" action="{% url 'adicionar_comentario' noticia.slug %}">
+                            {% csrf_token %}
+                            <!-- Token CSRF para proteger o formulário -->
+                            {{ form.as_p }}
+                            <!-- Exibe os campos do formulário de comentário -->
+                            <div class="d-flex flex-wrap mb-5">
+                                <!-- Contêiner flexível para o textarea e botão -->
+                                <textarea name="comentario" id="comentarioTextarea" rows="5" class="form-control" placeholder="Escreva seu comentário aqui..." required style="resize: none; border-radius: 20px; margin-top: 5%; width: 70%;"></textarea>
+                                <!-- Campo para o usuário escrever o comentário -->
+                                <button type="submit" class="btn" style="margin-right: 10%; background-color: #dddddd; height: 5%; margin-top: 10%; display: flex; margin-left: 2%;">Enviar Comentário</button>
+                                <!-- Botão para enviar o comentário -->
+                            </div>
+                        </form>
+                    </div>
+                {% else %}
+                    <div class="d-flex flex-wrap mb-5">
+                        <!-- Contêiner flexível para o textarea e botão -->
+                        <textarea name="comentario" id="comentarioTextarea" rows="5" class="form-control" placeholder="Faça login para comentar..." disabled required style="resize: none; border-radius: 20px; margin-top: 5%; width: 70%; user-selecÇ none;"></textarea>
+                        <!-- Campo para o usuário escrever o comentário -->
+                        <button type="submit" class="btn" disabled style="margin-right: 10%; background-color: #dddddd4d; height: 5%; margin-top: 10%; display: flex; margin-left: 2%;">Enviar Comentário</button>
+                        <!-- Botão para enviar o comentário -->
+                    </div>
+                {% endif %}
 
 
 

@@ -229,68 +229,110 @@ def detalhes_noticia(request, slug):
 
 
 
+
 # **FUNÇÃO DO MODELO.HTML**
 # **FUNÇÃO DO LIKE**
-
-@login_required
+@login_required  
+# Garante que apenas usuários autenticados possam acessar esta view.
 def atualizar_like(request, slug):
-    if request.method == 'POST':
-        noticia = get_object_or_404(Noticias, slug=slug)
-        usuario = request.user
+    if request.method == 'POST':  
+        # Verifica se a requisição é do tipo POST, pois apenas este tipo de requisição é permitido para esta ação.
+        noticia = get_object_or_404(Noticias, slug=slug)  
+            # Obtém a instância de 'Noticias' com base no slug ou retorna um erro 404 se não encontrado.
+        usuario = request.user  
+            # Obtém o usuário autenticado que fez a requisição.
 
+        # Tenta recuperar uma interação do usuário com a notícia ou cria uma nova se não existir.
         interacao, created = InteracaoUsuario.objects.get_or_create(
             noticia=noticia,
             usuario=usuario
         )
-        interacao.like = not interacao.like
-        interacao.save()
+        interacao.like = not interacao.like  
+            # Inverte o estado do like: se era True passa para False, e vice-versa.
+        interacao.save()  
+            # Salva a interação no banco de dados.
 
+        # Atualiza a contagem de likes da notícia com base nas interações de usuários onde 'like=True'.
         noticia.like_count = InteracaoUsuario.objects.filter(noticia=noticia, like=True).count()
-        noticia.save()
+        noticia.save()  
+            # Salva a contagem de likes atualizada na instância da notícia.
 
+        # Retorna uma resposta JSON contendo a nova contagem de likes e o estado atual do like do usuário.
         return JsonResponse({
             'like_count': noticia.like_count,
             'liked': interacao.like
         })
-    return JsonResponse({'error': 'Método inválido'}, status=400)
+    return JsonResponse({'error': 'Método inválido'}, status=400)  
+        # Retorna um erro JSON se a requisição não for do tipo POST.
+
+
+
 
 
 
 # **FUNÇÃO DO MODELO.HTML**
 # **FUNÇÃO DO COMENTÁRIO**
 @login_required
+# Decorador que exige que o usuário esteja autenticado para acessar esta função.
 def adicionar_comentario(request, slug):
+    # Função para adicionar um comentário a uma notícia específica.
+
     if request.method == 'POST':
+        # Verifica se a requisição recebida é do tipo POST.
+
         noticia = get_object_or_404(Noticias, slug=slug)
+            # Busca a notícia no banco de dados com base no slug fornecido.
+            # Retorna um erro 404 se a notícia não for encontrada.
 
         try:
             data = json.loads(request.body)
+                # Tenta carregar os dados enviados no corpo da requisição como JSON.
+
             comentario_texto = data.get('comentario')
+                # Obtém o texto do comentário enviado pelo cliente.
+
         except json.JSONDecodeError:
+            # Captura erros de decodificação JSON, caso os dados enviados estejam em um formato inválido.
+
             return JsonResponse({'success': False, 'error': 'Dados inválidos enviados.'}, status=400)
+                # Retorna uma resposta JSON indicando que houve erro no envio dos dados.
 
         if comentario_texto:
+            # Verifica se o texto do comentário não está vazio.
+
             comentario = Comentario.objects.create(
                 usuario=request.user,
+                    # Associa o comentário ao usuário atualmente logado.
+
                 noticia=noticia,
+                    # Relaciona o comentário à notícia específica.
+
                 comentario=comentario_texto
+                    # Salva o texto do comentário.
             )
+
             return JsonResponse({
                 'success': True,
+                    # Indica que o comentário foi salvo com sucesso.
                 'username': request.user.username,
+                    # Retorna o nome de usuário do autor do comentário.
                 'comment': comentario.comentario,
+                    # Retorna o texto do comentário.
                 'foto': request.user.foto.url if request.user.foto else '/static/images/default-avatar.png'
+                    # Retorna o caminho para a foto do usuário, ou uma imagem padrão caso o usuário não tenha uma foto.
             })
 
         return JsonResponse({'success': False, 'error': 'Comentário vazio.'}, status=400)
-
+        # Retorna um erro JSON caso o campo de comentário esteja vazio.
     return JsonResponse({'success': False, 'error': 'Método inválido.'}, status=400)
+    # Retorna um erro JSON caso a requisição não seja do tipo POST.
+
 
 
 
 
 # **FUNÇÃO DO MODELO_CATEGORIA.HTML**
-# **FUNÇÃO DOS PRÓXIMOS JOGOS DA CATEGORIA EXPECIFICA**
+# **FUNÇÃO DOS PRÓXIMOS JOGOS DA CATEGORIA ESPECÍFICA**
 def buscar_proximos_jogos(time_id):
     # Define a URL da API para buscar os próximos jogos de um time específico.
     api_url = f"https://api.futebol.com/v1/fixtures?team_id={time_id}&status=scheduled"
@@ -305,6 +347,7 @@ def buscar_proximos_jogos(time_id):
         return response.json()  # Retorna os dados JSON com os próximos jogos.
     else:
         return []  # Retorna uma lista vazia em caso de erro.
+
 
 
 

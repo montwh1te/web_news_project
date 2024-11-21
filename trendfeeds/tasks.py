@@ -318,34 +318,55 @@ def coletar_noticias():
                     #o time_id permanece none se ele nao conseguir associar
 
 
-                # Quebra o título em palavras para preservar a ordem
                 palavras_titulo = titulo_sem_pontuacao.lower().split()
+                    # Quebra o título em palavras para preservar a ordem
+
 
                 # Itera sobre as palavras do título, priorizando a ordem natural do texto
                 for palavra in palavras_titulo:
                     for clube, dados in times.items():
-                        if palavra in dados[:-1]:  # Verifica se a palavra é um apelido do time
-                            if not categorias_encontradas:  # Se nenhuma categoria foi registrada
+                        if palavra in dados[:-1]:  
+                            # Verifica se a palavra é um apelido do time
+                            if not categorias_encontradas:  
+                                # Se nenhuma categoria foi registrada
                                 categorias_encontradas.append(clube)
-                                time_id = dados[-1]  # Atribui o ID do time correspondente
-                                break  # Para de buscar após encontrar o primeiro time
-                    if categorias_encontradas:  # Se já encontrou uma categoria, para de iterar
+                                time_id = dados[-1]  
+                                    # Atribui o ID do time correspondente
+                                break  
+                            # Para de buscar após encontrar o primeiro time
+                    if categorias_encontradas:  
+                        # Se já encontrou uma categoria, para de iterar
                         break
 
                 print(Fore.BLUE + f"🔍 Categoria escolhida: {categorias_encontradas[0] if categorias_encontradas else 'Nenhuma'}", '\n')
 
 
 
-                if len(categorias_encontradas) == 0:
-                    print(Fore.YELLOW + "⚠️ Não foi possível relacionar nenhuma categoria!", '\n')
-                    categoria, _ = Categoria.objects.get_or_create(nome_categoria='outros')
-                    CategoriaNoticias.objects.get_or_create(noticia=noticia_modelo, categoria=categoria)
-                else:
-                    if categorias_encontradas:
-                        for nome_categoria in categorias_encontradas:
-                            categoria, _ = Categoria.objects.get_or_create(nome_categoria=nome_categoria)
-                            CategoriaNoticias.objects.get_or_create(noticia=noticia_modelo, categoria=categoria)
-                    print(Fore.GREEN + f"Notícia '{titulo_truncado}' associada com a categoria '{categoria.nome_categoria}'.", '\n')
+                if len(categorias_encontradas) == 0:  
+                    # Verifica se nenhuma categoria foi encontrada no título da notícia.
+
+                    print(Fore.YELLOW + "⚠️ Não foi possível relacionar nenhuma categoria!", '\n')  
+                        # Exibe uma mensagem de aviso no console informando que nenhuma categoria foi associada.
+
+                    categoria, _ = Categoria.objects.get_or_create(nome_categoria='outros')  
+                        # Busca ou cria uma categoria padrão chamada 'outros' no banco de dados.
+                    CategoriaNoticias.objects.get_or_create(noticia=noticia_modelo, categoria=categoria)  
+                        # Cria uma associação entre a notícia e a categoria 'outros'.
+
+                else:  
+                    # Se ao menos uma categoria foi encontrada:
+
+                    if categorias_encontradas:  
+                        # Verifica novamente se há categorias encontradas (redundante neste caso, mas usado por segurança).
+                        for nome_categoria in categorias_encontradas:  
+                                # Itera sobre todas as categorias encontradas no título da notícia.
+                            categoria, _ = Categoria.objects.get_or_create(nome_categoria=nome_categoria)  
+                                # Busca ou cria cada categoria encontrada no banco de dados.
+
+                            CategoriaNoticias.objects.get_or_create(noticia=noticia_modelo, categoria=categoria)  
+                                # Associa a notícia à categoria encontrada.
+                    print(Fore.GREEN + f"Notícia '{titulo_truncado}' associada com a categoria '{categoria.nome_categoria}'.", '\n')  
+                        # Exibe uma mensagem no console informando que a notícia foi associada com sucesso a uma ou mais categorias.
             except Exception as e:
                 print(Fore.YELLOW + "⚠️ Não foi possível relacionar nenhuma categoria!", '\n')
                 
@@ -792,28 +813,54 @@ def __criar_html_com_paragrafos(paragrafos):
 
 
 def __adicionar_imagens(text, image_names, noticia_id):
-    lines = text.split('\n')
-        # Divide o texto em linhas.
+    # Função para adicionar tags de imagem ao texto, vinculando imagens às descrições no texto.
+    # text: o texto original onde as imagens serão adicionadas.
+    # image_names: lista de nomes das imagens disponíveis.
+    # noticia_id: ID único da notícia, usado para criar o caminho das imagens.
 
+    lines = text.split('\n')
+        # Divide o texto em linhas com base nos quebras de linha (`\n`), criando uma lista de strings.
+        # Isso facilita a identificação de partes específicas do texto onde as imagens devem ser inseridas.
 
     new_text = []
-    image_index = 0
+        # Inicializa uma lista vazia para armazenar as novas linhas do texto com as tags de imagem adicionadas.
 
+    image_index = 0
+        # Índice para rastrear qual imagem da lista `image_names` está sendo adicionada ao texto.
 
     for line in lines:
+        # Itera sobre cada linha do texto original.
+
         if "Foto:" in line and image_index < len(image_names):
-                # Adiciona a imagem correspondente ao texto com "Foto:".
+                # Verifica se a linha contém a palavra "Foto:" e se ainda há imagens disponíveis para adicionar.
+                # Garante que não tentará acessar uma imagem fora do índice da lista `image_names`.
+
             img_tag = f'<div class="div-imagem"><img class="noticia-imagem" src="{{% get_media_prefix %}}noticias/n_{noticia_id}_{image_index}.jpg"></div>'
+                # Cria a tag HTML para a imagem, incluindo uma classe CSS para estilização.
+                # Usa o ID da notícia (`noticia_id`) e o índice da imagem (`image_index`) para criar um caminho único para cada imagem.
+
             new_line = f"{img_tag}<p class='foto-descricao'>{line}</p>"
+                # Cria uma nova linha combinando a tag da imagem com a descrição existente no texto original.
+
             new_text.append(new_line)
+                # Adiciona a nova linha (imagem + descrição) à lista `new_text`.
+
             image_index += 1
+                # Incrementa o índice para usar a próxima imagem na lista `image_names`.
+
         else:
             new_text.append(line)
-
+                # Se a linha não contiver "Foto:" ou não houver mais imagens, adiciona a linha original ao `new_text`.
 
     final_text = '\n'.join(new_text)
+        # Combina todas as linhas da lista `new_text` em uma única string, separadas por quebras de linha (`\n`).
+
     print(f"✅ {image_index} imagens adicionadas ao texto.")
+        # Exibe no console o número de imagens que foram efetivamente adicionadas ao texto.
+
     return final_text
+        # Retorna o texto final com as tags de imagem adicionadas.
+
 
 
 

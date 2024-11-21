@@ -232,6 +232,12 @@ svg:hover {
   margin-left: 10px; /* Ajuste adicional para espaçamento */
 }
 
+#likeCount1 {
+  font-size: 1.2rem;
+  color: #333;
+  margin-left: 10px; 
+}
+
 input{
   display: none;
 }
