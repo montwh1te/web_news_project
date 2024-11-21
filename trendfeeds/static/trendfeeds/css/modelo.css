@@ -1,7 +1,177 @@
 body {
   background-color: #f8f9fa;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  transition: 0.4s;
 }
+
+
+
+
+
+
+body.dark-mode{
+  background-color: #1a1a1a;
+}
+
+body.dark-mode .navbar-custom{
+  box-shadow: 0px 1px 0px 0px rgba(255, 255, 255, 0.222);
+}
+body.dark-mode .navbar-custom .nome-site{
+  color: #d2d2d2 !important; /* Cor do texto dos links da navbar no modo escuro */
+}
+
+
+body.dark-mode .navbar-custom .nav-link {
+  color: #d2d2d2 !important; /* Cor do texto dos links da navbar no modo escuro */
+}
+
+body.dark-mode .navbar-custom .nav-link:hover {
+  color: #969696 !important; /* Cor do texto dos links da navbar no modo escuro */
+}
+
+
+
+
+
+
+body.dark-mode  #search-results{
+  background-color: #000000;
+  color: #d2d2d2;
+}
+
+body.dark-mode  .search-result-item:hover{
+  background-color: #1a1a1a;
+  color: #d2d2d2;
+}
+/* Modo escuro */
+body.dark-mode::-webkit-scrollbar-track {
+  background: #333; /* cor mais escura para o modo escuro */
+}
+
+body.dark-mode::-webkit-scrollbar-thumb {
+  background: #777; /* cor da barra de rolagem no modo escuro */
+}
+
+body.dark-mode .noticia-titulo {
+  color: #d2d2d2;
+}
+
+body.dark-mode .noticia-conteudo {
+  color: #d2d2d2;
+}
+
+body.dark-mode p{
+  color: #d2d2d2;
+}
+
+body.dark-mode .comentarios-container{
+  background-color: #171717;
+}
+body.dark-mode  .border {
+  border: 1px solid #1e1e1e !important;
+}
+
+body.dark-mode .form-control:disabled, .form-control[readonly] {
+  background-color: #17191a;
+  opacity: 1;
+}
+
+body.dark-mode .form-control {
+  color: #d2d2d2;
+  background-color: #171717;
+  border: 1px solid #000000;
+
+}
+body.dark-mode button{
+  background-color: #171717;
+  color: #d2d2d2;
+}
+
+body.dark-mode .card {
+  position: relative;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #000000;
+  background-clip: border-box;
+   border: 0px ;
+  border-radius: .25rem;
+}
+body.dark-mode .card-title{
+  color: #d2d2d2;
+}
+
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* cor escura quando passa o mouse no modo escuro */
+}
+/* Barra de rolagem padrão */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Cor de fundo da barra de rolagem */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* cor clara para o modo claro */
+}
+
+/* Cor da barra de rolagem */
+::-webkit-scrollbar-thumb {
+  background: #888; /* cor padrão da barra de rolagem */
+}
+
+/* Cor quando o usuário passa o mouse sobre a barra de rolagem */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* cor escura quando passa o mouse */
+}
+
+
+#dark-mode-toggle {
+  all: unset; /* Remove todas as estilizações padrão */
+  background: none; /* Remove o fundo */
+  border: none; /* Remove a borda */
+  padding: 0; /* Remove o padding */
+  text-align: left; /* Garante que o texto fique alinhado à esquerda */
+  font-family: inherit; /* Usa a fonte padrão do documento */
+  font-size: inherit; /* Usa o tamanho de fonte padrão */
+  color: inherit; /* Usa a cor do texto padrão */
+}
+
+
+button{
+  margin-right: 10%;
+  background-color: #dddddd;
+  height: 5%;
+  margin-top: 5%;
+  display: flex;
+  margin-left: 2%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 .navbar-custom {
   padding: 15px 20px;
@@ -15,8 +185,8 @@ body {
 
 .hero h1 {
   font-size: 2rem;
-  /* font-weight: bold; */
 }
+
 .noticia-titulo {
   font-size: 3rem;
   font-weight: bold;
@@ -114,7 +284,6 @@ footer p {
     0,
     0.5
   ); /* Fundo semitransparente para melhor visibilidade */
-  /* Torna o ícone arredondado */
   width: 50px; /* Tamanho personalizado */
   height: 50px; /* Tamanho personalizado */
 }
@@ -141,10 +310,10 @@ footer p {
 }
 
 .comentarios-container {
-  max-width: 800px;
+  max-width: 100%;
   margin: auto;
-  padding: 20px;
-  background-color: #f9f9f9;
+  padding: 25px;
+  background-color: #f3f3f3;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
@@ -162,66 +331,217 @@ footer p {
   object-fit: cover;
 }
 
-.Btn {
-  width: 140px;
-  height: 35px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  border: none;
-  border-radius: 5px;
-  overflow: hidden;
-  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.089);
-  cursor: pointer;
-  background-color: transparent;
+.card-title {
+  color: #333;
+  text-decoration: none;
 }
 
-.leftContainer {
-  width: 60%;
-  height: 100%;
-  background-color: #0060ff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
+.card-text {
+  color: #333;
+  text-decoration: none;
 }
 
-.leftContainer .like {
-  color: white;
+a:hover {
+  text-decoration: none;
+}
+
+.comentarios {
+  font-size: 2.1vw;
+  color: #333;
   font-weight: 600;
 }
 
-.likeCount {
-  width: 40%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #0060ff;
+.mais_noticias {
+  font-size: 2.1vw;
+  color: #333;
   font-weight: 600;
+}
+
+
+
+
+
+
+/* Mantém o estilo do botão de like */
+.like {
+  display: inline-block;
   position: relative;
-  background-color: white;
+  cursor: pointer;
+  user-select: none;
+  margin-right: 10px; /* Espaço entre o botão e o contador */
 }
 
-.likeCount::before {
-  height: 8px;
-  width: 8px;
+.like input {
   position: absolute;
-  content: "";
-  background-color: rgb(255, 255, 255);
-  transform: rotate(45deg);
-  left: -4px;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
 }
 
-.Btn:hover .leftContainer {
-  background-color: #1d4292;
+svg {
+  position: relative;
+  height: 35px;
+  width: 35px;
+  transition: all 0.3s;
+  fill: #e7e7e7;
+  ; /* Cor padrão */
 }
 
-.Btn:active .leftContainer {
-  background-color: #072b7a;
+svg:hover {
+  transform: scale(1.1) rotate(-10deg); /* Efeito de hover */
 }
 
-.Btn:active .leftContainer svg {
-  transform: scale(1.15);
-  transform-origin: top;
+.container input:checked ~ svg {
+  fill: #2196F3; /* Cor ao curtir */
+}
+
+#likeCount {
+  font-size: 1.2rem;
+  color: #333;
+  margin-left: 10px; /* Ajuste adicional para espaçamento */
+}
+
+#likeCount1 {
+  font-size: 1.2rem;
+  color: #333;
+  margin-left: 10px; 
+}
+
+input{
+  display: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* From Uiverse.io by vinodjangid07 */ 
+.social-card {
+  height: fit-content;
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  background: rgb(255, 255, 255);
+  padding: 20px 25px;
+  border-radius: 14px;
+}
+.Btn {
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background-color: transparent;
+  position: relative;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.svgContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  backdrop-filter: blur(0px);
+  letter-spacing: 0.8px;
+  border-radius: 10px;
+  transition: all 0.3s;
+  border: 1px solid rgba(156, 156, 156, 0.466);
+  z-index: 2;
+}
+
+.BG {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #181818;
+  z-index: 1;
+  border-radius: 10px;
+  pointer-events: none;
+  transition: all 0.3s;
+  font-size: 0px;
+}
+.github .BG {
+  background: #181818;
+}
+.linkdin .BG {
+  background: #0077b5;
+}
+.whatsapp .BG {
+  background: #075e54;
+}
+.discord .BG {
+  background: #7289da;
+}
+.Btn:hover .BG {
+  transform: scale(1.5);
+  /* transform-origin: bottom; */
+  font-size: 20px;
+  color: white;
+}
+
+.Btn:hover .svgContainer {
+  border: 1px solid rgb(216, 216, 216);
+  background-color: rgb(209, 209, 209);
+  backdrop-filter: blur(4px);
+}
+
+
+.social-icons a {
+  text-decoration: none;
+  transition: transform 0.3s ease;
+}
+
+.social-icons a:hover {
+  transform: scale(1.2);
+}
+
+.social-icons i {
+  margin: 0 10px;
+}
+
+.fab{
+  color: #e7e7e7;
+}
+
+
+.social-icons a:hover .fa-whatsapp {
+  color: #25D366; /* Altera a cor do ícone do WhatsApp ao passar o mouse sobre o link. */
+}
+
+.social-icons a:hover .fa-instagram {
+  color: #C13584; /* Altera a cor do ícone do Instagram ao passar o mouse sobre o link. */
+}
+
+.social-icons a:hover .fa-facebook {
+  color: #1877F2; /* Altera a cor do ícone do Facebook ao passar o mouse sobre o link. */
+}
+
+.social-icons a:hover .fa-twitter {
+  color: #1DA1F2; /* Altera a cor do ícone do Twitter ao passar o mouse sobre o link. */
+}
+
+a{
+  color: #333;
+}
+
+.navbar-custom .nav-link:hover{
+  color: #424242;
 }

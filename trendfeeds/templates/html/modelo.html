@@ -1,247 +1,463 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+    <!-- Define o tipo de documento e a linguagem -->
     <meta charset="UTF-8">
+        <!-- Define a codificação de caracteres como UTF-8 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Configura o site para ser responsivo em dispositivos móveis -->
     <title>{% block title %}{{ categoria_nome|default:"Notícia" }} - {{ noticia.titulo }}{% endblock title %}</title>
+        <!-- Define o título da página, usando variáveis do Django template -->
     {% load static %}
-
+        <!-- Carrega a tag estática para gerenciar arquivos estáticos -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <!-- Link para os estilos do Bootstrap -->
     <link rel="stylesheet" href="/static/trendfeeds/css/modelo.css">
+        <!-- Link para o arquivo CSS personalizado -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
     <style>
         :root {
             --categoria-color: {% block cor_categoria %}#007bff{% endblock cor_categoria %};
+
+
+            /* Define uma variável CSS para a cor da categoria */
         }
         
         .categoria-badge {
             {% if categoria_nome|lower == 'outros' %}
                 background-color: transparent !important;
-                display: nonel !important;
+                display: none !important;
+
+
+                /* Esconde o badge para a categoria "outros" */
             {% else %}
                 background-color: var(--categoria-color);
+
+
+                /* Define a cor do badge baseada na categoria */
             {% endif %}
         }
-        
     </style>
-    
 </head>
 
+
 <body>
-    
+    <!-- INÍCIO DO CORPO DO DOCUMENTO -->
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-custom d-flex justify-content-sm-around">
-            <!-- Esquerda: Nome do site e dropdown dos times -->
+        <nav class="navbar navbar-expand-lg navbar-custom d-flex justify-content-sm-around">
+            <!-- Criação do menu de navegação com classes do Bootstrap -->
+
+
+            <!-- EQUERDA: NOME DO SITE -->
             <div class="d-flex align-items-center">
                 <a class="navbar-brand p-2 nome-site" href="#">site noticias</a>
+                    <!-- Link para a página inicial com o nome do site -->
             </div>
 
-            <!-- Centro: Itens do menu -->
+
+
+
+            <!-- CENTRO: ITENS DO MENU -->
             <div class="d-flex justify-content-center" id="navbarNav">
                 <ul class="navbar-nav">
+                        <!-- Criação da lista de navegação -->
                     <li class="nav-item"><a class="nav-link" href="#">Início</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Sobre</a></li>
+                        <!-- Link para a página inicial -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"> 
+                            <button id="dark-mode-toggle">Claro</button>
+                        </a>
+                    </li>
                     <li class="nav-item"><a class="nav-link" href="#">Serviços</a></li>
+                        <!-- Link para a página de serviços -->
                     <li class="nav-item"><a class="nav-link" href="#">Contato</a></li>
+                        <!-- Link para a página de contato -->
                 </ul>
             </div>
 
-          
+
+
 
             <!-- Direita: Foto do usuário com dropdown -->
             <div class="dropdown">
-            {% if request.user.is_authenticated %}
-                    <!-- Ícone ou foto do usuário, que ao ser clicado abre o dropdown -->
-                    <a class="nav-link dropdown-toggle" href="#" role="button" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        {% if request.user.foto %}
-                            <img src="{{ request.user.foto.url }}" alt="Foto de {{ request.user.username }}" class="rounded-circle" style="width: 40px; height: 40px;">
-                        {% else %}
-                            <img src="{% get_media_prefix %}login.png" alt="Foto de {{ request.user.username }}" class="rounded-circle" style="width: 40px; height: 40px;">
-                        {% endif %}
+                {% if request.user.is_authenticated %}
+                        <!-- Verifica se o usuário está autenticado -->
+                    <a class="nav-link dropdown-toggle" href="#" role="button" id="userDropdown" 
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                    data-foto="{% if request.user.foto %}{{ request.user.foto.url }}{% else %}{% static 'images/default-avatar.png' %}{% endif %}">
+                            <!-- Adiciona a foto ou ícone do usuário -->
+                        <img src="{% if request.user.foto %}{{ request.user.foto.url }}{% else %}{% static 'images/default-avatar.png' %}{% endif %}" 
+                            alt="Foto de {{ request.user.username }}" 
+                            class="rounded-circle" style="width: 40px; height: 40px;">
                     </a>
-
-                    <!-- Conteúdo do dropdown -->
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                            <!-- Dropdown com links para perfil e logout -->
                         <a href="{% url 'info_perfil' perfil_id=request.user.id %}"><span class="dropdown-item-text">{{ request.user.username }}</span></a>
                         <a class="dropdown-item text-danger" href="{% url 'logout' %}">Sair</a>
                     </div>
+                {% else %}
+                        <!-- Exibe opções de login e registro se o usuário não estiver autenticado -->
+                    <div class="row d-flex flex-wrap justify-content-center">
+                        <a class="nav-link text-dark" href="{% url 'login' %}">Login</a>
+                        <a class="nav-link text-dark" href="{% url 'registro' %}">Registro</a>
+                    </div>
+                {% endif %}
             </div>
-            {% else %}
-                <!-- Mostrar o botão de login e registro caso o usuário não esteja autenticado -->
-                 <div class="row d-flex flex-wrap justify-content-center">
-                    <a class="nav-link text-dark" href="{% url 'login' %}">Login</a>
-                    <a class="nav-link text-dark" href="{% url 'registro' %}">Registro</a>
-                 </div>
-              
-            {% endif %}
-
-
         </nav>
     </header>
 
-    <!-- Hero Section -->
+
+
+
+    <!-- HERO SECTION -->
     <section class="categoria-badge hero text-white text-center py-1 {% if categoria_nome|lower == 'outros' %}d-none{% endif %}">
+            <!-- Define uma seção de destaque baseada na categoria -->
         <h1 class="display-4">{% block main_title %}{{ categoria_nome|default:"Notícia" }}{% endblock main_title %}</h1>
     </section>
+    
+   
 
-    <main class="container mt-4">
-        <article class="noticia-detalhada" style=" margin-left: 10%; margin-right: 10%;">
-            <div class="rowA">
-                <div class="col-lg-12">
+
+    <!-- ÁREA PRINCIPAL -->
+    <main class="container mt-4"> 
+            <!-- Container principal para o artigo -->
+        <article class="noticia-detalhada" style="margin-left: 10%; margin-right: 10%;"> 
+                <!-- Container do artigo com margens laterais -->
+            <div class="rowA"> 
+                <!-- Linha de layout flexível para o conteúdo -->
+                <div class="col-lg-12" style="margin-bottom: 5%;">
+                    <!-- Coluna única para telas grandes, com margem inferior -->
+
+
+
+
+                    <!-- TÍTULO DA NOTÍCIA -->
                     <h2 class="noticia-titulo">{% block second_title %}{% endblock second_title %}</h2>
+                        <!-- Título do artigo, injetado dinamicamente usando o bloco `second_title` -->
+
+
+
+
+                    <!-- CONTEÚDO PRINCIPAL DA NOTÍCIA -->
                     <div class="noticia-conteudo">
                         {% block main_content %}{% endblock main_content %}
+                            <!-- Conteúdo principal do artigo, injetado pelo bloco `main_content` -->
+                    </div>
+
+
+
+
+                    <!-- FORMULÁRIO DE LIKES -->
+                    <!-- Botão de Like Estilizado -->
+                    {% if request.user.is_authenticated %}
+                        <form id="likeForm" method="post" action="{% url 'atualizar_like' noticia.slug %}" class="d-flex align-items-center">
+                            {% csrf_token %}
+                            <label class="container like d-flex align-items-center">
+                                <input type="checkbox" id="likeCheckbox" data-url="{% url 'atualizar_like' noticia.slug %}" {% if usuario_curtiu %}checked{% endif %}>
+                                <svg id="Glyph" version="1.1" viewBox="0 0 32 32" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M29.845,17.099l-2.489,8.725C26.989,27.105,25.804,28,24.473,28H11c-0.553,0-1-0.448-1-1V13  c0-0.215,0.069-0.425,0.198-0.597l5.392-7.24C16.188,4.414,17.05,4,17.974,4C19.643,4,21,5.357,21,7.026V12h5.002  c1.265,0,2.427,0.579,3.188,1.589C29.954,14.601,30.192,15.88,29.845,17.099z" id="XMLID_254_"></path><path d="M7,12H3c-0.553,0-1,0.448-1,1v14c0,0.552,0.447,1,1,1h4c0.553,0,1-0.448,1-1V13C8,12.448,7.553,12,7,12z   M5,25.5c-0.828,0-1.5-0.672-1.5-1.5c0-0.828,0.672-1.5,1.5-1.5c0.828,0,1.5,0.672,1.5,1.5C6.5,24.828,5.828,25.5,5,25.5z" id="XMLID_256_"></path></svg>
+                            </label>
+                            <span id="likeCount" class="ml-2" style="font-size: 1.0rem;margin-right: 90%;">{{ noticia.like_count }}</span>
+                        </form>
+                    {% else %}
+                        <p>Faça login para curtir esta notícia.</p>
+                        <svg id="Glyph" version="1.1" viewBox="0 0 32 32" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M29.845,17.099l-2.489,8.725C26.989,27.105,25.804,28,24.473,28H11c-0.553,0-1-0.448-1-1V13  c0-0.215,0.069-0.425,0.198-0.597l5.392-7.24C16.188,4.414,17.05,4,17.974,4C19.643,4,21,5.357,21,7.026V12h5.002  c1.265,0,2.427,0.579,3.188,1.589C29.954,14.601,30.192,15.88,29.845,17.099z" id="XMLID_254_"></path><path d="M7,12H3c-0.553,0-1,0.448-1,1v14c0,0.552,0.447,1,1,1h4c0.553,0,1-0.448,1-1V13C8,12.448,7.553,12,7,12z   M5,25.5c-0.828,0-1.5-0.672-1.5-1.5c0-0.828,0.672-1.5,1.5-1.5c0.828,0,1.5,0.672,1.5,1.5C6.5,24.828,5.828,25.5,5,25.5z" id="XMLID_256_"></path></svg>
+                        <span id="likeCount1" class="ml-2" style="font-size: 1.0rem;margin-right: 90%;">{{ noticia.like_count }}</
+                    {% endif %}
+
+
+
+
+                      <!-- Ícones de Redes Sociais -->
+                    <div class="social-icons ml-4 d-flex align-items-center" style="margin-left: 70% !important;margin-top: -4%;">
+                        <!-- WhatsApp -->
+                        <a href="https://wa.me/555191801651" target="_blank" class="mx-2">
+                            <i class="fab fa-whatsapp" style="font-size: 1.5rem; transition: 0.4s;"></i>
+                        </a>
+                        <!-- Instagram -->
+                        <a href="https://www.instagram.com/bruno.diferente___/" target="_blank" class="mx-2">
+                            <i class="fab fa-instagram" style="font-size: 1.5rem; transition: 0.4s;"></i>
+                        </a>
+                        <!-- Facebook -->
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" target="_blank" class="mx-2">
+                            <i class="fab fa-facebook" style="font-size: 1.5rem; transition: 0.4s;"></i>
+                        </a>
+                        <!-- Twitter -->
+                        <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}" target="_blank" class="mx-2">
+                            <i class="fab fa-twitter" style="font-size: 1.5rem; transition: 0.4s;"></i>
+                        </a>
                     </div>
                 </div>
 
 
-                <form id="likeForm" method="post" action="{% url 'atualizar_like' noticia.slug %}">
-                    {% csrf_token %}
-                    <button type="button" id="likeButton" class="Btn" data-url="{% url 'atualizar_like' noticia.slug %}">
-                        <span class="leftContainer">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512" fill="#fff">
-                                <path d="M313.4 32.9c26 5.2 42.9 30.5 37.7 56.5l-2.3 11.4c-5.3 26.7-15.1 52.1-28.8 75.2H464c26.5 0 48 21.5 48 48c0 18.5-10.5 34.6-25.9 42.6C497 275.4 504 288.9 504 304c0 23.4-16.8 42.9-38.9 47.1c4.4 7.3 6.9 15.8 6.9 24.9c0 21.3-13.9 39.4-33.1 45.6c.7 3.3 1.1 6.8 1.1 10.4c0 26.5-21.5 48-48 48H294.5c-19 0-37.5-5.6-53.3-16.1l-38.5-25.7C176 420.4 160 390.4 160 358.3V320 272 247.1c0-29.2 13.3-56.7 36-75l7.4-5.9c26.5-21.2 44.6-51 51.2-84.2l2.3-11.4c5.2-26 30.5-42.9 56.5-37.7zM32 192H96c17.7 0 32 14.3 32 32V448c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32V224c0-17.7 14.3-32 32-32z"></path>
-                            </svg>
-                            <span id="likeText">{% if usuario_curtiu %}Descurtir{% else %}Curtir{% endif %}</span>
-                        </span>
-                        <span id="likeCount">{{ noticia.like_count }}</span>
-                    </button>
-                </form>
                 
-                
-                
-                <div class="comentarios-container container mt-4">
-                    {% for interacao in comentarios %}
+
+                <!-- SEÇÃO DE COMENTÁRIOS -->
+                <p class="comentarios" style="margin-top: 10%;">COMENTÁRIOS</p>
+
+                <div id="comentariosContainer" class="comentarios-container container mt-4">
+                    {% if comentarios %}
+                        <!-- Exibe os comentários -->
+                        {% for comentario in comentarios %}
                         <div class="row align-items-center mb-4 p-3 shadow-sm rounded border bg-light">
-                            <!-- Foto do usuário -->
                             <div class="col-2 text-center">
-                                {% if interacao.usuario.foto %}
-                                    <img src="{{ interacao.usuario.foto.url }}" 
-                                         alt="Foto de {{ interacao.usuario }}" 
-                                         class="rounded-circle img-fluid" 
-                                         style="max-width: 80px; height: auto;">
+                                {% if comentario.usuario.foto %}
+                                <img class="usuario_foto" src="{{ comentario.usuario.foto.url }}" 
+                                    alt="Foto de {{ comentario.usuario.username }}" 
+                                    class="rounded-circle img-fluid" 
+                                    style="max-width: 80px; height: auto;">
                                 {% else %}
-                                    <img src="{% static 'images/default-avatar.png' %}" 
-                                         alt="Foto padrão" 
-                                         class="rounded-circle img-fluid" 
-                                         style="max-width: 80px; height: auto;">
+                                <img src="{% static 'images/default-avatar.png' %}" 
+                                    alt="Foto padrão" 
+                                    class="rounded-circle img-fluid" 
+                                    style="max-width: 80px; height: auto;">
                                 {% endif %}
                             </div>
-                            <!-- Nome e Interação -->
                             <div class="col-10">
-                                <h5 class="mb-1">{{ interacao.usuario.username }}</h5>
-                                {% if interacao.comentario %}
-                                    <p class="mb-0 text-muted">{{ interacao.comentario }}</p>
-                                {% endif %}
+                                <h5 class="mb-1">{{ comentario.usuario.username }}</h5>
+                                <p class="mb-0 text-muted">{{ comentario.comentario }}</p>
                             </div>
                         </div>
-                    {% empty %}
-                        <p class="text-center text-muted">Nenhuma interação ainda. Seja o primeiro a participar!</p>
-                    {% endfor %}
-                </div>
-                
-
-
-                <div class="noticiasInteracao">
-                        <form method="POST" action="{% url 'adicionar_comentario' noticia.id %}">
-                            {% csrf_token %}
-                            <div class="form-group">
-                                <textarea 
-                                    name="comentario" 
-                                    id="comentarios" 
-                                    rows="5" 
-                                    class="form-control" 
-                                    placeholder="Escreva seu comentário aqui..." 
-                                    required
-                                    style="resize: none;">
-                                </textarea>
+                        {% endfor %}
+                    {% else %}
+                        <!-- Condição para mensagens sem comentários -->
+                        {% if request.user.is_authenticated %}
+                            <div class="row align-items-center mb-4 p-3 shadow-sm rounded border">
+                                <div class="col-10">
+                                    <p class="mb-0 text-muted">Seja o primeiro a comentar!</p>
+                                </div>
                             </div>
-                            <button type="submit" class="btn btn-primary mt-2">Enviar Comentário</button>
-                    </form>
+                        {% else %}
+                            <div class="row align-items-center mb-4 p-3 shadow-sm rounded border">
+                                <div class="col-10">
+                                    <p class="mb-0 text-muted">Faça login para ser o primeiro a comentar!</p>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endif %}
                 </div>
-                
 
-                <div id="noticiasCarrossel" class="carousel slide" data-ride="carousel">
-                    <!-- Indicadores -->
+
+
+
+                <!-- FORMULÁRIO DE COMENTÁRIOS -->
+                {% if request.user.is_authenticated %}
+                    <div class="noticiasInteracao">
+                        <form id="commentForm" method="post" action="{% url 'adicionar_comentario' noticia.slug %}">
+                            {% csrf_token %}
+                            <!-- Token CSRF para proteger o formulário -->
+                            {{ form.as_p }}
+                            <!-- Exibe os campos do formulário de comentário -->
+                            <div class="d-flex flex-wrap mb-5">
+                                <!-- Contêiner flexível para o textarea e botão -->
+                                <textarea name="comentario" id="comentarioTextarea" rows="2" class="form-control" placeholder="Escreva seu comentário aqui..." required style="resize: none; border-radius: 20px; margin-top: 4%; width: 70%;"></textarea>
+                                <!-- Campo para o usuário escrever o comentário -->
+                                <button type="submit" class="btn">Enviar Comentário</button>
+                                <!-- Botão para enviar o comentário -->
+                            </div>
+                        </form>
+                    </div>
+                {% else %}
+                    <div class="d-flex flex-wrap mb-5">
+                        <!-- Contêiner flexível para o textarea e botão -->
+                        <textarea name="comentario" id="comentarioTextarea" rows="2" class="form-control" placeholder="Faça login para comentar..." disabled required style="resize: none; border-radius: 20px; margin-top: 4%; width: 70%; user-selecÇ none;"></textarea>
+                        <!-- Campo para o usuário escrever o comentário -->
+                        <button type="submit" class="btn" disabled>Enviar Comentário</button>
+                        <!-- Botão para enviar o comentário -->
+                    </div>
+                {% endif %}
+
+
+
+
+                <!-- NOTÍCIAS RELACIONADAS -->
+                <p class="mais_noticias" style="margin-top: 10%;">MAIS NOTÍCIAS</p>
+
+                <div id="noticiasCarrossel" class="carousel slide" data-ride="carousel" style="margin-top: 5%;">
+                        <!-- Carrossel de notícias -->
                     <ol class="carousel-indicators">
                         {% for grupo in noticias_agrupadas %}
                         <li data-target="#noticiasCarrossel" data-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %}></li>
+                            <!-- Indicadores para os grupos de notícias no carrossel -->
                         {% endfor %}
                     </ol>
-                
-                    <!-- Slides -->
+
                     <div class="carousel-inner">
+                            <!-- Contêiner para os itens do carrossel -->
                         {% for grupo in noticias_agrupadas %}
                         <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                <!-- Grupo de notícias no carrossel -->
                             <div class="row">
                                 {% for noticia in grupo %}
                                 <div class="col-12 col-md-4">
-                                    <div class="card border-light shadow-sm">
-                                        <img src="{% get_media_prefix %}/thumbs/thumb_n_{{ noticia.id }}.jpg" 
-                                             class="card-img-top noticia-imagem" 
-                                             alt="Imagem da notícia">
-                                        <div class="card-body">
-                                            <h5 class="card-title">{{ noticia.descricao }}</h5>
-                                            <p class="card-text">{{ noticia.descricao|slice:":150" }} ...</p>
+                                    <a class="link_noticia" href="{% url 'detalhes_noticia' noticia.slug %}">
+                                        <div class="card border-light shadow-sm">
+                                            <img src="{% get_media_prefix %}/thumbs/thumb_n_{{ noticia.id }}.jpg" 
+                                                class="card-img-top noticia-imagem" 
+                                                alt="Imagem da notícia">
+                                            <div class="card-body">
+                                                <h5 class="card-title">{{ noticia.descricao }}</h5>
+                                                <p class="card-text">{{ noticia.descricao|slice:":150" }} ...</p>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </a>
                                 </div>
                                 {% endfor %}
+                                    <!-- Fim do loop para exibir notícias no grupo -->
                             </div>
                         </div>
                         {% endfor %}
+                            <!-- Fim do loop para exibir os grupos no carrossel -->
                     </div>
-                
-                    <!-- Controles -->
-                    <a class="carousel-control-prev" href="#noticiasCarrossel" role="button" data-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Anterior</span>
-                    </a>
-                    <a class="carousel-control-next" href="#noticiasCarrossel" role="button" data-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Próximo</span>
-                    </a>
+
                 </div>
-                
-                
+            </div>
         </article>
-    </main>
+</main>
+
+
+
 
    
-    <footer class="text-center py-3 bg-light">
-        <p class="mb-0">© 2024 site noticias - Todos os direitos reservados.</p>
-    </footer>
+
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <!-- Importa a biblioteca jQuery na versão "slim", que é mais leve e suficiente para manipulação do DOM. -->
+    
+
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <!-- Importa o Popper.js, uma biblioteca usada para gerenciamento de popups, como tooltips ou dropdowns. -->
+    
+
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Importa o JavaScript do Bootstrap para habilitar interatividade nos componentes como carrossel, dropdowns, etc. -->
+    
+
+
+
     <script>
-        document.getElementById('likeButton').addEventListener('click', function(event) {
-            event.preventDefault(); // Evita o comportamento padrão do botão
-    
-            const url = this.dataset.url; // URL para enviar a requisição
-            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value; // CSRF token
-    
+        // PARA O BOTÃO DE LIKES
+        document.getElementById("likeCheckbox").addEventListener("change", function () {
+            const url = this.getAttribute("data-url"); // Obtém a URL do backend
+            const isChecked = this.checked; // Verifica se está curtido
+            const likeCount = document.getElementById("likeCount"); // Atualiza a contagem
+        
+            // Atualiza otimisticamente no frontend
+            likeCount.innerText = isChecked
+                ? parseInt(likeCount.innerText) + 1
+                : parseInt(likeCount.innerText) - 1;
+        
+            // Envia a requisição ao backend
             fetch(url, {
-                method: 'POST',
+                method: "POST",
                 headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': csrfToken
-                }
+                    "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value,
+                },
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    console.error('Erro ao alternar o like:', data.error);
-                } else {
-                    // Atualiza o contador de likes
-                    document.getElementById('likeCount').textContent = data.like_count;
-    
-                    // Atualiza o texto do botão
-                    document.getElementById('likeText').textContent = data.liked ? 'Descurtir' : 'Curtir';
-                }
-            })
-            .catch(error => console.error('Erro na requisição:', error));
+                .then((response) => response.json())
+                .then((data) => {
+                    likeCount.innerText = data.like_count; // Sincroniza com o backend
+                })
+                .catch((error) => {
+                    console.error("Erro ao atualizar o like:", error);
+                    this.checked = !isChecked; // Reverte o estado em caso de erro
+                    likeCount.innerText = isChecked
+                        ? parseInt(likeCount.innerText) - 1
+                        : parseInt(likeCount.innerText) + 1;
+                });
         });
+    
+
+
+
+        // PARA O FORMULÁRIO DE COMENTÁRIOS
+        document.getElementById("commentForm").addEventListener("submit", function (event) {
+            event.preventDefault(); // Evita o envio padrão do formulário
+        
+            const url = this.action;
+            const comentarioTextarea = document.getElementById("comentarioTextarea");
+            const comentarioTexto = comentarioTextarea.value.trim();
+        
+            if (comentarioTexto) {
+                // Envia o comentário ao servidor via fetch
+                fetch(url, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value,
+                    },
+                    body: JSON.stringify({ comentario: comentarioTexto }),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Atualiza a lista de comentários no DOM
+                            const comentariosContainer = document.getElementById("comentariosContainer");
+                            
+                            // Remove a mensagem de "Seja o primeiro a comentar", se existir
+                            const semComentarios = document.getElementById("semComentarios");
+                            if (semComentarios) {
+                                semComentarios.remove();
+                            }
+        
+                            // Adiciona o novo comentário ao topo da lista
+                            const novoComentario = `
+                                <div class="row align-items-center mb-4 p-3 shadow-sm rounded border bg-light">
+                                    <div class="col-2 text-center">
+                                        <img class="usuario_foto" src="${data.foto}" 
+                                            alt="Foto de ${data.username}" 
+                                            class="rounded-circle img-fluid" 
+                                            style="max-width: 80px; height: auto;">
+                                    </div>
+                                    <div class="col-10">
+                                        <h5 class="mb-1">${data.username}</h5>
+                                        <p class="mb-0 text-muted">${data.comment}</p>
+                                    </div>
+                                </div>`;
+                            
+                            comentariosContainer.insertAdjacentHTML("afterbegin", novoComentario);
+        
+                            // Limpa o campo de comentário
+                            comentarioTextarea.value = "";
+                        } else {
+                            console.error(data.error);
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Erro ao enviar comentário:", error);
+                    });
+            }
+        });
+    </script>
+    <script>
+        // Espera a página carregar completamente
+        window.onload = function() {
+            const toggleButton = document.getElementById('dark-mode-toggle');
+           
+            // Verificar se o modo escuro está ativado
+            if (localStorage.getItem('dark-mode') === 'true') {
+                document.body.classList.add('dark-mode');
+                toggleButton.innerHTML = "Escuro"; // Alterando o texto do botão
+            }
+    
+            // Evento de clique para alternar entre modos
+            toggleButton.addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                const isDarkMode = document.body.classList.contains('dark-mode');
+                
+                // Alterar ícone e salvar a preferência no localStorage
+                if (isDarkMode) {
+                    toggleButton.innerHTML = "Escuro";
+                    logo.src = "{% get_media_prefix %}brasao_branco.png"; // Mudando para o brasão branco
+                    localStorage.setItem('dark-mode', 'true');
+                } else {
+                    toggleButton.innerHTML = "Claro";
+                    logo.src = "{% get_media_prefix %}brasao.png"; // Mudando para o brasão original
+                    localStorage.setItem('dark-mode', 'false');
+                }
+            });
+        }
     </script>
 </body>
 </html>
+<!-- Finaliza o documento HTML -->

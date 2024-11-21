@@ -3,7 +3,148 @@ body {
   font-family: Arial, sans-serif;
   transition: 0.4s;
 }
+body.dark-mode{
+  background-color: #1a1a1a;
+}
+body.dark-mode .titulo-noticia-mais-recente {
+  color: #d2d2d2; /* Cor para o título no modo escuro */
+}
+body.dark-mode .titulo-noticia-recente {
+  color: #d2d2d2; /* Cor para o título no modo escuro */
+}
 
+body.dark-mode .navbar-custom .nav-link {
+  color: #d2d2d2 !important; /* Cor do texto dos links da navbar no modo escuro */
+}
+
+body.dark-mode .navbar-custom{
+  box-shadow: 0px 1px 0px 0px rgba(255, 255, 255, 0.222);
+}
+body.dark-mode .navbar-custom .nome-site{
+  color: #d2d2d2 !important; /* Cor do texto dos links da navbar no modo escuro */
+}
+body.dark-mode .titulo_brasileriao{
+  color: #d2d2d2 !important; /* Cor do texto dos links da navbar no modo escuro */
+  box-shadow: 0px 1px 0px 0px rgba(255, 255, 255, 0.222);
+}
+body.dark-mode .table thead tr {
+  background-color: transparent;
+  color: #d2d2d2;
+}
+body.dark-mode .table thead th{
+  border-bottom: #f4f4f457;
+}
+body.dark-mode .table tbody td {
+  border-bottom: 1px solid #ffffff42;;
+}
+body.dark-mode .table tbody td span {
+  color: #d2d2d2;
+}
+body.dark-mode  .table tbody tr:nth-child(odd) {
+  background-color: #252525;
+}
+
+body.dark-mode  .table tbody tr:nth-child(even) {
+  background-color: #161616;;
+}
+body.dark-mode .table{
+  color: #d2d2d2;
+}
+body.dark-mode .card{
+  background-color: #000000;
+  border: 1px solid rgb(255 255 255 / 21%);
+}
+body.dark-mode .card-text:last-child{
+  color: #d2d2d2;
+}
+body.dark-mode .versus{
+  color: #d2d2d2;
+}
+body.dark-mode .todas-noticias {
+  background-color: #1a1a1a;
+}
+body.dark-mode .todas-noticias h3{
+  color: #d2d2d2;
+  box-shadow: 0px 1px 0px 0px rgba(255, 255, 255, 0.222);
+}
+
+body.dark-mode .noticia-card{
+  background-color: #000000;
+}
+
+body.dark-mode .noticia-card .noticia-conteudo h5{
+  color: #d2d2d2;
+}
+body.dark-mode .noticia-card .noticia-conteudo p{
+  color: #d2d2d2;
+}
+body.dark-mode .form-control{
+  background-color: #000000;
+  border: 1px solid #181818;
+}
+
+body.dark-mode  #search-results{
+  background-color: #000000;
+  color: #d2d2d2;
+}
+
+body.dark-mode  .search-result-item:hover{
+  background-color: #1a1a1a;
+  color: #d2d2d2;
+}
+/* Modo escuro */
+body.dark-mode::-webkit-scrollbar-track {
+  background: #333; /* cor mais escura para o modo escuro */
+}
+
+body.dark-mode::-webkit-scrollbar-thumb {
+  background: #777; /* cor da barra de rolagem no modo escuro */
+}
+
+
+body.dark-mode .navbar-nav .dropdown-menu{
+  background-color: #000000;
+}
+
+body.dark-mode .dropdown-item:focus, .dropdown-item:hover {
+  color: #16181b;
+  text-decoration: none;
+  background-color: #000000;
+}
+
+body.dark-mode .nav-link.dropdown-toggle::after {
+  display: inline-block;
+  margin-left: 0.255em;
+  vertical-align: 0.255em;
+  content: "";
+  border-top: 0.3em solid rgb(255, 255, 255);
+  border-right: 0.3em solid transparent;
+  border-left: 0.3em solid transparent;
+  transition: 0.4s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* cor escura quando passa o mouse no modo escuro */
+}
+/* Barra de rolagem padrão */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Cor de fundo da barra de rolagem */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* cor clara para o modo claro */
+}
+
+/* Cor da barra de rolagem */
+::-webkit-scrollbar-thumb {
+  background: #888; /* cor padrão da barra de rolagem */
+}
+
+/* Cor quando o usuário passa o mouse sobre a barra de rolagem */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* cor escura quando passa o mouse */
+}
 main {
   height: 100vh;
   margin-top: 4%;
@@ -16,6 +157,9 @@ main {
   width: 100%;
   transition: 0.4s;
 }
+
+
+
 .titulo-noticia-mais-recente {
   font-size: 2.1vw;
   margin-top: 4%;
@@ -23,6 +167,8 @@ main {
   transition: 0.4s;
   font-weight: bolder;
 }
+
+
 .resumo-noticia-mais-recente {
   font-size: 1vw;
   transition: 0.4s;
@@ -64,6 +210,7 @@ main {
   margin: auto;
   box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.222);
   transition: 0.4s;
+  
 }
 
 /* Seta personalizada para o dropdown-toggle com div */
@@ -101,7 +248,9 @@ main {
   transform: scale(1.1);
   transition: 0.4s;
 }
-
+.dropdown-item:focus, .dropdown-item:hover{
+  background-color: #f8f9fa;
+}
 .user-info {
   position: relative;
   display: inline-block;
@@ -267,7 +416,6 @@ main {
   margin: 0;
 }
 
-
 .todas-noticias .d-flex {
   display: flex;
   flex-direction: row; /* Layout em linha */
@@ -344,15 +492,6 @@ a:hover {
   text-decoration: none; /* Garante que o sublinhado nunca apareça */
 }
 
-#search-bar {
-  width: 300px;
-  padding: 10px 15px;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 25px;
-  transition: box-shadow 0.3s;
-}
-
 #search-bar:focus {
   outline: none;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -362,9 +501,8 @@ a:hover {
   position: absolute;
   top: 100%;
   left: 0;
-  width: 100%;
+  width: 235%;
   background-color: #fff;
-  border: 1px solid #ddd;
   border-radius: 8px;
   margin-top: 5px;
   padding: 0;
@@ -399,26 +537,12 @@ a:hover {
   font-size: 1rem;
   color: #333;
   font-weight: 500;
-}
-
-.search-container {
-  position: relative;
-  display: flex;
-  align-items: center;
+  margin-left: 10%;
 }
 
 #dropdownTimes {
   margin: -5%;
 }
-
-
-
-
-
-
-
-
-
 
 /* Estilo Geral para a Tabela */
 .table {
@@ -432,13 +556,11 @@ a:hover {
   margin-right: 10%;
 }
 
-
 /* Corpo */
 .table tbody tr {
   background-color: #f9f9f9;
   transition: all 0.2s ease-in-out;
 }
-
 
 .table tbody td {
   padding: 12px;
@@ -464,7 +586,6 @@ a:hover {
   font-weight: bold;
   color: #dc3545;
 }
-
 
 /* Responsividade */
 @media (max-width: 768px) {
@@ -495,10 +616,6 @@ a:hover {
   }
 }
 
-
-
-
-
 /* Alterando a cor dos nomes dos times para preto */
 .table tbody td span {
   color: #000; /* Nomes dos times em preto */
@@ -527,13 +644,6 @@ a:hover {
   border-bottom: 2px solid #f4f4f4;
   text-align: center;
 }
-
-
-
-
-
-
-
 
 /* Estilo geral para a lista de jogos */
 .jogos-container {
@@ -583,18 +693,15 @@ a:hover {
   color: #888;
 }
 
-
-.caixa{
+.caixa {
   width: 80%;
 }
 
-
-.div-tabela-brasileiro{
+.div-tabela-brasileiro {
   width: 60%;
 }
 
-
-.titulo_brasileriao{
+.titulo_brasileriao {
   font-size: 4vh;
   color: #333;
   font-weight: bolder;
@@ -603,10 +710,9 @@ a:hover {
   box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.222);
 }
 
-.div_brasileirao{
+.div_brasileirao {
   width: 100%;
 }
-
 
 .search-container {
   position: relative;
@@ -625,4 +731,14 @@ a:hover {
   padding-left: 40px; /* Espaço para a lupa */
   border-radius: 20px; /* Bordas arredondadas */
   width: 100%;
+}
+#dark-mode-toggle {
+  all: unset; /* Remove todas as estilizações padrão */
+  background: none; /* Remove o fundo */
+  border: none; /* Remove a borda */
+  padding: 0; /* Remove o padding */
+  text-align: left; /* Garante que o texto fique alinhado à esquerda */
+  font-family: inherit; /* Usa a fonte padrão do documento */
+  font-size: inherit; /* Usa o tamanho de fonte padrão */
+  color: inherit; /* Usa a cor do texto padrão */
 }
