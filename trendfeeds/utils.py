@@ -1,5 +1,11 @@
+# **BIBLIOTECAS DE TERCEIROS**
 import requests
+    # Para fazer requisições HTTP a APIs externas.
+
+
+# **IMPORTAÇÕES DO DJANGO**
 from django.conf import settings
+    # Para pegar a api key dentro do arquivo settings.
 
 
 # **FUNÇÕES DA API FUTEBOL**

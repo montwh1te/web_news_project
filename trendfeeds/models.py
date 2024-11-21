@@ -1,15 +1,13 @@
-from django.db import models
-from django.utils.text import slugify
-# Importa ferramentas para criação de modelos e um método para gerar "slugs" baseados em texto.
+# **IMPORTAÇÕES DO DJANGO**
+from django.db import models  
+    # Ferramentas para criação e manipulação de modelos no Django.
+from django.utils.text import slugify  
+    # Método para gerar "slugs" a partir de texto.
 
 
-from users.models import Usuarios
-# Importa o modelo `Usuarios` de um aplicativo chamado `users`.
-
-
-from django.core.exceptions import ValidationError
-# Importa uma exceção para validações customizadas.
-
+# **IMPORTAÇÕES INTERNAS**
+from users.models import Usuarios  
+    # Importa o modelo `Usuarios` de um aplicativo chamado `users`.
 
 
 
