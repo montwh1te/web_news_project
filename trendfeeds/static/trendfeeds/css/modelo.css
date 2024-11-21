@@ -211,8 +211,8 @@ a:hover {
 
 svg {
   position: relative;
-  height: 50px;
-  width: 50px;
+  height: 35px;
+  width: 35px;
   transition: all 0.3s;
   fill: #e7e7e7;
   ; /* Cor padrão */

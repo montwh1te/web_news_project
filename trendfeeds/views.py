@@ -197,7 +197,14 @@ def detalhes_noticia(request, slug):
     template_name = f'html/noticias/{noticia.slug}.html'
         # Define o nome do template com base no slug da notícia.
 
-    usuario_curtiu = InteracaoUsuario.objects.filter(noticia=noticia, usuario=request.user, like=True).exists()
+    usuario_curtiu = False
+    if request.user.is_authenticated:
+        usuario_curtiu = InteracaoUsuario.objects.filter(
+            noticia=noticia, 
+            usuario=request.user, 
+            like=True
+        ).exists()
+
     comentarios = Comentario.objects.filter(noticia=noticia).order_by('-data_criacao')
         # Obtém os comentários associados à notícia, ordenados por data de criação.
 
@@ -215,8 +222,8 @@ def detalhes_noticia(request, slug):
         'cor_categoria': cor_categoria,
             #cor da categoria.
         'usuario_curtiu': usuario_curtiu,  
-            # Passa o estado do like para o template
-
+            # Apenas calculado se o usuário estiver autenticado
+           
     })
 
 

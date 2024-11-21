@@ -147,22 +147,25 @@
 
                     <!-- FORMULÁRIO DE LIKES -->
                     <!-- Botão de Like Estilizado -->
-                    <form id="likeForm" method="post" action="{% url 'atualizar_like' noticia.slug %}" class="d-flex align-items-center">
-                        {% csrf_token %}
-                        <label class="container like d-flex align-items-center">
-                            <!-- Define o atributo checked com base no estado de `usuario_curtiu` -->
-                            <input type="checkbox" id="likeCheckbox" data-url="{% url 'atualizar_like' noticia.slug %}" {% if usuario_curtiu %}checked{% endif %}>
-                            <!-- Ícone do like -->
-                            <svg id="Glyph" version="1.1" viewBox="0 0 32 32" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M29.845,17.099l-2.489,8.725C26.989,27.105,25.804,28,24.473,28H11c-0.553,0-1-0.448-1-1V13  c0-0.215,0.069-0.425,0.198-0.597l5.392-7.24C16.188,4.414,17.05,4,17.974,4C19.643,4,21,5.357,21,7.026V12h5.002  c1.265,0,2.427,0.579,3.188,1.589C29.954,14.601,30.192,15.88,29.845,17.099z" id="XMLID_254_"></path><path d="M7,12H3c-0.553,0-1,0.448-1,1v14c0,0.552,0.447,1,1,1h4c0.553,0,1-0.448,1-1V13C8,12.448,7.553,12,7,12z   M5,25.5c-0.828,0-1.5-0.672-1.5-1.5c0-0.828,0.672-1.5,1.5-1.5c0.828,0,1.5,0.672,1.5,1.5C6.5,24.828,5.828,25.5,5,25.5z" id="XMLID_256_"></path></svg>
-                        </label>
-                        <!-- Contagem de Likes -->
-                        <span id="likeCount" class="ml-2" style="font-size: 1.2rem;margin-right: 90%;">{{ noticia.like_count }}</span>
-                    </form>
+                    {% if request.user.is_authenticated %}
+                        <form id="likeForm" method="post" action="{% url 'atualizar_like' noticia.slug %}" class="d-flex align-items-center">
+                            {% csrf_token %}
+                            <label class="container like d-flex align-items-center">
+                                <input type="checkbox" id="likeCheckbox" data-url="{% url 'atualizar_like' noticia.slug %}" {% if usuario_curtiu %}checked{% endif %}>
+                                <svg id="Glyph" version="1.1" viewBox="0 0 32 32" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M29.845,17.099l-2.489,8.725C26.989,27.105,25.804,28,24.473,28H11c-0.553,0-1-0.448-1-1V13  c0-0.215,0.069-0.425,0.198-0.597l5.392-7.24C16.188,4.414,17.05,4,17.974,4C19.643,4,21,5.357,21,7.026V12h5.002  c1.265,0,2.427,0.579,3.188,1.589C29.954,14.601,30.192,15.88,29.845,17.099z" id="XMLID_254_"></path><path d="M7,12H3c-0.553,0-1,0.448-1,1v14c0,0.552,0.447,1,1,1h4c0.553,0,1-0.448,1-1V13C8,12.448,7.553,12,7,12z   M5,25.5c-0.828,0-1.5-0.672-1.5-1.5c0-0.828,0.672-1.5,1.5-1.5c0.828,0,1.5,0.672,1.5,1.5C6.5,24.828,5.828,25.5,5,25.5z" id="XMLID_256_"></path></svg>
+                            </label>
+                            <span id="likeCount" class="ml-2" style="font-size: 1.0rem;">{{ noticia.like_count }}</span>
+                        </form>
+                    {% else %}
+                        <p>Faça login para curtir esta notícia.</p>
+                        <svg id="Glyph" version="1.1" viewBox="0 0 32 32" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M29.845,17.099l-2.489,8.725C26.989,27.105,25.804,28,24.473,28H11c-0.553,0-1-0.448-1-1V13  c0-0.215,0.069-0.425,0.198-0.597l5.392-7.24C16.188,4.414,17.05,4,17.974,4C19.643,4,21,5.357,21,7.026V12h5.002  c1.265,0,2.427,0.579,3.188,1.589C29.954,14.601,30.192,15.88,29.845,17.099z" id="XMLID_254_"></path><path d="M7,12H3c-0.553,0-1,0.448-1,1v14c0,0.552,0.447,1,1,1h4c0.553,0,1-0.448,1-1V13C8,12.448,7.553,12,7,12z   M5,25.5c-0.828,0-1.5-0.672-1.5-1.5c0-0.828,0.672-1.5,1.5-1.5c0.828,0,1.5,0.672,1.5,1.5C6.5,24.828,5.828,25.5,5,25.5z" id="XMLID_256_"></path></svg>
+                    {% endif %}
+
 
 
 
                       <!-- Ícones de Redes Sociais -->
-                    <div class="social-icons ml-4 d-flex align-items-center" style="margin-left: 70% !important;margin-top: -5%;">
+                    <div class="social-icons ml-4 d-flex align-items-center" style="margin-left: 70% !important;margin-top: -4%;">
                         <!-- WhatsApp -->
                         <a href="https://wa.me/?text={{ request.build_absolute_uri }}" target="_blank" class="mx-2">
                             <i class="fab fa-whatsapp" style="font-size: 1.5rem; color: #25D366;"></i>
@@ -296,15 +299,6 @@
                             <!-- Fim do loop para exibir os grupos no carrossel -->
                     </div>
 
-                    <!-- CONTROLES DO CARROSEL -->
-                    <a class="carousel-control-prev" href="#noticiasCarrossel" role="button" data-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Anterior</span>
-                    </a>
-                    <a class="carousel-control-next" href="#noticiasCarrossel" role="button" data-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Próximo</span>
-                    </a>
                 </div>
             </div>
         </article>
