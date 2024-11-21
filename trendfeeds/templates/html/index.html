@@ -45,51 +45,48 @@
             <!-- Lista de itens da barra de navegação -->
             <li class="nav-item dropdown">
               <!-- Define um item do menu com dropdown -->
-              <div
-                class="nav-link dropdown-toggle d-flex align-items-center"
-                id="dropdownTimes"
-                role="button"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
+              <div class="nav-link dropdown-toggle d-flex align-items-center"id="dropdownTimes" role="button"data-toggle="dropdown"aria-haspopup="true"aria-expanded="false">
                 <!-- Ícone para abrir o dropdown -->
-                <img id="team-logo"
-                  src="{% get_media_prefix %}brasao.png"
-                  alt="Ícone do Time"
-                  style="width: 30px; height: 30px"
-                />
+                <img id="team-logo" src="{% get_media_prefix %}brasao.png" alt="Ícone do Time"style="width: 30px; height: 30px"/>
                 <!-- Mostra o ícone do time -->
               </div>
 
-              <div
-                class="dropdown-menu p-4"
-                style="width: 15vw"
-                aria-labelledby="dropdownTimes"
-              >
+              <div class="dropdown-menu p-4"style="width: 15vw"aria-labelledby="dropdownTimes">
                 <!-- Define o conteúdo do dropdown -->
-                <div
-                  class="d-flex flex-wrap justify-content-center align-items-center"
-                >
+
+
+
+                <div class="d-flex flex-wrap justify-content-center align-items-center">
                   <!-- Alinha os itens dentro do dropdown -->
-                  {% for categoria in categorias %}
+                  {% for categoria in categorias_serie_a %}
                   <!-- Loop pelas categorias passadas pelo backend -->
                   {% if categoria.nome_categoria != "outros" %}
-                  <!-- Exclui a categoria 'Outros' do loop -->
-                  <a
-                    class="dropdown-item p-3 col-3"
-                    href="{% url 'exibir_categoria' categoria.nome_categoria|slugify %}"
-                  >
+            
+                  <a class="dropdown-item p-3 col-3"href="{% url 'exibir_categoria' categoria.nome_categoria|slugify %}">
                     <!-- Link para exibir as notícias da categoria -->
-                    <img
-                      src="{% get_media_prefix %}escudos/{{ categoria.nome_categoria|lower }}.png"
-                      alt="{{ categoria.nome_categoria }}"
-                      style="width: 35px; height: 35x"
-                    />
+                    <img src="{% get_media_prefix %}escudos/{{ categoria.nome_categoria|lower }}.png" alt="{{ categoria.nome_categoria }}"style="width: 35px; height: 35x"/>
                     <!-- Ícone do escudo do time -->
                   </a>
                   {% endif %} {% endfor %}
                 </div>
+
+                <div class="d-flex flex-wrap justify-content-center align-items-center">
+                  <!-- Alinha os itens dentro do dropdown -->
+                  {% for categoria in categorias_serie_a %}
+                  <!-- Loop pelas categorias passadas pelo backend -->
+                  {% if categoria.nome_categoria != "outros" %}
+            
+                  <a class="dropdown-item p-3 col-3"href="{% url 'exibir_categoria' categoria.nome_categoria|slugify %}">
+                    <!-- Link para exibir as notícias da categoria -->
+                    <img src="{% get_media_prefix %}escudos/{{ categoria.nome_categoria|lower }}.png" alt="{{ categoria.nome_categoria }}"style="width: 35px; height: 35x"/>
+                    <!-- Ícone do escudo do time -->
+                  </a>
+                  {% endif %} {% endfor %}
+                </div>
+
+
+
+
               </div>
             </li>
 

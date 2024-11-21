@@ -26,7 +26,7 @@ from django.core.cache import cache
 
 
 # **IMPORTAÇÕES DE MÓDULOS INTERNOS**
-from .models import Categoria, Noticias, InteracaoUsuario, Comentario  
+from .models import Categoria, Noticias, InteracaoUsuario, Comentario, CategoriaNoticias
     # Importa os modelos definidos na aplicação para interagir com o banco de dados.
 from .utils import obter_tabela_brasileirao, obter_proximos_jogos     
     # Importa duas funções, uma utilitária personalizada para obter a tabela do Brasileirão e outra para os próximos jogos do Brasileirão.
@@ -88,6 +88,9 @@ def home(request):
             # Armazena os próximos jogos no cache por 1 hora.
 
 
+    
+    categorias_serie_a = categorias.filter(serie='A')
+    categorias_serie_b = categorias.filter(serie='A')
     # **Renderiza a página inicial com os dados obtidos.**
     return render(request, 'html/index.html', {
         'ultima_noticia': ultima_noticia,  
@@ -102,6 +105,9 @@ def home(request):
             # Tabela do Brasileirão.
         'proximos_jogos': proximos_jogos,  
             # Próximos jogos.
+        'categorias_serie_a': categorias_serie_a,
+
+        'categorias_serie_b':categorias_serie_b,
     })
 
 
@@ -156,6 +162,11 @@ def detalhes_noticia(request, slug):
 
     categoria = noticia.categorias.first()
         # Obtém a primeira categoria associada à notícia.
+
+    categoria_cor = categoria.cor 
+    print(categoria.cor) 
+
+
     categoria_nome = categoria.nome_categoria if categoria else "Outros"
         # Define o nome da categoria, ou "Outros" se nenhuma for encontrada.
 
@@ -166,22 +177,6 @@ def detalhes_noticia(request, slug):
         todas_as_noticias[i:i + 3] for i in range(0, len(todas_as_noticias), 3)
             # Agrupa as notícias em grupos de três para exibição.
     ]
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    # FAZER QUERY NO BANCO DE DADOS ASSOCIANDO categoria_nome COM A QUERY, BUSCANDO A COR
-    
-    
-    
-    
-    
-    
     
     
     
@@ -200,23 +195,19 @@ def detalhes_noticia(request, slug):
     comentarios = Comentario.objects.filter(noticia=noticia).order_by('-data_criacao')
         # Obtém os comentários associados à notícia, ordenados por data de criação.
 
+    
+
 
     # Renderiza a página de detalhes da notícia com os dados fornecidos.
     return render(request, template_name, {
         'noticia': noticia,  
-            # Dados da notícia.
         'categoria_nome': categoria_nome, 
-            # Nome da categoria.
         'noticias_agrupadas': noticias_agrupadas,  
-            # Notícias agrupadas para exibição.
         'comentarios': comentarios,  
-            # Comentários da notícia.
-        'cor_categoria': # NOME DA VARIAVEL QUE TRAZ A COR, <<<<<<<<<<<<<<<<<<<<<<<<<
-            #cor da categoria.
         'usuario_curtiu': usuario_curtiu,  
-            # Apenas calculado se o usuário estiver autenticado
-           
+        'categoria_cor': categoria_cor,  # Remova o espaço extra no nome
     })
+
 
 
 
@@ -350,6 +341,9 @@ def exibir_categoria(request, nome_time):
     # Busca a categoria pelo nome do time ou retorna erro 404.
     categoria = get_object_or_404(Categoria, nome_categoria=nome_time)
 
+    categoria_cor = categoria.cor 
+    print(categoria.cor) 
+
     # Filtra as notícias relacionadas à categoria, ordenadas por ID (mais recentes primeiro).
     noticias = Noticias.objects.filter(categorias=categoria).order_by('-id')
 
@@ -372,6 +366,7 @@ def exibir_categoria(request, nome_time):
         'noticias': restantes_noticias,  # Notícias restantes.
         'ultima_noticia': ultima_noticia,  # Última notícia publicada.
         'ultimas_tres_noticias': ultimas_tres_noticias,  # Próximas três notícias mais recentes.
+        'categoria_cor': categoria_cor,
     }
 
     # Renderiza a página da categoria com o contexto fornecido.

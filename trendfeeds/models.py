@@ -9,7 +9,7 @@ class Categoria(models.Model):
     nome = models.CharField(max_length=20)
     descricao = models.TextField()
     cor = models.CharField(max_length=10)
-    serie = models.CharField(max_length=5)
+    serie = models.CharField(max_length=5, null=True)
 
     def __str__(self):
         return self.nome_categoria

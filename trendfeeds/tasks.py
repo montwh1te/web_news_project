@@ -96,23 +96,6 @@ def coletar_noticias():
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     try:
         driver.get(url_principal)
             # Acessa a URL principal com o Selenium.
@@ -514,7 +497,6 @@ def coletar_noticias():
 
 {{% block title %}}{nome_categoria}{{% endblock title %}}
 {{% block main_title %}}{nome_categoria}{{% endblock main_title %}}
-{{% block cor_categoria %}}{cor_categoria}{{% endblock cor_categoria %}}
 {{% block id_time %}}{time_id}{{% endblock id_time %}}
 
 <div class="categoria-listagem">
@@ -550,7 +532,6 @@ def coletar_noticias():
 {{% block main_title %}}{categoria_nome}{{% endblock main_title %}}
 {{% block second_title %}}{second_title_formatado}{{% endblock second_title %}}
 {{% block main_content %}}{main_content_formatado}{{% endblock main_content %}}
-{{% block cor_categoria %}}{cor_categoria}{{% endblock cor_categoria %}}
 
 """
                 # Cria o conteúdo HTML para a notícia, referenciando o template principal.
