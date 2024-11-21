@@ -248,7 +248,9 @@ main {
   transform: scale(1.1);
   transition: 0.4s;
 }
-
+.dropdown-item:focus, .dropdown-item:hover{
+  background-color: #f8f9fa;
+}
 .user-info {
   position: relative;
   display: inline-block;

@@ -50,7 +50,7 @@
 <body>
     <!-- INÍCIO DO CORPO DO DOCUMENTO -->
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light navbar-bg-light navbar-custom d-flex justify-content-sm-around">
+        <nav class="navbar navbar-expand-lg navbar-custom d-flex justify-content-sm-around">
             <!-- Barra de navegação do site -->
             
 
@@ -68,7 +68,11 @@
                     <!-- Menu de navegação centralizado -->
                 <ul class="navbar-nav">
                     <li class="nav-item"><a class="nav-link" href="#">Início</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Sobre</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"> 
+                            <button id="dark-mode-toggle">Claro</button>
+                        </a>
+                    </li>
                     <li class="nav-item"><a class="nav-link" href="#">Serviços</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Contato</a></li>
                         <!-- Links para as diferentes seções do site -->
@@ -180,6 +184,36 @@
     <!-- Importa o Popper.js, usado para posicionamento de elementos -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <!-- Importa os scripts do Bootstrap -->
+
+    <script>
+        // Espera a página carregar completamente
+        window.onload = function() {
+            const toggleButton = document.getElementById('dark-mode-toggle');
+           
+            // Verificar se o modo escuro está ativado
+            if (localStorage.getItem('dark-mode') === 'true') {
+                document.body.classList.add('dark-mode');
+                toggleButton.innerHTML = "Escuro"; // Alterando o texto do botão
+            }
+    
+            // Evento de clique para alternar entre modos
+            toggleButton.addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                const isDarkMode = document.body.classList.contains('dark-mode');
+                
+                // Alterar ícone e salvar a preferência no localStorage
+                if (isDarkMode) {
+                    toggleButton.innerHTML = "Escuro";
+                    logo.src = "{% get_media_prefix %}brasao_branco.png"; // Mudando para o brasão branco
+                    localStorage.setItem('dark-mode', 'true');
+                } else {
+                    toggleButton.innerHTML = "Claro";
+                    logo.src = "{% get_media_prefix %}brasao.png"; // Mudando para o brasão original
+                    localStorage.setItem('dark-mode', 'false');
+                }
+            });
+        }
+    </script>
 </body>
 </html>
 <!-- Finaliza o documento HTML -->

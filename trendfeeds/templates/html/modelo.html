@@ -45,7 +45,7 @@
 <body>
     <!-- INÍCIO DO CORPO DO DOCUMENTO -->
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-custom d-flex justify-content-sm-around">
+        <nav class="navbar navbar-expand-lg navbar-custom d-flex justify-content-sm-around">
             <!-- Criação do menu de navegação com classes do Bootstrap -->
 
 
@@ -64,8 +64,11 @@
                         <!-- Criação da lista de navegação -->
                     <li class="nav-item"><a class="nav-link" href="#">Início</a></li>
                         <!-- Link para a página inicial -->
-                    <li class="nav-item"><a class="nav-link" href="#">Sobre</a></li>
-                        <!-- Link para a página sobre -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"> 
+                            <button id="dark-mode-toggle">Claro</button>
+                        </a>
+                    </li>
                     <li class="nav-item"><a class="nav-link" href="#">Serviços</a></li>
                         <!-- Link para a página de serviços -->
                     <li class="nav-item"><a class="nav-link" href="#">Contato</a></li>
@@ -219,13 +222,13 @@
                     {% else %}
                         <!-- Condição para mensagens sem comentários -->
                         {% if request.user.is_authenticated %}
-                            <div class="row align-items-center mb-4 p-3 shadow-sm rounded border bg-light">
+                            <div class="row align-items-center mb-4 p-3 shadow-sm rounded border">
                                 <div class="col-10">
                                     <p class="mb-0 text-muted">Seja o primeiro a comentar!</p>
                                 </div>
                             </div>
                         {% else %}
-                            <div class="row align-items-center mb-4 p-3 shadow-sm rounded border bg-light">
+                            <div class="row align-items-center mb-4 p-3 shadow-sm rounded border">
                                 <div class="col-10">
                                     <p class="mb-0 text-muted">Faça login para ser o primeiro a comentar!</p>
                                 </div>
@@ -249,7 +252,7 @@
                                 <!-- Contêiner flexível para o textarea e botão -->
                                 <textarea name="comentario" id="comentarioTextarea" rows="2" class="form-control" placeholder="Escreva seu comentário aqui..." required style="resize: none; border-radius: 20px; margin-top: 4%; width: 70%;"></textarea>
                                 <!-- Campo para o usuário escrever o comentário -->
-                                <button type="submit" class="btn" style="margin-right: 10%;background-color: #dddddd;height: 5%;margin-top: 5%;display: flex;margin-left: 2%;">Enviar Comentário</button>
+                                <button type="submit" class="btn">Enviar Comentário</button>
                                 <!-- Botão para enviar o comentário -->
                             </div>
                         </form>
@@ -259,7 +262,7 @@
                         <!-- Contêiner flexível para o textarea e botão -->
                         <textarea name="comentario" id="comentarioTextarea" rows="2" class="form-control" placeholder="Faça login para comentar..." disabled required style="resize: none; border-radius: 20px; margin-top: 4%; width: 70%; user-selecÇ none;"></textarea>
                         <!-- Campo para o usuário escrever o comentário -->
-                        <button type="submit" class="btn" disabled style="margin-right: 10%;background-color: #dddddd;height: 5%;margin-top: 5%;display: flex;margin-left: 2%;">Enviar Comentário</button>
+                        <button type="submit" class="btn" disabled>Enviar Comentário</button>
                         <!-- Botão para enviar o comentário -->
                     </div>
                 {% endif %}
@@ -315,9 +318,7 @@
 
 
 
-    <footer class="text-center py-3 bg-light">
-        <p class="mb-0">© 2024 site noticias - Todos os direitos reservados.</p>
-    </footer>
+   
 
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -427,6 +428,35 @@
                     });
             }
         });
+    </script>
+    <script>
+        // Espera a página carregar completamente
+        window.onload = function() {
+            const toggleButton = document.getElementById('dark-mode-toggle');
+           
+            // Verificar se o modo escuro está ativado
+            if (localStorage.getItem('dark-mode') === 'true') {
+                document.body.classList.add('dark-mode');
+                toggleButton.innerHTML = "Escuro"; // Alterando o texto do botão
+            }
+    
+            // Evento de clique para alternar entre modos
+            toggleButton.addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                const isDarkMode = document.body.classList.contains('dark-mode');
+                
+                // Alterar ícone e salvar a preferência no localStorage
+                if (isDarkMode) {
+                    toggleButton.innerHTML = "Escuro";
+                    logo.src = "{% get_media_prefix %}brasao_branco.png"; // Mudando para o brasão branco
+                    localStorage.setItem('dark-mode', 'true');
+                } else {
+                    toggleButton.innerHTML = "Claro";
+                    logo.src = "{% get_media_prefix %}brasao.png"; // Mudando para o brasão original
+                    localStorage.setItem('dark-mode', 'false');
+                }
+            });
+        }
     </script>
 </body>
 </html>

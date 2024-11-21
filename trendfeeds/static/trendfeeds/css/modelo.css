@@ -1,7 +1,177 @@
 body {
   background-color: #f8f9fa;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  transition: 0.4s;
 }
+
+
+
+
+
+
+body.dark-mode{
+  background-color: #1a1a1a;
+}
+
+body.dark-mode .navbar-custom{
+  box-shadow: 0px 1px 0px 0px rgba(255, 255, 255, 0.222);
+}
+body.dark-mode .navbar-custom .nome-site{
+  color: #d2d2d2 !important; /* Cor do texto dos links da navbar no modo escuro */
+}
+
+
+body.dark-mode .navbar-custom .nav-link {
+  color: #d2d2d2 !important; /* Cor do texto dos links da navbar no modo escuro */
+}
+
+body.dark-mode .navbar-custom .nav-link:hover {
+  color: #969696 !important; /* Cor do texto dos links da navbar no modo escuro */
+}
+
+
+
+
+
+
+body.dark-mode  #search-results{
+  background-color: #000000;
+  color: #d2d2d2;
+}
+
+body.dark-mode  .search-result-item:hover{
+  background-color: #1a1a1a;
+  color: #d2d2d2;
+}
+/* Modo escuro */
+body.dark-mode::-webkit-scrollbar-track {
+  background: #333; /* cor mais escura para o modo escuro */
+}
+
+body.dark-mode::-webkit-scrollbar-thumb {
+  background: #777; /* cor da barra de rolagem no modo escuro */
+}
+
+body.dark-mode .noticia-titulo {
+  color: #d2d2d2;
+}
+
+body.dark-mode .noticia-conteudo {
+  color: #d2d2d2;
+}
+
+body.dark-mode p{
+  color: #d2d2d2;
+}
+
+body.dark-mode .comentarios-container{
+  background-color: #171717;
+}
+body.dark-mode  .border {
+  border: 1px solid #1e1e1e !important;
+}
+
+body.dark-mode .form-control:disabled, .form-control[readonly] {
+  background-color: #17191a;
+  opacity: 1;
+}
+
+body.dark-mode .form-control {
+  color: #d2d2d2;
+  background-color: #171717;
+  border: 1px solid #000000;
+
+}
+body.dark-mode button{
+  background-color: #171717;
+  color: #d2d2d2;
+}
+
+body.dark-mode .card {
+  position: relative;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #000000;
+  background-clip: border-box;
+   border: 0px ;
+  border-radius: .25rem;
+}
+body.dark-mode .card-title{
+  color: #d2d2d2;
+}
+
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* cor escura quando passa o mouse no modo escuro */
+}
+/* Barra de rolagem padrão */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Cor de fundo da barra de rolagem */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* cor clara para o modo claro */
+}
+
+/* Cor da barra de rolagem */
+::-webkit-scrollbar-thumb {
+  background: #888; /* cor padrão da barra de rolagem */
+}
+
+/* Cor quando o usuário passa o mouse sobre a barra de rolagem */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* cor escura quando passa o mouse */
+}
+
+
+#dark-mode-toggle {
+  all: unset; /* Remove todas as estilizações padrão */
+  background: none; /* Remove o fundo */
+  border: none; /* Remove a borda */
+  padding: 0; /* Remove o padding */
+  text-align: left; /* Garante que o texto fique alinhado à esquerda */
+  font-family: inherit; /* Usa a fonte padrão do documento */
+  font-size: inherit; /* Usa o tamanho de fonte padrão */
+  color: inherit; /* Usa a cor do texto padrão */
+}
+
+
+button{
+  margin-right: 10%;
+  background-color: #dddddd;
+  height: 5%;
+  margin-top: 5%;
+  display: flex;
+  margin-left: 2%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 .navbar-custom {
   padding: 15px 20px;
@@ -366,4 +536,12 @@ input{
 
 .social-icons a:hover .fa-twitter {
   color: #1DA1F2; /* Altera a cor do ícone do Twitter ao passar o mouse sobre o link. */
+}
+
+a{
+  color: #333;
+}
+
+.navbar-custom .nav-link:hover{
+  color: #424242;
 }
