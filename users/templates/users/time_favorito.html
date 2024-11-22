@@ -69,7 +69,11 @@
 
         .owl-carousel .center-active img {
             transform: scale(1.9); /* Amplia a imagem do item ativo */
-            transition: transform 0.3s ease;
+            transition: transform 0.5s ease;
+        }
+
+        .owl-carousel .item input {
+            display: none;
         }
     
         .owl-carousel .owl-nav {
@@ -88,51 +92,94 @@
         }
 
         /* Times Série A */
-        .atlético-mg { background-color: #000000; }
-        .athletico-pr { background-color: #D81E05; }
-        .bahia { background-color: #003E92; }
-        .botafogo { background-color: #000000; }
-        .bragantino { background-color: #E30613; }
-        .corinthians { background-color: #000000; }
-        .cruzeiro { background-color: #003DA5; }
-        .cuiabá { background-color: #00843D; }
-        .flamengo { background-color: #E30613; }
-        .fluminense { background-color: #880016; }
-        .fortaleza { background-color: #0033A0; }
-        .grêmio { background-color: #6CABDD; }
-        .internacional { background-color: #E30613; }
-        .palmeiras { background-color: #009739; }
-        .são-paulo { background-color: #E30613; }
-        .vasco { background-color: #000000; }
-        .juventude { background-color: #00843D; }
-        .criciúma { background-color: #FFD700; }
-        .vitória { background-color: #E30613; }
-        .atlético-go { background-color: #D81E05; }
+        .atlético-mg {
+            position: relative;
+            color: white;
+            overflow: hidden;
+        }
+
+        /* Criando o overlay da imagem com blur */
+        .atlético-mg::before {
+            content: '';
+            position: absolute;
+            height: 130%;
+            width: 107%;
+            top: -30px;
+            left: -3px;
+            background-image: url(https://atletico.com.br/wp-content/uploads/2024/07/53852316265_0c9db1ccdd_k.jpg);
+            filter: blur(5px);
+            z-index: -1;
+        }
+
+        .atlético-mg_nome {
+            color: white;
+            display: inline-block; 
+        }
+
+        .atlético-mg_descricao {
+            color: white;
+            display: inline-block; 
+        }
+
+        .athletico-pr { background-color: #D81E05; color: white;}
+
+        .athletico-pr_nome {
+            color: white;
+            display: inline-block; 
+        }
+
+        .athletico-pr_descricao {
+            color: white;
+            display: inline-block; 
+        }
+
+        .bahia { background-color: #003E92; color: white;}
+
+        .botafogo { background-color: #000000; color: white;}
+
+        .bragantino { background-color: #E30613; color: white;}
+
+        .corinthians { background-color: #000000; color: white;}
+
+        .cruzeiro { background-color: #003DA5; color: white;}
+        .cuiabá { background-color: #00843D; color: white;}
+        .flamengo { background-color: #E30613; color: white;}
+        .fluminense { background-color: #880016; color: white;}
+        .fortaleza { background-color: #0033A0; color: white;}
+        .grêmio { background-color: #6CABDD; color: white;}
+        .internacional { background-color: #E30613; color: white;}
+        .palmeiras { background-color: #009739; color: white;}
+        .são-paulo { background-color: #E30613; color: white;}
+        .vasco { background-color: #000000; color: white;}
+        .juventude { background-color: #00843D; color: white;}
+        .criciúma { background-color: #FFD700; color: white;}
+        .vitória { background-color: #E30613; color: white;}
+        .atlético-go { background-color: #D81E05; color: white;}
 
         /* Seleção Brasileira */
-        .seleção { background-color: #FFCC00; }
+        .seleção { background-color: #FFCC00; color: white;}
 
         /* Times Série B */
-        .ceará { background-color: #000000; }
-        .crb { background-color: #E30613; }
-        .amazonas { background-color: #FFD700; }
-        .operário-pr { background-color: #000000; }
-        .brusque { background-color: #FFCC00; }
-        .paysandu { background-color: #009FDA; }
-        .chapecoense { background-color: #00843D; }
-        .ituano { background-color: #D81E05; }
-        .mirassol { background-color: #FFD700; }
-        .novorizontino { background-color: #FFD700; }
-        .ponte-preta { background-color: #000000; }
-        .sport { background-color: #E30613; }
-        .vila-nova { background-color: #D81E05; }
-        .avaí { background-color: #003DA5; }
-        .botafogo-sp { background-color: #000000; }
-        .guarani { background-color: #00843D; }
-        .goiás { background-color: #00843D; }
-        .santos { background-color: #000000; }
-        .coritiba { background-color: #00843D; }
-        .américa-mg { background-color: #00843D; }
+        .ceará { background-color: #000000; color: white;}
+        .crb { background-color: #E30613; color: white;}
+        .amazonas { background-color: #FFD700; color: white;}
+        .operário-pr { background-color: #000000; color: white;}
+        .brusque { background-color: #FFCC00; color: white;}
+        .paysandu { background-color: #009FDA; color: white;}
+        .chapecoense { background-color: #00843D; color: white;}
+        .ituano { background-color: #D81E05; color: white;}
+        .mirassol { background-color: #FFD700; color: white;}
+        .novorizontino { background-color: #FFD700; color: white;}
+        .ponte-preta { background-color: #000000; color: white;}
+        .sport { background-color: #E30613; color: white;}
+        .vila-nova { background-color: #D81E05; color: white;}
+        .avaí { background-color: #003DA5; color: white;}
+        .botafogo-sp { background-color: #000000; color: white;}
+        .guarani { background-color: #00843D; color: white;}
+        .goiás { background-color: #00843D; color: white;}
+        .santos { background-color: #000000; color: white;}
+        .coritiba { background-color: #00843D; color: white;}
+        .américa-mg { background-color: #00843D; color: white;}
     </style>
 </head>
 
@@ -190,8 +237,9 @@
             const $initialCenterItem = $('.owl-item.active.center');
 
             $initialCenterItem.addClass('center-active');
-            $initialCenterItem.find('.nome_time').addClass('active');
-            $initialCenterItem.find('.descricao_time').addClass('active');
+            $initialCenterItem.find('.nome_time').removeClass().addClass('nome_time active atlético-mg_nome');
+            $initialCenterItem.find('.descricao_time').removeClass().addClass('descricao_time active atlético-mg_descricao');
+
 
             const nomeTime = $initialCenterItem.find('.nome_time').text(); // Conteúdo do h2.
 
@@ -206,6 +254,20 @@
         $carousel.on('initialized.owl.carousel', function () {
             setTimeout(highlightInitialItem, 50); // Garante o carregamento do DOM
         });
+
+        // Valor inicial para Atlético-MG
+        var valor_inicial = "atlético-mg";
+
+        // Substitui espaços por hífens no valor inicial para corresponder ao CSS
+        var valor_inicial_css = valor_inicial.replace(/\s+/g, '-');
+
+        // Remove todas as classes relacionadas aos times do <body> (caso necessário)
+        $('body').removeClass(function (index, className) {
+            return (className.match(/\batlético-mg|athletico-pr|bahia|botafogo|bragantino|corinthians|cruzeiro|cuiabá|flamengo|fluminense|fortaleza|grêmio|internacional|palmeiras|são-paulo|vasco|juventude|criciúma|vitória|atlético-go|seleção|ceará|crb|amazonas|operário-pr|brusque|paysandu|chapecoense|ituano|mirassol|novorizontino|ponte-preta|sport|vila-nova|avaí|botafogo-sp|guarani|goiás|santos|coritiba|américa-mg\b/g) || []).join(' ');
+        });
+
+        // Adiciona a classe inicial ao <body>
+        $('body').addClass(valor_inicial_css);
 
         // Detectar quando a transição termina
         $carousel.on('translated.owl.carousel', function () {
@@ -229,15 +291,23 @@
 
             var valor_input = $inputCorrespondente.val();
 
+            // Substitui espaços por hífens no valor do input para corresponder ao CSS
+            var valor_input_css = valor_input.replace(/\s+/g, '-');
+
+
             // Remover qualquer classe anterior no <body> e adicionar a nova
             $('body').removeClass(function (index, className) {
-                return (className.match(/\b\w+\b/g) || []).join(' ');
-            });
-            $('body').addClass(valor_input);
 
-            // Adiciona a classe 'active' somente ao nome e descrição do item central
-            $currentCenterItem.find('.nome_time').addClass('active');
-            $currentCenterItem.find('.descricao_time').addClass('active');
+                return (className.match(/\batlético-mg|athletico-pr|bahia|botafogo|bragantino|corinthians|cruzeiro|cuiabá|flamengo|fluminense|fortaleza|grêmio|internacional|palmeiras|são-paulo|vasco|juventude|criciúma|vitória|atlético-go|seleção|ceará|crb|amazonas|operário-pr|brusque|paysandu|chapecoense|ituano|mirassol|novorizontino|ponte-preta|sport|vila-nova|avaí|botafogo-sp|guarani|goiás|santos|coritiba|américa-mg\b/g) || []).join(' ');
+            
+            });
+
+            $('body').addClass(valor_input_css);
+
+            // Adiciona a classe 'active' e o nome do time somente ao nome e descrição do item central
+            $currentCenterItem.find('.nome_time').removeClass().addClass(`nome_time active ${valor_input_css}_nome`);
+            $currentCenterItem.find('.descricao_time').removeClass().addClass(`descricao_time active ${valor_input_css}_descricao`);
+
         });
 
         setTimeout(highlightInitialItem, 200); // Garante o carregamento do DOM

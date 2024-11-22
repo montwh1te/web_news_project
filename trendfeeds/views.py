@@ -211,7 +211,7 @@ def detalhes_noticia(request, slug):
             # Notícias agrupadas para exibição.
         'comentarios': comentarios,  
             # Comentários da notícia.
-        'cor_categoria': # NOME DA VARIAVEL QUE TRAZ A COR, <<<<<<<<<<<<<<<<<<<<<<<<<
+        'cor_categoria': legal, # NOME DA VARIAVEL QUE TRAZ A COR, <<<<<<<<<<<<<<<<<<<<<<<<<
             #cor da categoria.
         'usuario_curtiu': usuario_curtiu,  
             # Apenas calculado se o usuário estiver autenticado

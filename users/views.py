@@ -13,6 +13,7 @@ def registro(request):
             user.set_password(form.cleaned_data['senha'])
             user.save()
             auth_login(request, user)  # Usa a função de login do Django com o alias 'auth_login'
+            return redirect('time_favorito')
     else:
         form = RegistrationForm()
 
