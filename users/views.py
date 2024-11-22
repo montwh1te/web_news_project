@@ -27,7 +27,9 @@ def login_view(request):
             password = form.cleaned_data.get('password')
             user = authenticate(request, username=username, password=password)
             if user is not None:
-                auth_login(request, user)  # Usa a função de login do Django com o 'auth_login'
+                auth_login(request, user)  
+                if user.is_superuser:
+                    return redirect('pagina_funcionarios')  
                 return redirect('home')
             else:
                 form.add_error(None, "Nome de usuário ou senha inválidos.")

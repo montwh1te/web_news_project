@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Página de Funcionários</title>
+    {% load static %}
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="{% static 'trendfeeds/css/index_funcionarios.css' %}" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-custom d-flex justify-content-sm-around">
+            <!-- Seu código de navegação -->
+        </nav>
+    </header>
+
+    <main class="container mt-5">
+        <h2>Gerenciar Notícias</h2>
+        <div class="row">
+            {% for noticia in noticias %}
+                <div class="col-12 col-md-4 mb-4">
+                    <div class="card">
+                        <img src="{% get_media_prefix %}noticias/n_{{ noticia.id }}_0.jpg" class="card-img-top" alt="Imagem da Notícia">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ noticia.titulo }}</h5>
+                            <p class="card-text">{{ noticia.descricao|slice:":100" }}...</p>
+                            <a href="#" class="btn btn-warning">Editar</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </main>
+
+    <footer>
+        <!-- Rodapé -->
+    </footer>
+
+</body>
+</html>

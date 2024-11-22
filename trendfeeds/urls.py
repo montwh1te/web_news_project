@@ -28,4 +28,8 @@ urlpatterns = [
 
     path('noticia/<slug:slug>/comentar/', views.adicionar_comentario, name='adicionar_comentario'),  
         # URL para adicionar comentários em uma notícia.
+
+    path('pagina_funcionarios/', views.pagina_funcionarios, name='pagina_funcionarios'),
+
+     path('editar_noticia/<slug:slug>/', views.editar_noticia, name='editar_noticia'),
 ]

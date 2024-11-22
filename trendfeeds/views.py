@@ -7,7 +7,7 @@ import json
 # **BIBLIOTECAS DE TERCEIROS**
 import requests  
     # Para fazer requisições HTTP a APIs externas.
-
+import os
 
 
 # **IMPORTAÇÕES DO DJANGO**
@@ -21,8 +21,9 @@ from django.utils.text import slugify
     # Para gerar slugs a partir de strings.
 from django.core.cache import cache 
     # Para armazenar e recuperar dados em cache.
+from django.conf import settings
 
-
+from django.template.loader import render_to_string
 
 
 # **IMPORTAÇÕES DE MÓDULOS INTERNOS**
@@ -30,6 +31,7 @@ from .models import Categoria, Noticias, InteracaoUsuario, Comentario, Categoria
     # Importa os modelos definidos na aplicação para interagir com o banco de dados.
 from .utils import obter_tabela_brasileirao, obter_proximos_jogos     
     # Importa duas funções, uma utilitária personalizada para obter a tabela do Brasileirão e outra para os próximos jogos do Brasileirão.
+from .forms import EditarNoticiaForm
 
 
 
@@ -396,8 +398,7 @@ def exibir_categoria(request, nome_time):
 
 
 
-
-
-
-
+def pagina_funcionarios(request):
+    noticias = Noticias.objects.all()
+    return render(request, 'html/index_funcionarios.html', {'noticias': noticias})
 
