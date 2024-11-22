@@ -123,6 +123,9 @@ body.dark-mode .nav-link.dropdown-toggle::after {
   transition: 0.4s;
 }
 
+body.dark-mode .resumo-noticia-mais-recente {
+  color: #d2d2d2;
+}
 ::-webkit-scrollbar-thumb:hover {
   background: #555; /* cor escura quando passa o mouse no modo escuro */
 }
