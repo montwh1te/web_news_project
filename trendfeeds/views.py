@@ -89,8 +89,10 @@ def home(request):
 
 
     
-    categorias_serie_a = categorias.filter(serie='A')
-    categorias_serie_b = categorias.filter(serie='A')
+    categorias_serie_a = Categoria.objects.all().filter(serie='A')
+    categorias_serie_b = Categoria.objects.all().filter(serie='B')
+
+
     # **Renderiza a página inicial com os dados obtidos.**
     return render(request, 'html/index.html', {
         'ultima_noticia': ultima_noticia,  

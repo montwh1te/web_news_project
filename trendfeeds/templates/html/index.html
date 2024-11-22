@@ -51,42 +51,28 @@
                 <!-- Mostra o ícone do time -->
               </div>
 
-              <div class="dropdown-menu p-4"style="width: 15vw"aria-labelledby="dropdownTimes">
+              <div class="dropdown-menu p-4" style="width: 15vw" aria-labelledby="dropdownTimes">
                 <!-- Define o conteúdo do dropdown -->
-
-
-
-                <div class="d-flex flex-wrap justify-content-center align-items-center">
-                  <!-- Alinha os itens dentro do dropdown -->
-                  {% for categoria in categorias_serie_a %}
-                  <!-- Loop pelas categorias passadas pelo backend -->
-                  {% if categoria.nome_categoria != "outros" %}
-            
-                  <a class="dropdown-item p-3 col-3"href="{% url 'exibir_categoria' categoria.nome_categoria|slugify %}">
-                    <!-- Link para exibir as notícias da categoria -->
-                    <img src="{% get_media_prefix %}escudos/{{ categoria.nome_categoria|lower }}.png" alt="{{ categoria.nome_categoria }}"style="width: 35px; height: 35x"/>
-                    <!-- Ícone do escudo do time -->
-                  </a>
-                  {% endif %} {% endfor %}
+                <div class="d-flex justify-content-center mb-3">
+                  <input type="radio" id="serie-a-radio" name="serie" value="a" checked />
+                  <label for="serie-a-radio" class="mx-2">Série A</label>
+                  <input type="radio" id="serie-b-radio" name="serie" value="b" />
+                  <label for="serie-b-radio" class="mx-2">Série B</label>
                 </div>
-
-                <div class="d-flex flex-wrap justify-content-center align-items-center">
-                  <!-- Alinha os itens dentro do dropdown -->
+              
+                <!-- Div única para exibir os ícones -->
+                <div id="serie-icons" class="d-flex flex-wrap justify-content-center align-items-center">
+                  <!-- Conteúdo inicial (Série A) -->
                   {% for categoria in categorias_serie_a %}
-                  <!-- Loop pelas categorias passadas pelo backend -->
-                  {% if categoria.nome_categoria != "outros" %}
-            
-                  <a class="dropdown-item p-3 col-3"href="{% url 'exibir_categoria' categoria.nome_categoria|slugify %}">
-                    <!-- Link para exibir as notícias da categoria -->
-                    <img src="{% get_media_prefix %}escudos/{{ categoria.nome_categoria|lower }}.png" alt="{{ categoria.nome_categoria }}"style="width: 35px; height: 35x"/>
-                    <!-- Ícone do escudo do time -->
+                  <a class="dropdown-item p-3 col-3" href="{% url 'exibir_categoria' categoria.nome_categoria|slugify %}">
+                    <img
+                      src="{% get_media_prefix %}escudos/{{ categoria.nome_categoria|lower }}.png"
+                      alt="{{ categoria.nome_categoria }}"
+                      style="width: 35px; height: 35px"
+                    />
                   </a>
-                  {% endif %} {% endfor %}
+                  {% endfor %}
                 </div>
-
-
-
-
               </div>
             </li>
 
@@ -450,6 +436,56 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Importa o JavaScript do Bootstrap versão 5.3.0 -->
 
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Seleciona os elementos
+        const serieARadio = document.getElementById("serie-a-radio");
+        const serieBRadio = document.getElementById("serie-b-radio");
+        const serieIcons = document.getElementById("serie-icons");
+
+        // Dados dinâmicos para Série A e Série B
+        const serieAContent = `
+          {% for categoria in categorias_serie_a %}
+          <a class="dropdown-item p-3 col-3" href="{% url 'exibir_categoria' categoria.nome_categoria|slugify %}">
+            <img
+              src="{% get_media_prefix %}escudos/{{ categoria.nome_categoria|lower }}.png"
+              alt="{{ categoria.nome_categoria }}"
+              style="width: 35px; height: 35px"
+            />
+          </a>
+          {% endfor %}
+        `;
+
+        const serieBContent = `
+          {% for categoria in categorias_serie_b %}
+          <a class="dropdown-item p-3 col-3" href="{% url 'exibir_categoria' categoria.nome_categoria|slugify %}">
+            <img
+              src="{% get_media_prefix %}escudos/{{ categoria.nome_categoria|lower }}.png"
+              alt="{{ categoria.nome_categoria }}"
+              style="width: 35px; height: 35px"
+            />
+          </a>
+          {% endfor %}
+        `;
+
+        // Função para alternar o conteúdo
+        function toggleIcons() {
+          if (serieARadio.checked) {
+            serieIcons.innerHTML = serieAContent; // Carrega conteúdo da Série A
+          } else if (serieBRadio.checked) {
+            serieIcons.innerHTML = serieBContent; // Carrega conteúdo da Série B
+          }
+        }
+
+        // Adiciona eventos de mudança nos botões de rádio
+        serieARadio.addEventListener("change", toggleIcons);
+        serieBRadio.addEventListener("change", toggleIcons);
+
+        // Inicializa com o estado correto
+        toggleIcons();
+      });
+
+    </script>
     <!-- Script necessário para a barra de pesquisas -->
     <script>
       document
