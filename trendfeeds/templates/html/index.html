@@ -344,39 +344,55 @@
           <div class="col-6 d-flex justify-content-center my-2">
             <!-- Define o layout para cada jogo -->
             <div
-              class="card text-center shadow-sm"
-              style="max-width: 300px; width: 100%"
+              class="card text-center shadow-sm p-3"
+              style="max-width: 300px; width: 100%; border-radius: 8px"
             >
               <!-- Estiliza o cartão de exibição -->
               <div class="card-body">
                 <!-- Corpo do cartão -->
-                <div class="d-flex align-items-center justify-content-center">
-                  <!-- Container para os escudos dos times -->
+                <div class="d-flex align-items-center justify-content-center mb-3">
+                  <!-- Escudos dos times -->
                   <img
                     src="{% get_media_prefix %}escudos/{{ jogo.time_mandante.nome_popular|slugify_with_underscore }}.png"
                     alt="{{ jogo.time_mandante.nome_popular }}"
                     class="img-fluid"
-                    style="width: 45px; height: 45px"
+                    style="width: 50px; height: 50px; border-radius: 50%"
                   />
-                  <!-- Escudo do time mandante -->
-                  <span class="mx-2 versus">- x -</span>
-                  <!-- Indicador de confronto -->
+                  <span
+                    class="mx-3 text-muted font-weight-bold"
+                    style="font-size: 1.5rem"
+                    >X</span
+                  >
                   <img
                     src="{% get_media_prefix %}escudos/{{ jogo.time_visitante.nome_popular|slugify_with_underscore }}.png"
                     alt="{{ jogo.time_visitante.nome_popular }}"
                     class="img-fluid"
-                    style="width: 45px; height: 45px"
+                    style="width: 50px; height: 50px; border-radius: 50%"
                   />
-                  <!-- Escudo do time visitante -->
                 </div>
-                <p class="card-text mt-2">
-                  <!-- Detalhes do jogo -->
-                  {{ jogo.data_realizacao }}<br />{{ jogo.hora_realizacao }}<br />{{jogo.status}}<br />{{jogo.estadio.nome_popular}}
-                </p>
+
+                <!-- Detalhes do jogo -->
+                <div class="game-details text-muted">
+                  <p class="mb-1">
+                    <strong>Data:</strong> {{ jogo.data_realizacao }}
+                  </p>
+                  <p class="mb-1">
+                    <strong>Horário:</strong> {{ jogo.hora_realizacao }}
+                  </p>
+                  <p class="mb-1">
+                    <strong>Estádio:</strong> {{ jogo.estadio.nome_popular }}
+                  </p>
+                  {% if jogo.placar_numerico %}
+                  <p class="mb-0">
+                    <strong>Placar:</strong> {{ jogo.placar_numerico }}
+                  </p>
+                  {% endif %}
+                </div>
               </div>
             </div>
           </div>
-          {% endfor %} {% else %}
+          {% endfor %}
+          {% else %}
           <!-- Caso não existam jogos -->
           <p class="text-center">Nenhum jogo disponível no momento.</p>
           {% endif %}

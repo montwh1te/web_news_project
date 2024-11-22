@@ -92,6 +92,20 @@ def home(request):
     categorias_serie_a = Categoria.objects.all().filter(serie='A')
     categorias_serie_b = Categoria.objects.all().filter(serie='B')
 
+    for jogo in proximos_jogos:
+        if jogo["placar"]:  # Verifica se há placar disponível
+            import re  # Biblioteca para expressões regulares
+
+            # Encontra os números no placar
+            numeros = re.findall(r'\d+', jogo["placar"])
+
+            if len(numeros) == 2:  # Verifica se encontrou dois números
+                jogo["placar_numerico"] = f"{numeros[0]} x {numeros[1]}"
+            else:
+                jogo["placar_numerico"] = None  # Placar inválido
+        else:
+            jogo["placar_numerico"] = None
+
 
     # **Renderiza a página inicial com os dados obtidos.**
     return render(request, 'html/index.html', {
