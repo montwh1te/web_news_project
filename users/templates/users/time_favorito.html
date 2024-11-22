@@ -91,14 +91,13 @@
             color: #333;
         }
 
-        /* Times Série A */
+        /* ATLÉTICO MG */
         .atlético-mg {
             position: relative;
             color: white;
             overflow: hidden;
         }
 
-        /* Criando o overlay da imagem com blur */
         .atlético-mg::before {
             content: '';
             position: absolute;
@@ -121,7 +120,24 @@
             display: inline-block; 
         }
 
-        .athletico-pr { background-color: #D81E05; color: white;}
+        /* ATHLÉTICO PR */
+        .athletico-pr {
+            position: relative;
+            color: white;
+            overflow: hidden;
+        }
+
+        .athletico-pr::before {
+            content: '';
+            position: absolute;
+            height: 130%;
+            width: 107%;
+            top: -30px;
+            left: -3px;
+            background-image: url(https://www.cnnbrasil.com.br/wp-content/uploads/sites/12/2023/01/FnCTl-2WQAEPV5x.jpg);
+            filter: blur(5px);
+            z-index: -1;
+        }
 
         .athletico-pr_nome {
             color: white;
@@ -269,12 +285,17 @@
         // Adiciona a classe inicial ao <body>
         $('body').addClass(valor_inicial_css);
 
+        // Declarando variável de escopo para armazenar nome do time antigo que foi executado na função abaixo
+        let time_antigo = valor_inicial_css
+
         // Detectar quando a transição termina
         $carousel.on('translated.owl.carousel', function () {
             
             $('.owl-item').removeClass('center-active');
             $('.owl-item.center').addClass('center-active');
             $('.nome_time, .descricao_time').removeClass('active');
+            $('.nome_time').removeClass(`${time_antigo}_nome`);
+            $('.descricao_time').removeClass(`${time_antigo}_descricao`);
 
             // Identifica o item central atual
             const $currentCenterItem = $('.owl-item.center');
@@ -308,12 +329,17 @@
             $currentCenterItem.find('.nome_time').removeClass().addClass(`nome_time active ${valor_input_css}_nome`);
             $currentCenterItem.find('.descricao_time').removeClass().addClass(`descricao_time active ${valor_input_css}_descricao`);
 
+
+            // Atualiza o time antigo para o próximo evento
+            time_antigo = valor_input_css;
+
+            // Log para depuração
+            console.log(`Time antigo: ${time_antigo}`);
         });
 
         setTimeout(highlightInitialItem, 200); // Garante o carregamento do DOM
 
 });
-
     </script>
 </body>
 </html>

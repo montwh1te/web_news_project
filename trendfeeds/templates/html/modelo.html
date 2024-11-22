@@ -15,12 +15,9 @@
     <link rel="stylesheet" href="/static/trendfeeds/css/modelo.css">
         <!-- Link para o arquivo CSS personalizado -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-
     <style>
         :root {
-            --categoria-color: {% block cor_categoria %}#007bff{% endblock cor_categoria %};
-
-
+            --categoria-color: {{ categoria_cor }};
             /* Define uma variável CSS para a cor da categoria */
         }
         
@@ -28,13 +25,9 @@
             {% if categoria_nome|lower == 'outros' %}
                 background-color: transparent !important;
                 display: none !important;
-
-
                 /* Esconde o badge para a categoria "outros" */
             {% else %}
                 background-color: var(--categoria-color);
-
-
                 /* Define a cor do badge baseada na categoria */
             {% endif %}
         }

@@ -16,7 +16,7 @@
         <!-- Importa um arquivo CSS específico para estilização personalizada -->
     <style>
         :root {
-            --categoria-cor: {% block cor_categoria %}#007bff{% endblock cor_categoria %};
+            --categoria-cor: {{ categoria_cor}};
         }
         
         .categoria-badge {

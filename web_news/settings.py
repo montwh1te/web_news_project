@@ -101,4 +101,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 ROOT_URLCONF = 'web_news.urls'
 
-API_FUTEBOL_KEY = 'live_2a8fa6e7d603888fb9656c01ac3240'
+API_FUTEBOL_KEY = 'live_4bb165998f3bbcfcbd93a9da3e13eb'
