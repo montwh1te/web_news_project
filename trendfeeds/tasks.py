@@ -30,7 +30,8 @@ from bs4 import BeautifulSoup
     # Para fazer o parsing de HTML e extrair informações de páginas web.
 from colorama import Fore, Style, init  
     # Para estilizar a saída no terminal, como colorir texto.
-
+from selenium.common.exceptions import TimeoutException
+    # Para se acabar o tempo de fazer uma ação
 
 
 
@@ -163,7 +164,16 @@ def coletar_noticias():
             driver.get(link_noticia)
                 # Acessa a URL da notícia para capturar o conteúdo completo.
 
-
+            try:
+                de_a_nota = WebDriverWait(driver, 10).until(
+                    EC.presence_of_element_located((By.CLASS_NAME, 'voce-da-nota__container'))
+                )
+                print(Fore.RED + f"❌ Erro na notícia {i+1}, é uma classificação...")
+                continue  
+                    # Vai para a próxima iteração do loop, ignorando o restante do código para essa notícia
+            except TimeoutException:
+                pass  
+                    # Se o elemento não for encontrado, o código continuará normalmente
             try:
                 title_element = WebDriverWait(driver, 10).until(
                     EC.presence_of_element_located((By.CLASS_NAME, 'content-head__title'))
@@ -347,7 +357,9 @@ def coletar_noticias():
 
 
             try:
-                imagens_elementos = driver.find_elements(By.CSS_SELECTOR, "amp-img")
+                imagens_elementos = WebDriverWait(driver, 60).until(
+                    EC.presence_of_all_elements_located((By.CSS_SELECTOR, "amp-img"))
+)
                     # Localiza todos os elementos de imagem na página com o seletor CSS "amp-img".
                 imagem_urls = []
                     # Inicializa uma lista vazia para armazenar os URLs das imagens.

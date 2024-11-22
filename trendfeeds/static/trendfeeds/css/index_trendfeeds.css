@@ -747,3 +747,12 @@ a:hover {
 }
 
 
+span{
+
+  margin-left: 1rem;
+  margin-right: 1rem;
+  color: #6c757d; /* Cor do texto "text-muted" */
+  font-weight: bold;
+  font-size: 1.5rem;
+
+}
