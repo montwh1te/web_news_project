@@ -284,51 +284,35 @@ def atualizar_like(request, slug):
 ''' Decorador que exige que o usuário esteja autenticado para acessar esta função. '''
 @login_required
 def adicionar_comentario(request, slug):
-    # Função para adicionar um comentário a uma notícia específica.
-
-    # Verifica se a requisição recebida é do tipo POST.
     if request.method == 'POST':
-        
-        # Busca a notícia no banco de dados com base no slug fornecido.
-        # Retorna um erro 404 se a notícia não for encontrada.
         noticia = get_object_or_404(Noticias, slug=slug)
 
         try:
-            # Tenta carregar os dados enviados no corpo da requisição como JSON.
             data = json.loads(request.body)
-
-            # Obtém o texto do comentário enviado pelo cliente.
             comentario_texto = data.get('comentario')
-
         except json.JSONDecodeError:
-            # Captura erros de decodificação JSON, caso os dados enviados estejam em um formato inválido.
-            
-            # Retorna uma resposta JSON indicando que houve erro no envio dos dados.
             return JsonResponse({'success': False, 'error': 'Dados inválidos enviados.'}, status=400)
 
-        # Verifica se o texto do comentário não está vazio.
         if comentario_texto:
-            
-            # Cria o comentário associando o usuário logado e a notícia.
             comentario = Comentario.objects.create(
-                usuario=request.user,  # Associa o comentário ao usuário atualmente logado.
-                noticia=noticia,  # Relaciona o comentário à notícia específica.
-                comentario=comentario_texto  # Salva o texto do comentário.
+                usuario=request.user,
+                noticia=noticia,
+                comentario=comentario_texto
             )
 
-            # Retorna uma resposta JSON indicando sucesso na criação do comentário.
             return JsonResponse({
-                'success': True,  # Indica que o comentário foi salvo com sucesso.
-                'username': request.user.username,  # Retorna o nome de usuário do autor do comentário.
-                'comment': comentario.comentario,  # Retorna o texto do comentário.
-                'foto': request.user.foto.url if request.user.foto else '/static/images/default-avatar.png'  # Retorna o caminho para a foto do usuário, ou uma imagem padrão.
+                'success': True,
+                'username': request.user.username,
+                'comment': comentario.comentario,
+                'foto': request.user.foto.url if request.user.foto else '/media/login.png'
             })
 
-        # Retorna um erro JSON caso o campo de comentário esteja vazio.
         return JsonResponse({'success': False, 'error': 'Comentário vazio.'}, status=400)
 
-    # Retorna um erro JSON caso a requisição não seja do tipo POST.
     return JsonResponse({'success': False, 'error': 'Método inválido.'}, status=400)
+
+
+
 
 
 
