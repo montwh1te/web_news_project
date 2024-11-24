@@ -59,5 +59,10 @@ urlpatterns = [
     # A URL recebe um parâmetro de slug e mapeia para a função `salvar_noticia_html` no módulo `views`.
     # A URL é identificada pelo nome 'salvar_noticia_html'.
     path('salvar-noticia-html/<slug:slug>/', views.salvar_noticia_html, name='salvar_noticia_html'),
+
+
+
+    path('coletar_noticias/', views.acionar_coletar_noticias, name='coletar_noticias'),
+
         
 ]

@@ -26,17 +26,21 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ noticia.titulo }}</h5>
                             <p class="card-text">{{ noticia.descricao|slice:":100" }}...</p>
-                            <a  href="{% url 'detalhes_noticia' noticia.slug %}" class="btn btn-warning">Editar</a>
+                            <a href="{% url 'detalhes_noticia' noticia.slug %}" class="btn btn-warning">Editar</a>
                         </div>
                     </div>
                 </div>
             {% endfor %}
         </div>
+        
+        <!-- Botão para acionar a função de coletar notícias -->
+        <form method="post" action="{% url 'coletar_noticias' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary mt-3">Coletar Notícias</button>
+        </form>
     </main>
 
-    <footer>
-        <!-- Rodapé -->
-    </footer>
+
 
 </body>
 </html>

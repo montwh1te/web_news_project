@@ -630,7 +630,7 @@ def coletar_noticias():
                 contador += 1
 
             # Encerra o loop após processar X notícias.
-            if contador == 340:
+            if contador == 99:
                 break
                                 
              # Salva o conteúdo renderizado no HTML.

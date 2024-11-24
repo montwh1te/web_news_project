@@ -41,6 +41,8 @@ from .models import Categoria, Noticias, InteracaoUsuario, Comentario, Categoria
 # Importa duas funções utilitárias personalizadas, uma para obter a tabela do Brasileirão e outra para os próximos jogos.
 from .utils import obter_tabela_brasileirao, obter_proximos_jogos  
 
+from .tasks import coletar_noticias
+
 
 
 
@@ -475,3 +477,13 @@ def salvar_noticia_html(request, slug):
     # Retorna erro se o método da requisição não for POST
     return JsonResponse({'success': False, 'error': 'Método inválido.'})
 
+
+
+
+
+
+def acionar_coletar_noticias(request):
+    if request.method == 'POST':
+        coletar_noticias()  # Chama a função do seu tasks.py
+        return JsonResponse({'status': 'success', 'message': 'Notícias coletadas com sucesso!'})
+    return JsonResponse({'status': 'error', 'message': 'Erro ao coletar notícias.'})
