@@ -89,29 +89,64 @@
     <!-- ÁREA PRINCIPAL -->
     <main class="container mt-4">
         {% if request.user.is_superuser %}
+
+
             <button id="editButton" class="btn btn-primary edit-btn" onclick="enableEditMode()" style="top: 70%; right: 3%;">Editar</button>
             <button id="saveButton" class="btn btn-success save-btn d-none" onclick="saveChanges()" style="top: 70%; right: 3%;">Salvar</button>
+            <button id="cancelButton" class="btn btn-secondary cancel-btn d-none" onclick="cancelEdit()" style="top: 70%;right: -3%;">Cancelar</button>
+
+
+
+            <div id="toolbar" class="d-none">
+                <!-- Botões de formatação -->
+                <button onclick="execCommand('bold')" title="Negrito">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 4h7a5 5 0 0 1 0 10H6zm7 7H6v6h7a5 5 0 0 0 0-10H6v4h7a2 2 0 1 1 0 4z"></path></svg>
+                </button>
+                <button onclick="execCommand('italic')" title="Itálico">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 4h8v2h-2.403L12.403 18H16v2h-8v-2h2.403L11.597 6H8V4z"></path></svg>
+                </button>
+                <button onclick="execCommand('underline')" title="Sublinhado">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 4h14v8a7 7 0 0 1-14 0V4zm2 2v6a5 5 0 0 0 10 0V6H7zm-3 14h16v2H4z"></path></svg>
+                </button>
+              
+                <!-- Separador -->
+                <div class="toolbar-separator"></div>
+              
+                <!-- Botões de alinhamento -->
+                <button onclick="execCommand('justifyLeft')" title="Alinhar à Esquerda">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 5h16v2H4zm0 4h10v2H4zm0 4h16v2H4zm0 4h10v2H4z"></path></svg>
+                </button>
+                <button onclick="execCommand('justifyCenter')" title="Centralizar">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 5h10v2H7zm-3 4h16v2H4zm3 4h10v2H7zm-3 4h16v2H4z"></path></svg>
+                </button>
+                <button onclick="execCommand('justifyRight')" title="Alinhar à Direita">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 5h16v2H4zm6 4h10v2H10zm-6 4h16v2H4zm6 4h10v2H10z"></path></svg>
+                </button>
+              
+                <!-- Separador -->
+                <div class="toolbar-separator"></div>
+              
+                <!-- Botão de adicionar mídia -->
+                <button onclick="addMedia()" title="Adicionar Mídia">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 5v14h16V5H4zm2 2h12v10H6V7zm3 5l1.5 2L12 11l3 4H9z"></path></svg>
+                </button>
+            </div>
+              
         {% endif %}
 
 
-
+        
 
         <!-- ARTIGO -->
         <article class="noticia-detalhada" style="margin-left: 10%; margin-right: 10%;"> 
             <div class="rowA">
+                
                 <div class="col-lg-12" style="margin-bottom: 5%;">
 
 
-                    <div id="toolbar" class="d-none">
-                        <button onclick="execCommand('bold')"><b>B</b></button>
-                        <button onclick="execCommand('italic')"><i>I</i></button>
-                        <button onclick="execCommand('underline')"><u>U</u></button>
-                        <button onclick="execCommand('justifyLeft')">Esquerda</button>
-                        <button onclick="execCommand('justifyCenter')">Centro</button>
-                        <button onclick="execCommand('justifyRight')">Direita</button>
-                        <button onclick="addMedia()">Adicionar Mídia</button>
-                    </div>
-
+                    
+                      
+                   
                     <!-- TÍTULO DA NOTÍCIA -->
                    
                     <h2 class="noticia-titulo">{% block second_title %}{% endblock second_title %}</h2>
@@ -471,56 +506,63 @@
             console.log("Habilitando modo de edição"); // Debug
             const editButton = document.getElementById('editButton');
             const saveButton = document.getElementById('saveButton');
+            const cancelButton = document.getElementById('cancelButton');
             const toolbar = document.getElementById('toolbar');
             const isSuperUser = document.body.dataset.superuser === 'true';
-          
+
             // Exibir barra de ferramentas apenas se for superuser
             if (isSuperUser) {
-              if (toolbar) {
-                toolbar.classList.remove('d-none'); // Mostra a barra
-                console.log("Toolbar visível"); // Debug
-              }
+                if (toolbar) {
+                    toolbar.classList.remove('d-none'); // Mostra a barra
+                    console.log("Toolbar visível"); // Debug
+                }
             } else {
-              console.log("Usuário não é superuser."); // Debug
+                console.log("Usuário não é superuser."); // Debug
             }
-          
+
             // Tornar os elementos editáveis
             const title = document.querySelector('.noticia-titulo');
             const content = document.querySelector('.noticia-conteudo');
             if (title) title.contentEditable = true;
             if (content) content.contentEditable = true;
-          
+
             // Alternar botões
             if (editButton) editButton.classList.add('d-none');
             if (saveButton) saveButton.classList.remove('d-none');
+            if (cancelButton) cancelButton.classList.remove('d-none');
         }
-          
-        function disableEditMode() {
-            console.log("Desabilitando modo de edição"); // Debug
+
+        function cancelEdit() {
+            console.log("Cancelando edição"); // Debug
             const editButton = document.getElementById('editButton');
             const saveButton = document.getElementById('saveButton');
+            const cancelButton = document.getElementById('cancelButton');
             const toolbar = document.getElementById('toolbar');
-          
+
             // Ocultar a barra de ferramentas
             if (toolbar) {
-              toolbar.classList.add('d-none');
-              console.log("Toolbar escondida"); // Debug
+                toolbar.classList.add('d-none');
+                console.log("Toolbar escondida"); // Debug
             }
-          
-            // Desativar edição
+
+            // Cancelar edição e restaurar conteúdo original
             const title = document.querySelector('.noticia-titulo');
             const content = document.querySelector('.noticia-conteudo');
             if (title) title.contentEditable = false;
             if (content) content.contentEditable = false;
-          
+
             // Alternar botões
             if (editButton) editButton.classList.remove('d-none');
             if (saveButton) saveButton.classList.add('d-none');
+            if (cancelButton) cancelButton.classList.add('d-none');
         }
-          
+
+
         // Adicionar eventos aos botões
         document.getElementById('editButton').addEventListener('click', enableEditMode);
-        document.getElementById('saveButton').addEventListener('click', disableEditMode);
+        document.getElementById('saveButton').addEventListener('click', saveChanges);
+        document.getElementById('cancelButton').addEventListener('click', cancelEdit);
+
           
           
     </script>
