@@ -239,43 +239,35 @@ def detalhes_noticia(request, slug):
 
 
 ''' Função para atualizar o "like" de uma notícia. Somente usuários autenticados podem interagir. '''
-@login_required  
+@login_required
 def atualizar_like(request, slug):
-    # Verifica se a requisição é do tipo POST, pois apenas este tipo de requisição é permitido para esta ação.
+    # Verifica se a requisição é do tipo POST
     if request.method == 'POST':  
-        
-        # Obtém a instância de 'Noticias' com base no slug ou retorna um erro 404 se não encontrado.
-        noticia = get_object_or_404(Noticias, slug=slug)  
-        
-        # Obtém o usuário autenticado que fez a requisição.
-        usuario = request.user  
+        noticia = get_object_or_404(Noticias, slug=slug)  # Obtém a notícia
+        usuario = request.user  # Obtém o usuário
 
-        # Tenta recuperar uma interação do usuário com a notícia ou cria uma nova se não existir.
+        # Tenta recuperar ou criar uma interação para o usuário com a notícia
         interacao, created = InteracaoUsuario.objects.get_or_create(
             noticia=noticia,
             usuario=usuario
         )
-        
-        # Inverte o estado do like: se era True passa para False, e vice-versa.
+
+        # Inverte o estado do like
         interacao.like = not interacao.like  
-        
-        # Salva a interação no banco de dados.
-        interacao.save()  
+        interacao.save()  # Salva a interação no banco de dados
 
-        # Atualiza a contagem de likes da notícia com base nas interações de usuários onde 'like=True'.
+        # Atualiza a contagem de likes da notícia
         noticia.like_count = InteracaoUsuario.objects.filter(noticia=noticia, like=True).count()
-        
-        # Salva a contagem de likes atualizada na instância da notícia.
-        noticia.save()  
+        noticia.save()  # Salva a contagem de likes atualizada
 
-        # Retorna uma resposta JSON contendo a nova contagem de likes e o estado atual do like do usuário.
+        # Retorna uma resposta JSON com a nova contagem de likes e o estado do like
         return JsonResponse({
             'like_count': noticia.like_count,
             'liked': interacao.like
         })
-    
-    # Retorna um erro JSON se a requisição não for do tipo POST.
-    return JsonResponse({'error': 'Método inválido'}, status=400)  
+
+    return JsonResponse({'error': 'Método inválido'}, status=400)
+
 
 
 

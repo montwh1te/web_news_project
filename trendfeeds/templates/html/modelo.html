@@ -175,19 +175,28 @@
                         <p>Faça login para curtir esta notícia.</p>
                         <svg id="Glyph" version="1.1" viewBox="0 0 32 32"><path d="M29.845,17.099l-2.489,8.725C26.989,27.105,25.804,28,24.473,28H11c-0.553,0-1-0.448-1-1V13c0-0.215,0.069-0.425,0.198-0.597l5.392-7.24C16.188,4.414,17.05,4,17.974,4C19.643,4,21,5.357,21,7.026V12h5.002c1.265,0,2.427,0.579,3.188,1.589C29.954,14.601,30.192,15.88,29.845,17.099z"></path><path d="M7,12H3c-0.553,0-1,0.448-1,1v14c0,0.552,0.447,1,1,1h4c0.553,0,1-0.448,1-1V13C8,12.448,7.553,12,7,12z"></path></svg>
                             <span class="likeCount" style="padding-right: 100%;">{{ noticia.like_count }}</span>
-
                     {% endif %}
 
 
 
 
                     <!-- Ícones de Redes Sociais -->
-                    <div class="social-icons ml-4 d-flex align-items-center" style="margin-left: 70% !important;margin-top: -4%;">
-                        <a href="https://wa.me/555191801651" target="_blank" style="width: 10%; height10% ;"class="mx-3"><i class="fab fa-whatsapp"></i></a>
-                        <a href="https://www.instagram.com/bruno.diferente___/" target="_blank" class="mx-2"><i class="fab fa-instagram"></i></a>
-                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" target="_blank" class="mx-2"><i class="fab fa-facebook"></i></a>
-                        <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}" target="_blank" class="mx-2"><i class="fab fa-twitter"></i></a>
+                   <!-- Ícones de Redes Sociais -->
+                    <div class="social-icons ml-4 d-flex align-items-center" style="margin-left: 70% !important; margin-top: -4%;">
+                        <a href="https://wa.me/555191801651" target="_blank" class="mx-3" style="font-size: 30px;">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                        <a href="https://www.instagram.com/bruno.diferente___/" target="_blank" class="mx-2" style="font-size: 30px;">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" target="_blank" class="mx-2" style="font-size: 30px;">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}" target="_blank" class="mx-2" style="font-size: 30px;">
+                            <i class="fab fa-twitter"></i>
+                        </a>
                     </div>
+
                 </div>
             </div>
 
@@ -306,13 +315,14 @@
         document.getElementById("likeCheckbox").addEventListener("change", function () {
             const url = this.getAttribute("data-url"); // Obtém a URL do backend
             const isChecked = this.checked; // Verifica se está curtido
-            const likeCount = document.getElementById("likeCount"); // Atualiza a contagem
-    
+            const likeCount = document.querySelector(".likeCount"); // Atualiza a contagem
+            const likeButton = this; // Referência ao botão de like
+        
             // Atualiza otimisticamente no frontend
             likeCount.innerText = isChecked
                 ? parseInt(likeCount.innerText) + 1
                 : parseInt(likeCount.innerText) - 1;
-    
+        
             // Envia a requisição ao backend
             fetch(url, {
                 method: "POST",
@@ -320,18 +330,23 @@
                     "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value,
                 },
             })
-                .then((response) => response.json())
-                .then((data) => {
-                    likeCount.innerText = data.like_count; // Sincroniza com o backend
-                })
-                .catch((error) => {
-                    console.error("Erro ao atualizar o like:", error);
-                    this.checked = !isChecked; // Reverte o estado em caso de erro
-                    likeCount.innerText = isChecked
-                        ? parseInt(likeCount.innerText) - 1
-                        : parseInt(likeCount.innerText) + 1;
-                });
+            .then((response) => response.json())
+            .then((data) => {
+                likeCount.innerText = data.like_count; // Sincroniza com o backend
+                // Se o usuário não tiver curtido, desmarque a caixa
+                if (!data.liked) {
+                    likeButton.checked = false;
+                }
+            })
+            .catch((error) => {
+                console.error("Erro ao atualizar o like:", error);
+                likeButton.checked = !isChecked; // Reverte o estado em caso de erro
+                likeCount.innerText = isChecked
+                    ? parseInt(likeCount.innerText) - 1
+                    : parseInt(likeCount.innerText) + 1;
+            });
         });
+        
     </script>
     
 
