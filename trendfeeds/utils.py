@@ -1,14 +1,14 @@
-# **BIBLIOTECAS DE TERCEIROS**
+''' **BIBLIOTECAS DE TERCEIROS** '''
 import requests
     # Para fazer requisições HTTP a APIs externas.
 
 
-# **IMPORTAÇÕES DO DJANGO**
+''' **IMPORTAÇÕES DO DJANGO** '''
 from django.conf import settings
     # Para pegar a api key dentro do arquivo settings.
 
 
-# **FUNÇÕES DA API FUTEBOL**
+''' **FUNÇÕES DA API FUTEBOL** '''
 def obter_tabela_brasileirao():
     url = "https://api.api-futebol.com.br/v1/campeonatos/10/tabela"  # ID 10 refere-se à Série A
     headers = {
@@ -21,7 +21,7 @@ def obter_tabela_brasileirao():
         raise Exception(f"Erro ao acessar a API: {response.status_code} - {response.text}")
 def obter_proximos_jogos():
     # Define a URL da API onde os dados dos próximos jogos serão buscados.
-    url = "https://api.api-futebol.com.br/v1/campeonatos/10/rodadas/34"  # Substitua '34' pela rodada desejada dinamicamente.
+    url = "https://api.api-futebol.com.br/v1/campeonatos/10/rodadas/35"  # Substitua '34' pela rodada desejada dinamicamente.
 
     # Define os cabeçalhos da requisição, incluindo o token de autenticação para a API.
     headers = {
@@ -38,6 +38,7 @@ def obter_proximos_jogos():
         # Retorna a lista de partidas da resposta JSON.
         return response.json().get('partidas', [])
     except requests.exceptions.RequestException as e:
+        
         # Em caso de erro, exibe o erro no console e retorna uma lista vazia.
         print(f"Erro ao buscar próximos jogos: {e}")
         return []

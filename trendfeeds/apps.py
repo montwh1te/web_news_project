@@ -1,14 +1,22 @@
-# **IMPORTAÇÕES DO DJANGO**
+''' **IMPORTAÇÕES DO DJANGO**  '''
+# Importa a classe base `AppConfig`, usada para configurar aplicativos no Django.
 from django.apps import AppConfig  
-    # Importa a classe base `AppConfig`, usada para configurar aplicativos no Django.
 
+
+
+
+# Define a configuração para o aplicativo `trendfeeds`.
 class TrendfeedsConfig(AppConfig):  
-    # Define a configuração para o aplicativo `trendfeeds`.
-    default_auto_field = 'django.db.models.BigAutoField'  
-        # Especifica o tipo padrão de campo de chave primária automática para os modelos do aplicativo como `BigAutoField`.
 
+
+    # Especifica o tipo padrão de campo de chave primária automática para os modelos do aplicativo como `BigAutoField`.
+    default_auto_field = 'django.db.models.BigAutoField'  
+
+    # Define o nome do aplicativo, que deve corresponder ao diretório do aplicativo.
     name = 'trendfeeds'  
-        # Define o nome do aplicativo, que deve corresponder ao diretório do aplicativo.
-        
+    
+    # Método chamado quando o aplicativo é inicializado.
     def ready(self):
+
+        # Importa os sinais (signals) do aplicativo para ativar a funcionalidade associada.
         import trendfeeds.signals

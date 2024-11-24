@@ -102,3 +102,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 ROOT_URLCONF = 'web_news.urls'
 
 API_FUTEBOL_KEY = 'live_4bb165998f3bbcfcbd93a9da3e13eb'
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    }
+}
+
+# Configuração máxima (2 GB)
+DATA_UPLOAD_MAX_MEMORY_SIZE = 100 * 1024 * 1024 * 1024  # 100 GB
+FILE_UPLOAD_MAX_MEMORY_SIZE = 100 * 1024 * 1024 * 1024  # 100 GB
+

@@ -26,7 +26,7 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ noticia.titulo }}</h5>
                             <p class="card-text">{{ noticia.descricao|slice:":100" }}...</p>
-                            <a href="#" class="btn btn-warning">Editar</a>
+                            <a  href="{% url 'detalhes_noticia' noticia.slug %}" class="btn btn-warning">Editar</a>
                         </div>
                     </div>
                 </div>

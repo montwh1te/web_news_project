@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <!-- Define o tipo de documento e a linguagem -->
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
         <!-- Define a codificação de caracteres como UTF-8 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- Configura o site para ser responsivo em dispositivos móveis -->
@@ -35,7 +35,7 @@
 </head>
 
 
-<body>
+<body data-slug="{{ noticia.slug }}">
     <!-- INÍCIO DO CORPO DO DOCUMENTO -->
     <header>
         <nav class="navbar navbar-expand-lg navbar-custom d-flex justify-content-sm-around">
@@ -114,6 +114,12 @@
 
     <!-- ÁREA PRINCIPAL -->
     <main class="container mt-4"> 
+        {% if request.user.is_superuser %}
+            <button id="editButton" class="btn btn-primary edit-btn" onclick="enableEditMode()" style="top: 70%;right: 3%;">Editar</button>
+            <button id="saveButton" class="btn btn-success save-btn d-none" onclick="saveChanges()" style="top: 70%;right: 3%;">Salvar</button>
+        {% endif %}
+
+       
             <!-- Container principal para o artigo -->
         <article class="noticia-detalhada" style="margin-left: 10%; margin-right: 10%;"> 
                 <!-- Container do artigo com margens laterais -->
@@ -134,9 +140,17 @@
 
                     <!-- CONTEÚDO PRINCIPAL DA NOTÍCIA -->
                     <div class="noticia-conteudo">
-                        {% block main_content %}{% endblock main_content %}
-                            <!-- Conteúdo principal do artigo, injetado pelo bloco `main_content` -->
+                        <div class="imagens-editaveis">
+                            {% if user.is_superuser %}
+                                <input type="file" class="editar-imagem d-none" data-imagem-id="{{ imagem.id }}" onchange="handleImageChange(event, '{{ imagem.id }}')">
+                            {% endif %}
+                        </div>
+                        {% block main_content %}
+                        <!-- Aqui serão listadas as imagens existentes -->
+                       
+                        {% endblock main_content %}
                     </div>
+                    
 
 
 
@@ -326,7 +340,7 @@
     <!-- Importa o JavaScript do Bootstrap para habilitar interatividade nos componentes como carrossel, dropdowns, etc. -->
     
 
-
+   
 
     <script>
         // PARA O BOTÃO DE LIKES
@@ -451,6 +465,154 @@
             });
         }
     </script>
+
+    
+    <script>
+        // Objeto para armazenar imagens alteradas
+        const imagensAlteradas = {};
+
+        // Função para lidar com a troca de imagens
+        function handleImageChange(event, imagemId) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+        
+                reader.onload = function (e) {
+                    // Encontra o contêiner de edição de imagens
+                    const container = document.querySelector('.noticia-conteudo');
+        
+                    if (!container) {
+                        console.error("Contêiner para exibição não encontrado!");
+                        return;
+                    }
+        
+                    // Cria o placeholder para backend
+                    const placeholder = `<imagem_id:${imagemId}>`;
+        
+                    // Cria o HTML da pré-visualização da imagem
+                    const imageHtml = `
+                        <div class="div-imagem">
+                            <img class="noticia-imagem" src="${e.target.result}" alt="Pré-visualização" data-placeholder="${placeholder}">
+                        </div>
+                    `;
+        
+                    // Adiciona a pré-visualização ao final do contêiner
+                    container.insertAdjacentHTML('beforeend', imageHtml);
+        
+                    // Armazena a imagem no objeto para envio ao backend
+                    imagensAlteradas[imagemId] = file;
+        
+                    console.log("Imagem pré-visualizada com sucesso.");
+                };
+        
+                // Lê o arquivo e cria a URL para pré-visualização
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        
+        
+        function enableEditMode() {
+            const title = document.querySelector('.noticia-titulo');
+            const content = document.querySelector('.noticia-conteudo');
+            const editButton = document.getElementById('editButton');
+            const saveButton = document.getElementById('saveButton');
+            const imageInputContainer = document.querySelector('.imagens-editaveis');
+            const existingFileInputs = document.querySelectorAll('.imagens-editaveis input.editar-imagem');
+        
+            // Torna os campos editáveis
+            if (title) title.contentEditable = true;
+            if (content) content.contentEditable = true;
+        
+            // Mostra os inputs de imagem
+            if (existingFileInputs.length > 0) {
+                existingFileInputs.forEach(input => {
+                    input.style.setProperty('display', 'block', 'important');
+                });
+            }
+        
+            // Esconde o botão "Editar" e mostra o botão "Salvar"
+            if (editButton) editButton.classList.add('d-none');
+            if (saveButton) saveButton.classList.remove('d-none');
+        }
+        
+        function disableEditMode() {
+            const title = document.querySelector('.noticia-titulo');
+            const content = document.querySelector('.noticia-conteudo');
+            const editButton = document.getElementById('editButton');
+            const saveButton = document.getElementById('saveButton');
+            const existingFileInputs = document.querySelectorAll('.imagens-editaveis input.editar-imagem');
+        
+            // Torna os campos não editáveis
+            if (title) title.contentEditable = false;
+            if (content) content.contentEditable = false;
+        
+            // Oculta os inputs de imagem
+            if (existingFileInputs.length > 0) {
+                existingFileInputs.forEach(input => {
+                    input.style.setProperty('display', 'none', 'important');
+                });
+            }
+        
+            // Esconde o botão "Salvar" e mostra o botão "Editar"
+            if (editButton) editButton.classList.remove('d-none');
+            if (saveButton) saveButton.classList.add('d-none');
+        }
+        
+        // Event Listeners
+        document.getElementById('editButton').addEventListener('click', enableEditMode);
+        document.getElementById('saveButton').addEventListener('click', disableEditMode);
+        
+        
+        
+        
+       
+
+        function saveChanges() {
+            const slug = document.body.dataset.slug; // Obtém o slug da página
+            const title = document.querySelector('.noticia-titulo').innerText.trim();
+            const content = document.querySelector('.noticia-conteudo').innerHTML.trim(); // Inclui placeholders
+        
+            console.log('Conteúdo enviado:', content); // Verifique o console para placeholders e pré-visualizações
+        
+            const url = `/salvar-noticia-html/${slug}/`;
+        
+            const formData = new FormData();
+            formData.append('titulo', title);
+            formData.append('conteudo', content);
+        
+            // Adiciona as imagens alteradas ao formulário
+            for (const [id, file] of Object.entries(imagensAlteradas)) {
+                formData.append(`imagens[${id}]`, file);
+            }
+        
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("Notícia atualizada com sucesso!");
+                        location.reload();
+                    } else {
+                        alert("Erro ao atualizar a notícia: " + data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error("Erro ao salvar alterações:", error);
+                    alert("Erro ao salvar alterações.");
+                });
+        }
+        
+    </script>
+    
+  
+
+    
 </body>
 </html>
 <!-- Finaliza o documento HTML -->
