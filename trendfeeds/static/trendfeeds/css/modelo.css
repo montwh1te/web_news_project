@@ -715,28 +715,3 @@ input{
   transform: scale(1.2);
   transition: transform 0.2s;
 }
-
-
-/* Estilo para imagens redimensionáveis */
-.resizable {
-  position: relative;
-  display: inline-block;
-  max-width: 100%;
-  cursor: nwse-resize;
-}
-
-.resizable img {
-  display: block;
-  max-width: 100%;
-  height: auto;
-}
-
-.resizable .resize-handle {
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  background: #007bff;
-  bottom: 0;
-  right: 0;
-  cursor: nwse-resize;
-}
