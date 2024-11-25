@@ -64,5 +64,7 @@ urlpatterns = [
 
     path('coletar_noticias/', views.acionar_coletar_noticias, name='coletar_noticias'),
 
+    path('criar_noticia/', views.criar_noticia, name='criar_noticia'),
+
         
 ]

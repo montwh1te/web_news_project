@@ -202,7 +202,7 @@
               <div class="card-body">
                 <div class="d-flex align-items-center justify-content-center mb-3">
                   <img src="{% get_media_prefix %}escudos/{{ jogo.time_mandante.nome_popular|slugify_with_underscore }}.png" alt="{{ jogo.time_mandante.nome_popular }}" class="img-fluid" style="width: 50px; height: 50px; border-radius: 50%" />
-                  {% if jogo.placar_numerico %}<div>{{ jogo.placar_numerico|safe }}</div>{% else %}<span>X</span>{% endif %}
+                  {% if jogo.placar_numerico %}<div style="color: #6c757d !important;">{{ jogo.placar_numerico|safe }}</div>{% else %}<span>X</span>{% endif %}
                   <img src="{% get_media_prefix %}escudos/{{ jogo.time_visitante.nome_popular|slugify_with_underscore }}.png" alt="{{ jogo.time_visitante.nome_popular }}" class="img-fluid" style="width: 50px; height: 50px; border-radius: 50%" />
                 </div>
                 <div class="game-details text-muted">
@@ -231,7 +231,7 @@
         {% for noticia in todas_as_noticias %}
         <div class="col-12 mb-4">
           <a href="{% url 'detalhes_noticia' noticia.slug %}" class="noticia-card" style="width: 100%">
-            <img src="{% get_media_prefix %}/thumbs/thumb_n_{{ noticia.id }}.jpg" alt="noticia" />
+            <img src="{% get_media_prefix %}/thumbs/thumb_n_{{ noticia.id }}.jpg" onerror="this.onerror=null; this.src='{% get_media_prefix %}SemImagem.png';" alt="noticia" />
             <div class="noticia-conteudo">
               <h5>{{ noticia.descricao }}</h5>
               <p>{{ noticia.descricao|slice:":150" }} ...</p>

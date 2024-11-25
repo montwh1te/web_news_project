@@ -64,13 +64,16 @@ body.dark-mode p{
   color: #d2d2d2;
 }
 
-body.dark-mode .comentarios-container{
-  background-color: #171717;
+body.dark-mode .comentarios-container {
+  background-color: #000000;
 }
-body.dark-mode  .border {
-  border: 1px solid #1e1e1e !important;
+body.dark-mode .border {
+  background-color: #1e1e1e !important;
+  border: #000000 !important;
 }
-
+body.dark-mode .likeCount{
+  color: #d2d2d2;
+}
 body.dark-mode .form-control:disabled, .form-control[readonly] {
   background-color: #17191a;
   opacity: 1;
@@ -79,11 +82,9 @@ body.dark-mode .form-control:disabled, .form-control[readonly] {
 body.dark-mode .form-control {
   color: #d2d2d2;
   background-color: #171717;
-  border: 1px solid #000000;
-
+  border: 1px solid #000000 !important;
 }
 body.dark-mode button{
-  background-color: #171717;
   color: #d2d2d2;
 }
 
@@ -104,7 +105,9 @@ body.dark-mode .card-title{
   color: #d2d2d2;
 }
 
-
+body.dark-mode .carousel-indicators li{
+  background-color: #ffffff;
+}
 ::-webkit-scrollbar-thumb:hover {
   background: #555; /* cor escura quando passa o mouse no modo escuro */
 }
@@ -153,13 +156,19 @@ button{
 
 
 
+body.dark-mode #toolbar{
+  background: #000000;
+}
+
+body.dark-mode #toolbar button{
+  background-color: #171717;
+}
 
 
 
-
-
-
-
+body.dark-mode #toolbar button svg{
+  fill: #dddddd;
+}
 
 
 
@@ -537,7 +546,22 @@ a{
   color: #424242;
 }
 
-
+.carousel-indicators {
+  position: absolute;
+  top: 110%;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 15;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: center;
+  justify-content: center;
+  padding-left: 0;
+  margin-right: 15%;
+  margin-left: 15%;
+  list-style: none;
+}
 .carousel-indicators li {
   box-sizing: content-box;
   -ms-flex: 0 1 auto;

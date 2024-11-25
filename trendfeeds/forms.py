@@ -34,3 +34,27 @@ class EditarNoticiaForm(forms.ModelForm):
 
         # Define os campos que podem ser editados no formulário.
         fields = ['titulo', 'descricao', 'autor', 'link', 'categorias']  
+
+
+
+class NoticiasForm(forms.ModelForm):
+    
+    imagens = forms.FileField(widget=forms.ClearableFileInput, required=False)
+
+    class Meta:
+        model = Noticias
+        fields = ['titulo', 'descricao', 'autor', 'link', 'categorias']
+        widgets = {
+            'titulo': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Digite o título'}),
+            'descricao': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Digite a descrição'}),
+            'autor': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Autor da notícia'}),
+            'link': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Link da notícia'}),
+            'categorias': forms.SelectMultiple(attrs={'class': 'form-control'}),
+        }
+        labels = {
+            'titulo': 'Título',
+            'descricao': 'Descrição',
+            'autor': 'Autor',
+            'link': 'Link',
+            'categorias': 'Categorias',
+        }

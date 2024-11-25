@@ -33,6 +33,8 @@ from django.core.cache import cache
 # Para acessar as configurações globais do projeto, como chaves e parâmetros de banco de dados.
 from django.conf import settings  
 
+from django.contrib import messages
+
 
 ''' **IMPORTAÇÕES DE MÓDULOS INTERNOS** '''
 # Importa os modelos definidos na aplicação para interagir com o banco de dados.
@@ -43,7 +45,7 @@ from .utils import obter_tabela_brasileirao, obter_proximos_jogos
 
 from .tasks import coletar_noticias
 
-
+from .forms import NoticiasForm
 
 
 ''' Função que lida com a página inicial da aplicação. '''
@@ -487,3 +489,106 @@ def acionar_coletar_noticias(request):
         coletar_noticias()  # Chama a função do seu tasks.py
         return JsonResponse({'status': 'success', 'message': 'Notícias coletadas com sucesso!'})
     return JsonResponse({'status': 'error', 'message': 'Erro ao coletar notícias.'})
+
+
+
+
+
+
+def criar_noticia(request):
+    if request.method == 'POST':
+        form = NoticiasForm(request.POST, request.FILES)
+        if form.is_valid():
+            # Salva a notícia no banco de dados
+            noticia = form.save(commit=False)  # Não salva ainda no banco
+
+            # Salva apenas os primeiros 93 caracteres da descrição no banco
+            descricao_completa = noticia.descricao  # Armazena o texto completo
+            noticia.descricao = descricao_completa[:93]  # Limita a descrição para o banco
+            noticia.save()  # Salva a notícia com a descrição truncada
+
+            # Salva as categorias selecionadas no formulário
+            form.save_m2m()  # Salva as relações Many-to-Many, como categorias
+
+            # Diretório de destino das imagens
+            diretorio_imagens = os.path.join(settings.MEDIA_ROOT, 'noticias')
+            os.makedirs(diretorio_imagens, exist_ok=True)
+
+            try:
+                # Obtém a imagem enviada
+                imagem = request.FILES.get('imagens')  # Supondo que o campo no formulário seja 'imagens'
+
+                if imagem:
+                    # Define o caminho e nome do arquivo para salvar a imagem localmente
+                    nome_arquivo_imagem = os.path.join(diretorio_imagens, f"n_{noticia.id}_0.jpg")
+
+                    # Salva a imagem no diretório de destino
+                    with open(nome_arquivo_imagem, 'wb') as file:
+                        for chunk in imagem.chunks():
+                            file.write(chunk)
+
+                    print(f"✅ Imagem salva como {nome_arquivo_imagem}")
+
+                    # Diretório e nome do arquivo para salvar a miniatura da imagem
+                    diretorio_thumbs = os.path.join(settings.MEDIA_ROOT, 'thumbs')
+                    os.makedirs(diretorio_thumbs, exist_ok=True)
+
+                    nome_arquivo_thumb = os.path.join(diretorio_thumbs, f"thumb_n_{noticia.id}.jpg")
+
+                    # Redimensiona a imagem e salva a miniatura
+                    from PIL import Image
+                    with Image.open(nome_arquivo_imagem) as img:
+                        img.thumbnail((380, 215))
+                        img.save(nome_arquivo_thumb, "JPEG")
+
+                    print(f"✅ Miniatura salva como {nome_arquivo_thumb}")
+            except Exception as e:
+                print(f"Erro ao salvar a imagem: {e}")
+
+            # Busca a categoria relacionada à notícia
+            categoria_relacionada = CategoriaNoticias.objects.filter(noticia=noticia).first()
+            nome_categoria = categoria_relacionada.categoria.nome_categoria if categoria_relacionada else "Sem Categoria"
+
+            # Diretório onde o HTML será salvo
+            templates_dir = os.path.join(settings.BASE_DIR, 'trendfeeds/templates/html/noticias')
+            os.makedirs(templates_dir, exist_ok=True)
+
+            # Nome do arquivo HTML baseado no slug
+            html_file_name = f'{noticia.slug}.html'
+            html_file_path = os.path.join(templates_dir, html_file_name)
+
+            # Processa a descrição para transformar quebras de linha em parágrafos
+            descricao_formatada = ''.join(f"<p class='noticia-conteudo'>{linha}</p>" for linha in descricao_completa.split('\n') if linha.strip())
+
+            # Adiciona a imagem ao conteúdo
+            imagem_html = (
+                f"<div class='div-imagem'><img class='noticia-imagem' src='{settings.MEDIA_URL}noticias/{f'n_{noticia.id}_0.jpg'}' alt='Imagem'></div>"
+                if imagem else ""
+            )
+
+            # Conteúdo do arquivo HTML
+            html_content = f"""
+            {{% extends "html/modelo.html" %}}
+            {{% load static %}}
+
+            {{% block title %}}{nome_categoria}{{% endblock title %}}
+            {{% block main_title %}}{nome_categoria}{{% endblock main_title %}}
+            {{% block second_title %}}{noticia.titulo}{{% endblock second_title %}}
+            {{% block main_content %}}
+            {descricao_formatada}
+            {imagem_html}
+            {{% endblock main_content %}}
+            """
+
+            # Salva o conteúdo no arquivo HTML
+            with open(html_file_path, 'w', encoding='utf-8') as html_file:
+                html_file.write(html_content)
+
+            # Sucesso
+            messages.success(request, f'Notícia \"{noticia.titulo}\" criada com sucesso! Página gerada em {html_file_path}.')
+        else:
+            messages.error(request, 'Erro ao criar a notícia. Verifique os dados.')
+    else:
+        form = NoticiasForm()
+
+    return render(request, 'html/criar_noticia.html', {'form': form})
