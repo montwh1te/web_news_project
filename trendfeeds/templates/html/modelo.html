@@ -684,5 +684,54 @@
         }
         
     </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Adiciona a funcionalidade de redimensionar a todas as imagens
+            document.querySelectorAll('.noticia-imagem').forEach(img => makeResizable(img));
+        
+            function makeResizable(img) {
+                // Cria um contêiner para a imagem e o handle de redimensionamento
+                const wrapper = document.createElement('div');
+                wrapper.classList.add('resizable');
+        
+                // Cria o handle de redimensionamento
+                const resizeHandle = document.createElement('div');
+                resizeHandle.classList.add('resize-handle');
+        
+                // Insere a imagem no contêiner e adiciona o handle
+                img.parentNode.insertBefore(wrapper, img);
+                wrapper.appendChild(img);
+                wrapper.appendChild(resizeHandle);
+        
+                let isResizing = false;
+        
+                // Inicia o redimensionamento
+                resizeHandle.addEventListener('mousedown', (e) => {
+                    isResizing = true;
+                    document.addEventListener('mousemove', resize);
+                    document.addEventListener('mouseup', stopResize);
+                    e.preventDefault();
+                });
+        
+                function resize(e) {
+                    if (!isResizing) return;
+                    const rect = wrapper.getBoundingClientRect();
+                    const newWidth = e.clientX - rect.left;
+                    const newHeight = (newWidth / rect.width) * rect.height;
+        
+                    img.style.width = `${newWidth}px`;
+                    img.style.height = `${newHeight}px`;
+                }
+        
+                function stopResize() {
+                    isResizing = false;
+                    document.removeEventListener('mousemove', resize);
+                    document.removeEventListener('mouseup', stopResize);
+                }
+            }
+        });
+        
+    </script>
 </body>
 </html>
