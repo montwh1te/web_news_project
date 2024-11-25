@@ -124,7 +124,7 @@
           </a>
           <div class="d-flex flex-column container-fluid justify-content-start descricao-noticia-mais-recente">
             <a href="{% if ultima_noticia.slug %}{% url 'detalhes_noticia' ultima_noticia.slug %}{% else %}#{% endif %}">
-              <p class="titulo-noticia-mais-recente">{{ ultima_noticia.titulo}}</p>
+              <p class="titulo-noticia-mais-recente">{{ ultima_noticia.descricao }}</p>
               <p class="resumo-noticia-mais-recente">{{ ultima_noticia.descricao|slice:":350" }} ...</p>
             </a>
           </div>
