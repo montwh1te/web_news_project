@@ -249,8 +249,8 @@
             {% if request.user.is_authenticated %}
                 <form id="commentForm" method="post" action="{% url 'comentar_noticia' noticia.slug %}" class="d-flex">
                     {% csrf_token %}
-                    <textarea name="comentario" id="comentarioTextarea" rows="2" class="form-control" placeholder="Deixe seu comentário..." required style="resize: none; border-radius: 20px; width: 70%;"></textarea>
-                    <button type="submit" class="btn btn-primary ml-2" style="height: 40px;">Enviar</button>
+                    <textarea name="comentario" id="comentarioTextarea" rows="1" class="form-control" placeholder="Deixe seu comentário..." required style="resize: none;border-radius: 20px;width: 80%;margin-left: 10%;"></textarea>
+                    <button type="submit" class="btn btn-primary ml-2" style="height: 40px;margin-top: 3%;border-radius: 7px">Enviar</button>
                 </form>
             {% else %}
                 <textarea class="form-control" placeholder="Faça login para comentar..." disabled></textarea>

@@ -68,6 +68,10 @@ urlpatterns = [
 
     path('noticia/comentario/deletar/<int:comentario_id>/', views.deletar_comentario, name='deletar_comentario'),
 
+    path('noticia/deletar/<int:noticia_id>/', views.deletar_noticia, name='deletar_noticia'),
+
+
+    path('pagina_noticias_funcionarios/', views.pagina_noticias_funcionarios, name='pagina_noticias_funcionarios'),
 
         
 ]

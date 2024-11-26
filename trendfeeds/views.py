@@ -392,13 +392,22 @@ def exibir_categoria(request, nome_time):
 ''' Função que exibe a página de funcionários. '''
 def pagina_funcionarios(request):
     # Obtém todas as notícias do banco de dados.
+    
+    # Renderiza a página de funcionários com as notícias obtidas.
+    # O contexto passado inclui todas as notícias para exibição na página.
+    return render(request, 'html/index_funcionarios.html')
+
+
+
+
+''' Função que exibe a página que mostra todas as noticias aos funcionários. '''
+def pagina_noticias_funcionarios(request):
+    # Obtém todas as notícias do banco de dados.
     noticias = Noticias.objects.all()
     
     # Renderiza a página de funcionários com as notícias obtidas.
     # O contexto passado inclui todas as notícias para exibição na página.
-    return render(request, 'html/index_funcionarios.html', {'noticias': noticias})
-
-
+    return render(request, 'html/todas_as_noticias_funcionarios.html', {'noticias': noticias})
 
 
 
@@ -600,7 +609,7 @@ def criar_noticia(request):
         form = NoticiasForm()
 
     return render(request, 'html/criar_noticia.html', {'form': form})
-
+    
 
 
 
@@ -616,3 +625,19 @@ def deletar_comentario(request, comentario_id):
     comentario.delete()
     messages.success(request, "Comentário deletado com sucesso.")
     return redirect('detalhes_noticia', slug=slug)  # Redireciona para os detalhes da notícia
+
+
+@login_required
+def deletar_noticia(request, noticia_id):
+    if not request.user.is_superuser:
+        messages.error(request, "Você não tem permissão para deletar notícias.")
+        return redirect('pagina_noticias_funcionarios')  # Redireciona de volta à página
+
+    # Busca a notícia ou retorna 404 se não existir
+    noticia = get_object_or_404(Noticias, id=noticia_id)
+
+    # Deleta a notícia (as relações na tabela intermediária CategoriaNoticias serão deletadas automaticamente se configuradas corretamente)
+    noticia.delete()
+
+    messages.success(request, "Notícia deletada com sucesso.")
+    return redirect('pagina_noticias_funcionarios')  

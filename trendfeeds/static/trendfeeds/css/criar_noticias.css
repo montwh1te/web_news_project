@@ -6,6 +6,7 @@ body {
   background: linear-gradient(135deg, #f3f4f7, #ffffff);
   color: #333;
   line-height: 1.6;
+  transition: 0.4s;
 }
 
 /* Container principal */
@@ -137,4 +138,192 @@ input[type="file"]:hover {
   select {
     font-size: 0.9rem;
   }
+}
+
+ /* Estilização para o menu lateral */
+ .sidebar {
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #343a40;
+  padding-top: 30px;
+  width: 250px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+.sidebar a {
+  color: #ffffff;
+  text-decoration: none;
+  padding: 15px 20px;
+  display: block;
+  font-size: 16px;
+  border-radius: 4px;
+  margin: 10px 20px;
+  transition: background-color 0.3s, transform 0.2s;
+}
+.sidebar a:hover {
+  background-color: #495057;
+  transform: translateX(5px);
+}
+.main-content {
+  margin-left: 270px; /* Largura do menu lateral */
+  padding: 20px;
+}
+.sidebar h3 {
+  color: #ffffff;
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 18px;
+  font-weight: bold;
+}
+/* Estilização Geral */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f8f9fa;
+  transition: 0.4s;
+}
+
+/* Área de conteúdo principal */
+.content {
+  padding: 20px;
+  margin: 0 auto;
+  max-width: 800px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+/* Cabeçalho do conteúdo */
+.content-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #e9ecef;
+  padding-bottom: 10px;
+}
+
+/* Informações do usuário */
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Foto do usuário */
+.user-photo {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #6c757d;
+}
+
+/* Nome do usuário */
+.user-name {
+  font-size: 18px;
+  font-weight: bold;
+  color: #343a40;
+}
+
+/* Seção de boas-vindas */
+.welcome h2 {
+  font-size: 24px;
+  color: #495057;
+  text-align: center;
+  margin-top: 20px;
+  line-height: 1.5;
+}
+
+body.dark-mode{
+  background-color: #1a1a1a;
+  background: #1a1a1a;
+}
+
+body.dark-mode .container{
+  background-color: #1a1a1a;
+  box-shadow: 0 4px 8px rgb(0 0 0 / 49%);
+}
+
+body.dark-mode .content-header {
+  border-bottom: 1px solid #000000;
+}
+
+body.dark-mode .welcome h2 {
+  color: #ffffff;
+}
+
+body.dark-mode input{
+  background-color: #1a1a1a;
+  background: #1a1a1a;
+  border: 1px solid #333333;
+  color: #bbbbbb;
+
+  
+
+}
+
+body.dark-mode textarea{
+  background-color: #1a1a1a;
+  background: #1a1a1a;
+  border: 1px solid #333333;
+}
+
+body.dark-mode select{
+  background-color: #1a1a1a;
+  background: #1a1a1a;
+  border: 1px solid #333333;
+}
+
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* cor escura quando passa o mouse no modo escuro */
+}
+/* Barra de rolagem padrão */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Cor de fundo da barra de rolagem */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* cor clara para o modo claro */
+}
+
+/* Cor da barra de rolagem */
+::-webkit-scrollbar-thumb {
+  background: #888; /* cor padrão da barra de rolagem */
+}
+
+/* Cor quando o usuário passa o mouse sobre a barra de rolagem */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* cor escura quando passa o mouse */
+}
+
+/* Modo escuro */
+body.dark-mode::-webkit-scrollbar-track {
+  background: #333; /* cor mais escura para o modo escuro */
+}
+
+body.dark-mode::-webkit-scrollbar-thumb {
+  background: #777; /* cor da barra de rolagem no modo escuro */
+}
+
+body.dark-mode select::-webkit-scrollbar-track {
+  background: #333; /* cor mais escura para o modo escuro */
+}
+
+body.dark-mode select::-webkit-scrollbar-thumb {
+  background: #777; /* cor da barra de rolagem no modo escuro */
+}
+
+body.dark-mode h2{
+  color: #bbbbbb;
+}
+body.dark-mode label{
+  color: #bbbbbb;
+}
+body.dark-mode option{
+  color: #bbbbbb;
 }

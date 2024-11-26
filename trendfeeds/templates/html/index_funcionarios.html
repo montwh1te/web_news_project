@@ -8,43 +8,174 @@
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
     <link rel="stylesheet" href="{% static 'trendfeeds/css/index_funcionarios.css' %}" />
+    <style>
+        /* Estilização para o menu lateral */
+        .sidebar {
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #343a40;
+            padding-top: 30px;
+            width: 250px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .sidebar a {
+            color: #ffffff;
+            text-decoration: none;
+            padding: 15px 20px;
+            display: block;
+            font-size: 16px;
+            border-radius: 4px;
+            margin: 10px 20px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .sidebar a:hover {
+            background-color: #495057;
+            transform: translateX(5px);
+        }
+        .main-content {
+            margin-left: 270px; /* Largura do menu lateral */
+            padding: 20px;
+        }
+        .sidebar h3 {
+            color: #ffffff;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        /* Estilização Geral */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            transition: 0.4s;
+        }
+
+        /* Área de conteúdo principal */
+        .content {
+            padding: 20px;
+            margin: 0 auto;
+            max-width: 800px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        /* Cabeçalho do conteúdo */
+        .content-header {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #e9ecef;
+            padding-bottom: 10px;
+        }
+
+        /* Informações do usuário */
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* Foto do usuário */
+        .user-photo {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #6c757d;
+        }
+
+        /* Nome do usuário */
+        .user-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #343a40;
+        }
+
+        /* Seção de boas-vindas */
+        .welcome h2 {
+            font-size: 24px;
+            color: #495057;
+            text-align: center;
+            margin-top: 20px;
+            line-height: 1.5;
+        }
+
+        body.dark-mode{
+            background-color: #1a1a1a;
+        }
+
+        body.dark-mode .content{
+            background-color: #1a1a1a;
+            box-shadow: 0 4px 8px rgb(0 0 0 / 49%);
+        }
+
+        body.dark-mode .content-header {
+            border-bottom: 1px solid #000000;
+        }
+
+        body.dark-mode .welcome h2 {
+            color: #ffffff;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-custom d-flex justify-content-sm-around">
-            <!-- Seu código de navegação -->
-        </nav>
-    </header>
 
-    <main class="container mt-5">
-        <h2>Gerenciar Notícias</h2>
-        <div class="row">
-            {% for noticia in noticias %}
-                <div class="col-12 col-md-4 mb-4">
-                    <div class="card">
-                        <img src="{% get_media_prefix %}noticias/n_{{ noticia.id }}_0.jpg" class="card-img-top" alt="Imagem da Notícia" onerror="this.onerror=null; this.src='{% get_media_prefix %}SemImagem.png';">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ noticia.titulo }}</h5>
-                            <p class="card-text">{{ noticia.descricao|slice:":100" }}...</p>
-                            <a href="{% url 'detalhes_noticia' noticia.slug %}" class="btn btn-warning">Editar</a>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
-        
-        <!-- Botão para acionar a função de coletar notícias -->
-        <form method="post" action="{% url 'coletar_noticias' %}">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-primary mt-3">Coletar Notícias</button>
-        </form>
+    <!-- Menu Lateral -->
+    <div class="sidebar">
+        <h3>Menu</h3>
+        <a href="{% url 'home' %}">Início do site</a>    
+        <a href="{% url 'criar_noticia' %}">Criar Nova Notícia</a>
+        <a href="{% url 'pagina_noticias_funcionarios' %}">Listar todas as notícias</a>
+        <a href='#' id="dark-mode-toggle">Claro</a>
 
-        
-        <a class="btn btn-primary mt-3" href="{% url 'criar_noticia' %}" >Criar nova notícia</a>
-       
+    </div>
+
+    <!-- Conteúdo Principal -->
+    
+
+    <main class="content">
+        <header class="content-header">
+            <div class="user-info">
+                <img src="{{ request.user.foto.url }}" alt="Foto de {{ request.user.username }}" class="user-photo">
+                <span>{{ request.user.username }}</span>
+            </div>
+        </header>
+
+        <section class="welcome">
+            <h2>Bem-vindo, {{ request.user.username }}!</h2>
+        </section>
     </main>
 
 
 
+    <!-- Script necessário para o modo noturno -->
+    <script>
+        // Espera a página carregar completamente
+        window.onload = function() {
+          const toggleButton = document.getElementById('dark-mode-toggle');
+  
+        
+          // Evento de clique para alternar entre modos (escuro/claro)
+          toggleButton.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode'); // Alterna a classe dark-mode no body
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            
+            // Atualiza o estado do botão e do logo, e salva a preferência no localStorage
+            if (isDarkMode) {
+              toggleButton.innerHTML = "Escuro";
+              localStorage.setItem('dark-mode', 'true'); // Salva a preferência
+            } else {
+              toggleButton.innerHTML = "Claro";
+              localStorage.setItem('dark-mode', 'false'); // Salva a preferência
+            }
+          });
+        }
+    </script>
 </body>
 </html>
