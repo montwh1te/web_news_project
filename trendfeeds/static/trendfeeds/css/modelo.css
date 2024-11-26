@@ -108,6 +108,21 @@ body.dark-mode .card-title{
 body.dark-mode .carousel-indicators li{
   background-color: #ffffff;
 }
+
+body.dark-mode h5{
+  color: #d2d2d2;
+}
+
+body.dark-mode .dropdown-menu.show{
+  background-color: #171717;
+
+}
+body.dark-mode .dropdown-item-text{
+  color: #d2d2d2 !important;
+}
+body.dark-mode .text-danger:hover{
+  background-color: #000000 !important;
+}
 ::-webkit-scrollbar-thumb:hover {
   background: #555; /* cor escura quando passa o mouse no modo escuro */
 }

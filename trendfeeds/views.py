@@ -203,15 +203,23 @@ def detalhes_noticia(request, slug):
 
     # Define o nome da categoria, ou "Outros" se nenhuma for encontrada.
     categoria_nome = categoria.nome_categoria if categoria else "Outros"
+
+    # Cria uma lista de IDs das notícias já selecionadas.
+    ids_excluidos = [noticia.id] if noticia else []  
+    # Se `ultima_noticia` não for `None`, adiciona o ID da última notícia à lista `ids_excluidos`. 
+    # Caso contrário, a lista será vazia ([]).
+    
     
     # Obtém todas as notícias, ordenadas por data de publicação.
-    todas_as_noticias = Noticias.objects.all().order_by('-data_publicacao')
+    todas_as_noticias = Noticias.objects.exclude(id__in=ids_excluidos).order_by('-data_publicacao')[1:11]
     
     # Agrupa as notícias em grupos de três para exibição.
     noticias_agrupadas = [
         todas_as_noticias[i:i + 3] for i in range(0, len(todas_as_noticias), 3)
     ]
-    
+   
+   
+
     # Define o nome do template com base no slug da notícia.
     template_name = f'html/noticias/{noticia.slug}.html'
 
@@ -592,3 +600,19 @@ def criar_noticia(request):
         form = NoticiasForm()
 
     return render(request, 'html/criar_noticia.html', {'form': form})
+
+
+
+
+
+@login_required
+def deletar_comentario(request, comentario_id):
+    if not request.user.is_superuser:
+        messages.error(request, "Você não tem permissão para deletar comentários.")
+        return redirect('detalhes_noticia', slug=request.POST.get('slug'))  # Redireciona de volta à página
+
+    comentario = get_object_or_404(Comentario, id=comentario_id)
+    slug = comentario.noticia.slug  # Obtém o slug da notícia associada ao comentário
+    comentario.delete()
+    messages.success(request, "Comentário deletado com sucesso.")
+    return redirect('detalhes_noticia', slug=slug)  # Redireciona para os detalhes da notícia

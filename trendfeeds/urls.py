@@ -66,5 +66,8 @@ urlpatterns = [
 
     path('criar_noticia/', views.criar_noticia, name='criar_noticia'),
 
+    path('noticia/comentario/deletar/<int:comentario_id>/', views.deletar_comentario, name='deletar_comentario'),
+
+
         
 ]
