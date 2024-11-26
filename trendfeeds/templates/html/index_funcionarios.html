@@ -22,7 +22,7 @@
             {% for noticia in noticias %}
                 <div class="col-12 col-md-4 mb-4">
                     <div class="card">
-                        <img src="{% get_media_prefix %}noticias/n_{{ noticia.id }}_0.jpg" class="card-img-top" alt="Imagem da Notícia">
+                        <img src="{% get_media_prefix %}noticias/n_{{ noticia.id }}_0.jpg" class="card-img-top" alt="Imagem da Notícia" onerror="this.onerror=null; this.src='{% get_media_prefix %}SemImagem.png';">
                         <div class="card-body">
                             <h5 class="card-title">{{ noticia.titulo }}</h5>
                             <p class="card-text">{{ noticia.descricao|slice:":100" }}...</p>
