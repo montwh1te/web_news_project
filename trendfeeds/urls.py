@@ -73,5 +73,8 @@ urlpatterns = [
 
     path('pagina_noticias_funcionarios/', views.pagina_noticias_funcionarios, name='pagina_noticias_funcionarios'),
 
+  
+
+
         
 ]

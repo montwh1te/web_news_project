@@ -459,55 +459,76 @@ def coletar_noticias():
 
                 # Itera sobre cada elemento de imagem encontrado, com um índice `j` para diferenciar as imagens.
                 for j, imagem_elemento in enumerate(imagens_elementos):
+                    try:
+                        # Garante que a imagem está visível antes de capturar o `src`.
+                        driver.execute_script("arguments[0].scrollIntoView(true);", imagem_elemento)
 
-                    # Obtém o atributo `src` de cada elemento de imagem, que contém o URL da imagem.
-                    url_imagem = imagem_elemento.get_attribute("src")
+                        # Aguarda o carregamento do atributo `src`.
+                        WebDriverWait(driver, 10).until(
+                            lambda d: imagem_elemento.get_attribute("src") is not None)
 
-                    # Define o caminho e nome do arquivo para salvar a imagem localmente, com base no ID da notícia e no índice.
-                    nome_arquivo_imagem = os.path.join(f'{diretorio_imagens}/noticias', f"n_{novo_id_noticia}_{j}.jpg")
-                       
-                    # Faz uma requisição HTTP para o URL da imagem e ativa o modo "stream" para download por partes.
-                    resposta_imagem = requests.get(url_imagem, stream=True)
+                        # Obtém o atributo `src` de cada elemento de imagem, que contém o URL da imagem.
+                        url_imagem = imagem_elemento.get_attribute("src")
 
-                    # Verifica se a requisição foi bem-sucedida. Lança uma exceção caso haja algum erro (e.g., 404 ou 500).
-                    resposta_imagem.raise_for_status()
+                        # Valida o URL da imagem (opcionalmente, pode filtrar URLs inválidos).
+                        if not url_imagem or not url_imagem.startswith("http"):
+                            print(Fore.RED + f"⚠️ URL inválido encontrado: {url_imagem}")
+                            continue
 
-                    # Abre um arquivo no modo "write binary" para salvar os dados da imagem.
-                    with open(nome_arquivo_imagem, 'wb') as file:
+                        # Define o caminho e nome do arquivo para salvar a imagem localmente, com base no ID da notícia e no índice.
+                        nome_arquivo_imagem = os.path.join(f'{diretorio_imagens}/noticias', f"n_{novo_id_noticia}_{j}.jpg")
 
-                        # Faz o download da imagem em blocos de 1024 bytes para economizar memória.
-                        for chunk in resposta_imagem.iter_content(1024):
+                        # Verifica se o arquivo já existe.
+                        if os.path.exists(nome_arquivo_imagem):
+                            print(Fore.YELLOW + f"🔄 Arquivo {nome_arquivo_imagem} já existe. Será sobrescrito.")
+                                
+                        # Faz uma requisição HTTP para o URL da imagem e ativa o modo "stream" para download por partes.
+                        resposta_imagem = requests.get(url_imagem, stream=True)
 
-                            # Escreve cada bloco baixado no arquivo.
-                            file.write(chunk)
+                        # Verifica se a requisição foi bem-sucedida. Lança uma exceção caso haja algum erro (e.g., 404 ou 500).
+                        resposta_imagem.raise_for_status()
 
-                    # Adiciona o caminho da imagem salva à lista `imagem_urls`.
-                    imagem_urls.append(nome_arquivo_imagem)
+                        # Abre um arquivo no modo "write binary" para salvar os dados da imagem.
+                        with open(nome_arquivo_imagem, 'wb') as file:
 
-                    # Exibe uma mensagem indicando que a imagem foi salva com sucesso.
-                    print(Fore.GREEN + f"✅ Imagem {j} salva como {nome_arquivo_imagem}")
+                            # Faz o download da imagem em blocos de 1024 bytes para economizar memória.
+                            for chunk in resposta_imagem.iter_content(1024):
 
-                    # Redimensiona a imagem e salva no diretório de miniaturas (thumbs)
-                    # Define o caminho e nome do arquivo para salvar a miniatura da imagem.
-                    nome_arquivo_thumb = os.path.join(f'{diretorio_imagens}/thumbs', f"thumb_n_{novo_id_noticia}.jpg")
-                       
-                    # Abre a imagem salva usando a biblioteca Pillow.
-                    with Image.open(nome_arquivo_imagem) as img:
+                                # Escreve cada bloco baixado no arquivo.
+                                file.write(chunk)
 
-                        # Redimensiona a imagem para um tamanho máximo de 380x215 pixels, mantendo a proporção.
-                        img.thumbnail((380, 215))
+                        # Adiciona o caminho da imagem salva à lista `imagem_urls`.
+                        imagem_urls.append(nome_arquivo_imagem)
 
-                        # Salva a miniatura no formato JPEG no diretório definido.
-                        img.save(nome_arquivo_thumb, "JPEG")
+                        # Exibe uma mensagem indicando que a imagem foi salva com sucesso.
+                        print(Fore.GREEN + f"✅ Imagem {j} salva como {nome_arquivo_imagem}")
 
-                    # Exibe uma mensagem indicando que a miniatura foi salva com sucesso.
-                    print(Fore.GREEN + f"✅ Miniatura da imagem {j} salva como {nome_arquivo_thumb}")
+                        # Redimensiona a imagem e salva no diretório de miniaturas (thumbs)
+                        # Define o caminho e nome do arquivo para salvar a miniatura da imagem.
+                        nome_arquivo_thumb = os.path.join(f'{diretorio_imagens}/thumbs', f"thumb_n_{novo_id_noticia}.jpg")
+                        
+                        # Abre a imagem salva usando a biblioteca Pillow.
+                        with Image.open(nome_arquivo_imagem) as img:
+
+                            # Redimensiona a imagem para um tamanho máximo de 380x215 pixels, mantendo a proporção.
+                            img.thumbnail((380, 215))
+
+                            # Salva a miniatura no formato JPEG no diretório definido.
+                            img.save(nome_arquivo_thumb, "JPEG")
+                        # Exibe uma mensagem indicando que a miniatura foi salva com sucesso.
+
+                        print(Fore.GREEN + f"✅ Miniatura da imagem {j} salva como {nome_arquivo_thumb}")
+
+                    except Exception as e:
+
+                        # Exibe uma mensagem de erro caso qualquer exceção seja levantada durante o processo.
+                        print(Fore.RED + f"Erro ao baixar as imagens: {e}")
+
             except Exception as e:
 
-                # Exibe uma mensagem de erro caso qualquer exceção seja levantada durante o processo.
+                # Exibe uma mensagem de erro geral caso qualquer exceção seja levantada.
                 print(Fore.RED + f"Erro ao baixar as imagens: {e}")
-
-                        
+                                
 
 
 

@@ -6,6 +6,7 @@ import json
 import re  
 
 
+
 ''' **BIBLIOTECAS DE TERCEIROS** '''
 # Para fazer requisições HTTP a APIs externas.
 import requests  
@@ -13,6 +14,7 @@ import requests
 # Para interagir com o sistema operacional, como manipulação de arquivos e caminhos.
 import os  
 
+from cachetools import TTLCache
 
 ''' **IMPORTAÇÕES DO DJANGO** '''
 # Para restringir acesso a usuários autenticados.
@@ -41,7 +43,7 @@ from django.contrib import messages
 from .models import Categoria, Noticias, InteracaoUsuario, Comentario, CategoriaNoticias  
 
 # Importa duas funções utilitárias personalizadas, uma para obter a tabela do Brasileirão e outra para os próximos jogos.
-from .utils import obter_tabela_brasileirao, obter_proximos_jogos  
+from .utils import obter_tabela_brasileirao, obter_proximos_jogos, obter_jogos_um_time
 
 from .tasks import coletar_noticias
 
@@ -349,40 +351,54 @@ def buscar_proximos_jogos(time_id):
 
 ''' Função que exibe a página de uma categoria específica (time), mostrando suas notícias. '''
 def exibir_categoria(request, nome_time):
-    # Busca a categoria pelo nome do time, ou retorna erro 404 se não encontrada.
+    """
+    Exibe as informações da categoria de um time (nome do time).
+    Obtém as últimas notícias e os próximos jogos do time.
+    """
+    # Busca a categoria pelo nome do time (verificando se existe)
     categoria = get_object_or_404(Categoria, nome_categoria=nome_time)
 
-    # Obtém a cor associada à categoria.
+    # Obtém a cor associada à categoria
     categoria_cor = categoria.cor
-    print(categoria.cor)  # Exibe a cor da categoria no console para depuração.
 
-    # Filtra as notícias relacionadas à categoria, ordenadas por ID (mais recentes primeiro).
+    # Filtra as notícias relacionadas à categoria
     noticias = Noticias.objects.filter(categorias=categoria).order_by('-id')
 
-    # Obtém a última notícia publicada (mais recente).
+    # Obtém a última notícia publicada
     ultima_noticia = noticias.first()
 
-    # Obtém as próximas três notícias mais recentes, excluindo a última.
+    # Obtém as próximas três notícias mais recentes, excluindo a última
     ultimas_tres_noticias = noticias[1:4]
 
-    # Obtém as notícias restantes, excluindo as quatro primeiras.
+    # Obtém as notícias restantes
     restantes_noticias = noticias[4:]
 
-    # Define o template dinâmico para exibir a categoria, usando o nome do time.
+    # Define o template dinâmico com base no nome do time
     template_name = f'html/categorias/index_{nome_time}.html'
 
-    # Define o contexto para renderizar o template.
+    # Define o contexto para renderizar o template
     context = {
-        'main_title': nome_time,  
-        'cor_categoria': getattr(categoria, 'cor_categoria', "#3333"),  
-        'noticias': restantes_noticias,  
-        'ultima_noticia': ultima_noticia,  
-        'ultimas_tres_noticias': ultimas_tres_noticias,  
-        'categoria_cor': categoria_cor, 
+        'main_title': nome_time,
+        'cor_categoria': getattr(categoria, 'cor_categoria', "#3333"),
+        'noticias': restantes_noticias,
+        'ultima_noticia': ultima_noticia,
+        'ultimas_tres_noticias': ultimas_tres_noticias,
+        'categoria_cor': categoria_cor,
     }
 
-    # Renderiza a página da categoria com o contexto fornecido.
+    # Obtemos os jogos do time a partir da função obter_jogos_um_time
+    try:
+        proximos_jogos = obter_jogos_um_time(nome_time)
+    except ValueError as e:
+        # Caso o time não seja encontrado, você pode capturar o erro e tratá-lo (por exemplo, mostrando uma mensagem).
+        return render(request, 'index.html', {'mensagem': str(e)})
+
+    # Adiciona os próximos jogos ao contexto
+    context['proximos_jogos'] = proximos_jogos
+
+    # Renderiza o template com as informações do time
     return render(request, template_name, context)
+
 
 
 
@@ -519,7 +535,6 @@ def criar_noticia(request):
             # Salva a notícia no banco de dados
             noticia = form.save(commit=False)  # Não salva ainda no banco
 
-            # Salva apenas os primeiros 93 caracteres da descrição no banco
             descricao_completa = noticia.descricao  # Armazena o texto completo
             noticia.descricao = descricao_completa[:93]  # Limita a descrição para o banco
             noticia.save()  # Salva a notícia com a descrição truncada
@@ -545,20 +560,6 @@ def criar_noticia(request):
                             file.write(chunk)
 
                     print(f"✅ Imagem salva como {nome_arquivo_imagem}")
-
-                    # Diretório e nome do arquivo para salvar a miniatura da imagem
-                    diretorio_thumbs = os.path.join(settings.MEDIA_ROOT, 'thumbs')
-                    os.makedirs(diretorio_thumbs, exist_ok=True)
-
-                    nome_arquivo_thumb = os.path.join(diretorio_thumbs, f"thumb_n_{noticia.id}.jpg")
-
-                    # Redimensiona a imagem e salva a miniatura
-                    from PIL import Image
-                    with Image.open(nome_arquivo_imagem) as img:
-                        img.thumbnail((380, 215))
-                        img.save(nome_arquivo_thumb, "JPEG")
-
-                    print(f"✅ Miniatura salva como {nome_arquivo_thumb}")
             except Exception as e:
                 print(f"Erro ao salvar a imagem: {e}")
 
@@ -627,6 +628,10 @@ def deletar_comentario(request, comentario_id):
     return redirect('detalhes_noticia', slug=slug)  # Redireciona para os detalhes da notícia
 
 
+
+
+
+
 @login_required
 def deletar_noticia(request, noticia_id):
     if not request.user.is_superuser:
@@ -635,9 +640,46 @@ def deletar_noticia(request, noticia_id):
 
     # Busca a notícia ou retorna 404 se não existir
     noticia = get_object_or_404(Noticias, id=noticia_id)
+   
+  
 
+    # Caminho do template HTML baseado no slug da notícia
+    nome_arquivo_html = os.path.join(settings.BASE_DIR, 'trendfeeds', 'templates', 'html', 'noticias', f"{noticia.slug}.html")
+
+    
+    try:
+        # Remove o arquivo HTML se existir
+        if os.path.exists(nome_arquivo_html):
+            os.remove(nome_arquivo_html)
+            messages.success(request, f"Arquivo {noticia.slug}.html deletado com sucesso.")
+        else:
+            messages.warning(request, f"O arquivo {noticia.slug}.html não foi encontrado.")
+    except Exception as e:
+        messages.error(request, f"Erro ao deletar o arquivo HTML: {e}")
+
+
+
+    # Excluir imagens associadas à notícia
+    pasta_imagens = os.path.join(settings.BASE_DIR, 'trendfeeds', 'media', 'noticias')
+    prefixo_imagem = f"n_{noticia_id}_"
+
+    # Itera sobre os arquivos na pasta de imagens
+    for nome_arquivo in os.listdir(pasta_imagens):
+        if nome_arquivo.startswith(prefixo_imagem):
+            caminho_arquivo = os.path.join(pasta_imagens, nome_arquivo)
+            os.remove(caminho_arquivo)
+            print(f"✅ Imagem {caminho_arquivo} excluída com sucesso.")
+
+ 
     # Deleta a notícia (as relações na tabela intermediária CategoriaNoticias serão deletadas automaticamente se configuradas corretamente)
     noticia.delete()
 
+    # Mensagem de sucesso para deletar a notícia
     messages.success(request, "Notícia deletada com sucesso.")
-    return redirect('pagina_noticias_funcionarios')  
+    return redirect('pagina_noticias_funcionarios')
+
+
+
+
+
+
