@@ -783,3 +783,26 @@ span{
 .mx-2{
   cursor: pointer;
 }
+
+
+
+.dropdown-menu-right {
+  right: 0%;
+  left: -75%;
+}
+
+.dropdown-item-text {
+  display: block;
+  padding: 0.25rem 1.5rem;
+  color: #212529;
+  font-size: 1vw;
+}
+
+
+span {
+  margin-left: 1rem;
+  margin-right: 1rem;
+  color: #6c757d;
+  font-weight: bold;
+  font-size: 1.5rem;
+}

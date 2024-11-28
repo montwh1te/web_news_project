@@ -22,37 +22,30 @@ def obter_tabela_brasileirao():
     
 
 
-
-
 def obter_proximos_jogos():
-    # Define a URL da API onde os dados dos próximos jogos serão buscados.
-    url = "https://api.api-futebol.com.br/v1/campeonatos/10/rodadas/35"  # Substitua '34' pela rodada desejada dinamicamente.
+    """
+    Obtém os próximos jogos disponíveis no campeonato.
+    
+    Returns:
+        list: Lista de jogos disponíveis.
+    """
+    import requests
 
-    # Define os cabeçalhos da requisição, incluindo o token de autenticação para a API.
-    headers = {
-        "Authorization": f"Bearer {settings.API_FUTEBOL_KEY}"  # Insere o token da API configurado no Django settings.
-    }
-
+    # Configuração da API
+    headers = {"Authorization": f"Bearer {settings.API_FUTEBOL_KEY}"}
+    url = "https://api.api-futebol.com.br/v1/campeonatos/10/rodadas/35"
 
     try:
-        # Envia a requisição HTTP para buscar os dados da API.
+        # Fazendo a requisição
         response = requests.get(url, headers=headers)
-
-        # Verifica se a requisição foi bem-sucedida. Caso contrário, lança uma exceção.
-        response.raise_for_status()
-
-        # Retorna a lista de partidas da resposta JSON.
-        return response.json().get('partidas', [])
+        response.raise_for_status()  # Levanta exceções para códigos HTTP de erro
+        dados = response.json()
     except requests.exceptions.RequestException as e:
-        
-        # Em caso de erro, exibe o erro no console e retorna uma lista vazia.
-        print(f"Erro ao buscar próximos jogos: {e}")
-        return []
+        print(f"Erro ao consultar a API: {e}")
+        return []  # Retorna uma lista vazia em caso de erro
 
-
-
-
-
+    # Retorna as partidas disponíveis
+    return dados.get('partidas', [])
 
 
 def obter_jogos_um_time(time):
@@ -63,9 +56,10 @@ def obter_jogos_um_time(time):
         time (str): Nome do time (ex: 'internacional', 'palmeiras').
     
     Returns:
-        list: Lista de partidas do time.
+        list: Lista de partidas do time, ou mensagem indicando que não há jogos.
     """
-    
+    import requests
+
     TIMES_IDS = {
         "internacional": 44,
         "palmeiras": 56,
@@ -87,38 +81,32 @@ def obter_jogos_um_time(time):
         "cuiaba": 204,
         "atletico_go": 98,
         "fluminense": 26,
-        "athletico_pr": 26,
-
-
-
     }
 
-    # Verifica se o time existe no mapeamento, caso contrário levanta um erro
+    # Verifica se o time existe no mapeamento
     if time not in TIMES_IDS:
-        raise ValueError(f"Time '{time}' não encontrado. Verifique os nomes disponíveis.")
-    
+        return []  # Retorna uma lista vazia se o time não for encontrado
+
     # Obtemos o ID do time usando o nome
     id_time = TIMES_IDS[time]
-
-    # Verifica se os dados já estão no cache (cache pode ser um dicionário global, por exemplo)
-
 
     # Configurações da API
     headers = {"Authorization": f"Bearer {settings.API_FUTEBOL_KEY}"}
     url = "https://api.api-futebol.com.br/v1/campeonatos/10/rodadas/35"
 
-    # Fazendo a requisição
-    response = requests.get(url, headers=headers)
-    if response.status_code != 200:
-        raise Exception(f"Erro ao consultar a API: {response.status_code} - {response.text}")
-
-    dados = response.json()
+    try:
+        # Fazendo a requisição
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()  # Levanta exceções para códigos HTTP de erro
+        dados = response.json()
+    except requests.exceptions.RequestException as e:
+        print(f"Erro ao consultar a API: {e}")
+        return []  # Retorna uma lista vazia em caso de erro na API
 
     # Filtra os jogos do time
     partidas = [
-    partida for partida in dados.get('partidas', [])
-    if partida['time_mandante']['time_id'] == id_time or partida['time_visitante']['time_id'] == id_time
+        partida for partida in dados.get('partidas', [])
+        if partida['time_mandante']['time_id'] == id_time or partida['time_visitante']['time_id'] == id_time
     ]
 
-    # Armazena no cache (se não estiver lá)
     return partidas
