@@ -37,6 +37,7 @@ from django.conf import settings
 
 from django.contrib import messages
 
+from django.contrib.auth import get_user_model
 
 ''' **IMPORTAÇÕES DE MÓDULOS INTERNOS** '''
 # Importa os modelos definidos na aplicação para interagir com o banco de dados.
@@ -408,10 +409,12 @@ def exibir_categoria(request, nome_time):
 ''' Função que exibe a página de funcionários. '''
 def pagina_funcionarios(request):
     # Obtém todas as notícias do banco de dados.
+    usuarios = get_user_model().objects.all()  # Obtém todos os usuários cadastrados
+    noticias = Noticias.objects.all()  # Exemplo de como obter notícias, ajuste conforme necessário
     
     # Renderiza a página de funcionários com as notícias obtidas.
     # O contexto passado inclui todas as notícias para exibição na página.
-    return render(request, 'html/index_funcionarios.html')
+    return render(request, 'html/index_funcionarios.html', {'usuarios': usuarios, 'noticias': noticias})
 
 
 
@@ -663,10 +666,25 @@ def deletar_noticia(request, noticia_id):
     pasta_imagens = os.path.join(settings.BASE_DIR, 'trendfeeds', 'media', 'noticias')
     prefixo_imagem = f"n_{noticia_id}_"
 
+
+
     # Itera sobre os arquivos na pasta de imagens
     for nome_arquivo in os.listdir(pasta_imagens):
         if nome_arquivo.startswith(prefixo_imagem):
             caminho_arquivo = os.path.join(pasta_imagens, nome_arquivo)
+            os.remove(caminho_arquivo)
+            print(f"✅ Imagem {caminho_arquivo} excluída com sucesso.")
+
+
+
+    pasta_imagens_thumbs = os.path.join(settings.BASE_DIR, 'trendfeeds', 'media', 'thumbs')
+    prefixo_imagem_thumb = f"thumb_n_{noticia_id}_"
+
+
+      # Itera sobre os arquivos na pasta de imagens
+    for nome_arquivo in os.listdir(pasta_imagens_thumbs):
+        if nome_arquivo.startswith(prefixo_imagem_thumb):
+            caminho_arquivo = os.path.join(pasta_imagens_thumbs, nome_arquivo)
             os.remove(caminho_arquivo)
             print(f"✅ Imagem {caminho_arquivo} excluída com sucesso.")
 

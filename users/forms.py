@@ -2,74 +2,85 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from .models import Usuarios
 from django.core.exceptions import ValidationError   
+from django.contrib.auth import authenticate
           
 class RegistrationForm(forms.ModelForm):
     first_name = forms.CharField(
         widget=forms.TextInput(attrs={'placeholder': 'Primeiro nome'}),
-        label="Primeiro Nome",
+        label=None,  # Remove a label
         strip=True,
         min_length=2,
         error_messages={
-        'required': 'Este campo é obrigatório.',
-        'min_length': 'O nome deve ter pelo menos 2 caracteres.',
-    },
+            'required': 'Este campo é obrigatório.',
+            'min_length': 'O nome deve ter pelo menos 2 caracteres.',
+        },
     )
     last_name = forms.CharField(
         widget=forms.TextInput(attrs={'placeholder': 'Sobrenome'}),
-        label="Sobrenome",
+        label=None,  # Remove a label
         strip=True,
         required=True,
         min_length=2,
         error_messages={
-        'required': 'Este campo é obrigatório.',
-        'min_length': 'O sobrenome deve ter pelo menos 2 caracteres.',
-    },
+            'required': 'Este campo é obrigatório.',
+            'min_length': 'O sobrenome deve ter pelo menos 2 caracteres.',
+        },
     )
     username = forms.CharField(
         widget=forms.TextInput(attrs={'placeholder': 'Nome de Usuário'}),
-        label="Nome de Usuário",
+        label=None,  # Remove a label
         strip=True,
         required=True,
         max_length=15,
         min_length=3,
         error_messages={
-        'required': 'Este campo é obrigatório.',
-        'min_length': 'O nome de usuário deve ter entre 3 e 15 caracteres.',
-    },
+            'required': 'Este campo é obrigatório.',
+            'min_length': 'O nome de usuário deve ter entre 3 e 15 caracteres.',
+        },
     )
     email = forms.EmailField(
         widget=forms.EmailInput(attrs={'placeholder': 'E-mail'}),
-        label="E-mail",
+        label=None,  # Remove a label
         required=True,
         error_messages={
-        'required': 'Este campo é obrigatório.',
-    },
+            'required': 'Este campo é obrigatório.',
+        },
     )
     senha = forms.CharField(
         widget=forms.PasswordInput(attrs={'placeholder': 'Senha'}),
-        label="Senha",
+        label=None,  # Remove a label
         strip=True,
         required=True,
         min_length=7,
         error_messages={
-        'required': 'Este campo é obrigatório.',
-        'min_length': 'A senha deve possuir no mínimo 7 caracteres.',
-    },
+            'required': 'Este campo é obrigatório.',
+            'min_length': 'A senha deve possuir no mínimo 7 caracteres.',
+        },
     )
     confirmar_senha = forms.CharField(
         widget=forms.PasswordInput(attrs={'placeholder': 'Confirmar Senha'}),
-        label="Confirmar Senha",
+        label=None,  # Remove a label
         strip=True,
         required=True,
         error_messages={
-        'required': 'Este campo é obrigatório.',
-    },
+            'required': 'Este campo é obrigatório.',
+        },
     )
     foto = forms.ImageField(
         widget=forms.FileInput(attrs={'placeholder': 'Foto de Perfil'}),
-        label="Foto de Perfil",
+        label=None,  # Remove a label
         required=False
     )
+    is_staff = forms.BooleanField(
+        required=False,
+        widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+    )
+    is_superuser = forms.BooleanField(
+        required=False,
+        widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+    )
+
+
 
     class Meta:
         model = Usuarios
@@ -80,8 +91,21 @@ class RegistrationForm(forms.ModelForm):
             'username': 'Nome de Usuário',
             'email': 'E-mail',
             'password': 'Senha',
-            'foto': 'Foto de Perfil'
+            'foto': 'Foto de Perfil',
         }
+
+    # Sobrescrevendo o __init__ para aceitar o parâmetro 'user'
+    def __init__(self, *args, user=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Verifica se o usuário é superusuário
+        if user and not user.is_superuser:
+            # Remove os campos is_staff e is_superuser se não for superusuário
+            self.fields.pop('is_staff')
+            self.fields.pop('is_superuser')
+
+
+
         
     def clean_first_name(self):
         first_name = self.cleaned_data.get('first_name')
@@ -121,17 +145,30 @@ class RegistrationForm(forms.ModelForm):
             })
 
         return cleaned_data
-
+    
     def save(self, commit=True):
         user = super().save(commit=False)
-        user.set_password(self.cleaned_data["senha"]) # Transforma a senha em SHAHash
-        user.first_name = self.cleaned_data["first_name"].title() # Padroniza o nome
-        user.last_name = self.cleaned_data["last_name"].title() # Padroniza o sobrenome
-        
+
+        # A senha já está sendo tratada no formulário, mas precisamos garantir que ela seja salva de forma segura
+        senha = self.cleaned_data["senha"]
+        user.set_password(senha)  # Use o método set_password para salvar a senha de forma segura
+
+        user.first_name = self.cleaned_data["first_name"].title()  # Padroniza o nome
+        user.last_name = self.cleaned_data["last_name"].title()    # Padroniza o sobrenome
+
+        # Verifica se é superusuário ou staff
+        if self.cleaned_data.get("is_superuser"):
+            user.is_superuser = True
+            user.is_staff = True  # Superusuários geralmente são também staff
+        elif self.cleaned_data.get("is_staff"):
+            user.is_staff = True
+
         if commit:
             user.save()
         return user
 
+
+    
 class LoginForm(AuthenticationForm):
     username = forms.CharField(
         widget=forms.TextInput(attrs={'placeholder': 'Nome de Usuário'}),
@@ -153,6 +190,27 @@ class LoginForm(AuthenticationForm):
     },
     )
     
+    def clean(self):
+            # Chama a validação padrão do formulário
+            cleaned_data = super().clean()
+
+            # Recupera os dados de username e password
+            username = cleaned_data.get('username')
+            password = cleaned_data.get('password')
+
+            # Autentica o usuário
+            user = authenticate(username=username, password=password)
+            if user is None:
+                # Se a autenticação falhar, adiciona um erro geral
+                raise ValidationError("Nome de usuário ou senha inválidos.")
+
+            # Retorna os dados limpos se não houver problemas
+            return cleaned_data
+
+
+
+
+
 class UsuarioUpdateForm(forms.ModelForm):
     class Meta:
         model = Usuarios

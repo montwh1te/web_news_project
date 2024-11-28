@@ -68,7 +68,6 @@
                 {% else %}
                     <div class="row d-flex flex-wrap justify-content-center">
                         <a class="nav-link text-dark" href="{% url 'login' %}">Login</a>
-                        <a class="nav-link text-dark" href="{% url 'registro' %}">Registro</a>
                     </div>
                 {% endif %}
             </div>
@@ -215,7 +214,7 @@
                                     src="{{ comentario.usuario.foto.url}}" 
                                     alt="Foto de {{ comentario.usuario.username }}" 
                                     class="rounded-circle img-fluid" 
-                                    style="max-width: 80px;">
+                                    style="max-width: 80px; border-radius: 40px;">
                             </div>
                             <div class="col-10">
                                 <h5 class="mb-1">{{ comentario.usuario.username }}</h5>
@@ -400,7 +399,7 @@
                         const novoComentario = `
                             <div class="row align-items-center mb-4 p-3 shadow-sm rounded border bg-light">
                                 <div class="col-2 text-center">
-                                    <img class="usuario_foto" src="${data.foto}" alt="Foto de ${data.username}" class="rounded-circle img-fluid" style="max-width: 80px; height: auto;">
+                                    <img class="usuario_foto" src="${data.foto}" alt="Foto de ${data.username}" class="rounded-circle img-fluid" style="max-width: 80px;border-radius: 40px;" height: auto;">
                                 </div>
                                 <div class="col-10">
                                     <h5 class="mb-1">${data.username}</h5>

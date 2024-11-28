@@ -460,9 +460,6 @@ def coletar_noticias():
                 # Itera sobre cada elemento de imagem encontrado, com um índice `j` para diferenciar as imagens.
                 for j, imagem_elemento in enumerate(imagens_elementos):
                     try:
-                        # Garante que a imagem está visível antes de capturar o `src`.
-                        driver.execute_script("arguments[0].scrollIntoView(true);", imagem_elemento)
-
                         # Aguarda o carregamento do atributo `src`.
                         WebDriverWait(driver, 10).until(
                             lambda d: imagem_elemento.get_attribute("src") is not None)
