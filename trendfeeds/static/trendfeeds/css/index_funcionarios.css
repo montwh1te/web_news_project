@@ -1,0 +1,337 @@
+/* CSS Global */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.container-fluid {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-weight: bold;
+  margin: 0;
+}
+
+p {
+  margin: 5px 0;
+}
+
+/* HEADER */
+header {
+  background-color: #343a40;
+  color: #fff;
+}
+
+.navbar-custom {
+  background-color: #212529;
+}
+
+.navbar-custom .navbar-nav .nav-link {
+  color: #fff;
+  margin-right: 20px;
+}
+
+.navbar-custom .navbar-nav .nav-link:hover {
+  color: #f8f9fa;
+}
+
+.navbar-brand {
+  font-size: 1.5rem;
+  color: #fff;
+  font-weight: bold;
+}
+
+#team-logo {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+}
+
+#search-bar {
+  border-radius: 25px;
+  padding-left: 40px;
+}
+
+#lupa {
+  width: 16px;
+  height: 16px;
+  margin-right: 10px;
+}
+
+/* Navbar do usuário */
+#userDropdown img {
+  border-radius: 50%;
+}
+
+.navbar-custom .dropdown-menu {
+  background-color: #343a40;
+  border-radius: 5px;
+}
+
+.navbar-custom .dropdown-item {
+  color: #fff;
+}
+
+.navbar-custom .dropdown-item:hover {
+  background-color: #495057;
+}
+
+/* Main */
+main {
+  padding: 30px 0;
+  background-color: #f8f9fa;
+}
+
+.noticia-mais-recente {
+  margin-bottom: 30px;
+}
+
+.noticia-mais-recente img {
+  border-radius: 20px;
+  max-width: 100%;
+}
+
+.descricao-noticia-mais-recente {
+  padding-top: 20px;
+}
+
+.titulo-noticia-mais-recente {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.resumo-noticia-mais-recente {
+  color: #6c757d;
+  font-size: 1rem;
+}
+
+.noticias-recentes-div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.noticia-recente {
+  margin: 10px;
+  width: 100%;
+  max-width: 300px;
+}
+
+.noticia-recente img {
+  border-radius: 10px;
+  width: 100%;
+}
+
+.titulo-noticia-recente {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.noticia-conteudo {
+  padding: 10px;
+}
+
+.noticia-card img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+/* Tabela de Campeonato Brasileiro */
+.div_brasileirao {
+  margin-top: 50px;
+  text-align: center;
+}
+
+.titulo_brasileriao {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #343a40;
+}
+
+.div-tabela-brasileiro table {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+}
+
+.div-tabela-brasileiro th,
+.div-tabela-brasileiro td {
+  padding: 10px;
+  text-align: left;
+}
+
+.div-tabela-brasileiro th {
+  background-color: #343a40;
+  color: #fff;
+}
+
+.div-tabela-brasileiro tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+/* Jogos */
+.card {
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.card img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.card-body {
+  padding: 15px;
+}
+
+.game-details {
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+/* Funcionario Page */
+.pagina-funcionarios {
+  padding: 30px;
+  background-color: #fff;
+  margin: 30px auto;
+  max-width: 1200px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.pagina-funcionarios h2 {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 30px;
+}
+
+.table {
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+.table th,
+.table td {
+  padding: 12px;
+  text-align: center;
+}
+
+.table th {
+  background-color: #007bff;
+  color: white;
+}
+
+.table td {
+  background-color: #f9f9f9;
+}
+
+.table tbody tr:nth-child(even) {
+  background-color: #e9ecef;
+}
+
+.edit-btn {
+  background-color: #28a745;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.edit-btn:hover {
+  background-color: #218838;
+}
+
+.delete-btn {
+  background-color: #dc3545;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.delete-btn:hover {
+  background-color: #c82333;
+}
+
+/* Modificar e Excluir Noticias */
+.form-container {
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.form-container label {
+  font-weight: bold;
+}
+
+.form-container input,
+.form-container textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.form-container button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.form-container button:hover {
+  background-color: #0056b3;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* cor escura quando passa o mouse no modo escuro */
+}
+/* Barra de rolagem padrão */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Cor de fundo da barra de rolagem */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* cor clara para o modo claro */
+}
+
+/* Cor da barra de rolagem */
+::-webkit-scrollbar-thumb {
+  background: #888; /* cor padrão da barra de rolagem */
+}
+
+/* Cor quando o usuário passa o mouse sobre a barra de rolagem */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* cor escura quando passa o mouse */
+}
+
+/* Modo escuro */
+body.dark-mode::-webkit-scrollbar-track {
+  background: #333; /* cor mais escura para o modo escuro */
+}
+
+body.dark-mode::-webkit-scrollbar-thumb {
+  background: #777; /* cor da barra de rolagem no modo escuro */
+}

@@ -1,30 +1,30 @@
 /* Geral */
 body {
   background-color: #f4f4f9; /* Fundo neutro e agradável */
-  font-family: 'Roboto', Arial, sans-serif;
+  font-family: "Roboto", Arial, sans-serif;
   color: #333;
   margin: 0;
   padding: 0;
   transition: 0.4s;
+  overflow-x: hidden;
 }
-
-
 
 body.dark-mode .noticias-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 30px;
-  box-shadow: 0px 1px 0px 0px rgba(217, 217, 217, 0.222), 0px -1px 0px 0px rgba(217, 217, 217, 0.222);
+  box-shadow: 0px 1px 0px 0px rgba(217, 217, 217, 0.222),
+    0px -1px 0px 0px rgba(217, 217, 217, 0.222);
 }
 
-body.dark-mode p{
+body.dark-mode p {
   color: #d2d2d2;
 }
 
-body.dark-mode h3{
+body.dark-mode h3 {
   color: #d2d2d2;
 }
-body.dark-mode{
+body.dark-mode {
   background-color: #1a1a1a;
 }
 
@@ -32,24 +32,24 @@ body.dark-mode .navbar-custom .nav-link {
   color: #d2d2d2 !important; /* Cor do texto dos links da navbar no modo escuro */
 }
 
-body.dark-mode .navbar-custom{
+body.dark-mode .navbar-custom {
   box-shadow: 0px 1px 0px 0px rgba(255, 255, 255, 0.222);
 }
-body.dark-mode .navbar-custom .nome-site{
+body.dark-mode .navbar-custom .nome-site {
   color: #d2d2d2 !important; /* Cor do texto dos links da navbar no modo escuro */
 }
 
-body.dark-mode .form-control{
+body.dark-mode .form-control {
   background-color: #000000;
   border: 1px solid #181818;
 }
 
-body.dark-mode  #search-results{
+body.dark-mode #search-results {
   background-color: #000000;
   color: #d2d2d2;
 }
 
-body.dark-mode  .search-result-item:hover{
+body.dark-mode .search-result-item:hover {
   background-color: #1a1a1a;
   color: #d2d2d2;
 }
@@ -61,8 +61,6 @@ body.dark-mode::-webkit-scrollbar-track {
 body.dark-mode::-webkit-scrollbar-thumb {
   background: #777; /* cor da barra de rolagem no modo escuro */
 }
-
-
 
 ::-webkit-scrollbar-thumb:hover {
   background: #555; /* cor escura quando passa o mouse no modo escuro */
@@ -97,17 +95,6 @@ body.dark-mode::-webkit-scrollbar-thumb {
   color: inherit; /* Usa a cor do texto padrão */
 }
 
-
-
-
-
-
-
-
-
-
-
-
 main {
   margin: 20px auto;
   max-width: 75%;
@@ -127,6 +114,7 @@ main {
   height: 50%;
   object-fit: cover;
   transition: transform 0.3s ease;
+  border-radius: 20px;
 }
 
 .imagem-principal-banner:hover {
@@ -163,16 +151,14 @@ main {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 30px;
-  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.222), 0px -1px 0px 0px rgba(0, 0, 0, 0.222);
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.222),
+    0px -1px 0px 0px rgba(0, 0, 0, 0.222);
 }
-
 
 .noticia-item {
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-
-
 
 .noticia-item img {
   width: 15%;
@@ -180,7 +166,6 @@ main {
   margin-left: 0%;
   margin-top: 2%;
   object-fit: contain;
-
 }
 
 .noticia-item div {
@@ -188,14 +173,10 @@ main {
 }
 
 .noticia-item h3 {
-  font-size: 1.0rem;
+  font-size: 1rem;
   color: #000000;
   margin-bottom: 9px;
-  
 }
-
-
-
 
 .noticia-item p {
   font-size: 0.9rem;
@@ -236,15 +217,12 @@ main {
   }
 }
 
-
-
 .navbar-custom {
   padding: 15px 7%;
   width: 100%;
   margin: auto;
   box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.222);
   transition: 0.4s;
-  
 }
 
 /* Seta personalizada para o dropdown-toggle com div */
@@ -326,9 +304,6 @@ main {
   transition: 0.4s;
 }
 
-
-
-
 #search-bar:focus {
   outline: none;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -396,10 +371,197 @@ main {
   width: 100%;
 }
 
-a{
+a {
   color: #333;
 }
 
-.navbar-custom .nav-link:hover{
+.navbar-custom .nav-link:hover {
   color: #424242;
+}
+
+/* Estilos gerais para o container */
+.caixa {
+  width: 80%;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  margin: 0 auto;
+}
+
+/* Estilos do cartão */
+.card {
+  max-width: 300px;
+  width: 100%;
+  border-radius: 15px;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.card-body {
+  padding: 15px;
+}
+
+/* Estilos para a parte dos escudos */
+.card-body .d-flex {
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.card-body .d-flex img {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+}
+
+/* Estilo para o placar */
+.card-body .d-flex div,
+.card-body .d-flex span {
+  font-size: 1.2rem;
+  color: #6c757d;
+  font-weight: bold;
+  margin: 0 10px;
+}
+
+/* Estilos para os detalhes do jogo */
+.game-details p {
+  font-size: 0.9rem;
+  color: #6c757d;
+  margin: 5px 0;
+}
+
+/* Para telas menores, ajustando o layout */
+@media (max-width: 768px) {
+  .caixa {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .card {
+    margin-bottom: 15px;
+  }
+
+  .game-details p {
+    font-size: 0.8rem;
+  }
+
+  /* Alinha os cartões de forma mais compacta */
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .col-6 {
+    flex: 0 0 48%;
+    max-width: 48%;
+  }
+
+  .col-12 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+
+
+@media (min-width: 1200px) {
+  .col-md-6 {
+      flex: 1 0 63%;
+      max-width: 100%;
+  }
+}
+
+
+/* Container principal das notícias */
+.noticias-listagem {
+  width: 100%;
+  margin: 20px auto;
+  padding: 10px;
+  border-radius: 10px;
+
+}
+
+/* Título da seção */
+
+/* Container das notícias */
+.noticias-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Cada item de notícia */
+.noticia-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 10px;
+    /* border: 1px solid #ddd; */
+  border-radius: 8px;
+    /* background-color: #fff; */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.noticia-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Imagem da notícia */
+.noticia-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+/* Conteúdo da notícia */
+.noticia-conteudo {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Título da notícia */
+.noticia-titulo {
+  font-size: 1rem;
+  color: #007bff;
+  margin: 0 0 5px;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.noticia-link:hover .noticia-titulo {
+  color: #0056b3;
+}
+
+/* Data da notícia */
+.noticia-data {
+  font-size: 0.875rem;
+  color: #6c757d;
+}
+
+/* Caso não existam notícias */
+.nenhuma-noticia {
+  font-size: 1rem;
+  text-align: center;
+  color: #6c757d;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .noticia-item {
+      flex-direction: column;
+      align-items: flex-start;
+  }
+
+  .noticia-img {
+      width: 100%;
+      height: 150px;
+  }
+
+  .noticia-titulo {
+      font-size: 1.2rem;
+  }
 }

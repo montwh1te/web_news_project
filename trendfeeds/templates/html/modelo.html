@@ -1,99 +1,75 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <!-- Define o tipo de documento e a linguagem -->
-    <meta charset="UTF-8">
-        <!-- Define a codificação de caracteres como UTF-8 -->
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!-- Configura o site para ser responsivo em dispositivos móveis -->
     <title>{% block title %}{{ categoria_nome|default:"Notícia" }} - {{ noticia.titulo }}{% endblock title %}</title>
-        <!-- Define o título da página, usando variáveis do Django template -->
-    {% load static %}
-        <!-- Carrega a tag estática para gerenciar arquivos estáticos -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-        <!-- Link para os estilos do Bootstrap -->
-    <link rel="stylesheet" href="/static/trendfeeds/css/modelo.css">
-        <!-- Link para o arquivo CSS personalizado -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    {% load static %}
+    <link rel="stylesheet" href="/static/trendfeeds/css/modelo.css">
+    {% csrf_token %}
     <style>
         :root {
             --categoria-color: {{ categoria_cor }};
-            /* Define uma variável CSS para a cor da categoria */
         }
-        
+
         .categoria-badge {
             {% if categoria_nome|lower == 'outros' %}
                 background-color: transparent !important;
                 display: none !important;
-                /* Esconde o badge para a categoria "outros" */
             {% else %}
                 background-color: var(--categoria-color);
-                /* Define a cor do badge baseada na categoria */
             {% endif %}
         }
     </style>
 </head>
 
-
-<body>
-    <!-- INÍCIO DO CORPO DO DOCUMENTO -->
+<body data-superuser="true" data-slug="{{ noticia.slug }}">
     <header>
         <nav class="navbar navbar-expand-lg navbar-custom d-flex justify-content-sm-around">
-            <!-- Criação do menu de navegação com classes do Bootstrap -->
 
 
-            <!-- EQUERDA: NOME DO SITE -->
+            <!-- NOME DO SITE -->
             <div class="d-flex align-items-center">
                 <a class="navbar-brand p-2 nome-site" href="#">site noticias</a>
-                    <!-- Link para a página inicial com o nome do site -->
             </div>
 
 
 
 
-            <!-- CENTRO: ITENS DO MENU -->
+            <!-- ITENS DO MENU -->
             <div class="d-flex justify-content-center" id="navbarNav">
                 <ul class="navbar-nav">
-                        <!-- Criação da lista de navegação -->
-                    <li class="nav-item"><a class="nav-link" href="#">Início</a></li>
-                        <!-- Link para a página inicial -->
+                    <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Início</a></li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"> 
-                            <button id="dark-mode-toggle">Claro</button>
-                        </a>
+                        <a class="nav-link" href="#"><button id="dark-mode-toggle">Claro</button></a>
                     </li>
-                    <li class="nav-item"><a class="nav-link" href="#">Serviços</a></li>
-                        <!-- Link para a página de serviços -->
-                    <li class="nav-item"><a class="nav-link" href="#">Contato</a></li>
-                        <!-- Link para a página de contato -->
+                    <li class="nav-item"><a class="nav-link" href="#">Sobre</a></li>
+                    {% if request.user.is_superuser %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'pagina_funcionarios' %}">Funcionários</a></li>
+                    {% endif %}
                 </ul>
             </div>
 
 
 
 
-            <!-- Direita: Foto do usuário com dropdown -->
+            <!-- FOTO DO USUÁRIO -->
             <div class="dropdown">
                 {% if request.user.is_authenticated %}
-                        <!-- Verifica se o usuário está autenticado -->
-                    <a class="nav-link dropdown-toggle" href="#" role="button" id="userDropdown" 
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                    data-foto="{% if request.user.foto %}{{ request.user.foto.url }}{% else %}{% static 'images/default-avatar.png' %}{% endif %}">
-                            <!-- Adiciona a foto ou ícone do usuário -->
+                    <a class="nav-link dropdown-toggle" href="#" role="button" id="userDropdown" data-toggle="dropdown">
                         <img src="{% if request.user.foto %}{{ request.user.foto.url }}{% else %}{% static 'images/default-avatar.png' %}{% endif %}" 
                             alt="Foto de {{ request.user.username }}" 
                             class="rounded-circle" style="width: 40px; height: 40px;">
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                            <!-- Dropdown com links para perfil e logout -->
-                        <a href="{% url 'info_perfil' perfil_id=request.user.id %}"><span class="dropdown-item-text">{{ request.user.username }}</span></a>
+                        <a href="{% url 'info_perfil' perfil_id=request.user.id %}" class="dropdown-item-text">{{ request.user.username }}</a>
                         <a class="dropdown-item text-danger" href="{% url 'logout' %}">Sair</a>
                     </div>
                 {% else %}
-                        <!-- Exibe opções de login e registro se o usuário não estiver autenticado -->
                     <div class="row d-flex flex-wrap justify-content-center">
                         <a class="nav-link text-dark" href="{% url 'login' %}">Login</a>
-                        <a class="nav-link text-dark" href="{% url 'registro' %}">Registro</a>
                     </div>
                 {% endif %}
             </div>
@@ -105,226 +81,243 @@
 
     <!-- HERO SECTION -->
     <section class="categoria-badge hero text-white text-center py-1 {% if categoria_nome|lower == 'outros' %}d-none{% endif %}">
-            <!-- Define uma seção de destaque baseada na categoria -->
         <h1 class="display-4">{% block main_title %}{{ categoria_nome|default:"Notícia" }}{% endblock main_title %}</h1>
     </section>
-    
-   
+
+
 
 
     <!-- ÁREA PRINCIPAL -->
-    <main class="container mt-4"> 
-            <!-- Container principal para o artigo -->
+    <main class="container mt-4">
+        {% if request.user.is_superuser %}
+
+
+            <button id="editButton" class="btn btn-primary edit-btn" onclick="enableEditMode()" style="top: 70%; right: 3%;">Editar</button>
+            <button id="saveButton" class="btn btn-success save-btn d-none" onclick="saveChanges()" style="top: 70%; right: 3%;">Salvar</button>
+            <button id="cancelButton" class="btn btn-secondary cancel-btn d-none" onclick="cancelEdit()" style="top: 70%;right: -3%;">Cancelar</button>
+
+
+
+            <div id="toolbar" class="d-none">
+                <!-- Botões de formatação -->
+                <button onclick="execCommand('bold')" title="Negrito">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 4h7a5 5 0 0 1 0 10H6zm7 7H6v6h7a5 5 0 0 0 0-10H6v4h7a2 2 0 1 1 0 4z"></path></svg>
+                </button>
+                <button onclick="execCommand('italic')" title="Itálico">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 4h8v2h-2.403L12.403 18H16v2h-8v-2h2.403L11.597 6H8V4z"></path></svg>
+                </button>
+                <button onclick="execCommand('underline')" title="Sublinhado">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 4h14v8a7 7 0 0 1-14 0V4zm2 2v6a5 5 0 0 0 10 0V6H7zm-3 14h16v2H4z"></path></svg>
+                </button>
+              
+                <!-- Separador -->
+                <div class="toolbar-separator"></div>
+              
+                <!-- Botões de alinhamento -->
+                <button onclick="execCommand('justifyLeft')" title="Alinhar à Esquerda">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 5h16v2H4zm0 4h10v2H4zm0 4h16v2H4zm0 4h10v2H4z"></path></svg>
+                </button>
+                <button onclick="execCommand('justifyCenter')" title="Centralizar">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 5h10v2H7zm-3 4h16v2H4zm3 4h10v2H7zm-3 4h16v2H4z"></path></svg>
+                </button>
+                <button onclick="execCommand('justifyRight')" title="Alinhar à Direita">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 5h16v2H4zm6 4h10v2H10zm-6 4h16v2H4zm6 4h10v2H10z"></path></svg>
+                </button>
+              
+                <!-- Separador -->
+                <div class="toolbar-separator"></div>
+              
+                <!-- Botão de adicionar mídia -->
+                <button onclick="addMedia()" title="Adicionar Mídia">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 5v14h16V5H4zm2 2h12v10H6V7zm3 5l1.5 2L12 11l3 4H9z"></path></svg>
+                </button>
+            </div>
+              
+        {% endif %}
+
+
+        
+
+        <!-- ARTIGO -->
         <article class="noticia-detalhada" style="margin-left: 10%; margin-right: 10%;"> 
-                <!-- Container do artigo com margens laterais -->
-            <div class="rowA"> 
-                <!-- Linha de layout flexível para o conteúdo -->
+            <div class="rowA">
+                
                 <div class="col-lg-12" style="margin-bottom: 5%;">
-                    <!-- Coluna única para telas grandes, com margem inferior -->
 
 
-
-
+                    
+                      
+                   
                     <!-- TÍTULO DA NOTÍCIA -->
+                   
                     <h2 class="noticia-titulo">{% block second_title %}{% endblock second_title %}</h2>
-                        <!-- Título do artigo, injetado dinamicamente usando o bloco `second_title` -->
 
 
-
-
-                    <!-- CONTEÚDO PRINCIPAL DA NOTÍCIA -->
+                    <!-- CONTEÚDO DA NOTÍCIA -->
+                   
                     <div class="noticia-conteudo">
                         {% block main_content %}{% endblock main_content %}
-                            <!-- Conteúdo principal do artigo, injetado pelo bloco `main_content` -->
                     </div>
 
 
 
 
-                    <!-- FORMULÁRIO DE LIKES -->
-                    <!-- Botão de Like Estilizado -->
+                    <!-- FORMULÁRIO DE LIKE -->
                     {% if request.user.is_authenticated %}
                         <form id="likeForm" method="post" action="{% url 'atualizar_like' noticia.slug %}" class="d-flex align-items-center">
                             {% csrf_token %}
                             <label class="container like d-flex align-items-center">
                                 <input type="checkbox" id="likeCheckbox" data-url="{% url 'atualizar_like' noticia.slug %}" {% if usuario_curtiu %}checked{% endif %}>
-                                <svg id="Glyph" version="1.1" viewBox="0 0 32 32" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M29.845,17.099l-2.489,8.725C26.989,27.105,25.804,28,24.473,28H11c-0.553,0-1-0.448-1-1V13  c0-0.215,0.069-0.425,0.198-0.597l5.392-7.24C16.188,4.414,17.05,4,17.974,4C19.643,4,21,5.357,21,7.026V12h5.002  c1.265,0,2.427,0.579,3.188,1.589C29.954,14.601,30.192,15.88,29.845,17.099z" id="XMLID_254_"></path><path d="M7,12H3c-0.553,0-1,0.448-1,1v14c0,0.552,0.447,1,1,1h4c0.553,0,1-0.448,1-1V13C8,12.448,7.553,12,7,12z   M5,25.5c-0.828,0-1.5-0.672-1.5-1.5c0-0.828,0.672-1.5,1.5-1.5c0.828,0,1.5,0.672,1.5,1.5C6.5,24.828,5.828,25.5,5,25.5z" id="XMLID_256_"></path></svg>
+                                <svg id="Glyph" version="1.1" viewBox="0 0 32 32"><path d="M29.845,17.099l-2.489,8.725C26.989,27.105,25.804,28,24.473,28H11c-0.553,0-1-0.448-1-1V13c0-0.215,0.069-0.425,0.198-0.597l5.392-7.24C16.188,4.414,17.05,4,17.974,4C19.643,4,21,5.357,21,7.026V12h5.002c1.265,0,2.427,0.579,3.188,1.589C29.954,14.601,30.192,15.88,29.845,17.099z"></path><path d="M7,12H3c-0.553,0-1,0.448-1,1v14c0,0.552,0.447,1,1,1h4c0.553,0,1-0.448,1-1V13C8,12.448,7.553,12,7,12z"></path></svg>
                             </label>
-                            <span id="likeCount" class="ml-2" style="font-size: 1.0rem;margin-right: 90%;">{{ noticia.like_count }}</span>
+                            <span class="likeCount" style="padding-right: 100%;">{{ noticia.like_count }}</span>
                         </form>
                     {% else %}
                         <p>Faça login para curtir esta notícia.</p>
-                        <svg id="Glyph" version="1.1" viewBox="0 0 32 32" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M29.845,17.099l-2.489,8.725C26.989,27.105,25.804,28,24.473,28H11c-0.553,0-1-0.448-1-1V13  c0-0.215,0.069-0.425,0.198-0.597l5.392-7.24C16.188,4.414,17.05,4,17.974,4C19.643,4,21,5.357,21,7.026V12h5.002  c1.265,0,2.427,0.579,3.188,1.589C29.954,14.601,30.192,15.88,29.845,17.099z" id="XMLID_254_"></path><path d="M7,12H3c-0.553,0-1,0.448-1,1v14c0,0.552,0.447,1,1,1h4c0.553,0,1-0.448,1-1V13C8,12.448,7.553,12,7,12z   M5,25.5c-0.828,0-1.5-0.672-1.5-1.5c0-0.828,0.672-1.5,1.5-1.5c0.828,0,1.5,0.672,1.5,1.5C6.5,24.828,5.828,25.5,5,25.5z" id="XMLID_256_"></path></svg>
-                        <span id="likeCount1" class="ml-2" style="font-size: 1.0rem;margin-right: 90%;">{{ noticia.like_count }}</
+                        <svg id="Glyph" version="1.1" viewBox="0 0 32 32"><path d="M29.845,17.099l-2.489,8.725C26.989,27.105,25.804,28,24.473,28H11c-0.553,0-1-0.448-1-1V13c0-0.215,0.069-0.425,0.198-0.597l5.392-7.24C16.188,4.414,17.05,4,17.974,4C19.643,4,21,5.357,21,7.026V12h5.002c1.265,0,2.427,0.579,3.188,1.589C29.954,14.601,30.192,15.88,29.845,17.099z"></path><path d="M7,12H3c-0.553,0-1,0.448-1,1v14c0,0.552,0.447,1,1,1h4c0.553,0,1-0.448,1-1V13C8,12.448,7.553,12,7,12z"></path></svg>
+                            <span class="likeCount" style="padding-right: 100%;">{{ noticia.like_count }}</span>
                     {% endif %}
 
 
 
 
-                      <!-- Ícones de Redes Sociais -->
-                    <div class="social-icons ml-4 d-flex align-items-center" style="margin-left: 70% !important;margin-top: -4%;">
-                        <!-- WhatsApp -->
-                        <a href="https://wa.me/555191801651" target="_blank" class="mx-2">
-                            <i class="fab fa-whatsapp" style="font-size: 1.5rem; transition: 0.4s;"></i>
+                    <!-- Ícones de Redes Sociais -->
+                   <!-- Ícones de Redes Sociais -->
+                    <div class="social-icons ml-4 d-flex align-items-center" style="margin-left: 70% !important; margin-top: -4%;">
+                        <a href="https://wa.me/555191801651" target="_blank" class="mx-3" style="font-size: 30px;">
+                            <i class="fab fa-whatsapp"></i>
                         </a>
-                        <!-- Instagram -->
-                        <a href="https://www.instagram.com/bruno.diferente___/" target="_blank" class="mx-2">
-                            <i class="fab fa-instagram" style="font-size: 1.5rem; transition: 0.4s;"></i>
+                        <a href="https://www.instagram.com/bruno.diferente___/" target="_blank" class="mx-2" style="font-size: 30px;">
+                            <i class="fab fa-instagram"></i>
                         </a>
-                        <!-- Facebook -->
-                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" target="_blank" class="mx-2">
-                            <i class="fab fa-facebook" style="font-size: 1.5rem; transition: 0.4s;"></i>
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" target="_blank" class="mx-2" style="font-size: 30px;">
+                            <i class="fab fa-facebook"></i>
                         </a>
-                        <!-- Twitter -->
-                        <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}" target="_blank" class="mx-2">
-                            <i class="fab fa-twitter" style="font-size: 1.5rem; transition: 0.4s;"></i>
+                        <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}" target="_blank" class="mx-2" style="font-size: 30px;">
+                            <i class="fab fa-twitter"></i>
                         </a>
-                    </div>
-                </div>
-
-
-                
-
-                <!-- SEÇÃO DE COMENTÁRIOS -->
-                <p class="comentarios" style="margin-top: 10%;">COMENTÁRIOS</p>
-
-                <div id="comentariosContainer" class="comentarios-container container mt-4">
-                    {% if comentarios %}
-                        <!-- Exibe os comentários -->
-                        {% for comentario in comentarios %}
-                        <div class="row align-items-center mb-4 p-3 shadow-sm rounded border bg-light">
-                            <div class="col-2 text-center">
-                                {% if comentario.usuario.foto %}
-                                <img class="usuario_foto" src="{{ comentario.usuario.foto.url }}" 
-                                    alt="Foto de {{ comentario.usuario.username }}" 
-                                    class="rounded-circle img-fluid" 
-                                    style="max-width: 80px; height: auto;">
-                                {% else %}
-                                <img src="{% static 'images/default-avatar.png' %}" 
-                                    alt="Foto padrão" 
-                                    class="rounded-circle img-fluid" 
-                                    style="max-width: 80px; height: auto;">
-                                {% endif %}
-                            </div>
-                            <div class="col-10">
-                                <h5 class="mb-1">{{ comentario.usuario.username }}</h5>
-                                <p class="mb-0 text-muted">{{ comentario.comentario }}</p>
-                            </div>
-                        </div>
-                        {% endfor %}
-                    {% else %}
-                        <!-- Condição para mensagens sem comentários -->
-                        {% if request.user.is_authenticated %}
-                            <div class="row align-items-center mb-4 p-3 shadow-sm rounded border">
-                                <div class="col-10">
-                                    <p class="mb-0 text-muted">Seja o primeiro a comentar!</p>
-                                </div>
-                            </div>
-                        {% else %}
-                            <div class="row align-items-center mb-4 p-3 shadow-sm rounded border">
-                                <div class="col-10">
-                                    <p class="mb-0 text-muted">Faça login para ser o primeiro a comentar!</p>
-                                </div>
-                            </div>
-                        {% endif %}
-                    {% endif %}
-                </div>
-
-
-
-
-                <!-- FORMULÁRIO DE COMENTÁRIOS -->
-                {% if request.user.is_authenticated %}
-                    <div class="noticiasInteracao">
-                        <form id="commentForm" method="post" action="{% url 'adicionar_comentario' noticia.slug %}">
-                            {% csrf_token %}
-                            <!-- Token CSRF para proteger o formulário -->
-                            {{ form.as_p }}
-                            <!-- Exibe os campos do formulário de comentário -->
-                            <div class="d-flex flex-wrap mb-5">
-                                <!-- Contêiner flexível para o textarea e botão -->
-                                <textarea name="comentario" id="comentarioTextarea" rows="2" class="form-control" placeholder="Escreva seu comentário aqui..." required style="resize: none; border-radius: 20px; margin-top: 4%; width: 70%;"></textarea>
-                                <!-- Campo para o usuário escrever o comentário -->
-                                <button type="submit" class="btn">Enviar Comentário</button>
-                                <!-- Botão para enviar o comentário -->
-                            </div>
-                        </form>
-                    </div>
-                {% else %}
-                    <div class="d-flex flex-wrap mb-5">
-                        <!-- Contêiner flexível para o textarea e botão -->
-                        <textarea name="comentario" id="comentarioTextarea" rows="2" class="form-control" placeholder="Faça login para comentar..." disabled required style="resize: none; border-radius: 20px; margin-top: 4%; width: 70%; user-selecÇ none;"></textarea>
-                        <!-- Campo para o usuário escrever o comentário -->
-                        <button type="submit" class="btn" disabled>Enviar Comentário</button>
-                        <!-- Botão para enviar o comentário -->
-                    </div>
-                {% endif %}
-
-
-
-
-                <!-- NOTÍCIAS RELACIONADAS -->
-                <p class="mais_noticias" style="margin-top: 10%;">MAIS NOTÍCIAS</p>
-
-                <div id="noticiasCarrossel" class="carousel slide" data-ride="carousel" style="margin-top: 5%;">
-                        <!-- Carrossel de notícias -->
-                    <ol class="carousel-indicators">
-                        {% for grupo in noticias_agrupadas %}
-                        <li data-target="#noticiasCarrossel" data-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %}></li>
-                            <!-- Indicadores para os grupos de notícias no carrossel -->
-                        {% endfor %}
-                    </ol>
-
-                    <div class="carousel-inner">
-                            <!-- Contêiner para os itens do carrossel -->
-                        {% for grupo in noticias_agrupadas %}
-                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                                <!-- Grupo de notícias no carrossel -->
-                            <div class="row">
-                                {% for noticia in grupo %}
-                                <div class="col-12 col-md-4">
-                                    <a class="link_noticia" href="{% url 'detalhes_noticia' noticia.slug %}">
-                                        <div class="card border-light shadow-sm">
-                                            <img src="{% get_media_prefix %}/thumbs/thumb_n_{{ noticia.id }}.jpg" 
-                                                class="card-img-top noticia-imagem" 
-                                                alt="Imagem da notícia">
-                                            <div class="card-body">
-                                                <h5 class="card-title">{{ noticia.descricao }}</h5>
-                                                <p class="card-text">{{ noticia.descricao|slice:":150" }} ...</p>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                                {% endfor %}
-                                    <!-- Fim do loop para exibir notícias no grupo -->
-                            </div>
-                        </div>
-                        {% endfor %}
-                            <!-- Fim do loop para exibir os grupos no carrossel -->
                     </div>
 
                 </div>
             </div>
+
+
+
+
+           
+           <!-- COMENTÁRIOS -->
+            <p class="comentarios" style="margin-top: 10%;">COMENTÁRIOS</p>
+            <div id="comentariosContainer" class="comentarios-container container mt-4">
+                {% if comentarios %}
+                    {% for comentario in comentarios %}
+                        <div class="row align-items-center mb-4 p-3 shadow-sm rounded border bg-light">
+                            <div class="col-2 text-center">
+                                <img class="usuario_foto" 
+                                    src="{{ comentario.usuario.foto.url}}" 
+                                    alt="Foto de {{ comentario.usuario.username }}" 
+                                    class="rounded-circle img-fluid" 
+                                    style="max-width: 80px; border-radius: 40px;">
+                            </div>
+                            <div class="col-10">
+                                <h5 class="mb-1">{{ comentario.usuario.username }}</h5>
+                                <p class="mb-0 text-muted">{{ comentario.comentario }}</p>
+
+                                <!-- Botão para deletar comentário (visível apenas para superusuários) -->
+                                {% if request.user.is_superuser %}
+                                    <form action="{% url 'deletar_comentario' comentario.id %}" method="POST" class="d-inline">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger btn-sm mt-2">Deletar</button>
+                                    </form>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="row align-items-center mb-4 p-3 shadow-sm rounded border bg-light">
+                        <div class="col-12">
+                            <p>Nenhum comentário até agora.</p>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+
+
+
+
+
+            <!-- FORMULÁRIO DE COMENTÁRIO -->
+            {% if request.user.is_authenticated %}
+                <form id="commentForm" method="post" action="{% url 'comentar_noticia' noticia.slug %}" class="d-flex">
+                    {% csrf_token %}
+                    <textarea name="comentario" id="comentarioTextarea" rows="1" class="form-control" placeholder="Deixe seu comentário..." required style="resize: none;border-radius: 20px;width: 80%;margin-left: 10%;"></textarea>
+                    <button type="submit" class="btn btn-primary ml-2" style="height: 40px;margin-top: 3%;border-radius: 7px">Enviar</button>
+                </form>
+            {% else %}
+                <textarea class="form-control" placeholder="Faça login para comentar..." disabled></textarea>
+                <button class="btn btn-primary" disabled>Enviar Comentário</button>
+            {% endif %}
+
+
+
+
+
+
+            <!-- NOTÍCIAS RELACIONADAS -->
+            <p class="mais_noticias" style="margin-top: 10%;">MAIS NOTÍCIAS</p>
+
+            <div id="noticiasCarrossel" class="carousel slide" data-ride="carousel" style="margin-top: 5%;">
+                    <!-- Carrossel de notícias -->
+                <ol class="carousel-indicators">
+                    {% for grupo in noticias_agrupadas %}
+                    <li data-target="#noticiasCarrossel" data-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %}></li>
+                        <!-- Indicadores para os grupos de notícias no carrossel -->
+                    {% endfor %}
+                </ol>
+
+                <div class="carousel-inner">
+                        <!-- Contêiner para os itens do carrossel -->
+                    {% for grupo in noticias_agrupadas %}
+                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                            <!-- Grupo de notícias no carrossel -->
+                        <div class="row">
+                            {% for noticia in grupo %}
+                            <div class="col-12 col-md-4">
+                                <a class="link_noticia" href="{% url 'detalhes_noticia' noticia.slug %}">
+                                    <div class="card border-light shadow-sm">
+                                        <img src="{% get_media_prefix %}/thumbs/thumb_n_{{ noticia.id }}.jpg" 
+                                            class="card-img-top noticia-imagem" 
+                                            alt="Imagem da notícia" onerror="this.onerror=null; this.src='{% get_media_prefix %}SemImagem.png';">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ noticia.descricao }}</h5>
+                                            <p class="card-text">{{ noticia.descricao|slice:":150" }} ...</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            {% endfor %}
+                                <!-- Fim do loop para exibir notícias no grupo -->
+                        </div>
+                    </div>
+                    {% endfor %}
+                        <!-- Fim do loop para exibir os grupos no carrossel -->
+                </div>
+
+            </div>
+         
         </article>
-</main>
+    </main>
 
-
-
-
-   
-
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <!-- Importa a biblioteca jQuery na versão "slim", que é mais leve e suficiente para manipulação do DOM. -->
-    
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <!-- Importa o Popper.js, uma biblioteca usada para gerenciamento de popups, como tooltips ou dropdowns. -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    
+    <!-- Importa o JavaScript do Bootstrap para habilitar interatividade nos componentes como carrossel, dropdowns, etc. -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     
 
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <!-- Importa o JavaScript do Bootstrap para habilitar interatividade nos componentes como carrossel, dropdowns, etc. -->
-    
 
 
 
@@ -333,7 +326,8 @@
         document.getElementById("likeCheckbox").addEventListener("change", function () {
             const url = this.getAttribute("data-url"); // Obtém a URL do backend
             const isChecked = this.checked; // Verifica se está curtido
-            const likeCount = document.getElementById("likeCount"); // Atualiza a contagem
+            const likeCount = document.querySelector(".likeCount"); // Atualiza a contagem
+            const likeButton = this; // Referência ao botão de like
         
             // Atualiza otimisticamente no frontend
             likeCount.innerText = isChecked
@@ -347,92 +341,112 @@
                     "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value,
                 },
             })
-                .then((response) => response.json())
-                .then((data) => {
-                    likeCount.innerText = data.like_count; // Sincroniza com o backend
-                })
-                .catch((error) => {
-                    console.error("Erro ao atualizar o like:", error);
-                    this.checked = !isChecked; // Reverte o estado em caso de erro
-                    likeCount.innerText = isChecked
-                        ? parseInt(likeCount.innerText) - 1
-                        : parseInt(likeCount.innerText) + 1;
-                });
+            .then((response) => response.json())
+            .then((data) => {
+                likeCount.innerText = data.like_count; // Sincroniza com o backend
+                // Se o usuário não tiver curtido, desmarque a caixa
+                if (!data.liked) {
+                    likeButton.checked = false;
+                }
+            })
+            .catch((error) => {
+                console.error("Erro ao atualizar o like:", error);
+                likeButton.checked = !isChecked; // Reverte o estado em caso de erro
+                likeCount.innerText = isChecked
+                    ? parseInt(likeCount.innerText) - 1
+                    : parseInt(likeCount.innerText) + 1;
+            });
         });
+        
+    </script>
     
 
 
 
+
+    <script>
         // PARA O FORMULÁRIO DE COMENTÁRIOS
         document.getElementById("commentForm").addEventListener("submit", function (event) {
-            event.preventDefault(); // Evita o envio padrão do formulário
-        
-            const url = this.action;
+            event.preventDefault();  // Impede o envio tradicional do formulário
+            
             const comentarioTextarea = document.getElementById("comentarioTextarea");
             const comentarioTexto = comentarioTextarea.value.trim();
         
             if (comentarioTexto) {
-                // Envia o comentário ao servidor via fetch
+                const url = this.action;
+                const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        
+                // Envia o comentário para o servidor via fetch
                 fetch(url, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value,
+                        "X-CSRFToken": csrfToken,
                     },
                     body: JSON.stringify({ comentario: comentarioTexto }),
                 })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            // Atualiza a lista de comentários no DOM
-                            const comentariosContainer = document.getElementById("comentariosContainer");
-                            
-                            // Remove a mensagem de "Seja o primeiro a comentar", se existir
-                            const semComentarios = document.getElementById("semComentarios");
-                            if (semComentarios) {
-                                semComentarios.remove();
-                            }
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Atualiza a lista de comentários no DOM
+                        const comentariosContainer = document.getElementById("comentariosContainer");
         
-                            // Adiciona o novo comentário ao topo da lista
-                            const novoComentario = `
-                                <div class="row align-items-center mb-4 p-3 shadow-sm rounded border bg-light">
-                                    <div class="col-2 text-center">
-                                        <img class="usuario_foto" src="${data.foto}" 
-                                            alt="Foto de ${data.username}" 
-                                            class="rounded-circle img-fluid" 
-                                            style="max-width: 80px; height: auto;">
-                                    </div>
-                                    <div class="col-10">
-                                        <h5 class="mb-1">${data.username}</h5>
-                                        <p class="mb-0 text-muted">${data.comment}</p>
-                                    </div>
-                                </div>`;
-                            
-                            comentariosContainer.insertAdjacentHTML("afterbegin", novoComentario);
-        
-                            // Limpa o campo de comentário
-                            comentarioTextarea.value = "";
-                        } else {
-                            console.error(data.error);
+                        // Remove a mensagem "Seja o primeiro a comentar", se existir
+                        const semComentarios = document.getElementById("semComentarios");
+                        if (semComentarios) {
+                            semComentarios.remove();
                         }
-                    })
-                    .catch(error => {
-                        console.error("Erro ao enviar comentário:", error);
-                    });
+        
+                        // Adiciona o novo comentário ao topo
+                        const novoComentario = `
+                            <div class="row align-items-center mb-4 p-3 shadow-sm rounded border bg-light">
+                                <div class="col-2 text-center">
+                                    <img class="usuario_foto" src="${data.foto}" alt="Foto de ${data.username}" class="rounded-circle img-fluid" style="max-width: 80px;border-radius: 40px;" height: auto;">
+                                </div>
+                                <div class="col-10">
+                                    <h5 class="mb-1">${data.username}</h5>
+                                    <p class="mb-0 text-muted">${data.comment}</p>
+                                </div>
+                            </div>`;
+        
+                        comentariosContainer.insertAdjacentHTML("afterbegin", novoComentario);
+        
+                        // Limpa o campo de comentário
+                        comentarioTextarea.value = "";
+                    } else {
+                        console.error(data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error("Erro ao enviar comentário:", error);
+                });
             }
         });
+    
+
+        
+        
+        
     </script>
-    <script>
+    
+
+
+
+
+    <script>    
+        // PARA O MODO ESCURO
+
+
         // Espera a página carregar completamente
         window.onload = function() {
             const toggleButton = document.getElementById('dark-mode-toggle');
-           
+        
             // Verificar se o modo escuro está ativado
             if (localStorage.getItem('dark-mode') === 'true') {
                 document.body.classList.add('dark-mode');
                 toggleButton.innerHTML = "Escuro"; // Alterando o texto do botão
             }
-    
+
             // Evento de clique para alternar entre modos
             toggleButton.addEventListener('click', () => {
                 document.body.classList.toggle('dark-mode');
@@ -451,6 +465,236 @@
             });
         }
     </script>
+
+
+    
+
+
+    <script>
+        // PARA a Edição de Imagens
+
+
+        // Objeto para armazenar imagens alteradas
+        const imagensAlteradas = {};
+
+        // Função para lidar com a troca de imagens
+        function handleImageChange(event, imagemId) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    // Encontra o contêiner de edição de imagens
+                    const container = document.querySelector('.noticia-conteudo');
+
+                    if (!container) {
+                        console.error("Contêiner para exibição não encontrado!");
+                        return;
+                    }
+
+                    // Cria o placeholder para backend
+                    const placeholder = `<imagem_id:${imagemId}>`;
+
+                    // Cria o HTML da pré-visualização da imagem
+                    const imageHtml = `
+                        <div class="div-imagem">
+                            <img class="noticia-imagem" src="${e.target.result}" alt="Pré-visualização" data-placeholder="${placeholder}">
+                        </div>
+                    `;
+
+                    // Adiciona a pré-visualização ao final do contêiner
+                    container.insertAdjacentHTML('beforeend', imageHtml);
+
+                    // Armazena a imagem no objeto para envio ao backend
+                    imagensAlteradas[imagemId] = file;
+
+                    console.log("Imagem pré-visualizada com sucesso.");
+                };
+
+                // Lê o arquivo e cria a URL para pré-visualização
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+
+
+
+
+
+    <script>
+        // PARA O Modo de Edição
+
+        function execCommand(command) {
+            document.execCommand(command, false, null);
+        }
+          
+        function enableEditMode() {
+            console.log("Habilitando modo de edição"); // Debug
+            const editButton = document.getElementById('editButton');
+            const saveButton = document.getElementById('saveButton');
+            const cancelButton = document.getElementById('cancelButton');
+            const toolbar = document.getElementById('toolbar');
+            const isSuperUser = document.body.dataset.superuser === 'true';
+
+            // Exibir barra de ferramentas apenas se for superuser
+            if (isSuperUser) {
+                if (toolbar) {
+                    toolbar.classList.remove('d-none'); // Mostra a barra
+                    console.log("Toolbar visível"); // Debug
+                }
+            } else {
+                console.log("Usuário não é superuser."); // Debug
+            }
+
+            // Tornar os elementos editáveis
+            const title = document.querySelector('.noticia-titulo');
+            const content = document.querySelector('.noticia-conteudo');
+            if (title) title.contentEditable = true;
+            if (content) content.contentEditable = true;
+
+            // Alternar botões
+            if (editButton) editButton.classList.add('d-none');
+            if (saveButton) saveButton.classList.remove('d-none');
+            if (cancelButton) cancelButton.classList.remove('d-none');
+        }
+
+        function cancelEdit() {
+            console.log("Cancelando edição"); // Debug
+            const editButton = document.getElementById('editButton');
+            const saveButton = document.getElementById('saveButton');
+            const cancelButton = document.getElementById('cancelButton');
+            const toolbar = document.getElementById('toolbar');
+
+            // Ocultar a barra de ferramentas
+            if (toolbar) {
+                toolbar.classList.add('d-none');
+                console.log("Toolbar escondida"); // Debug
+            }
+
+            // Cancelar edição e restaurar conteúdo original
+            const title = document.querySelector('.noticia-titulo');
+            const content = document.querySelector('.noticia-conteudo');
+            if (title) title.contentEditable = false;
+            if (content) content.contentEditable = false;
+
+            // Alternar botões
+            if (editButton) editButton.classList.remove('d-none');
+            if (saveButton) saveButton.classList.add('d-none');
+            if (cancelButton) cancelButton.classList.add('d-none');
+        }
+
+
+        // Adicionar eventos aos botões
+        document.getElementById('editButton').addEventListener('click', enableEditMode);
+        document.getElementById('saveButton').addEventListener('click', saveChanges);
+        document.getElementById('cancelButton').addEventListener('click', cancelEdit);
+
+          
+          
+    </script>
+    
+        
+        
+        
+       
+    <script>
+
+
+        // Função para obter o CSRF Token do cookie
+        function getCSRFToken() {
+            const csrfToken = document.cookie.match(/csrftoken=([^;]+)/);
+            return csrfToken ? csrfToken[1] : '';
+        }
+
+        
+        // Função para salvar as alterações
+        function saveChanges() {
+            const slug = document.body.dataset.slug; 
+            const title = document.querySelector('.noticia-titulo').innerText.trim();
+            const content = document.querySelector('.noticia-conteudo').innerHTML.trim(); 
+
+            const url = `/salvar-noticia-html/${slug}/`;
+
+            const formData = new FormData();
+            formData.append('titulo', title);
+            formData.append('conteudo', content);
+
+            // Adiciona as imagens alteradas ao formulário
+            for (const [imagemId, imagemFile] of Object.entries(imagensAlteradas)) {
+                formData.append(imagemId, imagemFile);
+            }
+
+            // Obtenha o CSRF Token e adicione ao cabeçalho
+            const csrfToken = getCSRFToken();
+
+            // Envia os dados ao backend
+            fetch(url, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': csrfToken  // Adiciona o token CSRF no cabeçalho da requisição
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Exibe a mensagem de sucesso
+                    const successMessage = document.createElement('div');
+                    successMessage.textContent = 'Notícia atualizada com sucesso!';
+                    successMessage.style.backgroundColor = '#4CAF50'; // Cor verde
+                    successMessage.style.color = 'white';
+                    successMessage.style.padding = '10px';
+                    successMessage.style.margin = '10px 0';
+                    successMessage.style.borderRadius = '5px';
+                    successMessage.style.textAlign = 'center';
+
+                    // Adiciona a mensagem no topo do conteúdo
+                    const contentContainer = document.querySelector('.noticia-conteudo');
+                    contentContainer.insertAdjacentElement('beforebegin', successMessage);
+
+                    // Opção para o usuário fechar a mensagem
+                    setTimeout(() => {
+                        successMessage.style.display = 'none'; // Mensagem desaparece após 5 segundos
+                    }, 5000);
+                } else {
+                    alert('Falha ao salvar alterações.');
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao salvar alterações:', error);
+            });
+        }
+
+    </script>
+
+    <script>
+        function execCommand(command) {
+            document.execCommand(command, false, null);
+        }
+        
+        function addMedia() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.onchange = function (event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const selection = window.getSelection();
+                        const range = selection.getRangeAt(0);
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.style.maxWidth = '100%';
+                        range.insertNode(img);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
+            input.click();
+        }
+        
+    </script>
+    
 </body>
 </html>
-<!-- Finaliza o documento HTML -->

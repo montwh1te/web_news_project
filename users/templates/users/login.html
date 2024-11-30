@@ -1,3 +1,4 @@
+{% load custom_filters_users %}
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -6,96 +7,465 @@
       <title>Login</title>
       <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
       <style>
+    
+            @import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
+
+            * {
+                  box-sizing: border-box;
+            }
+
             body {
+                  background: #f6f5f7;
                   display: flex;
                   justify-content: center;
                   align-items: center;
-                  min-height: 100vh;
-                  background-color: #f8f9fa;
-                  font-family: Arial, sans-serif;
+                  flex-direction: column;
+                  font-family: 'Montserrat', sans-serif;
+                  height: 100vh;
+                  margin: -20px 0 50px;
             }
 
-            .form-container {
-                  width: 100%;
-                  max-width: 400px;
-                  background: #ffffff;
-                  padding: 30px;
-                  border-radius: 8px;
-                  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            h1 {
+                  font-weight: bold;
+                  margin: 0;
             }
 
             h2 {
                   text-align: center;
-                  color: #343a40;
-                  margin-bottom: 20px;
             }
 
-            .btn-primary {
-                  width: 100%;
-                  padding: 10px;
-                  font-size: 16px;
-                  font-weight: bold;
-            }
-
-            .register-link {
-                  display: block;
-                  text-align: center;
-                  margin-top: 15px;
+            p {
                   font-size: 14px;
+                  font-weight: 100;
+                  line-height: 20px;
+                  letter-spacing: 0.5px;
+                  margin: 20px 0 30px;
             }
 
-            .register-link a {
-                  color: #007bff;
+            span {
+                  font-size: 12px;
+            }
+
+            a {
+                  color: #333;
+                  font-size: 14px;
                   text-decoration: none;
+                  margin: 15px 0;
             }
 
-            .register-link a:hover {
-                  text-decoration: underline;
+            button {
+                  border-radius: 20px;
+                  border: 1px solid #000000;
+                  background-color: #000000;
+                  color: #FFFFFF;
+                  font-size: 12px;
+                  font-weight: bold;
+                  padding: 12px 45px;
+                  letter-spacing: 1px;
+                  text-transform: uppercase;
+                  transition: transform 80ms ease-in;
+            }
+
+            button:active {
+                  transform: scale(0.95);
+            }
+
+            button:focus {
+                  outline: none;
+            }
+
+            button.ghost {
+                  background-color: transparent;
+                  border-color: #FFFFFF;
+            }
+            
+            button.ghost-2 {
+                  background-color: transparent;
+                  border-color: #000000;
+                  color: #000000;
+            }
+
+            form {
+                  background-color: #FFFFFF;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  flex-direction: column;
+                  padding: 0 50px;
+                  height: 100%;
+                  text-align: center;
+            }
+
+            input {
+                  background-color: #eee;
+                  border: none;
+                  padding: 12px 15px;
+                  margin: 8px 0;
+                  width: 100%;
+            }
+
+            .container {
+                  background-color: #fff;
+                  border-radius: 10px;
+                  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+                  position: relative;
+                  overflow: hidden;
+                  width: 80%;
+                  height: 80vh;
+                  max-width: 100%;
+                  min-height: 480px;
+            }
+
+            .form-container {
+                  position: absolute;
+                  top: 0;
+                  height: 100%;
+                  transition: all 0.6s ease-in-out;
+            }
+
+            .sign-in-container {
+                  left: 0;
+                  width: 50%;
+                  z-index: 2;
+            }
+
+            .container.right-panel-active .sign-in-container {
+                  transform: translateX(100%);
+            }
+
+            .sign-up-container {
+                  left: 0;
+                  width: 50%;
+                  opacity: 0;
+                  z-index: 1;
+            }
+
+            .container.right-panel-active .sign-up-container {
+                  transform: translateX(100%);
+                  opacity: 1;
+                  z-index: 5;
+                  animation: show 0.6s;
+            }
+
+            @keyframes show {
+                  0%, 49.99% {
+                        opacity: 0;
+                        z-index: 1;
+                  }
+                  
+                  50%, 100% {
+                        opacity: 1;
+                        z-index: 5;
+                  }
+            }
+
+            .overlay-container {
+                  position: absolute;
+                  top: 0;
+                  left: 50%;
+                  width: 50%;
+                  height: 100%;
+                  overflow: hidden;
+                  transition: transform 0.6s ease-in-out;
+                  z-index: 100;
+            }
+
+            .container.right-panel-active .overlay-container{
+                  transform: translateX(-100%);
+            }
+
+            .overlay {
+                  background: rgb(242,241,241);
+                  background: linear-gradient(90deg, rgba(242,241,241,1) 50%, rgba(0,0,0,1) 50%);
+                  background-repeat: no-repeat;
+                  background-size: cover;
+                  background-position: 0 0;
+                  color: #FFFFFF;
+                  position: relative;
+                  left: -100%;
+                  height: 100%;
+                  width: 200%;
+                  transform: translateX(0);
+                  transition: transform 0.6s ease-in-out;
+            }
+
+            .container.right-panel-active .overlay {
+                  transform: translateX(50%);
+            }
+
+            .overlay-panel {
+                  position: absolute;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  flex-direction: column;
+                  padding: 0 40px;
+                  text-align: center;
+                  top: 0;
+                  height: 100%;
+                  width: 50%;
+                  transform: translateX(0);
+                  transition: transform 0.6s ease-in-out;
+            }
+
+            .overlay-left {
+                  transform: translateX(-20%);
+            }
+
+            .container.right-panel-active .overlay-left {
+                  transform: translateX(0);
+            }
+
+            .overlay-right {
+                  right: 0;
+                  transform: translateX(0);
+            }
+
+            .container.right-panel-active .overlay-right {
+                  transform: translateX(20%);
+            }
+
+            .social-container {
+                  margin: 20px 0;
+            }
+
+            .social-container a {
+                  border: 1px solid #DDDDDD;
+                  border-radius: 50%;
+                  display: inline-flex;
+                  justify-content: center;
+                  align-items: center;
+                  margin: 0 5px;
+                  height: 40px;
+                  width: 40px;
+            }
+
+            footer {
+            background-color: #222;
+            color: #fff;
+            font-size: 14px;
+            bottom: 0;
+            position: fixed;
+            left: 0;
+            right: 0;
+            text-align: center;
+            z-index: 999;
+            }
+
+            footer p {
+            margin: 10px 0;
+            }
+
+            footer i {
+            color: red;
+            }
+
+            footer a {
+            color: #3c97bf;
+            text-decoration: none;
+            }
+
+            .preto{
+                  color: #000000;
+            }
+
+
+            .form-group {
+                  margin-bottom: 1rem;
+            }
+              
+            .form-label {
+                  font-weight: bold;
+                  margin-bottom: 0.5rem;
+                  display: inline-block;
+            }
+              
+            .custom-checkbox input[type="checkbox"] {
+                  width: 20px;
+                  height: 20px;
+                  margin-right: 10px;
+            }
+              
+            .custom-checkbox label {
+                  font-size: 1rem;
+            }
+              
+            .form-control {
+                  padding: 10px;
+                  font-size: 1rem;
+                  width: 100%;
+                  border-radius: 5px;
             }
       </style>
 </head>
-<body>
-      <div class="form-container">
-            <h2>Login</h2>
-            <form method="post">
-                  {% csrf_token %}
-                  {% for field in form %}
-                        <div class="form-group">
-                              {{ field.label_tag }}
-                              {{ field }}
-                              {% for error in field.errors %}
-                                  <div class="text-danger">{{ error }}</div>
-                              {% endfor %}
-                        </div>
+<div class="container" id="container">
+      <!-- Formulário de Cadastro -->
+      <div class="form-container sign-up-container">
+
+            <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h1>Crie sua conta!</h1>
+            <div class="social-container">
+                  <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                  <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+                  <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+            <span>ou use seu email para se registrar</span>
+
+            <div >
+                  {{ form_register.first_name }} 
+                  {% for error in form_register.first_name.errors %}
+                      <div class="text-danger">{{ error }}</div>
                   {% endfor %}
+            </div>
 
-                  {% if form.non_field_errors %}
-                        <div class="form-group text-danger">
-                              {% for error in form.non_field_errors %}
-                                  <p>{{ error }}</p>
-                              {% endfor %}
+            <div >
+                  {{ form_register.last_name }}   <!-- Renderiza o campo de sobrenome -->
+                  {% for error in form_register.last_name.errors  %}
+                      <div class="text-danger">{{ error }}</div>
+                  {% endfor %}
+            </div>
+
+            <div >
+                  {{ form_register.username }}    <!-- Renderiza o campo de nome de usuário -->
+                  {% for error in form_register.username.errors  %}
+                      <div class="text-danger">{{ error }}</div>
+                  {% endfor %}
+            </div>
+
+            <div>
+                  {{ form_register.email }}       <!-- Renderiza o campo de e-mail -->
+                  {% for error in form_register.email.errors %}
+                      <div class="text-danger">{{ error }}</div>
+                  {% endfor %}
+            </div>
+
+            <div>
+                  {{ form_register.senha }}       <!-- Renderiza o campo de e-mail -->
+                  {% for error in form_register.senha.errors %}
+                      <div class="text-danger">{{ error }}</div>
+                  {% endfor %}
+            </div>
+
+            <div>
+                  {{ form_register.confirmar_senha }}      <!-- Renderiza o campo de e-mail -->
+                  {% for error in form_register.confirmar_senha.errors %}
+                      <div class="text-danger">{{ error }}</div>
+                  {% endfor %}
+            </div>
+
+            <div style="width: 36%;">
+                  {{ form_register.foto }}    
+            </div>    
+    
+       
+
+            {% if form_register.is_superuser %}
+                  <div style="display: flex; width: 40%; justify-content: space-around;"> 
+
+                        <label for="id_is_superuser" class="form-label">Superuser</label>
+                        <div class="custom-control custom-checkbox">
+                              {{ form_register.is_superuser }}  <!-- Renderiza o campo is_superuser -->
                         </div>
-                  {% endif %}
-                  
-                  <button type="submit" class="btn btn-primary mt-3">Entrar</button>
+
+                        <label for="id_is_staff" class="form-label">Staff</label>
+                        <div class="custom-control custom-checkbox">
+                              {{ form_register.is_staff }}  <!-- Renderiza o campo is_staff -->
+                        </div>
+                  </div>
+                    
+            {% endif %}
+
+                   
+            <button type="submit" name="register">Registrar</button>
             </form>
-            <p class="register-link">Não tem uma conta? <a href="{% url 'registro' %}">Se registre!</a></p>
+     
       </div>
+  
+      <!-- Formulário de Login -->
+      <div class="form-container sign-in-container">
+          <form method="post">
+              {% csrf_token %}
+              <h1>Entre</h1>
+              <div class="social-container">
+                  <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                  <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+                  <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+              </div>
+              <span>ou use sua conta</span>
+  
+              <div>
+                  {{ form_login.username }}
+                  {% for error in form_login.username.errors %}
+                      <div class="text-danger">{{ error }}</div>
+                  {% endfor %}
+              </div>
+  
+              <div >
+                  {{ form_login.password }}
+                  {% for error in form_login.password.errors %}
+                      <div class="text-danger">{{ error }}</div>
+                  {% endfor %}
+              </div>
 
-      <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.6.0/dist/umd/popper.min.js"></script>
-      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-      <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                // Seleciona o elemento que contém a mensagem de erro
-                const erroMensagem = document.querySelector(".text-danger");
-        
-                // Verifica se a mensagem de erro existe e, se sim, personaliza o conteúdo
-                if (erroMensagem) {
-                    erroMensagem.textContent = "O nome de usuário ou senha estão incorretos. Verifique suas credenciais e tente novamente.";
-                }
-            });
-        </script>
-</body>
-</html>
+              {% if form_login.non_field_errors %}
+              <div class="form-group text-danger">
+                  {% for error in form_login.non_field_errors %}
+                      <p>{{ error }}</p>
+                  {% endfor %}
+              </div>
+              {% endif %}
+  
+              <a href="#">Forgot your password?</a>
+              <button type="submit" name="login">Entrar</button>
+          </form>
+      </div>
+  
+      <div class="overlay-container">
+          <div class="overlay">
+              <div class="overlay-panel overlay-left">
+                  <h1 class='preto'>Welcome Back!</h1>
+                  <p class='preto'>To keep connected with us please login with your personal info</p>
+                  <button class="ghost-2" id="signIn">Sign In</button>
+              </div>
+              <div class="overlay-panel overlay-right">
+                  <h1>Hello, Friend!</h1>
+                  <p>Enter your personal details and start journey with us</p>
+                  <button class="ghost" id="signUp">Sign Up</button>
+              </div>
+          </div>
+      </div>
+  </div>
+  
+  <script>
+      const signUpButton = document.getElementById('signUp');
+      const signInButton = document.getElementById('signIn');
+      const container = document.getElementById('container');
+
+        // Verifica o valor no localStorage ao carregar a página
+      window.addEventListener('load', () => {
+            const userChoice = localStorage.getItem('click');
+            if (userChoice === 'true') {
+            container.classList.add("right-panel-active");
+            } else {
+            container.classList.remove("right-panel-active");
+            }
+      });
+  
+      signUpButton.addEventListener('click', () => {
+          container.classList.add("right-panel-active");
+          localStorage.setItem('click', 'true'); // Salva a preferência
+
+      });
+  
+      signInButton.addEventListener('click', () => {
+          container.classList.remove("right-panel-active");
+          localStorage.setItem('click', 'false'); // Salva a preferência
+
+      });
+
+  </script>
+  
+  </body>
+  </html>

@@ -17,12 +17,12 @@ body.dark-mode .navbar-custom{
   box-shadow: 0px 1px 0px 0px rgba(255, 255, 255, 0.222);
 }
 body.dark-mode .navbar-custom .nome-site{
-  color: #d2d2d2 !important; /* Cor do texto dos links da navbar no modo escuro */
+  color: #bbbbbb !important; /* Cor do texto dos links da navbar no modo escuro */
 }
 
 
 body.dark-mode .navbar-custom .nav-link {
-  color: #d2d2d2 !important; /* Cor do texto dos links da navbar no modo escuro */
+  color: #bbbbbb !important; /* Cor do texto dos links da navbar no modo escuro */
 }
 
 body.dark-mode .navbar-custom .nav-link:hover {
@@ -36,12 +36,12 @@ body.dark-mode .navbar-custom .nav-link:hover {
 
 body.dark-mode  #search-results{
   background-color: #000000;
-  color: #d2d2d2;
+  color: #bbbbbb;
 }
 
 body.dark-mode  .search-result-item:hover{
   background-color: #1a1a1a;
-  color: #d2d2d2;
+  color: #bbbbbb;
 }
 /* Modo escuro */
 body.dark-mode::-webkit-scrollbar-track {
@@ -53,38 +53,39 @@ body.dark-mode::-webkit-scrollbar-thumb {
 }
 
 body.dark-mode .noticia-titulo {
-  color: #d2d2d2;
+  color: #bbbbbb;
 }
 
 body.dark-mode .noticia-conteudo {
-  color: #d2d2d2;
+  color: #bbbbbb;
 }
 
 body.dark-mode p{
-  color: #d2d2d2;
+  color: #bbbbbb;
 }
 
-body.dark-mode .comentarios-container{
-  background-color: #171717;
+body.dark-mode .comentarios-container {
+  background-color: #161616;
 }
-body.dark-mode  .border {
-  border: 1px solid #1e1e1e !important;
+body.dark-mode .border {
+  background-color: #1e1e1e !important;
+  border: #000000 !important;
 }
-
+body.dark-mode .likeCount{
+  color: #bbbbbb;
+}
 body.dark-mode .form-control:disabled, .form-control[readonly] {
   background-color: #17191a;
   opacity: 1;
 }
 
 body.dark-mode .form-control {
-  color: #d2d2d2;
+  color: #bbbbbb;
   background-color: #171717;
-  border: 1px solid #000000;
-
+  border: 1px solid #000000 !important;
 }
 body.dark-mode button{
-  background-color: #171717;
-  color: #d2d2d2;
+  color: #bbbbbb;
 }
 
 body.dark-mode .card {
@@ -101,9 +102,33 @@ body.dark-mode .card {
   border-radius: .25rem;
 }
 body.dark-mode .card-title{
-  color: #d2d2d2;
+  color: #bbbbbb;
 }
 
+body.dark-mode .carousel-indicators li{
+  background-color: #ffffff;
+}
+
+body.dark-mode h5{
+  color: #bbbbbb;
+}
+
+body.dark-mode .dropdown-menu.show{
+  background-color: #171717;
+
+}
+body.dark-mode .dropdown-item-text{
+  color: #bbbbbb !important;
+}
+body.dark-mode .text-danger:hover{
+  background-color: #000000 !important;
+}
+body.dark-mode svg{
+  fill: #353535;
+}
+body.dark-mode .fab{
+  color: #353535;
+}
 
 ::-webkit-scrollbar-thumb:hover {
   background: #555; /* cor escura quando passa o mouse no modo escuro */
@@ -153,13 +178,19 @@ button{
 
 
 
+body.dark-mode #toolbar{
+  background: #000000;
+}
+
+body.dark-mode #toolbar button{
+  background-color: #171717;
+}
 
 
 
-
-
-
-
+body.dark-mode #toolbar button svg{
+  fill: #dddddd;
+}
 
 
 
@@ -408,15 +439,6 @@ svg:hover {
   margin-left: 10px; 
 }
 
-input{
-  display: none;
-}
-
-
-
-
-
-
 
 
 
@@ -546,7 +568,22 @@ a{
   color: #424242;
 }
 
-
+.carousel-indicators {
+  position: absolute;
+  top: 110%;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 15;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: center;
+  justify-content: center;
+  padding-left: 0;
+  margin-right: 15%;
+  margin-left: 15%;
+  list-style: none;
+}
 .carousel-indicators li {
   box-sizing: content-box;
   -ms-flex: 0 1 auto;
@@ -563,4 +600,140 @@ a{
   border-bottom: 10px solid transparent;
   opacity: .5;
   transition: opacity .6s ease;
+}
+
+.edit-btn, .save-btn {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  margin-left: 10px;
+  z-index: 1000;
+}
+
+
+.d-none {
+  display: none !important;
+}
+
+
+input{
+  display: none !important;
+}
+/* Estilo para a barra de ferramentas */
+#toolbar {
+  position: fixed;
+  top: 47%;
+  left: 84%;
+  transform: translateY(-50%);
+  background-color: #f8f9fa;
+  border: 1px solid #dcdcdc;
+  border-radius: 6px;
+  padding: 23px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+/* Quando a barra estiver ativa */
+#toolbar.active {
+  display: flex;
+}
+
+/* Botões */
+#toolbar button {
+  background-color: #ffffff;
+  border: 1px solid #dcdcdc;
+  border-radius: 4px;
+  padding: 28px 2px;
+  cursor: pointer;
+  font-size: 19px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  width: 55px;
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+/* Botão com ícone */
+#toolbar button svg {
+  height: 20px; /* Tamanho do ícone */
+  width: 20px; /* Tamanho do ícone */
+  fill: #555555; /* Cor do ícone */
+  pointer-events: none; /* Impede clique no SVG */
+}
+
+/* Efeito hover */
+#toolbar button:hover {
+  background-color: #f1f1f1;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2); /* Sombra suave */
+}
+
+/* Efeito ao clicar */
+#toolbar button:active {
+  background-color: #e1e1e1;
+}
+
+/* Separador visual */
+.toolbar-separator {
+  width: 55px;
+  height: 1px;
+  background-color: #a5a4a4;
+  margin: 0 0;
+}
+
+#cancelButton{
+  position: fixed;
+}
+
+/* Estilo do botão de envio */
+.btn-primary {
+  background-color: #007bff;
+  border-radius: 20px;
+  font-weight: bold;
+  padding: 10px 20px;
+}
+
+/* Efeito de hover no botão de envio */
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+/* Estilo da área de comentário */
+#comentarioTextarea {
+  border-radius: 10px;
+  padding: 28px;
+  font-size: 15px;
+  border: 1px solid #ddd;
+}
+
+/* Emoji button */
+#emojiButton {
+  font-size: 20px;
+  border-radius: 50%;
+  padding: 5px;
+}
+
+/* Picker de emojis */
+#emojiPicker {
+  display: none;
+  position: absolute;
+  background-color: white;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+.emoji {
+  font-size: 20px;
+  margin: 5px;
+}
+
+/* Emoji picker */
+.emoji:hover {
+  cursor: pointer;
+  transform: scale(1.2);
+  transition: transform 0.2s;
 }
