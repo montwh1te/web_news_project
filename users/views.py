@@ -30,7 +30,7 @@ def login_view(request):
             if form_register.is_valid():
                 user = form_register.save()
                 auth_login(request, user)
-                return redirect('time_favorito')
+                return redirect('time_favorito_default')
 
     return render(request, 'users/login.html', {
         'form_login': form_login,

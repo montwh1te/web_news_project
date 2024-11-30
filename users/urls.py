@@ -12,10 +12,3 @@ urlpatterns = [
     path('time_favorito/<str:page>/', views.time_favorito, name='time_favorito'),
     path('boas_vindas/<str:time_fav>/', views.boas_vindas, name='boas_vindas'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-
-# A ideia é ainda construir esse campo de time_favorito, ou seja, redirecionar o usuário pós registro a essa página para escolher o seu time favorito e armazenar no banco de dados, além disso daí, na informações da conta dar essa opção de alterar o time favorito.
-
-# ----------------------------------------------------------------------------
-
-# Fazer testes finais de usuários.
