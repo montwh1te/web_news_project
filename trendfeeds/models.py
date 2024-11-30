@@ -1,15 +1,17 @@
 from django.db import models
 from django.utils.text import slugify
+from api.models import Time
 from users.models import Usuarios
 from django.core.exceptions import ValidationError
 
 
 class Categoria(models.Model):
     nome_categoria = models.CharField(max_length=50)
-    nome = models.CharField(max_length=20)
+    nome = models.CharField(max_length=50)
     descricao = models.TextField()
     cor = models.CharField(max_length=10)
     serie = models.CharField(max_length=5, null=True)
+    time = models.ForeignKey(Time, on_delete=models.CASCADE, null=True, blank=True, default=1)
 
     def __str__(self):
         return self.nome_categoria

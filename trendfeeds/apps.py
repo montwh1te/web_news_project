@@ -9,6 +9,3 @@ class TrendfeedsConfig(AppConfig):
 
     name = 'trendfeeds'  
         # Define o nome do aplicativo, que deve corresponder ao diretório do aplicativo.
-        
-    def ready(self):
-        import trendfeeds.signals

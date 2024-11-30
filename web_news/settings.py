@@ -35,6 +35,8 @@ INSTALLED_APPS = [
     'django_bootstrap5',
     'trendfeeds',
     'users',
+    'api',
+    'rest_framework',
 ]
 
 # User model

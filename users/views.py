@@ -4,6 +4,10 @@ from .forms import RegistrationForm, LoginForm, UsuarioUpdateForm, AlterarSenhaF
 from .models import Usuarios
 from django.http import JsonResponse
 from trendfeeds.models import Categoria, TimeFavorito
+from django.contrib import messages
+import requests
+import http.client
+
 
 def registro(request):
     if request.method == 'POST':
@@ -13,7 +17,7 @@ def registro(request):
             user.set_password(form.cleaned_data['senha'])
             user.save()
             auth_login(request, user)  # Usa a função de login do Django com o alias 'auth_login'
-            return redirect('time_favorito')
+            return redirect('time_favorito_default')
     else:
         form = RegistrationForm()
 
@@ -77,24 +81,82 @@ def alterar_senha(request):
 
     return JsonResponse({'success': False})
 
-def time_favorito(request):
+def time_favorito(request, page="A"):
     # Pega todos os times disponíveis na tabela Categoria
     categorias = Categoria.objects.all()
 
     if request.method == "POST":
-        # Pega o time favorito escolhido pelo usuário
-        categoria_id = request.POST.get("categoria")
-        categoria = Categoria.objects.get(id=categoria_id)
+        
+        descricao_ativa = request.POST.get('descricao_ativa')
+
+        try:
+            categoria = Categoria.objects.get(descricao=descricao_ativa)
+        except Categoria.DoesNotExist:
+            messages.error(request, "Nenhum time correspondente foi encontrado.")
+            return redirect('time_favorito_default')
+        
+        
+        # Verifica se o usuário já tem um time favorito para essa categoria
+        existing_time_favorito = TimeFavorito.objects.filter(usuario=request.user, time=categoria).first()
+
+        if existing_time_favorito:
+            messages.info(request, "Você já escolheu este time como favorito.")
+            return redirect('time_favorito_default') # Abrir pop-up na página
+        
         
         # Verifica se o usuário já tem um time favorito
-        time_favorito, created = TimeFavorito.objects.get_or_create(usuario=request.user)
-        
-        # Associa o time favorito à categoria escolhida
-        time_favorito.categoria = categoria
-        time_favorito.save()
-        
+        existing_time = TimeFavorito.objects.filter(usuario=request.user).first()
+
+        if existing_time:
+            # Atualiza o time favorito existente
+            existing_time.time = categoria
+            existing_time.save()
+            messages.success(request, f"Seu time favorito foi atualizado para {categoria.nome}!")
+            return redirect('boas_vindas', time_fav=categoria.nome)
+
+        # Criação do time favorito
+        time_favorito, created = TimeFavorito.objects.get_or_create(usuario=request.user, time=categoria)
+
+        # Redireciona para a página inicial ou outra página
+        return redirect('boas_vindas', time_fav=categoria.nome)
+
+    # Escolhe o template com base no parâmetro da URL
+    template_name = f'users/time_favorito_{page}.html'
+
+    # Contexto com todas as categorias
+    context = {'categorias': categorias, 'page': page}
+    return render(request, template_name, context)
+
+
+
+
+
+
+def boas_vindas(request, time_fav):
+    # Pega todos os times disponíveis na tabela Categoria
+    categorias = Categoria.objects.all()
+
+    try:
+        time_captado = Categoria.objects.get(nome=time_fav)
+    except Categoria.DoesNotExist:
+        messages.error(request, "Nenhum time correspondente foi encontrado. Erro.")
         return redirect('home')
 
-    # Contexto com todos os times
-    context = {'categorias': categorias}
-    return render(request, 'users/time_favorito.html', context)
+    # Chama a API externa para pegar informações sobre o time
+    api_url = f"http://127.0.0.1:8000/api/times/{time_captado.time.id}/"
+    
+    try:
+        response = requests.get(api_url)
+        response.raise_for_status()
+        api_local = response.json()
+    except requests.exceptions.RequestException as e:
+        messages.error(request, f"Erro ao chamar a API: {e}")
+        api_local = {} 
+        
+    print(api_local)
+
+    # Contexto com todas as categorias e o time escolhido
+    context = {'categorias': categorias, 'time_fav': time_captado.nome, 'time_form': time_captado.nome_categoria, 'time_obj':time_captado, 'api_local': api_local}
+    
+    # Renderiza o template de boas-vindas
+    return render(request, 'users/boas_vindas.html', context)
