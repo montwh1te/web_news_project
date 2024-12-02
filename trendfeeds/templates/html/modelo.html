@@ -80,8 +80,8 @@
 
 
     <!-- HERO SECTION -->
-    <section class="categoria-badge hero text-white text-center py-1 {% if categoria_nome|lower == 'outros' %}d-none{% endif %}">
-        <h1 class="display-4">{% block main_title %}{{ categoria_nome|default:"Notícia" }}{% endblock main_title %}</h1>
+    <section class="categoria-badge hero text-white text-center py-3 {% if categoria_nome|lower == 'outros' %}d-none{% endif %}">
+        <h1 class="display-4">{% block main_title %}{{ categoria_nome_exibicao|upper |default:"Notícia" }}{% endblock main_title %}</h1>
     </section>
 
 

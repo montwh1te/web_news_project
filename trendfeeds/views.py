@@ -206,6 +206,8 @@ def detalhes_noticia(request, slug):
 
     # Define o nome da categoria, ou "Outros" se nenhuma for encontrada.
     categoria_nome = categoria.nome_categoria if categoria else "Outros"
+    categoria_nome_exibicao = categoria.nome if categoria else "Outros"
+
 
     # Cria uma lista de IDs das notícias já selecionadas.
     ids_excluidos = [noticia.id] if noticia else []  
@@ -245,7 +247,8 @@ def detalhes_noticia(request, slug):
         'noticias_agrupadas': noticias_agrupadas,  
         'comentarios': comentarios,  
         'usuario_curtiu': usuario_curtiu,  
-        'categoria_cor': categoria_cor,  
+        'categoria_cor': categoria_cor, 
+        'categoria_nome_exibicao': categoria_nome_exibicao,
     })
 
 
