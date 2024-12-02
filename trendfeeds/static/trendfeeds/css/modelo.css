@@ -216,6 +216,7 @@ body.dark-mode #toolbar button svg{
 
 .hero h1 {
   font-size: 2rem;
+  text-transform: uppercase;
 }
 
 .noticia-titulo {

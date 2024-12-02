@@ -579,6 +579,8 @@ def coletar_noticias():
                         # Cria ou obtém a categoria no banco de dados.
                         categoria, _ = Categoria.objects.get_or_create(nome_categoria=nome_categoria)
 
+                        nome_amigavel = categoria.nome
+
                         # Associa a notícia à categoria.
                         CategoriaNoticias.objects.get_or_create(noticia=noticia_modelo, categoria=categoria)
 
@@ -594,8 +596,8 @@ def coletar_noticias():
 {{% extends "html/modelo_categoria.html" %}}
 {{% load static %}}
 
-{{% block title %}}{nome_categoria}{{% endblock title %}}
-{{% block main_title %}}{nome_categoria}{{% endblock main_title %}}
+{{% block title %}}{nome_amigavel}{{% endblock title %}}
+{{% block main_title %}}{nome_amigavel}{{% endblock main_title %}}
 {{% block id_time %}}{time_id}{{% endblock id_time %}}
 
 <div class="categoria-listagem">
@@ -636,8 +638,8 @@ def coletar_noticias():
 {{% extends "html/modelo.html" %}}
 {{% load static %}}
 
-{{% block title %}}{categoria_nome}{{% endblock title %}}
-{{% block main_title %}}{categoria_nome}{{% endblock main_title %}}
+{{% block title %}}{nome_amigavel}{{% endblock title %}}
+{{% block main_title %}}{nome_amigavel}{{% endblock main_title %}}
 {{% block second_title %}}{second_title_formatado}{{% endblock second_title %}}
 {{% block main_content %}}{main_content_formatado}{{% endblock main_content %}}
 
