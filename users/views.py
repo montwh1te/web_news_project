@@ -12,7 +12,18 @@ def login_view(request):
     form_login = LoginForm()
     form_register = RegistrationForm(user=request.user)
 
+    form_login = LoginForm()
+    form_register = RegistrationForm(user=request.user)
+
     if request.method == 'POST':
+        if 'login' in request.POST:
+            form_login = LoginForm(request, data=request.POST)
+            if form_login.is_valid():
+                # Se `is_valid` passar, o usuário já foi autenticado
+                user = form_login.get_user()
+                auth_login(request, user)  # Faz o login do usuário
+                if user.is_superuser:
+                    return redirect('pagina_funcionarios')
         if 'login' in request.POST:
             form_login = LoginForm(request, data=request.POST)
             if form_login.is_valid():
