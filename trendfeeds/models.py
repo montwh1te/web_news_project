@@ -21,10 +21,10 @@ class Categoria(models.Model):
     # Campo para armazenar o nome completo da categoria (máximo de 50 caracteres).
     nome_categoria = models.CharField(max_length=50)
     nome = models.CharField(max_length=50)
-    descricao = models.TextField()
+    descricao = models.TextField(null=True)
 
     # Campo para armazenar uma cor associada à categoria, geralmente em formato hexadecimal (#RRGGBB), com limite de 10 caracteres.
-    cor = models.CharField(max_length=10)
+    cor = models.CharField(max_length=10, null=True)
 
     # Campo opcional para armazenar uma série ou código associado à categoria (máximo de 5 caracteres).
     serie = models.CharField(max_length=5, null=True)

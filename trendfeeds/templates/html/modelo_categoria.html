@@ -6,8 +6,8 @@
 <title>{% block title %}{{ main_title }} - Notícias de {{ main_title }}{% endblock title %}</title>
 {% load static %}
 {% load custom_filters %}
+<link rel="stylesheet" href="{% static 'css/modelo_categoria.css' %}" />
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<link rel="stylesheet" href="/static/trendfeeds/css/modelo_categoria.css">
     <style>
         :root {
             --categoria-cor: {{ categoria_cor}};
