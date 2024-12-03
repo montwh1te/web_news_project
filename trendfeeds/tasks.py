@@ -596,13 +596,13 @@ def coletar_noticias():
 {{% extends "html/modelo_categoria.html" %}}
 {{% load static %}}
 
-{{% block title %}}{nome_amigavel}{{% endblock title %}}
-{{% block main_title %}}{nome_amigavel}{{% endblock main_title %}}
+{{% block title %}}{categoria.nome_categoria}{{% endblock title %}}
+{{% block main_title %}}{categoria.nome_categoria}{{% endblock main_title %}}
 {{% block id_time %}}{time_id}{{% endblock id_time %}}
 
 <div class="categoria-listagem">
-    <h2>Últimas notícias sobre {nome_categoria}</h2>
-    <p>Aqui você encontrará todas as notícias sobre {nome_categoria}.</p>
+    <h2>Últimas notícias sobre {categoria.nome_categoria}</h2>
+    <p>Aqui você encontrará todas as notícias sobre {categoria.nome_categoria}.</p>
 </div>
                             """
                         
@@ -611,16 +611,16 @@ def coletar_noticias():
                                 file.write(html_categoria_content)
                                 
                             # Exibe mensagem de sucesso para criação da página de categoria.
-                            print(Fore.GREEN + f"📂 Página da categoria '{nome_categoria}' criada com sucesso em: {nome_arquivo_categoria}")
+                            print(Fore.GREEN + f"📂 Página da categoria '{categoria.nome_categoria}' criada com sucesso em: {nome_arquivo_categoria}")
                         else:
 
                             # Notifica que a página já existe e não será recriada.
-                            print(Fore.YELLOW + f"⚠️ A página da categoria '{nome_categoria}' já existe. Não será criada novamente.")
+                            print(Fore.YELLOW + f"⚠️ A página da categoria '{categoria.nome_categoria}' já existe. Não será criada novamente.")
 
                     except Exception as e:
 
                         # Exibe mensagem de erro ao criar a página da categoria.
-                        print(Fore.RED + f"❌ Erro ao criar a página da categoria '{nome_categoria}': {e}")
+                        print(Fore.RED + f"❌ Erro ao criar a página da categoria '{categoria.nome_categoria}': {e}")
             else:
 
                 # Exibe mensagem ao não encontrar categorias para a notícia.
@@ -638,8 +638,8 @@ def coletar_noticias():
 {{% extends "html/modelo.html" %}}
 {{% load static %}}
 
-{{% block title %}}{nome_amigavel}{{% endblock title %}}
-{{% block main_title %}}{nome_amigavel}{{% endblock main_title %}}
+{{% block title %}}{categoria.nome_categoria}{{% endblock title %}}
+{{% block main_title %}}{categoria.nome_categoria}{{% endblock main_title %}}
 {{% block second_title %}}{second_title_formatado}{{% endblock second_title %}}
 {{% block main_content %}}{main_content_formatado}{{% endblock main_content %}}
 

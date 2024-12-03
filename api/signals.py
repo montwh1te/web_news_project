@@ -606,3 +606,5 @@ def popular_banco(sender, **kwargs):
                     )
                 
         Categoria.objects.create(nome_categoria=categoria, nome=nome, cor=cor, descricao=descricao, serie=serie, time=time)
+    
+    Categoria.objects.create(nome_categoria="outros", nome="Outros", cor=None, descricao=None, serie=None, time=None)

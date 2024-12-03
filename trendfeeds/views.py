@@ -350,9 +350,6 @@ def buscar_proximos_jogos(time_id):
         return []
 
 
-
-
-
 ''' Função que exibe a página de uma categoria específica (time), mostrando suas notícias. '''
 def exibir_categoria(request, nome_time):
     """
@@ -402,24 +399,6 @@ def exibir_categoria(request, nome_time):
 
     # Renderiza o template com as informações do time
     return render(request, template_name, context)
-
-
-
-
-
-
-
-''' Função que exibe a página de funcionários. '''
-def pagina_funcionarios(request):
-    # Obtém todas as notícias do banco de dados.
-    usuarios = get_user_model().objects.all()  # Obtém todos os usuários cadastrados
-    noticias = Noticias.objects.all()  # Exemplo de como obter notícias, ajuste conforme necessário
-    
-    # Renderiza a página de funcionários com as notícias obtidas.
-    # O contexto passado inclui todas as notícias para exibição na página.
-    return render(request, 'html/index_funcionarios.html', {'usuarios': usuarios, 'noticias': noticias})
-
-
 
 
 ''' Função que exibe a página que mostra todas as noticias aos funcionários. '''

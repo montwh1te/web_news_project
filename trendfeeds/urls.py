@@ -48,11 +48,6 @@ urlpatterns = [
     # A URL recebe um parâmetro de slug da notícia e mapeia para a função `adicionar_comentario` no módulo `views`.
     # A URL é identificada pelo nome 'adicionar_comentario'.
     path('noticia/<slug:slug>/comentar/', views.adicionar_comentario, name='comentar_noticia'),  
-        
-
-    # Define uma URL para exibir a página de funcionários.
-    # A função `pagina_funcionarios` no módulo `views` é chamada para exibir essa página, e a URL é identificada pelo nome 'pagina_funcionarios'.
-    path('pagina_funcionarios/', views.pagina_funcionarios, name='pagina_funcionarios'),
        
 
     # Define uma URL para salvar uma notícia como arquivo HTML.

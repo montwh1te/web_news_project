@@ -10,5 +10,5 @@ urlpatterns = [
     path('alterar_senha/', views.alterar_senha, name='alterar_senha'),
     path('time_favorito/', views.time_favorito, {'page': 'A'}, name='time_favorito_default'),
     path('time_favorito/<str:page>/', views.time_favorito, name='time_favorito'),
-    path('boas_vindas/<str:time_fav>/', views.boas_vindas, name='boas_vindas'),
+    path('pagina_funcionarios/', views.pagina_funcionarios, name='pagina_funcionarios'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

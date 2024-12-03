@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carrossel Infinito</title>
+    <title>Escolha seu time!</title>
     {% load static %}
 
     <!-- Bootstrap -->
@@ -23,11 +23,20 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            background-image:url("{% get_media_prefix %}fundos/selecao/selecao.jpg");
         }
 
         label {
             display: inline-block;
             margin-bottom: 0px !important;
+        }
+
+        #escolha_seu_time{
+            position: absolute;
+            color: white;
+            top: 18%;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 3px black;
         }
 
         .spinner-container {
@@ -51,45 +60,29 @@
             height: 50px;
             animation: spin 1s linear infinite;
         }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .carousel-wrap {
-            margin: 22px auto;
-            position: relative;
-            width: calc(100% - 50px); /* Ajuste a largura do container */
-            overflow: hidden;
-            display: flex; /* Para centralizar o menu dos inputs radios */ 
-            justify-content: center;
-        }
-        .nome_time{
-            display: none;
-        }
-        .descricao_time{
-            display: none;
-        }
-        .nome_time.active {
+        
+        .nome_time {
             display: block;
             position: relative;
-            top: 150px;
+            top: 110px;
             width: 1000px;
             text-align: center;
             font-size: 60px;
             font-family: emoji;
             text-transform: uppercase;
+            color: white;
         }
-        .descricao_time.active {
+        .descricao_time {
             display: block;
             position: relative;
-            top: 180px;
+            top: 140px;
             text-align: center;
             width: 1000px;
             font-size: 20px;
+            color: white;
         }
-        .owl-carousel .item {
+
+        .item {
             margin: 0 15px;
             height: 930px;
             display: flex;
@@ -99,76 +92,18 @@
             align-items: center;
         }
 
-        .owl-carousel .item img {
+        .item input{
+            display: none;
+        }
+
+        .item img {
             max-width: 150px;
-            filter: brightness(0.4);
-            width: 50%;
             height: auto;
             margin: 40px auto;
             display: block;
-        }
-
-        .owl-carousel .center-active img {
-            transform: scale(1.9); /* Amplia a imagem do item ativo */
-            transition: transform 0.5s ease;
+            transform: scale(1.9); 
             filter: brightness(1) !important;
             width: 100% !important;
-        }
-
-        .owl-carousel .item input {
-            display: none;
-        }
-    
-        .owl-carousel .owl-nav {
-            position: absolute;
-            top: 49%;
-            transform: translateY(-50%);
-            padding-left: 5px;
-            width: 99.5%;
-            display: flex;
-            justify-content: space-between;
-        }
-    
-        .owl-carousel .owl-nav i {
-            font-size: 30px;
-            cursor: pointer;
-            color: #333;
-        }
-
-        .owl-carousel .owl-nav button.owl-prev, 
-        .owl-carousel .owl-nav button.owl-next {
-            font-size: 40px;
-            width: 60px; 
-            height: 60px; 
-            background-color: rgba(0, 0, 0, 0.5);
-            border-radius: 50%; 
-            margin-top: 20px;
-            border: none;
-            color: #fff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-        }
-
-        .owl-carousel .owl-nav button.owl-next span{
-            position: relative;
-            top: -8px;
-            left: 2px;
-            font-size: 4rem;
-        }
-
-        .owl-carousel .owl-nav button.owl-prev span{
-            position: relative;
-            top: -8px;
-            left: -2px;
-            font-size: 4rem;
-        }
-
-        .owl-carousel .owl-nav button.owl-prev:hover, 
-        .owl-carousel .owl-nav button.owl-next:hover {
-            background-color: #333; 
-            transform: scale(1.1);
         }
         
         .series_bar input[type="radio"] {
@@ -273,8 +208,11 @@
             background-color: #cfcfcf;
         }
 
-        /* Seleção Brasileira */
-        .seleção { background-color: #FFCC00; color: white;}
+        #submit {
+            position: absolute;
+            top: 88%;
+            left: 46%;
+        }
 
     </style>
 </head>
@@ -289,12 +227,31 @@
         <label for="SEL" id="selecao">Brasil</label>
     </div>
 
-    <div class="spinner-container" id="spinner">
-        <div class="spinner"></div>
+    {% for categoria in categorias %}
+        {% if categoria.serie == None %}
+            <div class="item">
+                <input type="radio" class="teste" id="{{ categoria.nome|lower }}" name="background" value="{{ categoria.nome|lower }}">
+                <label style="cursor: pointer;" for="{{ categoria.nome|lower }}"><img rel="preload" src="{% get_media_prefix %}escudos/{{ categoria.nome_categoria|lower }}.png" alt="imagem-time"></label>
+                <h2 class="nome_time">Seleção </h2>
+                <p class="descricao_time">{{ categoria.descricao }}</p>
+            </div>
+        {% endif %}
+    {% endfor %}
+
+    <form method="POST">
+        {% csrf_token %}
+            <input type="hidden" name="descricao_ativa" id="categoria-selecionada">
+            <div id="submit">
+                <button type="button" class="btn btn-primary btn-lg" onclick="capturarDescricaoAtiva()">SELECIONAR</button>
+            </div>
+    </form>
+
+    <div id="escolha_seu_time">
+        <h1>Escolha seu time!</h1>
     </div>
 
-    <div id="serie_selecao">
-        <h1>SELECAO BRZIL</h1>
+    <div class="spinner-container" id="spinner">
+        <div class="spinner"></div>
     </div>
 
     <script>
@@ -312,21 +269,21 @@
             window.location.href = '{% url 'time_favorito' 'B' %}'; 
 
             }
-        }, 1000);
+        }, 10000);
         }
     </script>
 
-    <!-- Script de envio do form MUDAR <<<<<<<<<<<<<<<< -->
+    <!-- Script de envio do form -->
     <script>
         function capturarDescricaoAtiva() {
-            // Seleciona o item ativo, que tem a classe 'active'
-            const itemAtivo = document.querySelector('.item .descricao_time.active');
+            // Seleciona o item ativo, que tem a classe '.item'
+            const itemAtivo = document.querySelector('.item .descricao_time');
             
             if (itemAtivo) {
-                // Captura o texto da descrição diretamente do item ativo
+                // Captura o texto da descrição diretamente do item
                 const descricaoAtiva = itemAtivo.textContent.trim();
 
-                // Define a descrição ativa no campo oculto
+                // Define a descrição no campo oculto
                 document.getElementById('categoria-selecionada').value = descricaoAtiva;
 
                 // Submete o formulário
@@ -335,7 +292,6 @@
                 alert('Nenhum time ativo foi encontrado.');
             }
         }
-
     </script>
 </body>
 </html>

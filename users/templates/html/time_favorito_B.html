@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carrossel Infinito</title>
+    <title>Escolha seu time!</title>
     {% load static %}
 
     <!-- Bootstrap -->
@@ -21,6 +21,7 @@
 
         body{
             display: flex;
+            background-color: black;
             justify-content: center;
             align-items: center;
         }
@@ -39,7 +40,7 @@
 
         #submit {
             position: absolute;
-            top: 85%;
+            top: 86%;
             left: 46%;
             box-shadow: 0px 0px 1px 0px white;
             border-radius: 7px;
@@ -221,7 +222,7 @@
             font-size: 18px;
             text-transform: uppercase;
             font-weight: bold;
-            color: #000;
+            color: #333;
             transition: background-color 0.3s, color 0.3s;
             border-right: 1px solid #ccc;
         }
@@ -234,7 +235,7 @@
             font-size: 18px;
             text-transform: uppercase;
             font-weight: bold;
-            color: #333;
+            color: #000;
             transition: background-color 0.3s, color 0.3s;
             border-right: 1px solid #ccc;
         }
@@ -252,7 +253,7 @@
             border-right: 1px solid #ccc;
         }
 
-        #serieB a {
+        #serieA a {
             text-decoration: none;
             color: #000;
             padding: 15px 15px;
@@ -289,366 +290,366 @@
             color: #000;
         }
 
-        body .series_bar input:checked + #serieA {
+        body .series_bar input:checked + #serieB {
             background-color: #cfcfcf;
         }
 
-        /* ATLÉTICO MG */
-        .atlético-mg {
+
+        /* CEARÁ */
+        .ceará {
             position: relative;
             color: white;
             overflow: hidden;
         }
-        .atlético-mg::before {
+        .ceará::before {
             content: '';
             position: absolute;
             height: 130%;
             width: 107%;
             top: -30px;
             left: -3px;
-            background-image: url("{% get_media_prefix %}fundos/serie_a/galo.jpg");
+            background-image: url("{% get_media_prefix %}fundos/serie_b/ceara.jpg");
             z-index: -1;
             filter: blur(1px);
         }
 
-        /* ATHLÉTICO PR */
-        .athletico-pr {
+        /* CRB */
+        .crb {
             position: relative;
             color: white;
             overflow: hidden;
         }
-        .athletico-pr::before {
+        .crb::before {
             content: '';
             position: absolute;
             height: 130%;
             width: 107%;
             top: -30px;
             left: -3px;
-            background-image: url("{% get_media_prefix %}fundos/serie_a/athletico.jpg");
+            background-image: url("{% get_media_prefix %}fundos/serie_b/crb.jpg");
             z-index: -1;
             filter: blur(1px);
         }
 
-        /* BAHIA */
-        .bahia {
+        /* AMAZONAS */
+        .amazonas {
             position: relative;
             color: white;
             overflow: hidden;
         }
-        .bahia::before {
+        .amazonas::before {
             content: '';
             position: absolute;
             height: 130%;
             width: 107%;
             top: -30px;
             left: -3px;
-            background-image: url("{% get_media_prefix %}fundos/serie_a/bahia.jpg");
+            background-image: url("{% get_media_prefix %}fundos/serie_b/amazonas.jpg");
             z-index: -1;
             filter: blur(1px);
         }
 
-        /* BOTAFOGO */
-        .botafogo {
+        /* OPERÁRIO-PR */
+        .operário-pr {
             position: relative;
             color: white;
             overflow: hidden;
         }
-        .botafogo::before {
+        .operário-pr::before {
             content: '';
             position: absolute;
             height: 130%;
             width: 107%;
             top: -30px;
             left: -3px;
-            background-image: url("{% get_media_prefix %}fundos/serie_a/botafogo.jpg");
+            background-image: url("{% get_media_prefix %}fundos/serie_b/operario.jpg");
             z-index: -1;
             filter: blur(1px);
         }
 
-        /* BRAGANTINO */
-        .red-bull-bragantino {
+        /* BRUSQUE */
+        .brusque {
             position: relative;
             color: white;
             overflow: hidden;
         }
-        .red-bull-bragantino::before {
+        .brusque::before {
             content: '';
             position: absolute;
             height: 130%;
             width: 107%;
             top: -30px;
             left: -3px;
-            background-image: url("{% get_media_prefix %}fundos/serie_a/braga.jpg");
+            background-image: url("{% get_media_prefix %}fundos/serie_b/brusque.jpg");
             z-index: -1;
             filter: blur(1px);
         }
 
-        /* CORTINHIANS */
-        .corinthians {
+        /* PAYSANDU */
+        .paysandu {
             position: relative;
             color: white;
             overflow: hidden;
         }
-        .corinthians::before {
+        .paysandu::before {
             content: '';
             position: absolute;
             height: 130%;
             width: 107%;
             top: -30px;
             left: -3px;
-            background-image: url("{% get_media_prefix %}fundos/serie_a/gamba.jpg");
+            background-image: url("{% get_media_prefix %}fundos/serie_b/paysandu.jpg");
             z-index: -1;
             filter: blur(1px);
         }
 
-        /* CRUZEIRO */
-        .cruzeiro {
+        /* CHAPECOENSE */
+        .chapecoense {
             position: relative;
             color: white;
             overflow: hidden;
         }
-        .cruzeiro::before {
+        .chapecoense::before {
             content: '';
             position: absolute;
             height: 130%;
             width: 107%;
             top: -30px;
             left: -3px;
-            background-image: url("{% get_media_prefix %}fundos/serie_a/cruzeiro.jpg");
+            background-image: url("{% get_media_prefix %}fundos/serie_b/chape.jpg");
             z-index: -1;
             filter: blur(1px);
         }
 
-        /* CUIABÁ */
-        .cuiabá {
+        /* ITUANO */
+        .ituano {
             position: relative;
             color: white;
             overflow: hidden;
         }
-        .cuiabá::before {
+        .ituano::before {
             content: '';
             position: absolute;
             height: 130%;
             width: 107%;
             top: -30px;
             left: -3px;
-            background-image: url("{% get_media_prefix %}fundos/serie_a/cuiaba.jpg");
+            background-image: url("{% get_media_prefix %}fundos/serie_b/ituano.jpg");
             z-index: -1;
             filter: blur(1px);
         }
 
-        /* FLAMENGO */
-        .flamengo {
+        /* MIRASSOL */
+        .mirassol {
             position: relative;
             color: white;
             overflow: hidden;
         }
-        .flamengo::before {
+        .mirassol::before {
             content: '';
             position: absolute;
             height: 130%;
             width: 107%;
             top: -30px;
             left: -3px;
-            background-image: url("{% get_media_prefix %}fundos/serie_a/fla.jpg"); 
+            background-image: url("{% get_media_prefix %}fundos/serie_b/mirassol.jpg");
             z-index: -1;
             filter: blur(1px);
         }
 
-        /* FLUMINENSE */
-        .fluminense {
+        /* NOVORIZONTINO */
+        .novorizontino {
             position: relative;
             color: white;
             overflow: hidden;
         }
-        .fluminense::before {
+        .novorizontino::before {
             content: '';
             position: absolute;
             height: 130%;
             width: 107%;
             top: -30px;
             left: -3px;
-            background-image: url("{% get_media_prefix %}fundos/serie_a/flu.jpg");  
+            background-image: url("{% get_media_prefix %}fundos/serie_b/novorizontino.jpg");
             z-index: -1;
             filter: blur(1px);
         }
 
-        /* FORTALEZA */
-        .fortaleza {
+        /* PONTE-PRETA */
+        .ponte-preta {
             position: relative;
             color: white;
             overflow: hidden;
         }
-        .fortaleza::before {
+        .ponte-preta::before {
             content: '';
             position: absolute;
             height: 130%;
             width: 107%;
             top: -30px;
             left: -3px;
-            background-image: url("{% get_media_prefix %}fundos/serie_a/fortaleza.jpg"); 
+            background-image: url("{% get_media_prefix %}fundos/serie_b/ponte_preta.jpg");
             z-index: -1;
             filter: blur(1px);
         }
 
-        /* GRÊMIO */
-        .grêmio {
+        /* SPORT */
+        .sport {
             position: relative;
             color: white;
             overflow: hidden;
         }
-        .grêmio::before {
+        .sport::before {
             content: '';
             position: absolute;
             height: 130%;
             width: 107%;
             top: -30px;
             left: -3px;
-            background-image: url("{% get_media_prefix %}fundos/serie_a/grebbbio.jpg");
+            background-image: url("{% get_media_prefix %}fundos/serie_b/sport.jpg");
             z-index: -1;
             filter: blur(1px);
         }
 
-        /* INTERNACIONAL */
-        .internacional {
+        /* VILA-NOVA */
+        .vila-nova {
             position: relative;
             color: white;
             overflow: hidden;
         }
-        .internacional::before {
+        .vila-nova::before {
             content: '';
             position: absolute;
             height: 130%;
             width: 107%;
             top: -30px;
             left: -3px;
-            background-image: url("{% get_media_prefix %}fundos/serie_a/inter_colosso.jpg");
+            background-image: url("{% get_media_prefix %}fundos/serie_b/vila_nova.jpg");
             z-index: -1;
             filter: blur(1px);
         }
 
-        /* PALMEIRAS */
-        .palmeiras {
+        /* AVAÍ */
+        .avaí  {
             position: relative;
             color: white;
             overflow: hidden;
         }
-        .palmeiras::before {
+        .avaí::before {
             content: '';
             position: absolute;
             height: 130%;
             width: 107%;
             top: -30px;
             left: -3px;
-            background-image: url("{% get_media_prefix %}fundos/serie_a/palmeiras.jpg");
+            background-image: url("{% get_media_prefix %}fundos/serie_b/avai.jpg");
             z-index: -1;
             filter: blur(1px);
         }
 
-        /* SÃO PAULO */
-        .são-paulo  {
+        /* BOTAFOGO-SP */
+        .botafogo-sp  {
             position: relative;
             color: white;
             overflow: hidden;
         }
-        .são-paulo::before {
+        .botafogo-sp::before {
             content: '';
             position: absolute;
             height: 130%;
             width: 107%;
             top: -30px;
             left: -3px;
-            background-image: url("{% get_media_prefix %}fundos/serie_a/sao_paulo_bambi.jpg");
+            background-image: url("{% get_media_prefix %}fundos/serie_b/botafogo_sp.jpg");
             z-index: -1;
             filter: blur(1px);
         }
 
-        /* VASCO */
-        .vasco  {
+        /* GUARANÍ */
+        .guarani  {
             position: relative;
             color: white;
             overflow: hidden;
         }
-        .vasco::before {
+        .guarani::before {
             content: '';
             position: absolute;
             height: 130%;
             width: 107%;
             top: -30px;
             left: -3px;
-            background-image: url("{% get_media_prefix %}fundos/serie_a/vasco.jpg");
+            background-image: url("{% get_media_prefix %}fundos/serie_b/guarani.jpg");
             z-index: -1;
             filter: blur(1px);
         }
 
-        /* JUVENTUDE */
-        .juventude  {
+        /* GOIÁS */
+        .goiás  {
             position: relative;
             color: white;
             overflow: hidden;
         }
-        .juventude::before {
+        .goiás::before {
             content: '';
             position: absolute;
             height: 130%;
             width: 107%;
             top: -30px;
             left: -3px;
-            background-image: url("{% get_media_prefix %}fundos/serie_a/juventude.jpg");
+            background-image: url("{% get_media_prefix %}fundos/serie_b/goias.jpg");
             z-index: -1;
             filter: blur(1px);
         }
 
-        /* CRICIÚMA */
-        .criciúma  {
+        /* SANTOS */
+        .santos  {
             position: relative;
             color: white;
             overflow: hidden;
         }
-        .criciúma::before {
+        .santos::before {
             content: '';
             position: absolute;
             height: 130%;
             width: 107%;
             top: -30px;
             left: -3px;
-            background-image: url("{% get_media_prefix %}fundos/serie_a/criciuma.jpg");
+            background-image: url("{% get_media_prefix %}fundos/serie_b/santos.jpg");
             z-index: -1;
             filter: blur(1px);
         }
 
-        /* VITÓRIA */
-        .vitória  {
+        /* CORITIBA */
+        .coritiba  {
             position: relative;
             color: white;
             overflow: hidden;
         }
-        .vitória::before {
+        .coritiba::before {
             content: '';
             position: absolute;
             height: 130%;
             width: 107%;
             top: -30px;
             left: -3px;
-            background-image: url("{% get_media_prefix %}fundos/serie_a/vitoria.jpg");
+            background-image: url("{% get_media_prefix %}fundos/serie_b/coxa_doido.jpg");
             z-index: -1;
-            filter: blur(1px);
         }
 
-        /* ATLÉTICO-GO */
-        .atlético-go  {
+        /* AMÉRICA-MG */
+        .américa-mg {
             position: relative;
             color: white;
             overflow: hidden;
         }
-        .atlético-go::before {
+        .américa-mg::before {
             content: '';
             position: absolute;
             height: 130%;
             width: 107%;
             top: -30px;
             left: -3px;
-            background-image: url("{% get_media_prefix %}fundos/serie_a/atletico_go.jpg");
+            background-image: url("{% get_media_prefix %}fundos/serie_b/america_mg.jpg");
             z-index: -1;
             filter: blur(1px);
         }
@@ -657,10 +658,10 @@
 
 <body>
     <div class="series_bar">
-        <input checked type="radio" name="serie" id="A" value="a">
-        <label for="A" id="serieA">Série A</label>
-        <input type="radio" name="serie" id="B" value="b">
-        <label onclick="loadContent('serieB')" for="B" id="serieB"><a href="{% url 'time_favorito' 'B' %}">Série B</a></label>
+        <input type="radio" name="serie" id="A" value="a">
+        <label onclick="loadContent('serieA')" for="A" id="serieA"><a href="{% url 'time_favorito' 'A' %}">Série A</a></label>
+        <input checked type="radio" name="serie" id="B" value="b">
+        <label for="B" id="serieB">Série B</label>
         <input type="radio" name="serie" id="SEL" value="selecao">
         <label onclick="loadContent('selecao')" for="SEL" id="selecao"><a href="{% url 'time_favorito' 'SEL' %}">Brasil</a></label>
     </div>
@@ -673,13 +674,13 @@
         <div class="spinner"></div>
     </div>
 
-    <div class="carousel-wrap" id="carrossel-serie-A">
+    <div class="carousel-wrap">
         <div class="owl-carousel">
             {% for categoria in categorias %}
-                {% if categoria.serie == 'A' %}
+                {% if categoria.serie == 'B' %}
                     <div class="item">
                         <input type="radio" class="teste" id="{{ categoria.nome|lower }}" name="background" value="{{ categoria.nome|lower }}">
-                        <label style="cursor: pointer;" for="{{ categoria.nome|lower }}"><img src="{% get_media_prefix %}escudos/{{ categoria.nome_categoria|lower }}.png" alt="imagem-time"></label>
+                        <label style="cursor: pointer;" for="{{ categoria.nome|lower }}"><img rel="preload" src="{% get_media_prefix %}escudos/{{ categoria.nome_categoria|lower }}.png" alt="imagem-time"></label>
                         <h2 class="nome_time">{{ categoria.nome }}</h2>
                         <p class="descricao_time">{{ categoria.descricao }}</p>
                     </div>
@@ -735,8 +736,8 @@
             const $initialCenterItem = $('.owl-item.active.center');
 
             $initialCenterItem.addClass('center-active');
-            $initialCenterItem.find('.nome_time').removeClass().addClass('nome_time active atlético-mg_nome');
-            $initialCenterItem.find('.descricao_time').removeClass().addClass('descricao_time active atlético-mg_descricao');
+            $initialCenterItem.find('.nome_time').removeClass().addClass('nome_time active ceará_nome');
+            $initialCenterItem.find('.descricao_time').removeClass().addClass('descricao_time active ceará_descricao');
 
 
             const nomeTime = $initialCenterItem.find('.nome_time').text(); // Conteúdo do h2.
@@ -753,15 +754,15 @@
             setTimeout(highlightInitialItem, 50); // Garante o carregamento do DOM
         });
 
-        // Valor inicial para Atlético-MG
-        var valor_inicial = "atlético-mg";
+        // Valor inicial para Ceará
+        var valor_inicial = "ceará";
 
         // Substitui espaços por hífens no valor inicial para corresponder ao CSS
         var valor_inicial_css = valor_inicial.replace(/\s+/g, '-');
 
         // Remove todas as classes relacionadas aos times do <body> (caso necessário)
         $('body').removeClass(function (index, className) {
-            return (className.match(/\batlético-mg|athletico-pr|bahia|botafogo|red-bull-bragantino|corinthians|cruzeiro|cuiabá|flamengo|fluminense|fortaleza|grêmio|internacional|palmeiras|são-paulo|vasco|juventude|criciúma|vitória|atlético-go\b/g) || []).join(' ');
+            return (className.match(/\bceará|crb|amazonas|operário-pr|brusque|paysandu|chapecoense|ituano|mirassol|novorizontino|ponte-preta|sport|vila-nova|avaí|botafogo-sp|guarani|goiás|santos|coritiba|américa-mg\b/g) || []).join(' ');
         });
 
         // Adiciona a classe inicial ao <body>
@@ -801,7 +802,7 @@
             // Remover qualquer classe anterior no <body> e adicionar a nova
             $('body').removeClass(function (index, className) {
 
-                return (className.match(/\batlético-mg|athletico-pr|bahia|botafogo|red-bull-bragantino|corinthians|cruzeiro|cuiabá|flamengo|fluminense|fortaleza|grêmio|internacional|palmeiras|são-paulo|vasco|juventude|criciúma|vitória|atlético-go|seleção|ceará|crb|amazonas|operário-pr|brusque|paysandu|chapecoense|ituano|mirassol|novorizontino|ponte-preta|sport|vila-nova|avaí|botafogo-sp|guarani|goiás|santos|coritiba|américa-mg\b/g) || []).join(' ');
+            return (className.match(/\bceará|crb|amazonas|operário-pr|brusque|paysandu|chapecoense|ituano|mirassol|novorizontino|ponte-preta|sport|vila-nova|avaí|botafogo-sp|guarani|goiás|santos|coritiba|américa-mg\b/g) || []).join(' ');
             
             });
 
@@ -821,7 +822,7 @@
 
         setTimeout(highlightInitialItem, 200); // Garante o carregamento do DOM
 
-});
+        });
     </script>
 
     <!-- Script de carregamento da página -->
@@ -829,53 +830,17 @@
         function loadContent(page) {
 
         const spinner = document.getElementById('spinner');
-    
+
         spinner.style.display = 'flex';
-    
+
         setTimeout(() => {
-            if (page === 'serieB') {
-            window.location.href = '{% url 'time_favorito' 'B' %}'; 
-
+            if (page === 'serieA') {
+                window.location.href = '{% url 'time_favorito' 'A' %}';
             } else if (page === 'selecao') {
-            window.location.href = '{% url 'time_favorito' 'SEL' %}'; 
-
+                window.location.href = '{% url 'time_favorito' 'SEL' %}';
             }
         }, 1000);
         }
-    </script>
-
-    <!-- Script de carregamento das imagens -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const images = [
-            '{% get_media_prefix %}fundos/serie_a/galo.jpg',
-            '{% get_media_prefix %}fundos/serie_a/athletico.jpg',
-            '{% get_media_prefix %}fundos/serie_a/bahia.jpg',
-            '{% get_media_prefix %}fundos/serie_a/botafogo.jpg',
-            '{% get_media_prefix %}fundos/serie_a/braga.jpg',
-            '{% get_media_prefix %}fundos/serie_a/gamba.jpg',
-            '{% get_media_prefix %}fundos/serie_a/cruzeiro.jpg',
-            '{% get_media_prefix %}fundos/serie_a/cuiaba.jpg',
-            '{% get_media_prefix %}fundos/serie_a/fla.jpg',
-            '{% get_media_prefix %}fundos/serie_a/flu.jpg',
-            '{% get_media_prefix %}fundos/serie_a/fortaleza.jpg',
-            '{% get_media_prefix %}fundos/serie_a/grebbbio.jpg',
-            '{% get_media_prefix %}fundos/serie_a/inter_colosso.jpg',
-            '{% get_media_prefix %}fundos/serie_a/palmeiras.jpg',
-            '{% get_media_prefix %}fundos/serie_a/sao_paulo_bambi.jpg',
-            '{% get_media_prefix %}fundos/serie_a/vasco.jpg',
-            '{% get_media_prefix %}fundos/serie_a/juventude.jpg',
-            '{% get_media_prefix %}fundos/serie_a/criciuma.jpg',
-            '{% get_media_prefix %}fundos/serie_a/vitoria.jpg',
-            '{% get_media_prefix %}fundos/serie_a/atletico_go.jpg'
-        ];
-
-        // Pré-carregamento das imagens
-        images.forEach(src => {
-            const img = new Image();
-            img.src = src;
-        });
-        });
     </script>
 
     <!-- Script de envio do form -->
@@ -897,7 +862,50 @@
                 alert('Nenhum time ativo foi encontrado.');
             }
         }
+    </script>
 
+    <!-- Cooldown do botão do carrossel -->
+    <script>
+        const observer = new MutationObserver(() => {
+        const buttons_next = document.getElementsByClassName('owl-next');
+        Array.from(buttons_next).forEach(button => {
+
+            if (!button.dataset.cooldownAdded) {
+                button.addEventListener('click', () => {
+                    button.disabled = true;
+                    button.classList.add('disabled');
+
+                    setTimeout(() => {
+                        button.disabled = false;
+                        button.classList.remove('disabled');
+                    }, 400);
+                });
+                // Marcar o botão para evitar duplicação de eventos
+                button.dataset.cooldownAdded = true;
+            }
+        });
+
+        const buttons_prev = document.getElementsByClassName('owl-prev');
+        Array.from(buttons_prev).forEach(button => {
+
+            if (!button.dataset.cooldownAdded) {
+                button.addEventListener('click', () => {
+                    button.disabled = true;
+                    button.classList.add('disabled');
+
+                    setTimeout(() => {
+                        button.disabled = false;
+                        button.classList.remove('disabled');
+                    }, 400);
+                });
+                // Marcar o botão para evitar duplicação de eventos
+                button.dataset.cooldownAdded = true;
+            }
+        });
+        });
+
+        // Observar o documento para alterações no DOM
+        observer.observe(document.body, { childList: true, subtree: true });
     </script>
 </body>
 </html>

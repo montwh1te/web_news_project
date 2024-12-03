@@ -1,5 +1,6 @@
 from django.contrib.auth import logout, login as auth_login, authenticate
 from django.shortcuts import render, redirect
+from django.contrib.auth import get_user_model
 from .forms import RegistrationForm, LoginForm, UsuarioUpdateForm, AlterarSenhaForm
 from .models import Usuarios
 from django.http import JsonResponse
@@ -43,7 +44,7 @@ def login_view(request):
                 auth_login(request, user)
                 return redirect('time_favorito_default')
 
-    return render(request, 'users/login.html', {
+    return render(request, 'html/login.html', {
         'form_login': form_login,
         'form_register': form_register
     })
@@ -63,7 +64,7 @@ def info_perfil(request, perfil_id):
         form = UsuarioUpdateForm(instance=user)  # Preenche o formulário com os dados do usuário
 
     context = {'user': user, 'form': form}
-    return render(request, 'users/perfil.html', context)
+    return render(request, 'html/perfil.html', context)
 
 def alterar_senha(request):
     if request.method == "POST":
@@ -89,6 +90,27 @@ def alterar_senha(request):
         return JsonResponse({'success': False, 'errors': form.errors})
 
     return JsonResponse({'success': False})
+
+
+
+
+
+
+
+''' Função que exibe a página de funcionários. '''
+def pagina_funcionarios(request):
+    # Obtém todas as notícias do banco de dados.
+    usuarios = get_user_model().objects.all()  # Obtém todos os usuários cadastrados
+    
+    # Renderiza a página de funcionários com as notícias obtidas.
+    # O contexto passado inclui todas as notícias para exibição na página.
+    return render(request, 'html/index_funcionarios.html', {'usuarios': usuarios})
+
+
+
+
+
+
 
 def time_favorito(request, page="A"):
     # Pega todos os times disponíveis na tabela Categoria
@@ -121,51 +143,17 @@ def time_favorito(request, page="A"):
             existing_time.time = categoria
             existing_time.save()
             messages.success(request, f"Seu time favorito foi atualizado para {categoria.nome}!")
-            return redirect('boas_vindas', time_fav=categoria.nome)
+            return redirect('exibir_categoria', nome_time=categoria.nome_categoria)
 
         # Criação do time favorito
         time_favorito, created = TimeFavorito.objects.get_or_create(usuario=request.user, time=categoria)
 
         # Redireciona para a página inicial ou outra página
-        return redirect('boas_vindas', time_fav=categoria.nome)
+        return redirect('exibir_categoria', nome_time=categoria.nome_categoria)
 
     # Escolhe o template com base no parâmetro da URL
-    template_name = f'users/time_favorito_{page}.html'
+    template_name = f'html/time_favorito_{page}.html'
 
     # Contexto com todas as categorias
     context = {'categorias': categorias, 'page': page}
     return render(request, template_name, context)
-
-
-
-
-
-
-def boas_vindas(request, time_fav):
-    # Pega todos os times disponíveis na tabela Categoria
-    categorias = Categoria.objects.all()
-
-    try:
-        time_captado = Categoria.objects.get(nome=time_fav)
-    except Categoria.DoesNotExist:
-        messages.error(request, "Nenhum time correspondente foi encontrado. Erro.")
-        return redirect('home')
-
-    # Chama a API externa para pegar informações sobre o time
-    api_url = f"http://127.0.0.1:8000/api/times/{time_captado.time.id}/"
-    
-    try:
-        response = requests.get(api_url)
-        response.raise_for_status()
-        api_local = response.json()
-    except requests.exceptions.RequestException as e:
-        messages.error(request, f"Erro ao chamar a API: {e}")
-        api_local = {} 
-        
-    print(api_local)
-
-    # Contexto com todas as categorias e o time escolhido
-    context = {'categorias': categorias, 'time_fav': time_captado.nome, 'time_form': time_captado.nome_categoria, 'time_obj':time_captado, 'api_local': api_local}
-    
-    # Renderiza o template de boas-vindas
-    return render(request, 'users/boas_vindas.html', context)
