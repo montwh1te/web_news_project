@@ -33,7 +33,7 @@ def obter_proximos_jogos():
 
     # Configuração da API
     headers = {"Authorization": f"Bearer {settings.API_FUTEBOL_KEY}"}
-    url = "https://api.api-futebol.com.br/v1/campeonatos/10/rodadas/35"
+    url = "https://api.api-futebol.com.br/v1/campeonatos/10/rodadas/37"
 
     try:
         # Fazendo a requisição
