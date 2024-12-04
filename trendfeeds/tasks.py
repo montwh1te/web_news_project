@@ -259,6 +259,7 @@ def coletar_noticias():
                     'shadow-video-flow-video-infoissued', 
                     'entitieslist-itemLink',
                     'content-publication-data__updated'
+                    'show-multicontent-playlist__label'
                 ]
 
                 # Remove o texto de elementos indesejados do conteúdo.
