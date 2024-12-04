@@ -65,6 +65,16 @@ body.dark-mode .search-result-item:hover {
   background-color: #1a1a1a;
 }
 
+body.dark-mode .dropdown-menu.show{
+  background-color: #171717;
+
+}
+body.dark-mode .dropdown-item-text{
+  color: #bbbbbb !important;
+}
+body.dark-mode .text-danger:hover{
+  background-color: #000000 !important;
+}
 
 
 

@@ -140,6 +140,9 @@ body.dark-mode .dropdown-item-text{
 body.dark-mode .text-danger:hover{
   background-color: #000000 !important;
 }
+
+
+
 ::-webkit-scrollbar-thumb:hover {
   background: #555; /* cor escura quando passa o mouse no modo escuro */
 }
