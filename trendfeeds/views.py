@@ -398,7 +398,7 @@ def exibir_categoria(request, nome_time):
     }
 
     # Lista de rodadas a serem buscadas
-    rodadas = [35, 36, 37]  # Adicione aqui as rodadas desejadas
+    rodadas = [35, 36, 37, 38]  # Adicione aqui as rodadas desejadas
 
     # Obtemos os jogos do time a partir da função obter_jogos_um_time_multiplas_rodadas
     try:
