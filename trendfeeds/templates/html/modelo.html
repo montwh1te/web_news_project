@@ -22,6 +22,27 @@
                 background-color: var(--categoria-color);
             {% endif %}
         }
+
+        .whatsapp-icon:hover, .instagram-icon:hover, .facebook-icon:hover, .twitter-icon:hover {
+            opacity: 0.8;
+        }
+    
+        /* Garantindo a cor do hover */
+        .whatsapp-icon:hover i {
+            color: #25D366 !important; /* Verde do WhatsApp */
+        }
+    
+        .instagram-icon:hover i {
+            color: #E1306C !important; /* Cor do Instagram */
+        }
+    
+        .facebook-icon:hover i {
+            color: #1877F2 !important; /* Azul do Facebook */
+        }
+    
+        .twitter-icon:hover i {
+            color: #1DA1F2 !important; /* Azul do Twitter */
+        }
     </style>
 </head>
 
@@ -207,16 +228,16 @@
                     <!-- Ícones de Redes Sociais -->
                    <!-- Ícones de Redes Sociais -->
                     <div class="social-icons ml-4 d-flex align-items-center" style="margin-left: 70% !important; margin-top: -4%;">
-                        <a href="https://wa.me/555191801651" target="_blank" class="mx-3" style="font-size: 30px;">
+                        <a href="https://wa.me/555191801651" target="_blank" class="mx-3 whatsapp-icon" style="font-size: 30px;">
                             <i class="fab fa-whatsapp"></i>
                         </a>
-                        <a href="https://www.instagram.com/bruno.diferente___/" target="_blank" class="mx-2" style="font-size: 30px;">
+                        <a href="https://www.instagram.com/bruno.diferente___/" target="_blank" class="mx-2 instagram-icon" style="font-size: 30px;">
                             <i class="fab fa-instagram"></i>
                         </a>
-                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" target="_blank" class="mx-2" style="font-size: 30px;">
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" target="_blank" class="mx-2 facebook-icon" style="font-size: 30px;">
                             <i class="fab fa-facebook"></i>
                         </a>
-                        <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}" target="_blank" class="mx-2" style="font-size: 30px;">
+                        <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}" target="_blank" class="mx-2 twitter-icon" style="font-size: 30px;">
                             <i class="fab fa-twitter"></i>
                         </a>
                     </div>
