@@ -12,9 +12,14 @@ from users.models import Usuarios
 from django.core.exceptions import ValidationError
 
 
+
 ''' **IMPORTAÇÕES INTERNAS**  '''
 # Modelo personalizado que provavelmente representa os usuários do sistema, definido no app `users`.
 from users.models import Usuarios
+
+
+
+
 
 class Categoria(models.Model):
 
@@ -117,10 +122,7 @@ class TimeFavorito(models.Model):
 
 
 
-class InteracaoUsuario(models.Model):
-
-
-
+class InteracaoUsuario(models.Model):\
 
     # Relaciona a interação a uma notícia, removendo-a caso a notícia seja excluída.
     noticia = models.ForeignKey(Noticias, on_delete=models.CASCADE)

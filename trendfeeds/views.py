@@ -14,7 +14,10 @@ import requests
 # Para interagir com o sistema operacional, como manipulação de arquivos e caminhos.
 import os  
 
-from cachetools import TTLCache
+# Para implementar um cache com tempo de expiração.
+from cachetools import TTLCache  
+
+
 
 ''' **IMPORTAÇÕES DO DJANGO** '''
 # Para restringir acesso a usuários autenticados.
@@ -35,9 +38,13 @@ from django.core.cache import cache
 # Para acessar as configurações globais do projeto, como chaves e parâmetros de banco de dados.
 from django.conf import settings  
 
-from django.contrib import messages
+# Para exibir mensagens ao usuário, como erros ou confirmações.
+from django.contrib import messages  
 
-from django.contrib.auth import get_user_model
+# Para obter o modelo de usuário personalizado ou padrão usado pelo sistema.
+from django.contrib.auth import get_user_model  
+
+
 
 ''' **IMPORTAÇÕES DE MÓDULOS INTERNOS** '''
 # Importa os modelos definidos na aplicação para interagir com o banco de dados.
@@ -46,9 +53,15 @@ from .models import Categoria, Noticias, InteracaoUsuario, Comentario, Categoria
 # Importa duas funções utilitárias personalizadas, uma para obter a tabela do Brasileirão e outra para os próximos jogos.
 from .utils import obter_tabela_brasileirao, obter_proximos_jogos, obter_jogos_um_time
 
-from .tasks import coletar_noticias
+# Importa a tarefa assíncrona definida em `tasks.py` para coletar notícias.
+from .tasks import coletar_noticias  
 
-from .forms import NoticiasForm
+# Importa o formulário personalizado para criação e edição de notícias.
+from .forms import NoticiasForm  
+
+
+
+
 
 
 ''' Função que lida com a página inicial da aplicação. '''
@@ -191,7 +204,6 @@ def buscar_noticias(request):
 
 
 
-
 ''' Função que lida com a exibição da página de detalhes de uma notícia específica. '''
 def detalhes_noticia(request, slug):
     # Obtém uma notícia específica com base no slug ou retorna erro 404.
@@ -255,7 +267,6 @@ def detalhes_noticia(request, slug):
 
 
 
-
 ''' Função para atualizar o "like" de uma notícia. Somente usuários autenticados podem interagir. '''
 @login_required
 def atualizar_like(request, slug):
@@ -285,7 +296,6 @@ def atualizar_like(request, slug):
         })
 
     return JsonResponse({'error': 'Método inválido'}, status=400)
-
 
 
 
@@ -325,9 +335,6 @@ def adicionar_comentario(request, slug):
 
 
 
-
-
-
 ''' Define a URL da API para buscar os próximos jogos de um time específico. '''
 def buscar_proximos_jogos(time_id):
     # Define a URL da API com o ID do time e o status "scheduled" para jogos agendados.
@@ -348,6 +355,9 @@ def buscar_proximos_jogos(time_id):
 
         # Retorna uma lista vazia em caso de erro na requisição.
         return []
+
+
+
 
 
 ''' Função que exibe a página de uma categoria específica (time), mostrando suas notícias. '''
@@ -401,6 +411,9 @@ def exibir_categoria(request, nome_time):
     return render(request, template_name, context)
 
 
+
+
+
 ''' Função que exibe a página que mostra todas as noticias aos funcionários. '''
 def pagina_noticias_funcionarios(request):
     # Obtém todas as notícias do banco de dados.
@@ -409,6 +422,7 @@ def pagina_noticias_funcionarios(request):
     # Renderiza a página de funcionários com as notícias obtidas.
     # O contexto passado inclui todas as notícias para exibição na página.
     return render(request, 'html/todas_as_noticias_funcionarios.html', {'noticias': noticias})
+
 
 
 
@@ -501,18 +515,21 @@ def salvar_noticia_html(request, slug):
 
 
 
-
+''' Função que aciona a coleta de notícias. '''
 def acionar_coletar_noticias(request):
+    # Verifica se o método da requisição é POST
     if request.method == 'POST':
         coletar_noticias()  # Chama a função do seu tasks.py
         return JsonResponse({'status': 'success', 'message': 'Notícias coletadas com sucesso!'})
+
+    # Retorna erro se o método da requisição não for POST
     return JsonResponse({'status': 'error', 'message': 'Erro ao coletar notícias.'})
 
 
 
 
 
-
+''' Função para criar novas notícias. '''
 def criar_noticia(request):
     if request.method == 'POST':
         form = NoticiasForm(request.POST, request.FILES)
@@ -600,6 +617,7 @@ def criar_noticia(request):
 
 
 
+''' Função para deletar comentários dentro da notícia, precisando estar logado. '''
 @login_required
 def deletar_comentario(request, comentario_id):
     if not request.user.is_superuser:
@@ -616,7 +634,7 @@ def deletar_comentario(request, comentario_id):
 
 
 
-
+''' Função para deletar notícias, precisando estar logado. '''
 @login_required
 def deletar_noticia(request, noticia_id):
     if not request.user.is_superuser:
