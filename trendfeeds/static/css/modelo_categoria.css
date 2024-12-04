@@ -1,4 +1,6 @@
-/* Geral */
+/* ==================================
+   Estilo Geral
+================================== */
 body {
   background-color: #f4f4f9; /* Fundo neutro e agradável */
   font-family: "Roboto", Arial, sans-serif;
@@ -9,34 +11,44 @@ body {
   overflow-x: hidden;
 }
 
-body.dark-mode .noticias-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 30px;
-  box-shadow: 0px 1px 0px 0px rgba(217, 217, 217, 0.222),
-    0px -1px 0px 0px rgba(217, 217, 217, 0.222);
+a {
+  color: #343a40 !important;
 }
 
-body.dark-mode p {
-  color: #d2d2d2;
+#dark-mode-toggle {
+  all: unset; /* Remove todas as estilizações padrão */
+  background: none;
+  border: none;
+  padding: 0;
+  text-align: left;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
 }
 
-body.dark-mode h3 {
-  color: #d2d2d2;
+main{
+  margin-top: 2%;
 }
+
+
+
+
+
+/* ==================================
+   Modo Escuro
+================================== */
 body.dark-mode {
   background-color: #1a1a1a;
 }
 
-body.dark-mode .navbar-custom .nav-link {
-  color: #d2d2d2 !important; /* Cor do texto dos links da navbar no modo escuro */
+body.dark-mode p,
+body.dark-mode h3 {
+  color: #d2d2d2;
 }
 
-body.dark-mode .navbar-custom {
-  box-shadow: 0px 1px 0px 0px rgba(255, 255, 255, 0.222);
-}
+body.dark-mode .navbar-custom .nav-link,
 body.dark-mode .navbar-custom .nome-site {
-  color: #d2d2d2 !important; /* Cor do texto dos links da navbar no modo escuro */
+  color: #d2d2d2 !important;
 }
 
 body.dark-mode .form-control {
@@ -51,58 +63,160 @@ body.dark-mode #search-results {
 
 body.dark-mode .search-result-item:hover {
   background-color: #1a1a1a;
-  color: #d2d2d2;
-}
-/* Modo escuro */
-body.dark-mode::-webkit-scrollbar-track {
-  background: #333; /* cor mais escura para o modo escuro */
 }
 
-body.dark-mode::-webkit-scrollbar-thumb {
-  background: #777; /* cor da barra de rolagem no modo escuro */
+body.dark-mode .dropdown-menu.show{
+  background-color: #171717;
+
+}
+body.dark-mode .dropdown-item-text{
+  color: #bbbbbb !important;
+}
+body.dark-mode .text-danger:hover{
+  background-color: #000000 !important;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #555; /* cor escura quando passa o mouse no modo escuro */
-}
-/* Barra de rolagem padrão */
+
+
+
+/* ==================================
+   Scrollbar
+================================== */
 ::-webkit-scrollbar {
   width: 10px;
 }
 
-/* Cor de fundo da barra de rolagem */
 ::-webkit-scrollbar-track {
-  background: #f1f1f1; /* cor clara para o modo claro */
+  background: #f1f1f1;
 }
 
-/* Cor da barra de rolagem */
 ::-webkit-scrollbar-thumb {
-  background: #888; /* cor padrão da barra de rolagem */
+  background: #888;
 }
 
-/* Cor quando o usuário passa o mouse sobre a barra de rolagem */
 ::-webkit-scrollbar-thumb:hover {
-  background: #555; /* cor escura quando passa o mouse */
-}
-#dark-mode-toggle {
-  all: unset; /* Remove todas as estilizações padrão */
-  background: none; /* Remove o fundo */
-  border: none; /* Remove a borda */
-  padding: 0; /* Remove o padding */
-  text-align: left; /* Garante que o texto fique alinhado à esquerda */
-  font-family: inherit; /* Usa a fonte padrão do documento */
-  font-size: inherit; /* Usa o tamanho de fonte padrão */
-  color: inherit; /* Usa a cor do texto padrão */
+  background: #555;
 }
 
-main {
-  margin: 20px auto;
-  max-width: 75%;
-  border-radius: 15px;
-  padding: 20px;
+/* Scrollbar no Modo Escuro */
+body.dark-mode::-webkit-scrollbar-track {
+  background: #333;
 }
 
-/* Notícia mais recente */
+body.dark-mode::-webkit-scrollbar-thumb {
+  background: #777;
+}
+
+
+
+
+
+/* ==================================
+   Navbar e Links
+================================== */
+.navbar-custom {
+  padding: 15px 7%;
+  width: 100%;
+  margin: auto;
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.222);
+  transition: 0.4s;
+}
+
+.navbar-custom .nav-link:hover {
+  color: #424242;
+}
+
+.nav-link.dropdown-toggle::after {
+  display: inline-block;
+  margin-left: 0.255em;
+  vertical-align: 0.255em;
+  content: "";
+  border-top: 0.3em solid rgb(0, 0, 0);
+  border-right: 0.3em solid transparent;
+  border-left: 0.3em solid transparent;
+}
+
+.nav-item.dropdown:hover .dropdown-menu {
+  display: block;
+  margin-top: 0;
+}
+
+.dropdown-menu {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 35px;
+  right: 0;
+  background-color: #f9f9f9;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  z-index: 1;
+  border-radius: 8px;
+  width: 150px;
+}
+
+.user-info:hover .dropdown-content {
+  display: block;
+}
+
+
+
+
+
+/* ==================================
+   Campo de Busca
+================================== */
+#search-bar {
+  padding-left: 40px;
+  border-radius: 20px;
+  width: 100%;
+}
+
+#search-bar:focus {
+  outline: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.search-container {
+  position: relative;
+}
+
+.search-container img {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+}
+
+#search-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 235%;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 0;
+  margin-top: 5px;
+  list-style: none;
+  max-height: 200px;
+  overflow-y: auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+
+
+
+/* ==================================
+   Notícia mais recente
+================================== */
 .noticia-mais-recente {
   margin-bottom: 40px;
   overflow: hidden;
@@ -118,7 +232,7 @@ main {
 }
 
 .imagem-principal-banner:hover {
-  transform: scale(1.03); /* Leve aumento no hover */
+  transform: scale(1.03);
 }
 
 .faixa-titulo-descricao {
@@ -145,64 +259,51 @@ main {
   color: #ddd;
 }
 
-/* Listagem de notícias */
+.container-fluid{
+  margin-right: 0 !important;
+}
 
+
+
+
+
+/* ==================================
+   Listagem de Notícias
+================================== */
 .noticias-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 30px;
-  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.222),
-    0px -1px 0px 0px rgba(0, 0, 0, 0.222);
+  display: flex;
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.222), 0px -1px 0px 0px rgba(0, 0, 0, 0.222);
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 .noticia-item {
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.222), 0px -1px 0px 0px rgba(0, 0, 0, 0.222);
 }
 
 .noticia-item img {
-  width: 15%;
-  height: 70%;
+  width: 10%;
   margin-left: 0%;
-  margin-top: 2%;
-  object-fit: contain;
+  margin-top: 0%;
+  object-fit: cover;
 }
 
 .noticia-item div {
   padding: 15px;
 }
 
-.noticia-item h3 {
-  font-size: 1rem;
-  color: #000000;
-  margin-bottom: 9px;
-}
 
-.noticia-item p {
-  font-size: 0.9rem;
-  color: #555;
-}
 
-.noticia-item .noticia-data {
-  font-size: 0.8rem;
-  color: #888;
-  margin-top: 10px;
-}
 
-/* Placeholder para notícias ausentes */
-.noticias-container .noticia-item-placeholder {
-  background-color: #e0e0e0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1rem;
-  color: #555;
-  height: 200px;
-  border-radius: 10px;
-  box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.1);
-}
 
-/* Responsividade */
+/* ==================================
+   Responsividade
+================================== */
 @media (max-width: 768px) {
   .imagem-principal-banner {
     height: 250px;
@@ -217,351 +318,9 @@ main {
   }
 }
 
-.navbar-custom {
-  padding: 15px 7%;
-  width: 100%;
-  margin: auto;
-  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.222);
-  transition: 0.4s;
-}
-
-/* Seta personalizada para o dropdown-toggle com div */
-.nav-link.dropdown-toggle::after {
-  display: inline-block;
-  margin-left: 0.255em;
-  vertical-align: 0.255em;
-  content: "";
-  border-top: 0.3em solid rgb(0, 0, 0); /* Cor branca para a seta */
-  border-right: 0.3em solid transparent;
-  border-left: 0.3em solid transparent;
-  transition: 0.4s;
-}
-
-/* Ajustes para o dropdown com hover */
-.nav-item.dropdown:hover .dropdown-menu {
-  display: block;
-  margin-top: 0;
-  transition: 0.4s;
-}
-
-.dropdown-menu {
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  padding: 10px;
-  transition: 0.4s;
-}
-
-.dropdown-item img {
-  transition: transform 0.2s ease;
-  transition: 0.4s;
-}
-
-.dropdown-item img:hover {
-  transform: scale(1.1);
-  transition: 0.4s;
-}
-
-.user-info {
-  position: relative;
-  display: inline-block;
-  transition: 0.4s;
-}
-
-.user-photo {
-  cursor: pointer;
-  transition: 0.4s;
-}
-
-.dropdown-content {
-  display: none;
-  position: absolute;
-  top: 35px;
-  right: 0;
-  background-color: #f9f9f9;
-  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-  padding: 10px;
-  z-index: 1;
-  border-radius: 8px;
-  width: 150px;
-  transition: 0.4s;
-}
-
-.user-info:hover .dropdown-content {
-  display: block;
-  transition: 0.4s;
-}
-
-.dropdown-content a {
-  color: #333;
-  text-decoration: none;
-  padding: 8px 0;
-  display: block;
-  transition: 0.4s;
-}
-
-.dropdown-content a:hover {
-  background-color: #ddd;
-  transition: 0.4s;
-}
-
-#search-bar:focus {
-  outline: none;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-#search-results {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 235%;
-  background-color: #fff;
-  border-radius: 8px;
-  margin-top: 5px;
-  padding: 0;
-  list-style: none;
-  max-height: 200px;
-  overflow-y: auto;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  z-index: 10;
-}
-
-.search-result-item {
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.search-result-item:hover {
-  background-color: #f0f0f0;
-}
-
-.search-result-image {
-  width: 40px !important;
-  height: 40px !important;
-  margin-right: 10px !important;
-  border-radius: 4px !important;
-  object-fit: cover !important;
-}
-
-.search-result-text {
-  font-size: 1rem;
-  color: #333;
-  font-weight: 500;
-  margin-left: 10%;
-}
-
-.search-container {
-  position: relative;
-}
-
-.search-container img {
-  position: absolute;
-  left: 15px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 16px; /* Tamanho da lupa */
-  height: 16px;
-}
-
-#search-bar {
-  padding-left: 40px; /* Espaço para a lupa */
-  border-radius: 20px; /* Bordas arredondadas */
-  width: 100%;
-}
-
-a {
-  color: #333;
-}
-
-.navbar-custom .nav-link:hover {
-  color: #424242;
-}
-
-/* Estilos gerais para o container */
-.caixa {
-  width: 80%;
-  padding-top: 20px;
-  padding-bottom: 20px;
-  margin: 0 auto;
-}
-
-/* Estilos do cartão */
-.card {
-  max-width: 300px;
-  width: 100%;
-  border-radius: 15px;
-  border: 1px solid #ddd;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
-}
-
-.card-body {
-  padding: 15px;
-}
-
-/* Estilos para a parte dos escudos */
-.card-body .d-flex {
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 15px;
-}
-
-.card-body .d-flex img {
-  width: 55px;
-  height: 55px;
-  border-radius: 50%;
-}
-
-/* Estilo para o placar */
-.card-body .d-flex div,
-.card-body .d-flex span {
-  font-size: 1.2rem;
-  color: #6c757d;
-  font-weight: bold;
-  margin: 0 10px;
-}
-
-/* Estilos para os detalhes do jogo */
-.game-details p {
-  font-size: 0.9rem;
-  color: #6c757d;
-  margin: 5px 0;
-}
-
-/* Para telas menores, ajustando o layout */
-@media (max-width: 768px) {
-  .caixa {
-    width: 100%;
-    padding: 10px;
-  }
-
-  .card {
-    margin-bottom: 15px;
-  }
-
-  .game-details p {
-    font-size: 0.8rem;
-  }
-
-  /* Alinha os cartões de forma mais compacta */
-  .row {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .col-6 {
-    flex: 0 0 48%;
-    max-width: 48%;
-  }
-
-  .col-12 {
-    flex: 0 0 100%;
-    max-width: 100%;
-  }
-}
-
-
-
 @media (min-width: 1200px) {
   .col-md-6 {
-      flex: 1 0 63%;
-      max-width: 100%;
-  }
-}
-
-
-/* Container principal das notícias */
-.noticias-listagem {
-  width: 100%;
-  margin: 20px auto;
-  padding: 10px;
-  border-radius: 10px;
-
-}
-
-/* Título da seção */
-
-/* Container das notícias */
-.noticias-container {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-/* Cada item de notícia */
-.noticia-item {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  padding: 10px;
-    /* border: 1px solid #ddd; */
-  border-radius: 8px;
-    /* background-color: #fff; */
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.noticia-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-/* Imagem da notícia */
-.noticia-img {
-  width: 80px;
-  height: 80px;
-  border-radius: 8px;
-  object-fit: cover;
-  flex-shrink: 0;
-}
-
-/* Conteúdo da notícia */
-.noticia-conteudo {
-  display: flex;
-  flex-direction: column;
-}
-
-/* Título da notícia */
-.noticia-titulo {
-  font-size: 1rem;
-  color: #007bff;
-  margin: 0 0 5px;
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.noticia-link:hover .noticia-titulo {
-  color: #0056b3;
-}
-
-/* Data da notícia */
-.noticia-data {
-  font-size: 0.875rem;
-  color: #6c757d;
-}
-
-/* Caso não existam notícias */
-.nenhuma-noticia {
-  font-size: 1rem;
-  text-align: center;
-  color: #6c757d;
-}
-
-/* Responsividade */
-@media (max-width: 768px) {
-  .noticia-item {
-      flex-direction: column;
-      align-items: flex-start;
-  }
-
-  .noticia-img {
-      width: 100%;
-      height: 150px;
-  }
-
-  .noticia-titulo {
-      font-size: 1.2rem;
+    flex: 1 0 63%;
+    max-width: 100%;
   }
 }

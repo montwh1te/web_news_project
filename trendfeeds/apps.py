@@ -1,7 +1,5 @@
 ''' **IMPORTAÇÕES DO DJANGO**  '''
 # Importa a classe base `AppConfig`, usada para configurar aplicativos no Django.
-''' **IMPORTAÇÕES DO DJANGO**  '''
-# Importa a classe base `AppConfig`, usada para configurar aplicativos no Django.
 from django.apps import AppConfig  
 
 

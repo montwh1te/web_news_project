@@ -8,6 +8,8 @@ from django.conf import settings
     # Para pegar a api key dentro do arquivo settings.
 
 
+
+
 ''' **FUNÇÕES DA API FUTEBOL** '''
 def obter_tabela_brasileirao():
     url = "https://api.api-futebol.com.br/v1/campeonatos/10/tabela"  # ID 10 refere-se à Série A
@@ -22,6 +24,7 @@ def obter_tabela_brasileirao():
     
 
 
+
 def obter_proximos_jogos():
     """
     Obtém os próximos jogos disponíveis no campeonato.
@@ -33,7 +36,7 @@ def obter_proximos_jogos():
 
     # Configuração da API
     headers = {"Authorization": f"Bearer {settings.API_FUTEBOL_KEY}"}
-    url = "https://api.api-futebol.com.br/v1/campeonatos/10/rodadas/35"
+    url = "https://api.api-futebol.com.br/v1/campeonatos/10/rodadas/37"
 
     try:
         # Fazendo a requisição
@@ -46,6 +49,9 @@ def obter_proximos_jogos():
 
     # Retorna as partidas disponíveis
     return dados.get('partidas', [])
+
+
+
 
 
 def obter_jogos_um_time(time):

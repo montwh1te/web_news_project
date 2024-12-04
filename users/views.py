@@ -8,6 +8,8 @@ from trendfeeds.models import Categoria, TimeFavorito
 from django.contrib import messages
 import requests
 import http.client
+from django.http import HttpResponseForbidden
+
 
 def login_view(request):
     form_login = LoginForm()
@@ -99,11 +101,10 @@ def alterar_senha(request):
 
 ''' Função que exibe a página de funcionários. '''
 def pagina_funcionarios(request):
-    # Obtém todas as notícias do banco de dados.
+    if not request.user.is_superuser:
+        return HttpResponseForbidden("Acesso negado. Esta página é restrita a superusuários.")
+
     usuarios = get_user_model().objects.all()  # Obtém todos os usuários cadastrados
-    
-    # Renderiza a página de funcionários com as notícias obtidas.
-    # O contexto passado inclui todas as notícias para exibição na página.
     return render(request, 'html/index_funcionarios.html', {'usuarios': usuarios})
 
 

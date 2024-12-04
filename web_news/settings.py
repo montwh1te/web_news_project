@@ -85,9 +85,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # Diretórios adicionais onde o Django vai procurar arquivos estáticos
-STATICFILES_DIRS = [
-    BASE_DIR / "static",  # Diretório global de arquivos estáticos
-    
+STATICFILES_DIRS = [ # Diretório global de arquivos estáticos
     # Se os arquivos estáticos estão dentro de um app (exemplo: trendfeeds/static)
     BASE_DIR / "trendfeeds/static",  
 ]

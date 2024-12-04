@@ -4,150 +4,63 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Criar Nova Notícia</title>
+
     {% load static %}
-    <link rel="stylesheet" href="{% static 'trendfeeds/css/criar_noticias.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/criar_noticias.css' %}" />
 
-
-  <style>
-    .sidebar {
-      height: 98vh;
-      width: 210px;
-      position: fixed;
-      top: 0;
-      left: 0;
-      background: linear-gradient(to bottom, #343a40, #23272b);
-      color: #ffffff;
-      box-shadow: 4px 0 10px rgba(0, 0, 0, 0.2);
-      padding: 10px 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .sidebar h3 {
-        font-size: 1.5rem;
-        font-weight: bold;
-        text-align: center;
-        margin-bottom: 20px;
-        color: #f8f9fa;
-        border-bottom: 2px solid #495057;
-        padding-bottom: 10px;
-    }
-
-    .sidebar nav {
-        flex-grow: 1;
-    }
-
-    .sidebar a {
-        display: block;
-        color: #f8f9fa;
-        text-decoration: none;
-        font-size: 1rem;
-        padding: 10px 15px;
-        margin: 10px 0;
-        border-radius: 5px;
-        background-color: #343a40;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        transition: all 0.3s ease;
-        transition: 0.4s;
-    }
-
-    .sidebar a:hover {
-        background-color:  #495057;
-        transform: translateX(5px);
-        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
-    }
-
-        /* Botão Coletar Notícias */
-    .btn-collect {
-        width: 100%;
-        background: linear-gradient(to right, #007bff, #0056b3);
-        color: #ffffff;
-        font-size: 1rem;
-        font-weight: bold;
-        padding: 10px 15px;
-        border: none;
-        border-radius: 5px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-
-    .btn-collect:hover {
-        background: linear-gradient(to right, #0056b3, #003a75);
-        transform: scale(1.05);
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-    }
-
-        /* Responsividade */
-    @media (max-width: 768px) {
-        .sidebar {
-              width: 200px;
-              padding: 20px 15px;
-    }
-
-    .sidebar h3 {
-              font-size: 1.2rem;
-    }
-
-    .sidebar a {
-              font-size: 0.9rem;
-              padding: 8px 10px;
-    }
-
-    .btn-collect {
-              font-size: 0.9rem;
-              padding: 8px 10px;
-    }
-    }
-    .content {
-      padding: 20px;
-      margin: 0 auto;
-      max-width: 800px;
-      background-color: #ffffff;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      border-radius: 8px;
-    }
-    
-</style>
 </head>
 
 
 <body>
-     <!-- Menu Lateral -->
-    <div class="sidebar">
-          <h3>Menu</h3>
-          <nav>
-                <a href="{% url 'pagina_funcionarios' %}">Início Funcionários</a>
-                <a href="{% url 'home' %}">Início do Site</a>
-                <a href="{% url 'pagina_noticias_funcionarios' %}">Lista De Notícias</a>
-                <a href="#" id="dark-mode-toggle">Claro</a>
-          </nav>
-          <a class="btn btn-logout" href="{% url 'logout' %}">Sair</a>
 
-          <form method="post" action="{% url 'coletar_noticias' %}">
-          {% csrf_token %}
-          <button type="submit" class="btn btn-collect">Coletar Notícias</button>
-          </form>
+  <!-- Menu Lateral -->
+  <div class="sidebar">
+
+    <!-- Menu Título  -->
+    <h3>Menu</h3>
+
+    <!-- Itens do menu, (links)  -->
+    <nav>
+      <a href="{% url 'pagina_funcionarios' %}">Início Funcionários</a>
+      <a href="{% url 'home' %}">Início do Site</a>
+      <a href="{% url 'pagina_noticias_funcionarios' %}">Lista De Notícias</a>
+      <a href="#" id="dark-mode-toggle">Claro</a>
+    </nav>
+
+    <!-- Botão de logout  -->
+    <a class="btn btn-logout" href="{% url 'logout' %}">Sair</a>
+
+
+    <!-- Botão para ativar a def do vies coletar_noticias()  -->
+    <form method="post" action="{% url 'coletar_noticias' %}">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-collect">Coletar Notícias</button>
+    </form>
+  
+  </div>
+    
+
+
+
+  <!-- Formulário para criar a notícia -->
+  <main class="content">
+    {% block content %}
+    <div class="container mt-5">
+      <h2>Criar Nova Notícia</h2>
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+          {{ form.as_p }}
+        <button type="submit" class="btn btn-primary mt-3">Criar Notícia</button>
+      </form>
     </div>
-    
-    <main class="content">
-      {% block content %}
-    
-      <div class="container mt-5">
-          <h2>Criar Nova Notícia</h2>
-          <form method="POST" enctype="multipart/form-data">
-              {% csrf_token %}
-              {{ form.as_p }}
-              <button type="submit" class="btn btn-primary mt-3">Criar Notícia</button>
-          </form>
-      </div>
-      {% endblock %}
-    </main>
+    {% endblock %}
+  </main>
+
+  
 
 
-     <!-- Script necessário para o modo noturno -->
-    <script>
+  <!-- Script necessário para o modo noturno -->
+  <script>
         // Espera a página carregar completamente
         window.onload = function() {
           const toggleButton = document.getElementById('dark-mode-toggle');
@@ -168,7 +81,7 @@
             }
           });
         }
-    </script>
+  </script>
 </body>
 </html>
 

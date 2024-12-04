@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     {% load static %}
-    <link rel="stylesheet" href="/static/trendfeeds/css/modelo.css">
+    <link rel="stylesheet" href="{% static 'css/modelo.css' %}" />
     {% csrf_token %}
     <style>
         :root {
@@ -55,23 +55,45 @@
 
 
 
-            <!-- FOTO DO USUÁRIO -->
+          
+            <!-- Dropdown do usuário -->
             <div class="dropdown">
                 {% if request.user.is_authenticated %}
-                    <a class="nav-link dropdown-toggle" href="#" role="button" id="userDropdown" data-toggle="dropdown">
-                        <img src="{% if request.user.foto %}{{ request.user.foto.url }}{% else %}{% static 'images/default-avatar.png' %}{% endif %}" 
-                            alt="Foto de {{ request.user.username }}" 
-                            class="rounded-circle" style="width: 40px; height: 40px;">
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                        <a href="{% url 'info_perfil' perfil_id=request.user.id %}" class="dropdown-item-text">{{ request.user.username }}</a>
-                        <a class="dropdown-item text-danger" href="{% url 'logout' %}">Sair</a>
-                    </div>
+    
+                <!-- Usuário autenticado -->
+                <a class="nav-link dropdown-toggle" href="#" role="button" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-top: -10%;">
+                {% if request.user.foto %}
+                    <img src="{{ request.user.foto.url }}" alt="Foto de {{ request.user.username }}" class="rounded-circle" style="width: 40px; height: 40px;" />
                 {% else %}
-                    <div class="row d-flex flex-wrap justify-content-center">
-                        <a class="nav-link text-dark" href="{% url 'login' %}">Login</a>
-                    </div>
+                    <img src="{% get_media_prefix %}login.png" alt="Foto de {{ request.user.username }}" class="rounded-circle" style="width: 40px; height: 40px;" />
                 {% endif %}
+                </a>
+                
+                <div class="dropdown-menu dropdown-menu-right text-center" aria-labelledby="userDropdown" style="min-width: 150px; padding: 10px;">
+                <!-- Nome do usuário -->
+                <span class="dropdown-item-text font-weight-bold text-muted" style="font-size: 0.85rem;">
+                    {{ request.user.username }}
+                </span>
+                <div class="dropdown-divider"></div>
+                
+                <!-- Link Meu Perfil -->
+                <a href="{% url 'info_perfil' perfil_id=request.user.id %}" class="dropdown-item" style="font-size: 0.9rem; padding: 5px;">
+                    Meu Perfil
+                </a>
+                
+                <!-- Link Sair -->
+                <a href="{% url 'logout' %}" class="dropdown-item text-danger" style="font-size: 0.9rem; padding: 5px;">
+                    Sair
+                </a>
+                </div>
+                {% else %}
+                <!-- Usuário não autenticado -->
+                <div class="row d-flex flex-wrap justify-content-center">
+                <a class="nav-link" href="{% url 'login' %}">Login</a>
+                </div>
+                {% endif %}
+                
+                
             </div>
         </nav>
     </header>
@@ -92,9 +114,9 @@
         {% if request.user.is_superuser %}
 
 
-            <button id="editButton" class="btn btn-primary edit-btn" onclick="enableEditMode()" style="top: 70%; right: 3%;">Editar</button>
-            <button id="saveButton" class="btn btn-success save-btn d-none" onclick="saveChanges()" style="top: 70%; right: 3%;">Salvar</button>
-            <button id="cancelButton" class="btn btn-secondary cancel-btn d-none" onclick="cancelEdit()" style="top: 70%;right: -3%;">Cancelar</button>
+            <button id="editButton" class="btn btn-primary edit-btn" onclick="enableEditMode()" style="position: fixed; top: 70%; right: 3%;">Editar</button>
+            <button id="saveButton" class="btn btn-success save-btn d-none" onclick="saveChanges()" style="position: fixed; top: 70%; right: 3%;">Salvar</button>
+            <button id="cancelButton" class="btn btn-secondary cancel-btn d-none" onclick="cancelEdit()" style="position: fixed; top: 70%;right: -3%;">Cancelar</button>
 
 
 
@@ -169,6 +191,7 @@
                             <label class="container like d-flex align-items-center">
                                 <input type="checkbox" id="likeCheckbox" data-url="{% url 'atualizar_like' noticia.slug %}" {% if usuario_curtiu %}checked{% endif %}>
                                 <svg id="Glyph" version="1.1" viewBox="0 0 32 32"><path d="M29.845,17.099l-2.489,8.725C26.989,27.105,25.804,28,24.473,28H11c-0.553,0-1-0.448-1-1V13c0-0.215,0.069-0.425,0.198-0.597l5.392-7.24C16.188,4.414,17.05,4,17.974,4C19.643,4,21,5.357,21,7.026V12h5.002c1.265,0,2.427,0.579,3.188,1.589C29.954,14.601,30.192,15.88,29.845,17.099z"></path><path d="M7,12H3c-0.553,0-1,0.448-1,1v14c0,0.552,0.447,1,1,1h4c0.553,0,1-0.448,1-1V13C8,12.448,7.553,12,7,12z"></path></svg>
+
                             </label>
                             <span class="likeCount" style="padding-right: 100%;">{{ noticia.like_count }}</span>
                         </form>
