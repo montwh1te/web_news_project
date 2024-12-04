@@ -139,9 +139,9 @@
 
 
     <!-- Lista de Notícias -->
-    <main class="d-flex flex-nowrap justify-content-center noticias-recentes-banner-principal">
+    <main class="d-flex flex-nowrap justify-content-center noticias-recentes-banner-principal" style="margin-left: 10%;margin-right: 10%;">
             <!-- Conteúdo principal -->
-        <div class="container-fluid" style="width: 35%;">
+        <div class="container-fluid" style="max-width: 100%;">
                 <!-- Contêiner de largura customizada -->
             
             <div class="noticia-mais-recente position-relative" style="max-height: 200%;">
@@ -169,8 +169,8 @@
 
 
         
-        <div class="noticias-listagem" style="margin-right: 25%;">
-            <p class="titulo-secao">TOP NOTÍCIAS</p>
+        <div class="noticias-listagem" style="width: 50%;">
+            <p class="titulo-secao" style="padding-left: 10px;">TOP NOTÍCIAS</p>
             <!-- Listagem das notícias mais recentes -->
             <div class="noticias-container">
                 {% for noticia in ultimas_tres_noticias %}
@@ -180,7 +180,7 @@
                     <!-- Imagem da notícia -->
                     <div class="noticia-conteudo">
                         <a href="{% url 'detalhes_noticia' noticia.slug %}" class="noticia-link">
-                            <h3 class="noticia-titulo">{{ noticia.descricao }}</h3>
+                            <h3 class="noticia-titulo" style="font-size: 2vh;">{{ noticia.descricao }}</h3>
                             <!-- Título da notícia -->
                         </a>
                         <p class="noticia-data">{{ noticia.data_publicacao }}</p>

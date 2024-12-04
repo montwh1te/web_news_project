@@ -271,23 +271,26 @@ body.dark-mode::-webkit-scrollbar-thumb {
    Listagem de Notícias
 ================================== */
 .noticias-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 30px;
+  display: flex;
   box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.222), 0px -1px 0px 0px rgba(0, 0, 0, 0.222);
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 .noticia-item {
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.222), 0px -1px 0px 0px rgba(0, 0, 0, 0.222);
 }
 
 .noticia-item img {
-  width: 15%;
-  height: 70%;
+  width: 10%;
   margin-left: 0%;
-  margin-top: 2%;
-  object-fit: contain;
+  margin-top: 0%;
+  object-fit: cover;
 }
 
 .noticia-item div {
