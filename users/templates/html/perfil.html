@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Informações da Conta</title>
@@ -21,11 +22,17 @@
         .form-container {
             background: #fff; /* Branco para contraste */
             border-radius: 12px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 16px rgb(0 0 0 / 24%);
             padding: 30px;
             max-width: 450px;
             width: 100%;
             border: 1px solid #ddd; /* Bordas sutis */
+        }
+
+        .form-container a img {
+            width: 20px;
+            position: relative;
+            margin-bottom: 15px;
         }
 
         /* Cabeçalho do formulário */
@@ -67,18 +74,18 @@
 
         /* Botão principal */
         .btn-primary {
-            background: #333; /* Preto suave */
+            background: #007bff;
             border: none;
             border-radius: 8px;
             font-size: 16px;
             font-weight: 600;
-            padding: 10px;
-            color: #fff; /* Texto branco para contraste */
+            padding: 14px;
+            color: #fff;
             transition: background-color 0.3s ease;
         }
 
         .btn-primary:hover {
-            background: #555; /* Cinza escuro para hover */
+            background: #0157b3;
         }
 
         /* Link de alteração de senha */
@@ -96,7 +103,7 @@
         /* Modal customizado */
         .modal-content {
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            height: 400px;
+            height: 420px;
         }
         
         .modal-header {
@@ -109,6 +116,10 @@
         }
         .modal-body .form-group {
             margin-bottom: 20px;
+        }
+
+        body .form-container form .form-group{
+            margin-bottom: 13px !important;
         }
         
         .modal-header .btn-close {
@@ -207,10 +218,13 @@
 </head>
 <body>
     <div class="form-container">
-        <a href="{% url 'home' %}" class="d-block text-center mb-3">
-            <h5>Página Principal</h5>
+
+        <a href="{% url 'home' %}">
+            <img src="{% get_media_prefix %}seta-esquerda.png" alt="seta_voltar">
         </a>
+
         <h2>Informações da Conta</h2>
+        
         <form method="POST" action="{% url 'info_perfil' perfil_id=user.id %}" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="form-group">
