@@ -92,9 +92,9 @@
         {% if request.user.is_superuser %}
 
 
-            <button id="editButton" class="btn btn-primary edit-btn" onclick="enableEditMode()" style="top: 70%; right: 3%;">Editar</button>
-            <button id="saveButton" class="btn btn-success save-btn d-none" onclick="saveChanges()" style="top: 70%; right: 3%;">Salvar</button>
-            <button id="cancelButton" class="btn btn-secondary cancel-btn d-none" onclick="cancelEdit()" style="top: 70%;right: -3%;">Cancelar</button>
+            <button id="editButton" class="btn btn-primary edit-btn" onclick="enableEditMode()" style="position: fixed; top: 70%; right: 3%;">Editar</button>
+            <button id="saveButton" class="btn btn-success save-btn d-none" onclick="saveChanges()" style="position: fixed; top: 70%; right: 3%;">Salvar</button>
+            <button id="cancelButton" class="btn btn-secondary cancel-btn d-none" onclick="cancelEdit()" style="position: fixed; top: 70%;right: -3%;">Cancelar</button>
 
 
 
@@ -169,6 +169,7 @@
                             <label class="container like d-flex align-items-center">
                                 <input type="checkbox" id="likeCheckbox" data-url="{% url 'atualizar_like' noticia.slug %}" {% if usuario_curtiu %}checked{% endif %}>
                                 <svg id="Glyph" version="1.1" viewBox="0 0 32 32"><path d="M29.845,17.099l-2.489,8.725C26.989,27.105,25.804,28,24.473,28H11c-0.553,0-1-0.448-1-1V13c0-0.215,0.069-0.425,0.198-0.597l5.392-7.24C16.188,4.414,17.05,4,17.974,4C19.643,4,21,5.357,21,7.026V12h5.002c1.265,0,2.427,0.579,3.188,1.589C29.954,14.601,30.192,15.88,29.845,17.099z"></path><path d="M7,12H3c-0.553,0-1,0.448-1,1v14c0,0.552,0.447,1,1,1h4c0.553,0,1-0.448,1-1V13C8,12.448,7.553,12,7,12z"></path></svg>
+
                             </label>
                             <span class="likeCount" style="padding-right: 100%;">{{ noticia.like_count }}</span>
                         </form>
