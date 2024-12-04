@@ -176,7 +176,7 @@
                 {% for noticia in ultimas_tres_noticias %}
                 <!-- Loop que exibe cada notícia disponível -->
                 <div class="noticia-item">
-                    <img src="{% get_media_prefix %}/thumbs/thumb_n_{{ noticia.id }}.jpg" alt="Imagem da notícia" class="noticia-img">
+                    <img src="{% get_media_prefix %}/noticias/n_{{ noticia.id }}_0.jpg" alt="Imagem da notícia" class="noticia-img">
                     <!-- Imagem da notícia -->
                     <div class="noticia-conteudo">
                         <a href="{% url 'detalhes_noticia' noticia.slug %}" class="noticia-link">
@@ -196,13 +196,15 @@
         
     </main>
 
-    <<div class="d-flex container-fluid flex-wrap caixa" style="width: 80%;padding-top: 20px;padding-bottom: 20px;">
+    <div class="caixa" style="width: 60%;padding-top: 20px;padding-bottom: 20px;margin-left: 10%;">
 
-        <section class="container my-3 d-flex flex-nowrap" style="flex: 0 0 40%;margin-left: 82%;">
-            <div class="row justify-content-center">
+        <h3 style="margin-left: 3%;">Próximos Jogos</h3>
+
+        <section class="container my-3 d-flex">
+            <div class=" d-flex justify-content-center">
                 {% if proximos_jogos %}
                 {% for jogo in proximos_jogos %}
-                <div class="col-12 col-md-6 d-flex justify-content-center my-2">
+                <div class="col-12 col-md-4 d-flex justify-content-center my-2">
                     <div class="card text-center shadow-sm p-3" style="max-width: 300px; width: 100%; border-radius: 15px; border: 1px solid #ddd;">
                         <div class="card-body">
                             <div class="d-flex align-items-center justify-content-center mb-3">
@@ -229,6 +231,30 @@
             </div>
         </section>
     </div>
+
+
+
+    <section class="section-noticias mt-2" style="width: 80%;padding-top: 3%;margin-left: 10%;padding-left: 2%;padding-right: 2%;">
+        <h3>Mais Notícias</h3>
+        <div class="row">
+            {% for noticia in noticias %}
+            <div class="col-12">
+                <a href="{% url 'detalhes_noticia' noticia.slug %}" class="card-link">
+                    <img src="{% get_media_prefix %}/thumbs/thumb_n_{{ noticia.id }}.jpg" 
+                         onerror="this.onerror=null; this.src='{% get_media_prefix %}SemImagem.png';" 
+                         alt="noticia" 
+                         class="card-img" />
+                    <div class="card-conteudo">
+                        <h5>{{ noticia.descricao }}</h5>
+                        <p>{{ noticia.descricao|slice:":100" }}...</p>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    
+    
     
 
 

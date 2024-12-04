@@ -379,7 +379,7 @@ def exibir_categoria(request, nome_time):
     ultima_noticia = noticias.first()
 
     # Obtém as próximas três notícias mais recentes, excluindo a última
-    ultimas_tres_noticias = noticias[1:4]
+    ultimas_tres_noticias = noticias[1:5]
 
     # Obtém as notícias restantes
     restantes_noticias = noticias[4:]
@@ -397,9 +397,12 @@ def exibir_categoria(request, nome_time):
         'categoria_cor': categoria_cor,
     }
 
-    # Obtemos os jogos do time a partir da função obter_jogos_um_time
+    # Lista de rodadas a serem buscadas
+    rodadas = [35, 36, 37]  # Adicione aqui as rodadas desejadas
+
+    # Obtemos os jogos do time a partir da função obter_jogos_um_time_multiplas_rodadas
     try:
-        proximos_jogos = obter_jogos_um_time(nome_time)
+        proximos_jogos = obter_jogos_um_time(nome_time, rodadas)
     except ValueError as e:
         # Caso o time não seja encontrado, você pode capturar o erro e tratá-lo (por exemplo, mostrando uma mensagem).
         return render(request, 'index.html', {'mensagem': str(e)})

@@ -54,15 +54,16 @@ def obter_proximos_jogos():
 
 
 
-def obter_jogos_um_time(time):
+def obter_jogos_um_time(time, rodadas):
     """
-    Obtém os próximos jogos de um time específico pelo nome.
+    Obtém os jogos de um time específico para múltiplas rodadas.
     
     Args:
         time (str): Nome do time (ex: 'internacional', 'palmeiras').
+        rodadas (list): Lista de números das rodadas a serem consultadas (ex: [35, 36, 37]).
     
     Returns:
-        list: Lista de partidas do time, ou mensagem indicando que não há jogos.
+        list: Lista de partidas do time nas rodadas especificadas.
     """
     import requests
 
@@ -93,26 +94,27 @@ def obter_jogos_um_time(time):
     if time not in TIMES_IDS:
         return []  # Retorna uma lista vazia se o time não for encontrado
 
-    # Obtemos o ID do time usando o nome
     id_time = TIMES_IDS[time]
 
-    # Configurações da API
     headers = {"Authorization": f"Bearer {settings.API_FUTEBOL_KEY}"}
-    url = "https://api.api-futebol.com.br/v1/campeonatos/10/rodadas/35"
+    url_template = "https://api.api-futebol.com.br/v1/campeonatos/10/rodadas/{}"
+    partidas_total = []
 
-    try:
-        # Fazendo a requisição
-        response = requests.get(url, headers=headers)
-        response.raise_for_status()  # Levanta exceções para códigos HTTP de erro
-        dados = response.json()
-    except requests.exceptions.RequestException as e:
-        print(f"Erro ao consultar a API: {e}")
-        return []  # Retorna uma lista vazia em caso de erro na API
+    for rodada in rodadas:
+        url = url_template.format(rodada)
+        try:
+            response = requests.get(url, headers=headers)
+            response.raise_for_status()
+            dados = response.json()
+        except requests.exceptions.RequestException as e:
+            print(f"Erro ao consultar a API na rodada {rodada}: {e}")
+            continue  # Pula para a próxima rodada em caso de erro
 
-    # Filtra os jogos do time
-    partidas = [
-        partida for partida in dados.get('partidas', [])
-        if partida['time_mandante']['time_id'] == id_time or partida['time_visitante']['time_id'] == id_time
-    ]
+        # Filtra os jogos do time
+        partidas = [
+            partida for partida in dados.get('partidas', [])
+            if partida['time_mandante']['time_id'] == id_time or partida['time_visitante']['time_id'] == id_time
+        ]
+        partidas_total.extend(partidas)
 
-    return partidas
+    return partidas_total
