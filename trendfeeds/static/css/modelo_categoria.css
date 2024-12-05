@@ -75,10 +75,18 @@ body.dark-mode .dropdown-item-text{
 body.dark-mode .text-danger:hover{
   background-color: #000000 !important;
 }
-
-
-
-
+body.dark-mode .card-link-jogos{
+  background-color: #000000 !important;
+}
+body.dark-mode .section-noticias{
+  background-color: #000000 !important;
+}
+body.dark-mode .card-link {
+  background-color: #1a1a1a;
+}
+body.dark-mode .card-conteudo h5{
+  color: #bbbbbb !important;
+}
 /* ==================================
    Scrollbar
 ================================== */
