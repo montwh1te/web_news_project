@@ -316,7 +316,7 @@ body.dark-mode::-webkit-scrollbar-thumb {
   font-size: 2rem;
   color: #222;
   text-align: start;
-  margin-bottom: 2%;
+  margin-bottom: 3%;
 }
 
 .card-link {
@@ -330,7 +330,7 @@ body.dark-mode::-webkit-scrollbar-thumb {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.3s ease;
   height: 30%;
-  margin-bottom: 1%;
+  margin-bottom: 2%;
   flex-wrap: wrap;
   align-content: center;
   justify-content: center;
@@ -363,6 +363,8 @@ body.dark-mode::-webkit-scrollbar-thumb {
   height: 100%;
   object-fit: cover;
   border-right: 1px solid #ddd;
+  flex-shrink: 0 !important;
+  width: 15% !important;
 }
 
 .card-conteudo {
