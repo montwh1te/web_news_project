@@ -11,4 +11,10 @@ urlpatterns = [
     path('time_favorito/', views.time_favorito, {'page': 'A'}, name='time_favorito_default'),
     path('time_favorito/<str:page>/', views.time_favorito, name='time_favorito'),
     path('pagina_funcionarios/', views.pagina_funcionarios, name='pagina_funcionarios'),
+    
+    # Define uma URL para acionar a função de coleta de notícias.
+    # A função `acionar_coletar_noticias` no módulo `views` é chamada.
+    # A URL é identificada pelo nome 'coletar_noticias'.
+    path('coletar_noticias/', views.acionar_coletar_noticias, name='coletar_noticias'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

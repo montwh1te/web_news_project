@@ -53,8 +53,6 @@ from .models import Categoria, Noticias, InteracaoUsuario, Comentario, Categoria
 # Importa duas funções utilitárias personalizadas, uma para obter a tabela do Brasileirão e outra para os próximos jogos.
 from .utils import obter_tabela_brasileirao, obter_proximos_jogos, obter_jogos_um_time
 
-# Importa a tarefa assíncrona definida em `tasks.py` para coletar notícias.
-from .tasks import coletar_noticias  
 
 # Importa o formulário personalizado para criação e edição de notícias.
 from .forms import NoticiasForm  
@@ -398,7 +396,7 @@ def exibir_categoria(request, nome_time):
     }
 
     # Lista de rodadas a serem buscadas
-    rodadas = [35, 36, 37, 38]  # Adicione aqui as rodadas desejadas
+    rodadas = [34, 35, 36, 37, 38,]  # Adicione aqui as rodadas desejadas
 
     # Obtemos os jogos do time a partir da função obter_jogos_um_time_multiplas_rodadas
     try:
@@ -410,7 +408,7 @@ def exibir_categoria(request, nome_time):
     # Adiciona os próximos jogos ao contexto
     context['proximos_jogos'] = proximos_jogos
 
-    # Renderiza o template com as informações do time
+    # Renderiza o template com as informações doF time
     return render(request, template_name, context)
 
 
@@ -518,15 +516,6 @@ def salvar_noticia_html(request, slug):
 
 
 
-''' Função que aciona a coleta de notícias. '''
-def acionar_coletar_noticias(request):
-    # Verifica se o método da requisição é POST
-    if request.method == 'POST':
-        coletar_noticias()  # Chama a função do seu tasks.py
-        return JsonResponse({'status': 'success', 'message': 'Notícias coletadas com sucesso!'})
-
-    # Retorna erro se o método da requisição não for POST
-    return JsonResponse({'status': 'error', 'message': 'Erro ao coletar notícias.'})
 
 
 

@@ -321,10 +321,31 @@ body.dark-mode::-webkit-scrollbar-thumb {
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.3s ease;
-  height: 120px; /* Altura fixa para manter os cards alinhados */
-  margin-bottom: 15px;
+  height: 30%;
+  margin-bottom: 1%;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: center;
 }
 
+.card-link-jogos {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  overflow: hidden;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+  height: 20vh !important;
+  margin-bottom: 15px;
+  width: 100%;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: space-evenly;
+  flex-direction: column;
+}
 .card-link:hover {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
@@ -359,6 +380,18 @@ body.dark-mode::-webkit-scrollbar-thumb {
   margin: 0;
 }
 
+.row {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  margin-right: -15px;
+  margin-left: -15px;
+  align-content: stretch;
+  justify-content: center;
+  align-items: center;
+  /* padding: 13%; */
+}
 @media (min-width: 576px) {
   .col-12 {
       width: 100%;
@@ -402,4 +435,10 @@ body.dark-mode::-webkit-scrollbar-thumb {
     flex: 1 0 63%;
     max-width: 100%;
   }
+}
+
+.titulo{
+  font-size: 4vh;
+  color: #333;
+  font-weight: bolder;
 }

@@ -9,7 +9,8 @@ from django.contrib import messages
 import requests
 import http.client
 from django.http import HttpResponseForbidden
-
+# Importa a tarefa assíncrona definida em `tasks.py` para coletar notícias.
+from trendfeeds.tasks import coletar_noticias  
 
 def login_view(request):
     form_login = LoginForm()
@@ -109,6 +110,15 @@ def pagina_funcionarios(request):
 
 
 
+''' Função que aciona a coleta de notícias. '''
+def acionar_coletar_noticias(request):
+    # Verifica se o método da requisição é POST
+    if request.method == 'POST':
+        coletar_noticias()  # Chama a função do seu tasks.py
+        return redirect( 'pagina_funcionarios')
+
+    # Retorna erro se o método da requisição não for POST
+    return JsonResponse({'status': 'error', 'message': 'Erro ao coletar notícias.'})
 
 
 
