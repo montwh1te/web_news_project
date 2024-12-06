@@ -47,6 +47,9 @@ class Noticias(models.Model):
     # Campo para armazenar o título da notícia, com limite de 255 caracteres e valor único.
     titulo = models.CharField(max_length=255, unique=True)
 
+    # Campo para armazenar o título que vai aparecer na tela da notícia, com limite de 255 caracteres e valor único.
+    titulo_bonito = models.CharField(max_length=255, unique=True, null=True)
+
     # Campo para a descrição completa da notícia, com limite de 7000 caracteres.
     descricao = models.TextField(max_length=7000)
 

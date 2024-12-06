@@ -418,7 +418,7 @@ def exibir_categoria(request, nome_time):
 ''' Função que exibe a página que mostra todas as noticias aos funcionários. '''
 def pagina_noticias_funcionarios(request):
     # Obtém todas as notícias do banco de dados.
-    noticias = Noticias.objects.all()
+    noticias = Noticias.objects.all().order_by('-id')
     
     # Renderiza a página de funcionários com as notícias obtidas.
     # O contexto passado inclui todas as notícias para exibição na página.

@@ -169,8 +169,7 @@
                     
                     <div class="faixa-titulo-descricao">
                             <!-- Faixa sobreposta com título e resumo -->
-                        
-                        <h3 class="titulo-noticia-mais-recente">{{ ultima_noticia.descricao }}</h3>
+                        <h3 class="titulo-noticia-mais-recente"> {% if ultima_noticia.titulo_bonito %}{{ noticia.titulo_bonito }}{% else %}{{ultima_noticia.descricao }}{% endif %}</h3>
                             <!-- Título da notícia -->
                         
                         <p class="resumo-noticia-mais-recente">{{ ultima_noticia.descricao|slice:":150" }} ...</p>
@@ -194,7 +193,7 @@
                     <!-- Imagem da notícia -->
                     <div class="noticia-conteudo">
                         <a href="{% url 'detalhes_noticia' noticia.slug %}" class="noticia-link">
-                            <h3 class="noticia-titulo" style="font-size: 2vh;">{{ noticia.descricao }}</h3>
+                            <h3 class="noticia-titulo" style="font-size: 2vh;">{{ noticia.titulo_bonito }}</h3>
                             <!-- Título da notícia -->
                         </a>
                         <p class="noticia-data">{{ noticia.data_publicacao }}</p>
@@ -272,7 +271,7 @@
                          alt="noticia" 
                          class="card-img" />
                     <div class="card-conteudo">
-                        <h5>{{ noticia.descricao }}</h5>
+                        <h5>{{ noticia.titulo_bonito }}</h5>
                         <p>{{ noticia.descricao|slice:":100" }}...</p>
                     </div>
                 </a>

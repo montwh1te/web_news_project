@@ -359,6 +359,7 @@ def coletar_noticias():
                 noticia_modelo, created = Noticias.objects.update_or_create(
                     titulo=titulo_truncado,
                     defaults={
+                        'titulo_bonito': titulo_noticia,
                         'data_publicacao': data_publicacao,
                         'descricao': preview_content,
                         'autor': autor_text,
@@ -453,7 +454,7 @@ def coletar_noticias():
 
                 # Localiza todos os elementos de imagem na página com o seletor CSS "amp-img".
                 imagens_elementos = WebDriverWait(driver, 60).until(
-                    EC.presence_of_all_elements_located((By.CSS_SELECTOR, "amp-img")))
+                    EC.presence_of_all_elements_located((By.CSS_SELECTOR, "figure.content-media-figure amp-img")))
                 
                 # Inicializa uma lista vazia para armazenar os URLs das imagens.
                 imagem_urls = []
@@ -717,18 +718,18 @@ def formatar_texto(arquivo_nome, imagens_elementos, novo_id_noticia):
         
         # Define um padrão para capturar linhas que começam e terminam com emojis.
         emoji_pattern = re.compile(
-            r'^[\U0001F600-\U0001F64F].*?[\U0001F600-\U0001F64F]$'
-            r'|^[\U0001F300-\U0001F5FF].*?[\U0001F300-\U0001F5FF]$'
-            r'|^[\U0001F680-\U0001F6FF].*?[\U0001F680-\U0001F6FF]$'
-            r'|^[\U0001F700-\U0001F77F].*?[\U0001F700-\U0001F77F]$'
-            r'|^[\U0001F780-\U0001F7FF].*?[\U0001F780-\U0001F7FF]$'
-            r'|^[\U0001F800-\U0001F8FF].*?[\U0001F800-\U0001F8FF]$'
-            r'|^[\U0001F900-\U0001F9FF].*?[\U0001F900-\U0001F9FF]$'
-            r'|^[\U0001FA00-\U0001FA6F].*?[\U0001FA00-\U0001FA6F]$'
-            r'|^[\U0001FA70-\U0001FAFF].*?[\U0001FA70-\U0001FAFF]$'
-            r'|^[\U00002700-\U000027BF].*?[\U00002700-\U000027BF]$'
-            r'|^[\U0001F1E0-\U0001F1FF].*?[\U0001F1E0-\U0001F1FF]$'
-            , flags=re.MULTILINE
+            r'.*[\U0001F600-\U0001F64F]'
+            r'|.*[\U0001F300-\U0001F5FF]'
+            r'|.*[\U0001F680-\U0001F6FF]'
+            r'|.*[\U0001F700-\U0001F77F]'
+            r'|.*[\U0001F780-\U0001F7FF]'
+            r'|.*[\U0001F800-\U0001F8FF]'
+            r'|.*[\U0001F900-\U0001F9FF]'
+            r'|.*[\U0001FA00-\U0001FA6F]'
+            r'|.*[\U0001FA70-\U0001FAFF]'
+            r'|.*[\U00002700-\U000027BF]'
+            r'|.*[\U0001F1E0-\U0001F1FF].*',
+            flags=re.MULTILINE
         )
         
         # Substitui linhas que começam e terminam com emojis por uma string vazia.

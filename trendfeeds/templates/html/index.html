@@ -136,7 +136,7 @@
           </a>
           <div class="d-flex flex-column container-fluid justify-content-start descricao-noticia-mais-recente">
             <a href="{% if ultima_noticia.slug %}{% url 'detalhes_noticia' ultima_noticia.slug %}{% else %}#{% endif %}">
-              <p class="titulo-noticia-mais-recente">{{ ultima_noticia.descricao }}</p>
+              <p class="titulo-noticia-mais-recente">{% if ultima_noticia.titulo_bonito %}{{ ultima_noticia.titulo_bonito }}{% else %}{{ ultima_noticia.descricao }}{% endif %}</p>
               <p class="resumo-noticia-mais-recente">{{ ultima_noticia.descricao|slice:":350" }} ...</p>
             </a>
           </div>
@@ -154,7 +154,7 @@
             </a>
             <div class="d-flex flex-wrap-column container-fluid justify-content-start descricao-noticia-recente">
               <a href="{% url 'detalhes_noticia' noticia.slug %}">
-                <p class="titulo-noticia-recente">{{ noticia.descricao | slice:":250" }} ...</p>
+                <p class="titulo-noticia-recente">{% if noticia.titulo_bonito %}{{ noticia.titulo_bonito | slice:":250" }}...{% else %}{{noticia.descricao }}...{% endif %}</p>
               </a>
             </div>
           </div>
@@ -245,7 +245,7 @@
           <a href="{% url 'detalhes_noticia' noticia.slug %}" class="noticia-card" style="width: 100%">
             <img src="{% get_media_prefix %}/thumbs/thumb_n_{{ noticia.id }}.jpg" onerror="this.onerror=null; this.src='{% get_media_prefix %}SemImagem.png';" alt="noticia" />
             <div class="noticia-conteudo">
-              <h5>{{ noticia.descricao }}</h5>
+              <h5>{% if noticia.titulo_bonito %}{{ noticia.titulo_bonito }}{% else %}{{noticia.descricao }}{% endif %}</h5>
               <p>{{ noticia.descricao|slice:":150" }} ...</p>
             </div>
           </a>

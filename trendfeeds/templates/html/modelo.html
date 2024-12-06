@@ -333,7 +333,7 @@
                                             class="card-img-top noticia-imagem" 
                                             alt="Imagem da notícia" onerror="this.onerror=null; this.src='{% get_media_prefix %}SemImagem.png';">
                                         <div class="card-body">
-                                            <h5 class="card-title">{{ noticia.descricao }}</h5>
+                                            <h5 class="card-title">{% if noticia.titulo_bonito %}{{ noticia.titulo_bonito }}{% else %}{{noticia.descricao }}{% endif %}</h5>
                                             <p class="card-text">{{ noticia.descricao|slice:":150" }} ...</p>
                                         </div>
                                     </div>
