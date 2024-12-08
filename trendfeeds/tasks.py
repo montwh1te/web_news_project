@@ -14,6 +14,7 @@ import unicodedata
 # Para manipulação e redimensionamento de imagens.
 from PIL import Image  
 
+from datetime import datetime
 
 
 
@@ -202,6 +203,13 @@ def coletar_noticias():
 
             # Acessa a URL da notícia para capturar o conteúdo completo.
             driver.get(link_noticia)
+            time.sleep(2)
+
+            # Verifique se a URL atual corresponde à notícia
+            if driver.current_url != link_noticia:
+                print(Fore.RED + f"❌ URL inconsistente ao capturar imagens para {titulo_truncado}.")
+                continue
+
 
             try:
                 # Aguarda até que o elemento de classificação esteja visível na página, indicando que é uma página de classificação.
@@ -355,18 +363,24 @@ def coletar_noticias():
                 except:
                     pass
 
-                # Cria ou atualiza a notícia e salva no banco de dados
-                noticia_modelo, created = Noticias.objects.update_or_create(
-                    titulo=titulo_truncado,
-                    defaults={
-                        'titulo_bonito': titulo_noticia,
-                        'data_publicacao': data_publicacao,
-                        'descricao': preview_content,
-                        'autor': autor_text,
-                        'link': link_noticia
-                    }
-                )
-                print(Fore.GREEN + f"Notícia '{titulo_truncado}' {'criada' if created else 'atualizada'} no banco de dados com sucesso.")
+                try:
+                    noticia_modelo, created = Noticias.objects.update_or_create(
+                        titulo=titulo_truncado,
+                        defaults={
+                            'titulo_bonito': titulo_noticia,
+                            'data_publicacao': data_publicacao,
+                            'descricao': preview_content,
+                            'autor': autor_text,
+                            'link': link_noticia
+                        }
+                    )
+                    if created:
+                        print(Fore.GREEN + f"✅ Notícia '{titulo_truncado}' criada com sucesso no banco de dados.")
+                    else:
+                        print(Fore.YELLOW + f"⚠️ Notícia '{titulo_truncado}' já existente. Atualizada no banco de dados.")
+                except Exception as e:
+                    print(Fore.RED + f"❌ Erro ao salvar a notícia '{titulo_truncado}' no banco de dados: {e}")
+                    continue
 
 
                 # Procura por categorias na lista de times com base no título da notícia
@@ -451,29 +465,27 @@ def coletar_noticias():
             ''' **SEÇÃO PARA PEGAR AS IMAGENS DA NOTÍCIA** '''
 
             try:
+                # Rolando a página para garantir que todo o conteúdo seja carregado
+                driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+                time.sleep(30)  # Aguarda brevemente para carregar elementos dinâmicos
 
                 # Localiza todos os elementos de imagem na página com o seletor CSS "amp-img".
                 imagens_elementos = WebDriverWait(driver, 60).until(
                     EC.presence_of_all_elements_located((By.CSS_SELECTOR, "figure.content-media-figure amp-img")))
-                
+
                 # Inicializa uma lista vazia para armazenar os URLs das imagens.
                 imagem_urls = []
 
                 # Itera sobre cada elemento de imagem encontrado, com um índice `j` para diferenciar as imagens.
                 for j, imagem_elemento in enumerate(imagens_elementos):
                     try:
-                        # Aguarda o carregamento do atributo `src`.
-                        WebDriverWait(driver, 10).until(
-                            lambda d: imagem_elemento.get_attribute("src") is not None)
-
-                        # Obtém o atributo `src` de cada elemento de imagem, que contém o URL da imagem.
                         url_imagem = imagem_elemento.get_attribute("src")
-
-                        # Valida o URL da imagem (opcionalmente, pode filtrar URLs inválidos).
                         if not url_imagem or not url_imagem.startswith("http"):
                             print(Fore.RED + f"⚠️ URL inválido encontrado: {url_imagem}")
                             continue
 
+
+                        timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
                         # Define o caminho e nome do arquivo para salvar a imagem localmente, com base no ID da notícia e no índice.
                         nome_arquivo_imagem = os.path.join(f'{diretorio_imagens}/noticias', f"n_{novo_id_noticia}_{j}.jpg")
 
@@ -501,22 +513,6 @@ def coletar_noticias():
 
                         # Exibe uma mensagem indicando que a imagem foi salva com sucesso.
                         print(Fore.GREEN + f"✅ Imagem {j} salva como {nome_arquivo_imagem}")
-
-                        # Redimensiona a imagem e salva no diretório de miniaturas (thumbs)
-                        # Define o caminho e nome do arquivo para salvar a miniatura da imagem.
-                        nome_arquivo_thumb = os.path.join(f'{diretorio_imagens}/thumbs', f"thumb_n_{novo_id_noticia}.jpg")
-                        
-                        # Abre a imagem salva usando a biblioteca Pillow.
-                        with Image.open(nome_arquivo_imagem) as img:
-
-                            # Redimensiona a imagem para um tamanho máximo de 380x215 pixels, mantendo a proporção.
-                            img.thumbnail((380, 215))
-
-                            # Salva a miniatura no formato JPEG no diretório definido.
-                            img.save(nome_arquivo_thumb, "JPEG")
-                        # Exibe uma mensagem indicando que a miniatura foi salva com sucesso.
-
-                        print(Fore.GREEN + f"✅ Miniatura da imagem {j} salva como {nome_arquivo_thumb}")
 
                     except Exception as e:
 
