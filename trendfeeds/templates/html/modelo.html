@@ -23,13 +23,6 @@
             {% endif %}
         }
 
-<<<<<<< HEAD
-        .categoria-card-text{
-            background-color: var(--categoria-color);
-        }
-
-=======
->>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
         .whatsapp-icon:hover, .instagram-icon:hover, .facebook-icon:hover, .twitter-icon:hover {
             opacity: 0.8;
         }
@@ -131,11 +124,7 @@
 
     <!-- HERO SECTION -->
     <section class="categoria-badge hero text-white text-center py-3 {% if categoria_nome|lower == 'outros' %}d-none{% endif %}">
-<<<<<<< HEAD
-        <h1 class="display-4">{{ categoria_nome_exibicao|upper |default:"Notícia" }}</h1>
-=======
         <h1 class="display-4">{% block main_title %}{{ categoria_nome_exibicao|upper |default:"Notícia" }}{% endblock main_title %}</h1>
->>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
     </section>
 
 
@@ -206,91 +195,6 @@
                    
                     <h2 class="noticia-titulo">{% block second_title %}{% endblock second_title %}</h2>
 
-<<<<<<< HEAD
-                    
-
-
-                    <div class="info-noticias container py-3 d-flex flex-nowrap">
-                        <!-- Linha para cidade e autor -->
-
-                        <div style="width: 90%;">
-                            <div class="row mb-2 align-items-center" >
-                                <div class="col-md-12 d-flex align-items-center mb-2">
-                                    <p  style= "font-weight: bold !important; color:#555555; max-width:30%; width:18%;" class="me-2">
-                                        {% if autor_primeira_parte == "Por Redação do ge" or autor_primeira_parte == "Por Redação ge" %}
-                                            Por edu e dudu
-                                        {% else %}
-                                            {{ autor_primeira_parte }}
-                                        {% endif %}
-                                    </p>                                
-                                    <p  style= "font-weight: bold !important; color:#555555;" class="fw-bold mx-2">—</p>
-                                    <p class="mb-0">{{ autor_segunda_parte|default:"Porto Alegre" }}</p>
-                                </div>
-                            </div>
-                            
-                           <!-- Linha para data e hora -->
-                            <div class="row align-items-center">
-                                <div class="col-md-6 d-flex align-items-center">
-                                    <!-- Ícone de relógio -->
-                                    <p class="mb-0 me-2 d-flex align-items-center">
-                                        {{ noticia.hora_publicacao }}
-                                    </p>
-    
-                                    <!-- Separador estilizado -->
-                                    <p class="fw-bold mx-2" style="color: #555555;">•</p>
-    
-                                    <!-- Ícone de calendário -->
-                                    <p class="mb-0 d-flex align-items-center">
-                                        {{ noticia.data_publicacao }}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div>
-                            <!-- FORMULÁRIO DE LIKE -->
-                            {% if request.user.is_authenticated %}
-                            <form id="likeForm" method="post" action="{% url 'atualizar_like' noticia.slug %}" class="d-flex align-items-center mb-2" style="width: 30%; margin-left: 60%; ">
-                                {% csrf_token %}
-                                <label class="container like d-flex align-items-center">
-                                    <input type="checkbox" id="likeCheckbox" data-url="{% url 'atualizar_like' noticia.slug %}" {% if usuario_curtiu %}checked{% endif %}>
-                                    <svg id="Glyph" version="1.1" viewBox="0 0 32 32"><path d="M29.845,17.099l-2.489,8.725C26.989,27.105,25.804,28,24.473,28H11c-0.553,0-1-0.448-1-1V13c0-0.215,0.069-0.425,0.198-0.597l5.392-7.24C16.188,4.414,17.05,4,17.974,4C19.643,4,21,5.357,21,7.026V12h5.002c1.265,0,2.427,0.579,3.188,1.589C29.954,14.601,30.192,15.88,29.845,17.099z"></path><path d="M7,12H3c-0.553,0-1,0.448-1,1v14c0,0.552,0.447,1,1,1h4c0.553,0,1-0.448,1-1V13C8,12.448,7.553,12,7,12z"></path></svg>
-
-                                </label>
-                                <span class="likeCount" style="">{{ noticia.like_count }}</span>
-                            </form>
-                            {% else %}
-                            <p>Faça login para curtir esta notícia.</p>
-                            <svg id="Glyph" version="1.1" viewBox="0 0 32 32"><path d="M29.845,17.099l-2.489,8.725C26.989,27.105,25.804,28,24.473,28H11c-0.553,0-1-0.448-1-1V13c0-0.215,0.069-0.425,0.198-0.597l5.392-7.24C16.188,4.414,17.05,4,17.974,4C19.643,4,21,5.357,21,7.026V12h5.002c1.265,0,2.427,0.579,3.188,1.589C29.954,14.601,30.192,15.88,29.845,17.099z"></path><path d="M7,12H3c-0.553,0-1,0.448-1,1v14c0,0.552,0.447,1,1,1h4c0.553,0,1-0.448,1-1V13C8,12.448,7.553,12,7,12z"></path></svg>
-                                <span class="likeCount" style="">{{ noticia.like_count }}</span>
-                            {% endif %}
-
-
-
-
-                            <!-- Ícones de Redes Sociais -->
-                            <div class="social-icons d-flex align-items-center">
-                                <a href="https://wa.me/555191801651" target="_blank" class="mx-1 whatsapp-icon" style="font-size: 25px;">
-                                    <i class="fab fa-whatsapp"></i>
-                                </a>
-                                <a href="https://www.instagram.com/bruno.diferente___/" target="_blank" class="mx-1 instagram-icon" style="font-size: 25px;">
-                                    <i class="fab fa-instagram"></i>
-                                </a>
-                                <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" target="_blank" class="mx-1 facebook-icon" style="font-size: 25px;">
-                                    <i class="fab fa-facebook"></i>
-                                </a>
-                                <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}" target="_blank" class="mx-1 twitter-icon" style="font-size: 25px;">
-                                    <i class="fab fa-twitter"></i>
-                                </a>
-                            </div>
-
-                        </div>
-                       
-                    </div>
-             
-=======
->>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
 
                     <!-- CONTEÚDO DA NOTÍCIA -->
                    
@@ -299,8 +203,6 @@
                     </div>
 
 
-<<<<<<< HEAD
-=======
 
 
                     <!-- FORMULÁRIO DE LIKE -->
@@ -340,7 +242,6 @@
                         </a>
                     </div>
 
->>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
                 </div>
             </div>
 
@@ -348,24 +249,6 @@
 
 
            
-<<<<<<< HEAD
-            <!-- COMENTÁRIOS -->
-            <p class="comentarios-title text-center mt-5 mb-4" style="font-size: 1.5rem; font-weight: bold; color: #333;">Comentários</p>
-
-            <div id="comentariosContainer" class="comentarios-container container mt-4">
-                {% if comentarios %}
-                    {% for comentario in comentarios %}
-                        <div class="comment-card row align-items-center mb-4 p-3 shadow-sm rounded bg-light">
-                            <div class="col-2 text-center">
-                                <img class="user-photo rounded-circle img-fluid" 
-                                    src="{{ comentario.usuario.foto.url }}" 
-                                    alt="Foto de {{ comentario.usuario.username }}" 
-                                    style="max-width: 70px; height: 70px; object-fit: cover;">
-                            </div>
-                            <div class="col-10">
-                                <h5 class="user-name mb-1" style="font-weight: 600; color: #555;">{{ comentario.usuario.username }}</h5>
-                                <p class="comment-text mb-0 text-muted">{{ comentario.comentario }}</p>
-=======
            <!-- COMENTÁRIOS -->
             <p class="comentarios" style="margin-top: 10%;">COMENTÁRIOS</p>
             <div id="comentariosContainer" class="comentarios-container container mt-4">
@@ -382,32 +265,21 @@
                             <div class="col-10">
                                 <h5 class="mb-1">{{ comentario.usuario.username }}</h5>
                                 <p class="mb-0 text-muted">{{ comentario.comentario }}</p>
->>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
 
                                 <!-- Botão para deletar comentário (visível apenas para superusuários) -->
                                 {% if request.user.is_superuser %}
                                     <form action="{% url 'deletar_comentario' comentario.id %}" method="POST" class="d-inline">
                                         {% csrf_token %}
-<<<<<<< HEAD
-                                        <button type="submit" class="btn btn-sm btn-outline-danger mt-2">Deletar</button>
-=======
                                         <button type="submit" class="btn btn-danger btn-sm mt-2">Deletar</button>
->>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
                                     </form>
                                 {% endif %}
                             </div>
                         </div>
                     {% endfor %}
                 {% else %}
-<<<<<<< HEAD
-                    <div class="row align-items-center mb-4 p-3 shadow-sm rounded bg-light">
-                        <div class="col-12">
-                            <p class="text-center text-muted">Nenhum comentário até agora.</p>
-=======
                     <div class="row align-items-center mb-4 p-3 shadow-sm rounded border bg-light">
                         <div class="col-12">
                             <p>Nenhum comentário até agora.</p>
->>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
                         </div>
                     </div>
                 {% endif %}
@@ -417,36 +289,6 @@
 
 
 
-<<<<<<< HEAD
-           
-           <!-- FORMULÁRIO DE COMENTÁRIO -->
-           {% if request.user.is_authenticated %}
-           <form id="commentForm" method="post" action="{% url 'comentar_noticia' noticia.slug %}" class="comment-form">
-               {% csrf_token %}
-               
-               <!-- Caixa de texto -->
-               <div class="comment-box">
-                   <textarea 
-                       id="comentarioTextarea" 
-                       class="comment-textarea" 
-                       placeholder="Escreva seu comentário aqui..." 
-                       rows="4" 
-                       required
-                   ></textarea>
-               </div>
-               
-               <!-- Botão de envio -->
-               <div class="submit-container">
-                   <button type="submit" class="submit-btn">Postar Comentário</button>
-               </div>
-           </form>
-       {% else %}
-           <div class="alert alert-info no-login-comment">
-               <p>Voce precisa estar logado para comentar.</p>
-           </div>
-       {% endif %}
-       
-=======
 
             <!-- FORMULÁRIO DE COMENTÁRIO -->
             {% if request.user.is_authenticated %}
@@ -459,7 +301,6 @@
                 <textarea class="form-control" placeholder="Faça login para comentar..." disabled></textarea>
                 <button class="btn btn-primary" disabled>Enviar Comentário</button>
             {% endif %}
->>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
 
 
 
@@ -467,16 +308,9 @@
 
 
             <!-- NOTÍCIAS RELACIONADAS -->
-<<<<<<< HEAD
-            {% if noticias_agrupadas %}
-            <p class="mais_noticias  {% if categoria_nome|lower == 'outros' %}d-none{% endif %}" style="margin-top: 10%;margin-bottom: 5% !important;!i;!;margin-left: 2%;font-size: 2.5vh;font-weight: bold;color: #555555;" >NOTÍCIAS RELACIONADAS</p>
-
-            <div id="noticiasCarrossel" class="carousel slide  {% if categoria_nome|lower == 'outros' %}d-none{% endif %}" data-ride="carousel" style="margin-top: 5%;">
-=======
             <p class="mais_noticias" style="margin-top: 10%;">MAIS NOTÍCIAS</p>
 
             <div id="noticiasCarrossel" class="carousel slide" data-ride="carousel" style="margin-top: 5%;">
->>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
                     <!-- Carrossel de notícias -->
                 <ol class="carousel-indicators">
                     {% for grupo in noticias_agrupadas %}
@@ -498,13 +332,6 @@
                                         <img src="{% get_media_prefix %}/noticias/n_{{ noticia.id }}_0.jpg" 
                                             class="card-img-top noticia-imagem" 
                                             alt="Imagem da notícia" onerror="this.onerror=null; this.src='{% get_media_prefix %}SemImagem.png';">
-<<<<<<< HEAD
-
-                                        <div class='categoria-card'>
-                                            <p class='categoria-card-text'>{{categoria_nome}}</p>
-                                        </div>
-=======
->>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
                                         <div class="card-body">
                                             <h5 class="card-title">{% if noticia.titulo_bonito %}{{ noticia.titulo_bonito }}{% else %}{{noticia.descricao }}{% endif %}</h5>
                                             <p class="card-text">{{ noticia.descricao|slice:":150" }} ...</p>
@@ -521,41 +348,6 @@
                 </div>
 
             </div>
-<<<<<<< HEAD
-            {% endif %}
-
-            <!-- Lista de mais notícias -->
-            <section class="all-news container-fluid mt-2" style="width: 100%;">
-                <div class="row">
-                    <p class="mais_noticias" style="margin-top: 10%;margin-bottom: 5% !important;!i;!;margin-left: 2%;font-size: 2.5vh;font-weight: bold;color: #555555;">MAIS NOTÍCIAS</p>
-                    {% for noticia in noticias_restantes %}
-                    <div class="col-12 mb-5">
-                        <a href="{% url 'detalhes_noticia' noticia.slug %}" class="news-card" style="width: 100%">
-                            <div class="row">
-                                <!-- Column for the image -->
-                                <div class="col-md-4 col-12 d-flex justify-content-center align-items-center" style="height: 15vh;" >
-                                    <img src="{% get_media_prefix %}/noticias/n_{{ noticia.id }}_0.jpg" 
-                                         onerror="this.onerror=null; this.src='{% get_media_prefix %}SemImagem.png';"  
-                                         alt="news" class="img-fluid news-image" />
-                                </div>
-            
-                                <!-- Column for the content -->
-                                <div class="col-md-8 col-12">
-                                    <div class="news-content">
-                                        <h5>{% if noticia.titulo_bonito %}{{ noticia.titulo_bonito }}{% else %}{{ noticia.descricao }}{% endif %}</h5>
-                                        <p>{{ noticia.descricao|slice:":150" }} ...</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    {% endfor %}
-                </div>
-            </section>
-            
-            
-=======
->>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
          
         </article>
     </main>
@@ -948,16 +740,5 @@
         
     </script>
     
-<<<<<<< HEAD
-
-    <script>
-        function formatText(command) {
-            document.execCommand(command, false, null);
-            document.getElementById('comentarioTextarea').focus();  // Mantém o foco na área de edição
-        }
-        
-    </script>
-=======
->>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
 </body>
 </html>

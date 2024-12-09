@@ -56,12 +56,6 @@ class Noticias(models.Model):
     # Data de publicação da notícia, definida automaticamente ao criar o registro.
     data_publicacao = models.DateField(auto_now_add=True)
 
-<<<<<<< HEAD
-    # Data de publicação da notícia, definida automaticamente ao criar o registro.
-    hora_publicacao = models.TimeField(auto_now_add=True, null=True)
-
-=======
->>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
     # Nome do autor da notícia, limitado a 100 caracteres.
     autor = models.CharField(max_length=100)
 
