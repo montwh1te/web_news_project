@@ -1,0 +1,788 @@
+/* CSS Global */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.container-fluid {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-weight: bold;
+  margin: 0;
+}
+
+p {
+  margin: 5px 0;
+}
+
+/* HEADER */
+header {
+  background-color: #343a40;
+  color: #fff;
+}
+
+.navbar-custom {
+  background-color: #212529;
+}
+
+.navbar-custom .navbar-nav .nav-link {
+  color: #fff;
+  margin-right: 20px;
+}
+
+.navbar-custom .navbar-nav .nav-link:hover {
+  color: #f8f9fa;
+}
+
+.navbar-brand {
+  font-size: 1.5rem;
+  color: #fff;
+  font-weight: bold;
+}
+
+#team-logo {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+}
+
+#search-bar {
+  border-radius: 25px;
+  padding-left: 40px;
+}
+
+#lupa {
+  width: 16px;
+  height: 16px;
+  margin-right: 10px;
+}
+
+/* Navbar do usuário */
+#userDropdown img {
+  border-radius: 50%;
+}
+
+.navbar-custom .dropdown-menu {
+  background-color: #343a40;
+  border-radius: 5px;
+}
+
+.navbar-custom .dropdown-item {
+  color: #fff;
+}
+
+.navbar-custom .dropdown-item:hover {
+  background-color: #495057;
+}
+
+/* Main */
+main {
+  padding: 30px 0;
+  background-color: #f8f9fa;
+}
+
+.noticia-mais-recente {
+  margin-bottom: 30px;
+}
+
+.noticia-mais-recente img {
+  border-radius: 20px;
+  max-width: 100%;
+}
+
+.descricao-noticia-mais-recente {
+  padding-top: 20px;
+}
+
+.titulo-noticia-mais-recente {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.resumo-noticia-mais-recente {
+  color: #6c757d;
+  font-size: 1rem;
+}
+
+.noticias-recentes-div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.noticia-recente {
+  margin: 10px;
+  width: 100%;
+  max-width: 300px;
+}
+
+.noticia-recente img {
+  border-radius: 10px;
+  width: 100%;
+}
+
+.titulo-noticia-recente {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.noticia-conteudo {
+  padding: 10px;
+}
+
+.noticia-card img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+/* Tabela de Campeonato Brasileiro */
+.div_brasileirao {
+  margin-top: 50px;
+  text-align: center;
+}
+
+.titulo_brasileriao {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #343a40;
+}
+
+.div-tabela-brasileiro table {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+}
+
+.div-tabela-brasileiro th,
+.div-tabela-brasileiro td {
+  padding: 10px;
+  text-align: left;
+}
+
+.div-tabela-brasileiro th {
+  background-color: #343a40;
+  color: #fff;
+}
+
+.div-tabela-brasileiro tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+/* Jogos */
+.card {
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.card img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.card-body {
+  padding: 15px;
+}
+
+.game-details {
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+/* Funcionario Page */
+.pagina-funcionarios {
+  padding: 30px;
+  background-color: #fff;
+  margin: 30px auto;
+  max-width: 1200px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.pagina-funcionarios h2 {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 30px;
+}
+
+.table {
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+.table th,
+.table td {
+  padding: 12px;
+  text-align: center;
+}
+
+.table th {
+  background-color: #007bff;
+  color: white;
+}
+
+.table td {
+  background-color: #f9f9f9;
+}
+
+.table tbody tr:nth-child(even) {
+  background-color: #e9ecef;
+}
+
+.edit-btn {
+  background-color: #28a745;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.edit-btn:hover {
+  background-color: #218838;
+}
+
+.delete-btn {
+  background-color: #dc3545;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.delete-btn:hover {
+  background-color: #c82333;
+}
+
+/* Modificar e Excluir Noticias */
+.form-container {
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.form-container label {
+  font-weight: bold;
+}
+
+.form-container input,
+.form-container textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.form-container button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.form-container button:hover {
+  background-color: #0056b3;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* cor escura quando passa o mouse no modo escuro */
+}
+/* Barra de rolagem padrão */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Cor de fundo da barra de rolagem */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* cor clara para o modo claro */
+}
+
+/* Cor da barra de rolagem */
+::-webkit-scrollbar-thumb {
+  background: #888; /* cor padrão da barra de rolagem */
+}
+
+/* Cor quando o usuário passa o mouse sobre a barra de rolagem */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* cor escura quando passa o mouse */
+}
+
+/* Modo escuro */
+body.dark-mode::-webkit-scrollbar-track {
+  background: #333; /* cor mais escura para o modo escuro */
+}
+
+body.dark-mode::-webkit-scrollbar-thumb {
+  background: #777; /* cor da barra de rolagem no modo escuro */
+}
+
+
+
+
+  /* Estilização para o menu lateral */
+  .sidebar {
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #343a40;
+    padding-top: 30px;
+    width: 250px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+.sidebar a {
+    color: #ffffff;
+    text-decoration: none;
+    padding: 15px 20px;
+    display: block;
+    font-size: 16px;
+    border-radius: 4px;
+    margin: 10px 20px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+.sidebar a:hover {
+    background-color: #495057;
+    transform: translateX(5px);
+}
+.main-content {
+    margin-left: 270px; /* Largura do menu lateral */
+    padding: 20px;
+}
+.sidebar h3 {
+    color: #ffffff;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 18px;
+    font-weight: bold;
+}
+/* Estilização Geral */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+    transition: 0.4s;
+}
+
+/* Área de conteúdo principal */
+.content {
+    padding: 20px;
+    margin: 0 auto;
+    max-width: 800px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+/* Cabeçalho do conteúdo */
+.content-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #e9ecef;
+    padding-bottom: 10px;
+}
+
+/* Informações do usuário */
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Foto do usuário */
+.user-photo {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #6c757d;
+}
+
+/* Nome do usuário */
+.user-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: #343a40;
+}
+
+/* Seção de boas-vindas */
+.welcome h2 {
+    font-size: 24px;
+    color: #495057;
+    text-align: center;
+    margin-top: 20px;
+    line-height: 1.5;
+}
+
+body.dark-mode{
+    background: #1a1a1a !important;
+}
+
+body.dark-mode .action-card{
+  background: #343a40;
+  border: 1px solid #2d2d2d;
+  color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+body.dark-mode .content{
+    background-color: #2b3035;
+    box-shadow: 0 4px 8px rgb(0 0 0 / 49%);
+}
+
+body.dark-mode .user-photo-wrapper-carousel{
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background: #ffffff;
+}
+body.dark-mode .carousel-control-next-icon, .carousel-control-prev-icon{
+  color: #ffffff !important;
+}
+
+body.dark-mode .content-header {
+    border-bottom: 1px solid #000000;
+}
+
+body.dark-mode .welcome h2 {
+    color: #ffffff;
+}
+
+.sidebar {
+    height: 100vh;
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: linear-gradient(to bottom, #343a40, #23272b);
+    color: #ffffff;
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.2);
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.sidebar h3 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #f8f9fa;
+    border-bottom: 2px solid #495057;
+    padding-bottom: 10px;
+}
+
+.sidebar nav {
+    flex-grow: 1;
+}
+
+.sidebar a {
+    display: block;
+    color: #f8f9fa;
+    text-decoration: none;
+    font-size: 1rem;
+    padding: 10px 15px;
+    margin: 10px 0;
+    border-radius: 5px;
+    background-color: #343a40;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    transition: 0.4s;
+}
+
+.sidebar a:hover {
+    background-color:  #495057;
+    transform: translateX(5px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+    /* Botão Coletar Notícias */
+.btn-collect {
+    width: 100%;
+    background: linear-gradient(to right, #007bff, #0056b3);
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-collect:hover {
+    background: linear-gradient(to right, #0056b3, #003a75);
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+    /* Responsividade */
+@media (max-width: 768px) {
+    .sidebar {
+          width: 200px;
+          padding: 20px 15px;
+}
+
+.sidebar h3 {
+          font-size: 1.2rem;
+}
+
+.sidebar a {
+          font-size: 0.9rem;
+          padding: 8px 10px;
+}
+
+.btn-collect {
+          font-size: 0.9rem;
+          padding: 8px 10px;
+}
+}
+
+/* Layout Geral */
+
+
+
+
+
+
+
+/* Corpo da página */
+body {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(to bottom, #f8f9fa, #e9ecef);
+    color: #343a40;
+    margin: 0;
+    padding: 0;
+}
+
+/* Layout principal */
+.content {
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+/* Header do Conteúdo */
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 10px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-photo-wrapper {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 2px solid #dee2e6;
+}
+
+.user-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.user-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #707070;
+}
+
+.user-role {
+    font-size: 0.9rem;
+    color: #acacac;
+}
+
+/* Botão de Sair */
+.header-actions .btn-logout {
+    font-size: 0.9rem;
+    padding: 10px 15px;
+    color: #fff;
+    background: #dc3545;
+    border: none;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.2);
+}
+
+.header-actions .btn-logout:hover {
+    background: #bd2130;
+    box-shadow: 0 6px 12px rgba(220, 53, 69, 0.3);
+    transform: translateY(-2px);
+}
+
+/* Bem-vindo */
+.welcome {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.welcome h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #343a40;
+}
+
+.welcome p {
+    font-size: 1rem;
+    color: #6c757d;
+}
+
+/* Ações dos Funcionários */
+.employee-actions {
+    margin: 20px 0;
+}
+
+.actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.action-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    text-decoration: none;
+    color: #343a40;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.action-card:hover {
+    background: #2c3136;
+    color: #ffffff;
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.action-card .icon {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .content {
+        padding: 15px;
+    }
+
+    .content-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .actions-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Corpo do carrossel */
+.carousel-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 300px; /* Define altura do carrossel */
+}
+
+.carousel-item {
+    position: relative;
+    display: none;
+    /* float: left; */
+    width: 100%;
+    margin-right: 0%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    transition: transform .6s ease-in-out;
+}
+
+.carousel-item.active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Estilo para a foto do usuário */
+.user-photo-wrapper-carousel {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.user-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Nome do usuário */
+.user-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #343a40;
+    margin-bottom: 5px;
+}
+
+/* Papel do usuário */
+.user-role {
+    font-size: 1rem;
+    color: #6c757d;
+}
+
+/* Controles do carrossel */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    filter: invert(1); /* Ícones em branco */
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    width: 5%;
+}
+

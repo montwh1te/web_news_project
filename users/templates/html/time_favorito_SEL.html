@@ -1,0 +1,106 @@
+{% load custom_filters_users %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escolha seu time!</title>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/timesel.css' %}" />
+
+    <!-- Bootstrap -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- CSS do Owl Carousel -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+    <style>
+        body{
+            background-image:url("{% get_media_prefix %}fundos/selecao/selecao.jpg");
+        }
+    </style>
+</head>
+
+<body>
+    <div class="series_bar">
+        <input type="radio" name="serie" id="A" value="a">
+        <label onclick="loadContent('serieA')" for="A" id="serieA"><a href="{% url 'time_favorito' 'A' %}">Série A</a></label>
+        <input type="radio" name="serie" id="B" value="b">
+        <label onclick="loadContent('serieB')" for="B" id="serieB"><a href="{% url 'time_favorito' 'B' %}">Série B</a></label>
+        <input checked type="radio" name="serie" id="SEL" value="selecao">
+        <label for="SEL" id="selecao">Brasil</label>
+    </div>
+
+    {% for categoria in categorias %}
+        {% if categoria.serie == None %}
+            <div class="item">
+                <input type="radio" class="teste" id="{{ categoria.nome|lower }}" name="background" value="{{ categoria.nome|lower }}">
+                <label style="cursor: pointer;" for="{{ categoria.nome|lower }}"><img rel="preload" src="{% get_media_prefix %}escudos/{{ categoria.nome_categoria|lower }}.png" alt="imagem-time"></label>
+                <h2 class="nome_time">Seleção </h2>
+                <p class="descricao_time">{{ categoria.descricao }}</p>
+            </div>
+        {% endif %}
+    {% endfor %}
+
+    <form method="POST">
+        {% csrf_token %}
+            <input type="hidden" name="descricao_ativa" id="categoria-selecionada">
+            <div id="submit">
+                <button type="button" class="btn btn-primary btn-lg" onclick="capturarDescricaoAtiva()">SELECIONAR</button>
+            </div>
+    </form>
+
+    <div id="escolha_seu_time">
+        <h1>Escolha seu time!</h1>
+    </div>
+
+    <div class="spinner-container" id="spinner">
+        <div class="spinner"></div>
+    </div>
+
+    <script>
+        function loadContent(page) {
+
+        const spinner = document.getElementById('spinner');
+    
+        spinner.style.display = 'flex';
+    
+        setTimeout(() => {
+            if (page === 'serieA') {
+            window.location.href = '{% url 'time_favorito' 'A' %}'; 
+
+            } else if (page === 'serieB') {
+            window.location.href = '{% url 'time_favorito' 'B' %}'; 
+
+            }
+        }, 10000);
+        }
+    </script>
+
+    <!-- Script de envio do form -->
+    <script>
+        function capturarDescricaoAtiva() {
+            // Seleciona o item ativo, que tem a classe '.item'
+            const itemAtivo = document.querySelector('.item .descricao_time');
+            
+            if (itemAtivo) {
+                // Captura o texto da descrição diretamente do item
+                const descricaoAtiva = itemAtivo.textContent.trim();
+
+                // Define a descrição no campo oculto
+                document.getElementById('categoria-selecionada').value = descricaoAtiva;
+
+                // Submete o formulário
+                document.querySelector('form').submit();
+            } else {
+                alert('Nenhum time ativo foi encontrado.');
+            }
+        }
+    </script>
+</body>
+</html>

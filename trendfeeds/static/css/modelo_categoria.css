@@ -1,0 +1,454 @@
+/* ==================================
+   Estilo Geral
+================================== */
+body {
+  background-color: #f4f4f9; /* Fundo neutro e agradável */
+  font-family: "Roboto", Arial, sans-serif;
+  color: #333;
+  margin: 0;
+  padding: 0;
+  transition: 0.4s;
+  overflow-x: hidden;
+}
+
+a {
+  color: #343a40 !important;
+}
+
+#dark-mode-toggle {
+  all: unset; /* Remove todas as estilizações padrão */
+  background: none;
+  border: none;
+  padding: 0;
+  text-align: left;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+main{
+  margin-top: 2%;
+}
+
+
+
+
+
+/* ==================================
+   Modo Escuro
+================================== */
+body.dark-mode {
+  background-color: #1a1a1a;
+}
+
+body.dark-mode p,
+body.dark-mode h3 {
+  color: #d2d2d2;
+}
+
+body.dark-mode .navbar-custom .nav-link,
+body.dark-mode .navbar-custom .nome-site {
+  color: #d2d2d2 !important;
+}
+
+body.dark-mode .form-control {
+  background-color: #000000;
+  border: 1px solid #181818;
+}
+
+body.dark-mode #search-results {
+  background-color: #000000;
+  color: #d2d2d2;
+}
+
+body.dark-mode .search-result-item:hover {
+  background-color: #1a1a1a;
+}
+
+body.dark-mode .dropdown-menu.show{
+  background-color: #171717;
+
+}
+body.dark-mode .dropdown-item-text{
+  color: #bbbbbb !important;
+}
+body.dark-mode .text-danger:hover{
+  background-color: #000000 !important;
+}
+body.dark-mode .card-link-jogos{
+  background-color: #000000 !important;
+}
+body.dark-mode .section-noticias{
+  background-color: #000000 !important;
+}
+body.dark-mode .card-link {
+  background-color: #1a1a1a;
+}
+body.dark-mode .card-conteudo h5{
+  color: #bbbbbb !important;
+}
+/* ==================================
+   Scrollbar
+================================== */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Scrollbar no Modo Escuro */
+body.dark-mode::-webkit-scrollbar-track {
+  background: #333;
+}
+
+body.dark-mode::-webkit-scrollbar-thumb {
+  background: #777;
+}
+
+
+
+
+
+/* ==================================
+   Navbar e Links
+================================== */
+.navbar-custom {
+  padding: 15px 7%;
+  width: 100%;
+  margin: auto;
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.222);
+  transition: 0.4s;
+}
+
+.navbar-custom .nav-link:hover {
+  color: #424242;
+}
+
+.nav-link.dropdown-toggle::after {
+  display: inline-block;
+  margin-left: 0.255em;
+  vertical-align: 0.255em;
+  content: "";
+  border-top: 0.3em solid rgb(0, 0, 0);
+  border-right: 0.3em solid transparent;
+  border-left: 0.3em solid transparent;
+}
+
+.nav-item.dropdown:hover .dropdown-menu {
+  display: block;
+  margin-top: 0;
+}
+
+.dropdown-menu {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 35px;
+  right: 0;
+  background-color: #f9f9f9;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  z-index: 1;
+  border-radius: 8px;
+  width: 150px;
+}
+
+.user-info:hover .dropdown-content {
+  display: block;
+}
+
+
+
+
+
+/* ==================================
+   Campo de Busca
+================================== */
+#search-bar {
+  padding-left: 40px;
+  border-radius: 20px;
+  width: 100%;
+}
+
+#search-bar:focus {
+  outline: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.search-container {
+  position: relative;
+}
+
+.search-container img {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+}
+
+#search-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 235%;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 0;
+  margin-top: 5px;
+  list-style: none;
+  max-height: 200px;
+  overflow-y: auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+
+
+
+/* ==================================
+   Notícia mais recente
+================================== */
+.noticia-mais-recente {
+  margin-bottom: 40px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.imagem-principal-banner {
+  width: 100%;
+  height: 50%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+  border-radius: 20px;
+}
+
+.imagem-principal-banner:hover {
+  transform: scale(1.03);
+}
+
+.faixa-titulo-descricao {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+  color: white;
+  padding: 20px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.titulo-noticia-mais-recente {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.resumo-noticia-mais-recente {
+  font-size: 1rem;
+  margin: 5px 0 0;
+  color: #ddd;
+}
+
+.container-fluid{
+  margin-right: 0 !important;
+}
+
+
+
+
+
+/* ==================================
+   Listagem de Notícias
+================================== */
+.noticias-container {
+  display: flex;
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.222), 0px -1px 0px 0px rgba(0, 0, 0, 0.222);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.noticia-item {
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.222), 0px -1px 0px 0px rgba(0, 0, 0, 0.222);
+}
+
+.noticia-item img {
+  width: 25%;
+  margin-left: 0%;
+  margin-top: 0%;
+  object-fit: cover;
+}
+
+.noticia-item div {
+  padding: 15px;
+}
+
+
+.section-noticias {
+  background-color: #f4f4f4;
+  padding: 20px 0;
+  border-radius: 6px;
+}
+
+.section-noticias h3 {
+  font-size: 2rem;
+  color: #222;
+  text-align: start;
+  margin-bottom: 3%;
+}
+
+.card-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  overflow: hidden;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+  height: 30%;
+  margin-bottom: 2%;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: center;
+}
+
+.card-link-jogos {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  overflow: hidden;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+  height: 20vh !important;
+  margin-bottom: 15px;
+  width: 100%;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: space-evenly;
+  flex-direction: column;
+}
+.card-link:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.card-img {
+  flex: 0 0 150px; /* Largura fixa da imagem */
+  height: 100%;
+  object-fit: cover;
+  border-right: 1px solid #ddd;
+  flex-shrink: 0 !important;
+  width: 15% !important;
+}
+
+.card-conteudo {
+  padding: 10px 15px;
+  flex: 1; /* O conteúdo ocupa o espaço restante */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.card-conteudo h5 {
+  font-size: 1rem;
+  color: #111;
+  font-weight: bold;
+  margin-bottom: 5px;
+  line-height: 1.2;
+}
+
+.card-conteudo p {
+  font-size: 0.875rem;
+  color: #555;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.row {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  margin-right: -15px;
+  margin-left: -15px;
+  align-content: stretch;
+  justify-content: center;
+  align-items: center;
+  /* padding: 13%; */
+}
+@media (min-width: 576px) {
+  .col-12 {
+      width: 100%;
+  }
+}
+
+@media (min-width: 768px) {
+  .col-12 {
+      width: 50%; /* Exibe duas colunas em telas maiores */
+  }
+}
+
+@media (min-width: 992px) {
+  .col-12 {
+      width: 33.33%; /* Exibe três colunas em telas grandes */
+  }
+}
+
+
+
+
+/* ==================================
+   Responsividade
+================================== */
+@media (max-width: 768px) {
+  .imagem-principal-banner {
+    height: 250px;
+  }
+
+  .titulo-noticia-mais-recente {
+    font-size: 1.5rem;
+  }
+
+  .noticia-item h3 {
+    font-size: 1rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .col-md-6 {
+    flex: 1 0 63%;
+    max-width: 100%;
+  }
+}
+
+.titulo{
+  font-size: 4vh;
+  color: #333;
+  font-weight: bolder;
+}

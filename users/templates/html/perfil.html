@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informações da Conta</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Estilo geral do corpo */
+        body {
+            background: linear-gradient(135deg, #f4f4f4, #e8e8e8);
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #333; /* Cinza escuro para texto */
+        }
+
+        /* Estilo do contêiner do formulário */
+        .form-container {
+            background: #fff; /* Branco para contraste */
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgb(0 0 0 / 24%);
+            padding: 30px;
+            max-width: 450px;
+            width: 100%;
+            border: 1px solid #ddd; /* Bordas sutis */
+        }
+
+        .form-container a img {
+            width: 20px;
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        /* Cabeçalho do formulário */
+        h2 {
+            text-align: center;
+            color: #444; /* Cinza médio */
+            margin-bottom: 25px;
+            font-weight: 700;
+        }
+
+        a[href] {
+            color: #555; /* Cinza mais escuro */
+            text-decoration: none;
+        }
+
+        a[href]:hover {
+            text-decoration: underline;
+        }
+
+        /* Estilo dos inputs */
+        .form-control {
+            border-radius: 8px;
+            border: 1px solid #ccc; /* Cinza claro */
+            background: #fdfdfd;
+            box-shadow: none;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #777; /* Cinza escuro */
+            box-shadow: 0 0 0 4px rgba(119, 119, 119, 0.1);
+        }
+
+        .form-group label {
+            font-weight: 500;
+            color: #555;
+            margin-bottom: 3px;
+        }
+
+        /* Botão principal */
+        .btn-primary {
+            background: #007bff;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            padding: 14px;
+            color: #fff;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: #0157b3;
+        }
+
+        /* Link de alteração de senha */
+        .btn-link {
+            margin-top: 10px;
+            border: none;
+            background: transparent;
+            color: blue;
+        }
+
+        .btn-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Modal customizado */
+        .modal-content {
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            height: 420px;
+        }
+        
+        .modal-header {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .modal-body {
+            font-size: 16px;
+            color: #495057;
+        }
+        .modal-body .form-group {
+            margin-bottom: 20px;
+        }
+
+        body .form-container form .form-group{
+            margin-bottom: 13px !important;
+        }
+        
+        .modal-header .btn-close {
+            background-color: white;
+            border-radius: 50%;
+            opacity: 1;
+            margin: 0;
+        }
+        
+        #successModal-custom .btn {
+            background-color: #28a745;
+            border: none;
+        }
+        
+        #successModal-custom .btn:hover {
+            background-color: #218838;
+        }
+
+        .btn-custom2 {
+            background: #444; /* Cinza médio-escuro */
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-custom2:hover {
+            background: #222; /* Preto suave */
+        }
+
+        /* Estilo da imagem de perfil */
+        .img-thumbnail {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin: 10px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ddd;
+        }
+
+        /* Mensagem de sucesso */
+        .modal-custom {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.5);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .modal-content-custom {
+            background: #fff;
+            padding: 30px;
+            transform: translate(185%, 135%);
+            border-radius: 12px;
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .close-custom {
+            font-size: 24px;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            color: #aaa;
+            cursor: pointer;
+        }
+
+        .close-custom:hover {
+            color: #333;
+        }
+
+        #redirectButton-custom {
+            background: #333; /* Preto suave */
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        #redirectButton-custom:hover {
+            background: #555; /* Cinza escuro */
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+
+        <a href="{% url 'home' %}">
+            <img src="{% get_media_prefix %}seta-esquerda.png" alt="seta_voltar">
+        </a>
+
+        <h2>Informações da Conta</h2>
+        
+        <form method="POST" action="{% url 'info_perfil' perfil_id=user.id %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="first_name">Primeiro Nome</label>
+                <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.first_name }}" required>
+                {% for error in form.first_name.errors %}
+                    <small class="text-danger">{{ error }}</small>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                <label for="last_name">Sobrenome</label>
+                <input type="text" class="form-control" id="last_name" name="last_name" value="{{ user.last_name }}" required>
+                {% for error in form.last_name.errors %}
+                    <small class="text-danger">{{ error }}</small>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                <label for="username">Nome de Usuário</label>
+                <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}" required>
+                {% for error in form.username.errors %}
+                    <small class="text-danger">{{ error }}</small>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                <label for="email">E-mail</label>
+                <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
+                {% for error in form.email.errors %}
+                    <small class="text-danger">{{ error }}</small>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                <label>Senha</label>
+                <input type="password" class="form-control" value="••••••" disabled>
+            </div>
+
+            <button type="button" id="alterarSenhaBtn" class="btn-link">Alterar Senha</button>
+
+            <div class="form-group mt-3">
+                <label for="foto">Imagem de Perfil:</label>
+                {% if user.foto %}
+                    <div class="text-center">
+                        <img src="{{ user.foto.url }}" alt="Foto de {{ user.username }}" class="img-thumbnail">
+                    </div>
+                {% else %}
+                    <p>Sem imagem de perfil</p>
+                {% endif %}
+                <input type="file" class="form-control mt-2" id="foto" name="foto">
+            </div>
+            <button type="submit" class="btn btn-primary mt-4">Atualizar Informações</button>
+        </form>
+    </div>
+
+    <!-- Modal de alteração de senha -->
+    <div id="senhaModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="senhaModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #9b9b9b; color: white;">
+                    <h5 class="modal-title" id="senhaModalLabel">Alterar Senha</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="alterarSenhaForm" method="POST">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="senha_atual">Senha Atual</label>
+                            <input type="password" class="form-control" id="senha_atual" name="senha_atual" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="senha_nova">Nova Senha</label>
+                            <input type="password" class="form-control" id="senha_nova" name="senha_nova" required>
+                            <small class="text-danger">* A senha deve possuir mais de 7 caracteres. *</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmar_senha_nova">Confirmar Nova Senha</label>
+                            <input type="password" class="form-control" id="confirmar_senha_nova" name="confirmar_senha_nova" required>
+                        </div>
+                        <button type="submit" class="btn btn-custom2 btn-block">Salvar Alterações</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="successModal-custom" class="modal-custom" style="display:none;">
+        <div class="modal-content-custom">
+            <span class="close-custom" onclick="closeModal()">&times;</span>
+            <h2 id="h2-custom">Senha Alterada com Sucesso</h2>
+            <p id="p-custom">Você será redirecionado para a página de login.</p>
+            <button id="redirectButton-custom" onclick="redirectToLogin()">OK</button>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Função para atualizar a imagem de perfil assim que o usuário selecionar uma nova foto
+        document.getElementById('foto').addEventListener('change', function(event) {
+            var reader = new FileReader();
+            
+            // Quando a leitura do arquivo estiver completa, atualizar a imagem no campo
+            reader.onload = function(e) {
+                var imgElement = document.querySelector("img"); // Seleciona a tag <img> existente
+                imgElement.src = e.target.result; // Atualiza a imagem com o novo arquivo
+            };
+            
+            // Lê o arquivo selecionado como uma URL de dados
+            reader.readAsDataURL(event.target.files[0]);
+        });
+        
+        document.getElementById('foto').addEventListener('change', function(event) {
+            var reader = new FileReader();
+            
+            // Quando a leitura do arquivo estiver completa, atualizar o conteúdo do <p>
+                reader.onload = function(e) {
+                var pElement = document.querySelector("p"); // Seleciona a tag <p> existente
+                pElement.innerHTML = ''; // Limpa o conteúdo do <p> para substituir pela imagem
+
+                // Cria um novo elemento <img> e define o src como a imagem carregada
+                var img = document.createElement('img');
+                img.src = e.target.result; // Define a imagem com o novo arquivo
+                img.style.width = '100%'; // Ajuste de tamanho
+                pElement.appendChild(img); // Adiciona a imagem no <p>
+            };
+            
+            // Lê o arquivo selecionado como uma URL de dados
+            reader.readAsDataURL(event.target.files[0]);
+        });
+
+
+        // Função para exibir o modal de alteração de senha
+        document.getElementById('alterarSenhaBtn').addEventListener('click', function(event) {
+            event.preventDefault();
+            var modalContent = document.querySelector('#senhaModal .modal-content');
+            
+            // Adiciona a classe de animação
+            modalContent.classList.add('slide-down');
+            
+            // Mostra o modal
+            $('#senhaModal').modal('show');
+        });
+        
+        // Remove a classe de animação quando o modal é fechado
+        $('#senhaModal').on('hidden.bs.modal', function () {
+            var modalContent = document.querySelector('#senhaModal .modal-content');
+            modalContent.classList.remove('slide-down');
+        });
+    
+        // Enviar formulário de alteração de senha via AJAX
+        document.getElementById('alterarSenhaForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            $.ajax({
+                url: "{% url 'alterar_senha' %}",  // Substitua pela URL correta
+                type: "POST",
+                data: $(this).serialize(),
+                success: function(response) {
+                    if (response.success) {
+                        $('#senhaModal').modal('hide');
+                        showModal();  // Mostra o modal de sucesso
+                    } else {
+                        if (response.error) {
+                            alert(response.error);  // Exibe mensagem de erro da senha atual incorreta
+                        } else {
+                            alert("Erro ao alterar a senha. Verifique os campos e tente novamente.");
+                        }
+                    }
+                },
+                error: function() {
+                    alert("Ocorreu um erro ao tentar alterar a senha.");
+                }
+            });
+        });
+    
+        // Função para exibir o modal de sucesso
+        function showModal() {
+            document.getElementById('successModal-custom').style.display = 'block'; 
+        }
+    
+        // Função para fechar o modal de sucesso
+        function closeModal() {
+            document.getElementById('successModal-custom').style.display = 'none'; 
+        }
+    
+        // Função para redirecionar para a página de login
+        function redirectToLogin() {
+            window.location.href = "{% url 'login' %}"; 
+        }
+    </script>  
+</body>
+</html>

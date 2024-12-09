@@ -1,0 +1,197 @@
+/* Estilo geral do corpo */
+body {
+  background: linear-gradient(135deg, #f4f4f4, #e8e8e8);
+  font-family: "Poppins", sans-serif;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #333; /* Cinza escuro para texto */
+}
+
+/* Estilo do contêiner do formulário */
+.form-container {
+  background: #fff; /* Branco para contraste */
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  max-width: 450px;
+  width: 100%;
+  border: 1px solid #ddd; /* Bordas sutis */
+}
+
+/* Cabeçalho do formulário */
+h2 {
+  text-align: center;
+  color: #444; /* Cinza médio */
+  margin-bottom: 25px;
+  font-weight: 700;
+}
+
+a[href] {
+  color: #555; /* Cinza mais escuro */
+  text-decoration: none;
+}
+
+a[href]:hover {
+  text-decoration: underline;
+}
+
+/* Estilo dos inputs */
+.form-control {
+  border-radius: 8px;
+  border: 1px solid #ccc; /* Cinza claro */
+  background: #fdfdfd;
+  box-shadow: none;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: #777; /* Cinza escuro */
+  box-shadow: 0 0 0 4px rgba(119, 119, 119, 0.1);
+}
+
+.form-group label {
+  font-weight: 500;
+  color: #555;
+  margin-bottom: 3px;
+}
+
+/* Botão principal */
+.btn-primary {
+  background: #333; /* Preto suave */
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 10px;
+  color: #fff; /* Texto branco para contraste */
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+  background: #555; /* Cinza escuro para hover */
+}
+
+/* Link de alteração de senha */
+.btn-link {
+  margin-top: 10px;
+  border: none;
+  background: transparent;
+  color: blue;
+}
+
+.btn-link:hover {
+  text-decoration: underline;
+}
+
+/* Modal customizado */
+.modal-content {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  height: 400px;
+}
+
+.modal-header {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.modal-body {
+  font-size: 16px;
+  color: #495057;
+}
+.modal-body .form-group {
+  margin-bottom: 20px;
+}
+
+.modal-header .btn-close {
+  background-color: white;
+  border-radius: 50%;
+  opacity: 1;
+  margin: 0;
+}
+
+#successModal-custom .btn {
+  background-color: #28a745;
+  border: none;
+}
+
+#successModal-custom .btn:hover {
+  background-color: #218838;
+}
+
+.btn-custom2 {
+  background: #444; /* Cinza médio-escuro */
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  padding: 10px 20px;
+  transition: all 0.3s ease;
+}
+
+.btn-custom2:hover {
+  background: #222; /* Preto suave */
+}
+
+/* Estilo da imagem de perfil */
+.img-thumbnail {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin: 10px 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ddd;
+}
+
+/* Mensagem de sucesso */
+.modal-custom {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.modal-content-custom {
+  background: #fff;
+  padding: 30px;
+  transform: translate(185%, 135%);
+  border-radius: 12px;
+  text-align: center;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.close-custom {
+  font-size: 24px;
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  color: #aaa;
+  cursor: pointer;
+}
+
+.close-custom:hover {
+  color: #333;
+}
+
+#redirectButton-custom {
+  background: #333; /* Preto suave */
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+#redirectButton-custom:hover {
+  background: #555; /* Cinza escuro */
+}

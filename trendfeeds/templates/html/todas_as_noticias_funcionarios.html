@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Página de Funcionários</title>
+{% load static %}
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+<link rel="stylesheet" href="{% static 'css/index_funcionarios.css' %}" />
+      <style>
+            /* Estilização para o menu lateral */
+            .sidebar {
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #343a40;
+            padding-top: 30px;
+            width: 250px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            }
+            .sidebar a {
+            color: #ffffff;
+            text-decoration: none;
+            padding: 15px 20px;
+            display: block;
+            font-size: 16px;
+            border-radius: 4px;
+            margin: 10px 20px;
+            transition: background-color 0.3s, transform 0.2s;
+            }
+            .sidebar a:hover {
+            background-color: #495057;
+            transform: translateX(5px);
+            }
+            .main-content {
+            margin-left: 270px; /* Largura do menu lateral */
+            padding: 20px;
+            }
+            .sidebar h3 {
+            color: #ffffff;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            }
+
+            body{
+                  transition: 0.4s;
+            }
+            
+            body.dark-mode{
+            background-color: #1a1a1a;
+            }
+
+            body.dark-mode .main-content{
+                  background-color: #1a1a1a;
+                  transition: 0.4s !important;
+            }
+
+            body.dark-mode .card{
+                  background-color: #1a1a1a;
+                  box-shadow: 0 4px 8px rgb(0 0 0 / 49%);
+            }
+            body.dark-mode .card-body{
+                background: #2c3136;                ;
+            }
+
+            body.dark-mode .gerenciar{
+                  color: #bbbbbb;
+            }
+            body.dark-mode .card-title{
+                  color: #bbbbbb;
+            }
+
+            body.dark-mode p{
+                  color: #bbbbbb;
+            }
+
+            /* Geral para os Cards */
+            .card {
+                border: none;
+                border-radius: 15px;
+                overflow: hidden;
+                box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+                background: linear-gradient(to bottom, #ffffff, #f8f9fa);
+                transition: transform 0.3s, box-shadow 0.3s;
+                display: flex;
+                flex-direction: column;
+                position: relative;
+            }
+            
+            .card:hover {
+                transform: translateY(-8px);
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            }
+            
+            /* Imagem do Card */
+            .card-image-wrapper {
+                height: 200px;
+                overflow: hidden;
+                position: relative;
+                background: linear-gradient(to bottom, #ddd, #eee);
+            }
+            
+            .card-img-top {
+                height: 100%;
+                width: 100%;
+                object-fit: cover;
+                transition: transform 0.3s;
+            }
+            
+            .card:hover .card-img-top {
+                transform: scale(1.1);
+            }
+            
+            /* Gradiente na parte inferior da imagem */
+            .card-image-wrapper::after {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 50%;
+                background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0));
+                z-index: 1;
+            }
+            
+            /* Título e Texto */
+            .card-title {
+                font-size: 1.2rem;
+                font-weight: bold;
+                margin-bottom: 0.5rem;
+                color: #343a40;
+                position: relative;
+                z-index: 2;
+            }
+            
+            .card-title.text-truncate {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            
+            .card-text {
+                font-size: 1rem;
+                color: #6c757d;
+                margin-bottom: 1.5rem;
+                position: relative;
+                z-index: 2;
+            }
+            
+            /* Botões */
+            .btn {
+                border-radius: 30px;
+                font-size: 0.9rem;
+                font-weight: bold;
+                padding: 0.5rem 1rem;
+                transition: all 0.3s;
+            }
+            
+            /* Botão Gradient */
+            .btn-gradient {
+                background: linear-gradient(to right, #ff7e5f, #feb47b);
+                color: #fff;
+                border: none;
+                box-shadow: 0 4px 6px rgba(255, 126, 95, 0.3);
+            }
+            
+            .btn-gradient:hover {
+                background: linear-gradient(to right, #feb47b, #ff7e5f);
+                box-shadow: 0 6px 10px rgba(255, 126, 95, 0.4);
+            }
+            
+            /* Botão Perigo */
+            .btn-danger {
+                background-color: #dc3545;
+                color: #fff;
+                border: none;
+                box-shadow: 0 4px 6px rgba(220, 53, 69, 0.3);
+            }
+            
+            .btn-danger:hover {
+                background-color: #c82333;
+                box-shadow: 0 6px 10px rgba(220, 53, 69, 0.4);
+            }
+            .card img {
+                  width: 100%;
+                  height: 100%;
+                  border-radius: 0px;
+                 
+                  
+            }
+            
+            /* Responsividade */
+            @media (max-width: 576px) {
+                .card-title {
+                    font-size: 1rem;
+                }
+            
+                .card-text {
+                    font-size: 0.9rem;
+                }
+            
+                .btn {
+                    font-size: 0.8rem;
+                }
+            }
+
+            /* Geral do Menu Lateral */
+            .sidebar {
+            height: 100vh;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: linear-gradient(to bottom, #343a40, #23272b);
+            color: #ffffff;
+            box-shadow: 4px 0 10px rgba(0, 0, 0, 0.2);
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            }
+
+            .sidebar h3 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #f8f9fa;
+            border-bottom: 2px solid #495057;
+            padding-bottom: 10px;
+            }
+
+            .sidebar nav {
+            flex-grow: 1;
+            }
+
+            .sidebar a {
+            display: block;
+            color: #f8f9fa;
+            text-decoration: none;
+            font-size: 1rem;
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background-color: #343a40;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            transition: 0.4s;
+            }
+
+            .sidebar a:hover {
+            background-color:  #495057;
+            transform: translateX(5px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+            }
+
+            /* Botão Coletar Notícias */
+            .btn-collect {
+            width: 100%;
+            background: linear-gradient(to right, #007bff, #0056b3);
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: bold;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            }
+
+            .btn-collect:hover {
+            background: linear-gradient(to right, #0056b3, #003a75);
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            }
+
+            /* Responsividade */
+            @media (max-width: 768px) {
+            .sidebar {
+                  width: 200px;
+                  padding: 20px 15px;
+            }
+
+            .sidebar h3 {
+                  font-size: 1.2rem;
+            }
+
+            .sidebar a {
+                  font-size: 0.9rem;
+                  padding: 8px 10px;
+            }
+
+            .btn-collect {
+                  font-size: 0.9rem;
+                  padding: 8px 10px;
+            }
+            }
+
+            
+      </style>
+</head>
+<body>
+
+    <!-- Menu Lateral -->
+      <div class="sidebar">
+            <h3>Menu</h3>
+            <nav>
+                  <a href="{% url 'pagina_funcionarios' %}">Início Funcionários</a>
+                  <a href="{% url 'home' %}">Início do Site</a>
+                  <a href="{% url 'criar_noticia' %}">Criar Nova Notícia</a>
+                  <a href="#" id="dark-mode-toggle">Claro</a>
+            </nav>
+            <a class="btn btn-logout" href="{% url 'logout' %}">Sair</a>
+
+            <form method="post" action="{% url 'coletar_noticias' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-collect">Coletar Notícias</button>
+            </form>
+      </div>
+  
+
+    <!-- Conteúdo Principal -->
+      <main class="main-content">
+            
+            <div class="container mt-5">
+          
+            <h2 class='gerenciar' style="color: #333;margin-bottom: 5%;">Gerenciar Notícias </h2>
+            <div class="row">
+                  {% for noticia in noticias %}
+                  <div class="col-12 col-md-6 col-lg-4 mb-4">
+                      <div class="card h-100">
+                          <div class="card-image-wrapper">
+                              <img src="{% get_media_prefix %}noticias/n_{{ noticia.id }}_0.jpg" class="card-img-top" alt="Imagem da Notícia" 
+                                   onerror="this.onerror=null; this.src='{% get_media_prefix %}SemImagem.png';">
+                          </div>
+                          <div class="card-body d-flex flex-column">
+                              <h5 class="card-title text-truncate" title="{{ noticia.titulo }}">{{ noticia.titulo_bonito }}</h5>
+                              <p class="card-text">{{ noticia.descricao|slice:":100" }}...</p>
+                              <div class="mt-auto">
+                                  <div class="d-flex justify-content-center">
+                                      <a href="{% url 'detalhes_noticia' noticia.slug %}" class="btn btn-gradient">Editar</a>
+                                      <form action="{% url 'deletar_noticia' noticia.id %}" method="POST">
+                                          {% csrf_token %}
+                                          <button type="submit" class="btn btn-danger">Deletar</button>
+                                      </form>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  {% endfor %}
+            </div>
+              
+              
+
+           
+      </main>
+
+
+
+    <!-- Script necessário para o modo noturno -->
+      <script>
+            // Espera a página carregar completamente
+            window.onload = function() {
+            const toggleButton = document.getElementById('dark-mode-toggle');
+
+            // Verificar se o modo escuro está ativado previamente
+            if (localStorage.getItem('dark-mode') === 'true') {
+            document.body.classList.add('dark-mode');
+            toggleButton.innerHTML = "Escuro"; // Alterando o texto do botão
+            }
+
+            // Evento de clique para alternar entre modos (escuro/claro)
+            toggleButton.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode'); // Alterna a classe dark-mode no body
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            
+            // Atualiza o estado do botão e do logo, e salva a preferência no localStorage
+            if (isDarkMode) {
+                  toggleButton.innerHTML = "Escuro";
+                  localStorage.setItem('dark-mode', 'true'); // Salva a preferência
+            } else {
+                  toggleButton.innerHTML = "Claro";
+                  localStorage.setItem('dark-mode', 'false'); // Salva a preferência
+            }
+            });
+            }
+      </script>
+
+    
+</body>
+</html>

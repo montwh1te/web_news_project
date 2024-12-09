@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Página de Funcionários</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/index_funcionarios.css' %}" />
+ 
+</head>
+<body>
+
+    <!-- Menu Lateral -->
+    <div class="sidebar">
+        <h3>Menu</h3>
+        <nav>
+              <a href="{% url 'pagina_noticias_funcionarios' %}">Lista De Notícias</a>
+              <a href="{% url 'home' %}">Início do Site</a>
+              <a href="{% url 'criar_noticia' %}">Criar Nova Notícia</a>
+              <a href="#" id="dark-mode-toggle">Claro</a>
+        </nav>
+        <a class="btn btn-logout" href="{% url 'logout' %}">Sair</a>
+
+        <form method="post" action="{% url 'coletar_noticias' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-collect">Coletar Notícias</button>
+        </form>
+    </div>
+
+    <!-- Conteúdo Principal -->
+    
+
+    <main class="content">
+        <header class="content-header">
+            <div class="user-info">
+                <div class="user-photo-wrapper">
+                    <img src="{{ request.user.foto.url }}" alt="Foto de {{ request.user.username }}" class="user-photo">
+                </div>
+                <div>
+                    <span class="user-name">{{ request.user.username }}</span>
+                    <span class="user-role">Funcionário</span>
+                </div>
+            </div>
+        </header>
+        
+
+        <section class="welcome">
+            <h2>Bem-vindo, {{ request.user.username }}!</h2>
+            <p>Escolha abaixo a ação que deseja realizar:</p>
+        </section>
+
+        <section class="employee-actions">
+            <div class="actions-grid">
+                <a href="{% url 'login' %}" class="action-card">
+                    <i class="icon fas fa-user-plus"></i>
+                    <span>Registrar Novo Funcionário</span>
+                </a>
+            </div>
+        </section>
+
+
+         <!-- Carrossel de Usuários -->
+        <section id="userCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                {% for usuario in usuarios %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <div class="d-flex flex-column align-items-center text-center">
+                        <div class="user-photo-wrapper-carousel">
+                            <img src="{{ usuario.foto.url }}" alt="Foto de {{ usuario.username }}" class="user-photo">
+                        </div>
+                        <h5 class="user-name">{{ usuario.username }}</h5>
+                        <span class="user-role">
+                            {% if usuario.is_superuser %}
+                                Funcionário
+                            {% else %}
+                                Cliente
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Controles do Carrossel -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#userCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#userCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Próximo</span>
+            </button>
+        </section>
+    </main>
+
+    
+
+    <!-- Bootstrap CSS -->
+   
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Script necessário para o modo noturno -->
+    <script>
+        // Espera a página carregar completamente
+        window.onload = function() {
+          const toggleButton = document.getElementById('dark-mode-toggle');
+  
+        
+          // Evento de clique para alternar entre modos (escuro/claro)
+          toggleButton.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode'); // Alterna a classe dark-mode no body
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            
+            // Atualiza o estado do botão e do logo, e salva a preferência no localStorage
+            if (isDarkMode) {
+              toggleButton.innerHTML = "Escuro";
+              localStorage.setItem('dark-mode', 'true'); // Salva a preferência
+            } else {
+              toggleButton.innerHTML = "Claro";
+              localStorage.setItem('dark-mode', 'false'); // Salva a preferência
+            }
+          });
+        }
+    </script>
+</body>
+</html>

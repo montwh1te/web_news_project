@@ -1,0 +1,811 @@
+body {
+  background-color: #f8f9fa; /* Fundo leve */
+  font-family: Arial, sans-serif;
+  transition: 0.4s;
+}
+body.dark-mode{
+  background-color: #1a1a1a;
+}
+body.dark-mode .titulo-noticia-mais-recente {
+  color: #bbbbbb;}
+body.dark-mode .titulo-noticia-recente {
+  color: #bbbbbb;}
+
+body.dark-mode .navbar-custom .nav-link {
+  color: #bbbbbb !important; /* Cor do texto dos links da navbar no modo escuro */
+}
+
+body.dark-mode .navbar-custom{
+  box-shadow: 0px 1px 0px 0px rgba(255, 255, 255, 0.222);
+}
+body.dark-mode .navbar-custom .nome-site{
+  color: #bbbbbb !important; /* Cor do texto dos links da navbar no modo escuro */
+}
+body.dark-mode .titulo_brasileriao{
+  color: #bbbbbb !important; /* Cor do texto dos links da navbar no modo escuro */
+  box-shadow: 0px 1px 0px 0px rgba(255, 255, 255, 0.222);
+}
+body.dark-mode .table thead tr {
+  background-color: transparent;
+  color: #bbbbbb;
+}
+body.dark-mode .table thead th{
+  border-bottom: #f4f4f457;
+}
+body.dark-mode .table tbody td {
+  border-bottom: 1px solid #ffffff42;;
+}
+body.dark-mode .table tbody td span {
+  color: #bbbbbb;
+}
+body.dark-mode  .table tbody tr:nth-child(odd) {
+  background-color: #252525;
+}
+
+body.dark-mode  .table tbody tr:nth-child(even) {
+  background-color: #161616;;
+}
+body.dark-mode .table{
+  color: #bbbbbb;
+}
+body.dark-mode .card{
+  background-color: #000000;
+  border: 1px solid rgb(255 255 255 / 21%);
+}
+body.dark-mode .card-text:last-child{
+  color: #bbbbbb;
+}
+body.dark-mode .versus{
+  color: #bbbbbb;
+}
+body.dark-mode .todas-noticias {
+  background-color: #1a1a1a;
+}
+body.dark-mode .todas-noticias h3{
+  color: #bbbbbb;
+  box-shadow: 0px 1px 0px 0px rgba(255, 255, 255, 0.222);
+}
+
+body.dark-mode .noticia-card{
+  background-color: #000000;
+}
+
+body.dark-mode .noticia-card .noticia-conteudo h5{
+  color: #bbbbbb;
+}
+body.dark-mode .noticia-card .noticia-conteudo p{
+  color: #bbbbbb;
+}
+body.dark-mode .form-control{
+  background-color: #131313;
+  border: 1px solid #181818;
+}
+
+body.dark-mode  #search-results{
+  background-color: #000000;
+  color: #bbbbbb;
+}
+
+body.dark-mode  .search-result-item:hover{
+  background-color: #1a1a1a;
+  color: #bbbbbb;
+}
+/* Modo escuro */
+body.dark-mode::-webkit-scrollbar-track {
+  background: #333; /* cor mais escura para o modo escuro */
+}
+
+body.dark-mode::-webkit-scrollbar-thumb {
+  background: #777; /* cor da barra de rolagem no modo escuro */
+}
+
+
+body.dark-mode .navbar-nav .dropdown-menu{
+  background-color: #1a1a1a;
+
+}
+
+body.dark-mode .dropdown-item:focus, .dropdown-item:hover {
+  color: #16181b;
+  text-decoration: none;
+  background-color: #000000;
+}
+
+body.dark-mode .nav-link.dropdown-toggle::after {
+  display: inline-block;
+  margin-left: 0.255em;
+  vertical-align: 0.255em;
+  content: "";
+  border-top: 0.3em solid rgb(255, 255, 255);
+  border-right: 0.3em solid transparent;
+  border-left: 0.3em solid transparent;
+  transition: 0.4s;
+}
+
+body.dark-mode .resumo-noticia-mais-recente {
+  color: #bbbbbb;
+}
+
+body.dark-mode .mx-2{
+  color: #bbbbbb;
+}
+
+body.dark-mode .dropdown-menu.show{
+  background-color: #171717;
+
+}
+body.dark-mode .dropdown-item-text{
+  color: #bbbbbb !important;
+}
+body.dark-mode .text-danger:hover{
+  background-color: #000000 !important;
+}
+
+
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* cor escura quando passa o mouse no modo escuro */
+}
+/* Barra de rolagem padrão */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Cor de fundo da barra de rolagem */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* cor clara para o modo claro */
+}
+
+/* Cor da barra de rolagem */
+::-webkit-scrollbar-thumb {
+  background: #888; /* cor padrão da barra de rolagem */
+}
+
+/* Cor quando o usuário passa o mouse sobre a barra de rolagem */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* cor escura quando passa o mouse */
+}
+main {
+  height: 100vh;
+  margin-top: 4%;
+  transition: 0.4s;
+  max-width: 85%;
+}
+
+.descricao-noticia-mais-recente {
+  height: 60%;
+  width: 100%;
+  transition: 0.4s;
+}
+
+
+
+.titulo-noticia-mais-recente {
+  font-size: 2.1vw;
+  margin-top: 4%;
+  color: #333;
+  transition: 0.4s;
+  font-weight: bolder;
+}
+
+
+.resumo-noticia-mais-recente {
+  font-size: 1vw;
+  transition: 0.4s;
+}
+.titulo-noticia-recente {
+  margin-top: 3%;
+  font-size: 1vw;
+  transition: 0.4s;
+  color: #333;
+  text-decoration: none;
+}
+.noticia-mais-recente {
+  height: 50%;
+  width: 100%;
+  transition: 0.4s;
+}
+.noticias-recentes-div {
+  width: 50%;
+  height: 90vh;
+  transition: 0.4s;
+}
+
+.noticia-recente {
+  height: 50%;
+  width: 50%;
+  min-width: 50%;
+  transition: 0.4s;
+}
+
+.noticias-recentes-banner-principal {
+  width: 95%;
+  height: 100%;
+  transition: 0.4s;
+}
+
+.navbar-custom {
+  padding: 15px 7%;
+  width: 100%;
+  margin: auto;
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.222);
+  transition: 0.4s;
+  
+}
+
+/* Seta personalizada para o dropdown-toggle com div */
+.nav-link.dropdown-toggle::after {
+  display: inline-block;
+  margin-left: 0.255em;
+  vertical-align: 0.255em;
+  content: "";
+  border-top: 0.3em solid rgb(0, 0, 0); /* Cor branca para a seta */
+  border-right: 0.3em solid transparent;
+  border-left: 0.3em solid transparent;
+  transition: 0.4s;
+}
+
+/* Ajustes para o dropdown com hover */
+.nav-item.dropdown:hover .dropdown-menu {
+  display: block;
+  margin-top: 0;
+  transition: 0.4s;
+}
+
+.dropdown-menu {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 10px;
+  transition: 0.4s;
+}
+
+.dropdown-item img {
+  transition: transform 0.2s ease;
+  transition: 0.4s;
+}
+
+.dropdown-item img:hover {
+  transform: scale(1.1);
+  transition: 0.4s;
+}
+.dropdown-item:focus, .dropdown-item:hover{
+  background-color: #f8f9fa;
+}
+.user-info {
+  position: relative;
+  display: inline-block;
+  transition: 0.4s;
+}
+
+.user-photo {
+  cursor: pointer;
+  transition: 0.4s;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 35px;
+  right: 0;
+  background-color: #f9f9f9;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  z-index: 1;
+  border-radius: 8px;
+  width: 150px;
+  transition: 0.4s;
+}
+
+.user-info:hover .dropdown-content {
+  display: block;
+  transition: 0.4s;
+}
+
+.dropdown-content a {
+  color: #333;
+  text-decoration: none;
+  padding: 8px 0;
+  display: block;
+  transition: 0.4s;
+}
+
+.dropdown-content a:hover {
+  background-color: #ddd;
+  transition: 0.4s;
+}
+
+.imagem-principal-banner {
+  width: 100%;
+  height: 100%;
+  transition: 0.4s;
+  object-fit: cover;
+}
+
+.imagem-principal-banner-recente {
+  width: 100%;
+  height: 55%;
+  transition: 0.4s;
+  object-fit: cover;
+}
+
+.descricao-noticia-recente {
+  height: 40%;
+  transition: 0.4s;
+}
+
+/* Efeito de hover apenas na imagem */
+.noticia-mais-recente:hover .imagem-principal-banner,
+.noticia-recente:hover .imagem-principal-banner-recente {
+  transform: scale(1.05); /* Aumenta levemente o tamanho da imagem */
+  transition: transform 0.3s ease, filter 0.3s ease; /* Animação suave */
+  filter: brightness(0.85); /* Escurece a imagem para destacar o efeito */
+}
+
+/* Efeito no texto ao passar o mouse */
+.noticia-mais-recente .titulo-noticia-mais-recente,
+.noticia-recente .titulo-noticia-recente {
+  transition: opacity 0.3s ease; /* Anima a opacidade */
+  opacity: 1; /* Opacidade inicial do texto */
+}
+
+.noticia-mais-recente:hover .titulo-noticia-mais-recente,
+.noticia-recente:hover .titulo-noticia-recente {
+  opacity: 0.8; /* Reduz a opacidade do texto ao passar o mouse */
+}
+
+.todas-noticias {
+  background-color: #f9f9f9; /* Fundo suave */
+  padding: 40px 0;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column; /* As divs ficam uma embaixo da outra */
+  gap: 20px; /* Espaçamento entre as notícias */
+}
+
+.todas-noticias h3 {
+  font-size: 4vh;
+  color: #333;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 40px;
+  margin-bottom: 3%;
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.222);
+  text-align: left;
+  margin-left: 1%;
+}
+
+.todas-noticias .row {
+  display: flex;
+  flex-direction: column; /* Empilhamento das notícias em uma coluna */
+  gap: 20px; /* Espaçamento entre as notícias */
+}
+
+.todas-noticias .col-12 {
+  display: flex;
+  flex-direction: row; /* Layout em linha para imagem e texto */
+  align-items: center; /* Alinhamento vertical */
+  gap: 20px; /* Espaçamento entre a imagem e o texto */
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.noticia-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  background-color: #fff; /* Fundo branco */
+  border-radius: 10px; /* Bordas arredondadas */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+  overflow: hidden; /* Evita que os elementos saiam da div */
+  padding: 20px; /* Espaçamento interno */
+  height: 200px; /* Altura fixa para alinhamento */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animação suave no hover */
+}
+
+.noticia-card:hover {
+  transform: translateY(-5px); /* Move levemente para cima no hover */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Sombra mais destacada no hover */
+}
+
+.noticia-card img {
+  width: 20%; /* Ajusta a largura da imagem */
+  height: 100%; /* Altura da imagem igual à div */
+  object-fit: cover; /* Ajusta a imagem para cobrir o espaço */
+  border-radius: 8px; /* Bordas arredondadas */
+}
+
+.noticia-card .noticia-conteudo {
+  flex: 1; /* Faz o texto ocupar o restante do espaço */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Espaça o título e a descrição */
+}
+
+.noticia-card h5 {
+  font-size: 1.5rem; /* Tamanho do título */
+  color: #333;
+  font-weight: bold;
+  margin: 0;
+}
+
+.noticia-card p {
+  font-size: 1rem;
+  color: #666;
+  line-height: 1.5; /* Melhor espaçamento entre linhas */
+  margin: 0;
+}
+
+.todas-noticias .d-flex {
+  display: flex;
+  flex-direction: row; /* Layout em linha */
+  background-color: #fff; /* Fundo branco para os cards */
+  border-radius: 8px; /* Bordas arredondadas */
+  overflow: hidden; /* Evita que a imagem ultrapasse os limites */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Efeito suave ao passar o mouse */
+  width: 100%; /* Ocupa toda a largura disponível */
+}
+
+.todas-noticias .d-flex:hover {
+  transform: translateY(-5px); /* Levantar o card quando passar o mouse */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Sombra mais intensa */
+}
+
+.todas-noticias .img-thumbnail {
+  width: 25vw; /* Tamanho da imagem em 25% da largura da tela */
+  height: 25vh; /* Altura da imagem em 25% da altura da tela */
+  object-fit: cover; /* Ajusta a imagem para cobrir o espaço */
+  border-radius: 6px; /* Bordas arredondadas na imagem */
+}
+
+.todas-noticias h5 {
+  font-size: 1.5rem; /* Título maior */
+  color: #333; /* Cor do título */
+  font-weight: 500;
+  margin: 0 0 10px; /* Espaçamento entre a imagem e o título */
+}
+
+.todas-noticias p {
+  font-size: 1rem;
+  color: #666; /* Texto secundário mais suave */
+  line-height: 1.5; /* Maior espaçamento entre as linhas */
+  margin: 0; /* Remove margem extra */
+  padding-bottom: 15px; /* Espaço entre a descrição e o final do card */
+}
+
+/* Estilo para os links de títulos de notícias */
+.titulo-noticia-mais-recente a,
+.titulo-noticia-recente a,
+.todas-noticias a {
+  color: #000; /* Define a cor preta para os links */
+  text-decoration: none; /* Remove o sublinhado */
+}
+
+/* Garante que não haja sublinhado ao passar o mouse */
+.titulo-noticia-mais-recente a:hover,
+.titulo-noticia-recente a:hover,
+.todas-noticias a:hover {
+  color: #000; /* Mantém a cor preta no hover */
+  text-decoration: none; /* Garante que o sublinhado nunca apareça */
+}
+
+/* Estilo para todos os links na página */
+a {
+  color: #000 !important; /* Cor preta para os links */
+  text-decoration: none; /* Remove o sublinhado */
+}
+
+/* Garante que não haja sublinhado ao passar o mouse em todos os links */
+a:hover {
+  color: #000 !important; /* Cor preta no hover */
+  text-decoration: none; /* Garante que o sublinhado nunca apareça */
+}
+
+.noticias-recentes-div a {
+  color: #000; /* Cor preta para links na seção de outras notícias */
+  text-decoration: none; /* Remove o sublinhado */
+}
+
+.noticias-recentes-div a:hover {
+  color: #000; /* Cor preta no hover */
+  text-decoration: none; /* Garante que o sublinhado nunca apareça */
+}
+
+#search-bar:focus {
+  outline: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#search-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 235%;
+  background-color: #fff;
+  border-radius: 8px;
+  margin-top: 5px;
+  padding: 0;
+  list-style: none;
+  max-height: 200px;
+  overflow-y: auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+.search-result-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.search-result-item:hover {
+  background-color: #f0f0f0;
+}
+
+.search-result-image {
+  width: 40px !important;
+  height: 40px !important;
+  margin-right: 10px !important;
+  border-radius: 4px !important;
+  object-fit: cover !important;
+}
+
+.search-result-text {
+  font-size: 1rem;
+  color: #333;
+  font-weight: 500;
+  margin-left: 10%;
+}
+
+#dropdownTimes {
+  margin: -5%;
+}
+
+/* Estilo Geral para a Tabela */
+.table {
+  width: 90% !important;
+  margin: 20px auto;
+  border-collapse: collapse;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  height: 80%;
+  margin-right: 10%;
+}
+
+/* Corpo */
+.table tbody tr {
+  background-color: #f9f9f9;
+  transition: all 0.2s ease-in-out;
+}
+
+.table tbody td {
+  padding: 12px;
+  text-align: center;
+  font-size: 15px;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Efeito ao Passar o Mouse */
+.table tbody tr:hover {
+  background-color: #e2f0ff;
+  transform: scale(1.02);
+  cursor: pointer;
+}
+
+/* Personalização de Colunas */
+.table tbody td:first-child {
+  font-weight: bold;
+  color: #007bff;
+}
+
+.table tbody td:last-child {
+  font-weight: bold;
+  color: #dc3545;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .table {
+    font-size: 14px;
+  }
+
+  .table thead {
+    display: none;
+  }
+
+  .table tbody td {
+    display: block;
+    text-align: right;
+    padding-left: 50%;
+    position: relative;
+  }
+
+  .table tbody td:before {
+    content: attr(data-label);
+    position: absolute;
+    left: 0;
+    width: 50%;
+    padding-left: 10px;
+    font-weight: bold;
+    text-align: left;
+    color: #007bff;
+  }
+}
+
+/* Alterando a cor dos nomes dos times para preto */
+.table tbody td span {
+  color: #000; /* Nomes dos times em preto */
+}
+
+/* Remover a escala de cinza das linhas e aplicar nas colunas */
+.table tbody tr:nth-child(even) {
+  background-color: #f9f9f9; /* Linha clara */
+}
+
+.table tbody tr:nth-child(odd) {
+  background-color: #f1f1f1; /* Linha um pouco mais escura */
+}
+
+/* Cabeçalho da tabela com fundo transparente */
+.table thead tr {
+  background-color: transparent; /* Fundo transparente */
+  color: #000; /* Texto do cabeçalho em preto */
+}
+
+.table thead th {
+  padding: 12px;
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 2px solid #f4f4f4;
+  text-align: center;
+}
+
+/* Estilo geral para a lista de jogos */
+.jogos-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Espaço entre os jogos */
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Estilo para cada card de jogo */
+.jogo-card {
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+/* Efeito de hover no card */
+.jogo-card:hover {
+  transform: scale(1.05);
+}
+
+/* Cabeçalho do card com o nome dos times */
+.jogo-header h4 {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+/* Detalhes do jogo (data) */
+.jogo-details small {
+  display: block;
+  text-align: center;
+  font-size: 14px;
+  color: #555;
+}
+
+/* Estilo para o texto quando não há jogos disponíveis */
+.jogo-card p {
+  text-align: center;
+  font-size: 16px;
+  color: #888;
+}
+
+.caixa {
+  width: 80%;
+}
+
+.div-tabela-brasileiro {
+  width: 60%;
+}
+
+.titulo_brasileriao {
+  font-size: 4vh;
+  color: #333;
+  font-weight: bolder;
+  margin-left: 1%;
+  margin-bottom: 3%;
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.222);
+}
+
+.div_brasileirao {
+  width: 100%;
+}
+
+.search-container {
+  position: relative;
+}
+
+.search-container img {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px; /* Tamanho da lupa */
+  height: 16px;
+}
+
+#search-bar {
+  padding-left: 40px; /* Espaço para a lupa */
+  border-radius: 20px; /* Bordas arredondadas */
+  width: 100%;
+}
+#dark-mode-toggle {
+  all: unset; /* Remove todas as estilizações padrão */
+  background: none; /* Remove o fundo */
+  border: none; /* Remove a borda */
+  padding: 0; /* Remove o padding */
+  text-align: left; /* Garante que o texto fique alinhado à esquerda */
+  font-family: inherit; /* Usa a fonte padrão do documento */
+  font-size: inherit; /* Usa o tamanho de fonte padrão */
+  color: inherit; /* Usa a cor do texto padrão */
+}
+
+
+span{
+
+  margin-left: 1rem;
+  margin-right: 1rem;
+  color: #6c757d; /* Cor do texto "text-muted" */
+  font-weight: bold;
+  font-size: 1.5rem;
+
+}
+
+
+#serie-a-radio{
+  display: none;
+}
+
+#serie-b-radio{
+  display: none;
+}
+
+.mx-2{
+  cursor: pointer;
+}
+
+
+
+.dropdown-menu-right {
+  right: 0%;
+  left: -75%;
+}
+
+.dropdown-item-text {
+  display: block;
+  padding: 0.25rem 1.5rem;
+  color: #212529;
+  font-size: 1vw;
+}
+
+
+span {
+  margin-left: 1rem;
+  margin-right: 1rem;
+  color: #6c757d;
+  font-weight: bold;
+  font-size: 1.5rem;
+}

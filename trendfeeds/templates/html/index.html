@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    {% load static %}
+    {% load custom_filters %}
+    <link rel="stylesheet" href="{% static 'css/index_trendfeeds.css' %}" />
+
+  </head>
+  <body>
+
+
+    <!-- Cabeçalho -->
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-custom d-flex justify-content-sm-around">
+
+        <!-- Logo e nome do site -->
+        <div class="d-flex align-items-center">
+          <a class="navbar-brand p-2 nome-site" href="#">site noticias</a>
+        </div>
+
+
+
+
+        <!-- Navegação principal -->
+        <div class="d-flex justify-content-center" id="navbarNav">
+          <ul class="navbar-nav">
+
+            <!-- Dropdown para seleção de times -->
+            <li class="nav-item dropdown">
+              <div class="nav-link dropdown-toggle d-flex align-items-center" id="dropdownTimes" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <img id="team-logo" src="{% get_media_prefix %}brasao.png" alt="Ícone do Time" style="width: 30px; height: 30px" />
+              </div>
+              <div class="dropdown-menu p-4" style="width: 15vw" aria-labelledby="dropdownTimes">
+
+                <!-- Opções de Séries -->
+                <div class="d-flex justify-content-center mb-3">
+                  <input type="radio" id="serie-a-radio" name="serie" value="a" checked />
+                  <label for="serie-a-radio" class="mx-2">Série A</label>
+                  <input type="radio" id="serie-b-radio" name="serie" value="b" />
+                  <label for="serie-b-radio" class="mx-2">Série B</label>
+                </div>
+                
+                <!-- Ícones de times -->
+                <div id="serie-icons" class="d-flex flex-wrap justify-content-center align-items-center">
+                  {% for categoria in categorias_serie_a %}
+                  <a class="dropdown-item p-3 col-3" href="{% url 'exibir_categoria' categoria.nome_categoria|slugify %}">
+                    <img src="{% get_media_prefix %}escudos/{{ categoria.nome_categoria|lower }}.png" alt="{{ categoria.nome_categoria }}" style="width: 35px; height: 35px" />
+                  </a>
+                  {% endfor %}
+                </div>
+              </div>
+            </li>
+
+
+
+
+            <!-- Botão de Modo Claro/Escuro -->
+            <li class="nav-item"><a class="nav-link" href="#"><button id="dark-mode-toggle">Claro</button></a></li>
+            <!-- Links adicionais -->
+            <li class="nav-item"><a class="nav-link" href="#">Sobre</a></li>
+            {% if request.user.is_superuser %}
+              <li class="nav-item"><a class="nav-link" href="{% url 'pagina_funcionarios' %}">Funcionários</a></li>
+            {% endif %}
+          </ul>
+        </div>
+
+
+
+
+        <!-- Barra de pesquisa -->
+        <div class="search-container d-flex align-items-center">
+          <img id="lupa" src="{% get_media_prefix %}lupa.png" alt="lupa" style="width: 16px; height: 16px; margin-right: 8px" />
+          <input id="search-bar" class="form-control" type="search" placeholder="Pesquisar" aria-label="Pesquisar" style="padding-left: 40px" />
+          <ul id="search-results"></ul>
+        </div>
+
+
+
+
+        <!-- Dropdown do usuário -->
+        <div class="dropdown">
+          {% if request.user.is_authenticated %}
+
+          <!-- Usuário autenticado -->
+          <a class="nav-link dropdown-toggle" href="#" role="button" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-top: -10%;">
+            {% if request.user.foto %}
+              <img src="{{ request.user.foto.url }}" alt="Foto de {{ request.user.username }}" class="rounded-circle" style="width: 40px; height: 40px;" />
+            {% else %}
+              <img src="{% get_media_prefix %}login.png" alt="Foto de {{ request.user.username }}" class="rounded-circle" style="width: 40px; height: 40px;" />
+            {% endif %}
+          </a>
+          
+          <div class="dropdown-menu dropdown-menu-right text-center" aria-labelledby="userDropdown" style="min-width: 150px; padding: 10px;">
+            <!-- Nome do usuário -->
+            <span class="dropdown-item-text font-weight-bold text-muted" style="font-size: 0.85rem;">
+              {{ request.user.username }}
+            </span>
+            <div class="dropdown-divider"></div>
+          
+            <!-- Link Meu Perfil -->
+            <a href="{% url 'info_perfil' perfil_id=request.user.id %}" class="dropdown-item" style="font-size: 0.9rem; padding: 5px;">
+              Meu Perfil
+            </a>
+          
+            <!-- Link Sair -->
+            <a href="{% url 'logout' %}" class="dropdown-item text-danger" style="font-size: 0.9rem; padding: 5px;">
+              Sair
+            </a>
+          </div>
+          {% else %}
+          <!-- Usuário não autenticado -->
+          <div class="row d-flex flex-wrap justify-content-center">
+            <a class="nav-link" href="{% url 'login' %}">Login</a>
+          </div>
+          {% endif %}
+          
+          
+        </div>
+      </nav>
+    </header>
+
+
+
+
+    <!-- Conteúdo principal -->
+    <main class="d-flex container-fluid justify-content-center">
+      <div class="row d-flex flex-nowrap justify-content-center noticias-recentes-banner-principal">
+
+        <!-- Notícia principal -->
+        <div class="col-12 col-md-6 noticia-mais-recente">
+          <a href="{% if ultima_noticia.slug %}{% url 'detalhes_noticia' ultima_noticia.slug %}{% else %}#{% endif %}">
+            <img class="img-fluid imagem-principal-banner" src="{% get_media_prefix %}noticias/n_{{ ultima_noticia.id }}_0.jpg" alt="noticia-mais-recente" style="border-radius: 20px" onerror="this.onerror=null; this.src='{% get_media_prefix %}SemImagem.png';">
+          </a>
+          <div class="d-flex flex-column container-fluid justify-content-start descricao-noticia-mais-recente">
+            <a href="{% if ultima_noticia.slug %}{% url 'detalhes_noticia' ultima_noticia.slug %}{% else %}#{% endif %}">
+              <p class="titulo-noticia-mais-recente">{% if ultima_noticia.titulo_bonito %}{{ ultima_noticia.titulo_bonito }}{% else %}{{ ultima_noticia.descricao }}{% endif %}</p>
+              <p class="resumo-noticia-mais-recente">{{ ultima_noticia.descricao|slice:":350" }} ...</p>
+            </a>
+          </div>
+        </div>
+
+
+
+
+        <!-- Outras notícias -->
+        <div class="d-flex flex-wrap container-fluid justify-content-center align-items-center noticias-recentes-div">
+          {% for noticia in outras_noticias %}
+          <div class="col-6 col-md-3 noticia-recente">
+            <a href="{% url 'detalhes_noticia' noticia.slug %}">
+              <img class="img-fluid imagem-principal-banner-recente" src="{% get_media_prefix %}noticias/n_{{ noticia.id }}_0.jpg" alt="noticia-recente" style="border-radius: 20px"onerror="this.onerror=null; this.src='{% get_media_prefix %}SemImagem.png';">
+            </a>
+            <div class="d-flex flex-wrap-column container-fluid justify-content-start descricao-noticia-recente">
+              <a href="{% url 'detalhes_noticia' noticia.slug %}">
+                <p class="titulo-noticia-recente">{% if noticia.titulo_bonito %}{{ noticia.titulo_bonito | slice:":250" }}...{% else %}{{noticia.descricao }}...{% endif %}</p>
+              </a>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </main>
+
+
+
+
+    <!-- Tabela do Campeonato Brasileiro -->
+    <div class="d-flex container-fluid flex-wrap caixa" style="width: 80%">
+      <div class="div_brasileirao"><h2 class="titulo_brasileriao">CAMPEONATO BRASILEIRO</h2></div>
+      <div class="div-tabela-brasileiro container mt-7" style="flex: 0 0 60%; padding-right: 15px">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th style="text-align: left">Posição</th>
+              <th>P</th>
+              <th>J</th>
+              <th>V</th>
+              <th>E</th>
+              <th>D</th>
+              <th>GP</th>
+              <th>GC</th>
+              <th>SG</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for time in tabela %}
+            <tr>
+              <td>
+                <div class="d-flex align-items-center">
+                  <span class="mr-3" style="text-align: left; flex-shrink: 0">{{ time.posicao }}</span>
+                  <span style="font-size: 1.1rem; font-weight: bold; text-transform: capitalize;">{{ time.time.nome_popular }}</span>
+                </div>
+              </td>
+              <td>{{ time.pontos }}</td><td>{{ time.jogos }}</td><td>{{ time.vitorias }}</td><td>{{ time.empates }}</td>
+              <td>{{ time.derrotas }}</td><td>{{ time.gols_pro }}</td><td>{{ time.gols_contra }}</td><td>{{ time.saldo_gols }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+
+
+
+      <!-- Próximos jogos -->
+      <section class="container my-3 d-flex flex-nowrap" style="flex: 0 0 40%; padding-left: 15px">
+        <div class="row justify-content-center">
+          {% if proximos_jogos %}
+          {% for jogo in proximos_jogos %}
+          <div class="col-6 d-flex justify-content-center my-2">
+            <div class="card text-center shadow-sm p-3" style="max-width: 300px; width: 100%; border-radius: 8px">
+              <div class="card-body">
+                <div class="d-flex align-items-center justify-content-center mb-3">
+                  <img src="{% get_media_prefix %}escudos/{{ jogo.time_mandante.nome_popular|slugify_with_underscore }}.png" alt="{{ jogo.time_mandante.nome_popular }}" class="img-fluid" style="width: 50px; height: 50px; border-radius: 50%" />
+                  {% if jogo.placar_numerico %}<div style="color: #6c757d !important;">{{ jogo.placar_numerico|safe }}</div>{% else %}<span>X</span>{% endif %}
+                  <img src="{% get_media_prefix %}escudos/{{ jogo.time_visitante.nome_popular|slugify_with_underscore }}.png" alt="{{ jogo.time_visitante.nome_popular }}" class="img-fluid" style="width: 50px; height: 50px; border-radius: 50%" />
+                </div>
+                <div class="game-details text-muted">
+                  <p class="mb-1"><strong>Data:</strong> {{ jogo.data_realizacao }}</p>
+                  <p class="mb-1"><strong>Horário:</strong> {{ jogo.hora_realizacao }}</p>
+                  <p class="mb-1"><strong>Estádio:</strong> {{ jogo.estadio.nome_popular }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+          {% else %}
+          <p class="text-center">Nenhum jogo disponível no momento.</p>
+          {% endif %}
+        </div>
+      </section>
+    </div>
+
+
+
+
+    <!-- Lista de mais notícias -->
+    <section class="todas-noticias container-fluid mt-2" style="width: 80%; padding-top: 7%">
+      <h3>Mais Notícias</h3>
+      <div class="row">
+        {% for noticia in todas_as_noticias %}
+        <div class="col-12 mb-4">
+          <a href="{% url 'detalhes_noticia' noticia.slug %}" class="noticia-card" style="width: 100%">
+            <img src="{% get_media_prefix %}/noticias/n_{{ noticia.id }}_0.jpg" onerror="this.onerror=null; this.src='{% get_media_prefix %}SemImagem.png';" alt="noticia" />
+            <div class="noticia-conteudo">
+              <h5>{% if noticia.titulo_bonito %}{{ noticia.titulo_bonito }}{% else %}{{noticia.descricao }}{% endif %}</h5>
+              <p>{{ noticia.descricao|slice:":150" }} ...</p>
+            </div>
+          </a>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+
+
+    
+
+    <!-- Inclusão de scripts necessários para o funcionamento do Bootstrap -->
+
+    <!-- Importa a biblioteca jQuery, necessária para algumas funcionalidades do Bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
+    <!-- Importa o Popper.js, utilizado para elementos como dropdowns e tooltips -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <!-- Importa o JavaScript do Bootstrap versão 4.5.2 -->
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Importa o JavaScript do Bootstrap versão 5.3.0 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+
+
+    
+    
+   <!-- Script necessário para alternar entre a Série A e Série B -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Seleciona os elementos necessários para alternar entre as séries
+        const serieARadio = document.getElementById("serie-a-radio");
+        const serieBRadio = document.getElementById("serie-b-radio");
+        const serieIcons = document.getElementById("serie-icons");
+
+        // Conteúdo dinâmico para Série A e Série B
+        const serieAContent = `
+          {% for categoria in categorias_serie_a %}
+          <a class="dropdown-item p-3 col-3" href="{% url 'exibir_categoria' categoria.nome_categoria|slugify %}">
+            <img
+              src="{% get_media_prefix %}escudos/{{ categoria.nome_categoria|lower }}.png"
+              alt="{{ categoria.nome_categoria }}"
+              style="width: 35px; height: 35px"
+            />
+          </a>
+          {% endfor %}
+        `;
+
+        const serieBContent = `
+          {% for categoria in categorias_serie_b %}
+          <a class="dropdown-item p-3 col-3" href="{% url 'exibir_categoria' categoria.nome_categoria|slugify %}">
+            <img
+              src="{% get_media_prefix %}escudos/{{ categoria.nome_categoria|lower }}.png"
+              alt="{{ categoria.nome_categoria }}"
+              style="width: 35px; height: 35px"
+            />
+          </a>
+          {% endfor %}
+        `;
+
+        // Função para alternar o conteúdo com base na seleção de Série A ou Série B
+        function toggleIcons() {
+          if (serieARadio.checked) {
+            serieIcons.innerHTML = serieAContent; // Carrega conteúdo da Série A
+          } else if (serieBRadio.checked) {
+            serieIcons.innerHTML = serieBContent; // Carrega conteúdo da Série B
+          }
+        }
+
+        // Adiciona eventos de mudança nos botões de rádio para alternar as séries
+        serieARadio.addEventListener("change", toggleIcons);
+        serieBRadio.addEventListener("change", toggleIcons);
+
+        // Inicializa o conteúdo com o estado da seleção atual
+        toggleIcons();
+      });
+    </script>
+
+
+
+
+
+    <!-- Script necessário para a barra de pesquisas -->
+    <script>
+      document
+        .getElementById("search-bar")
+        .addEventListener("input", function () {
+          // Adiciona um evento ao campo de busca (search-bar) para capturar a entrada do usuário
+
+          let query = this.value; // Obtém o valor digitado no campo de busca
+
+          if (query.length > 1) {
+            // Verifica se o tamanho da consulta é maior que 1 caractere
+
+            fetch(`/buscar_noticias/?q=${query}`)
+              // Faz uma requisição para a URL "/buscar_noticias/" passando o parâmetro de busca
+              .then((response) => response.json())
+              // Processa a resposta JSON retornada pelo servidor
+              .then((data) => {
+                const resultsContainer = document.getElementById("search-results");
+                // Seleciona o contêiner onde os resultados da busca serão exibidos
+                resultsContainer.innerHTML = ""; // Limpa os resultados anteriores
+
+                if (data.results.length > 0) {
+                  // Verifica se há resultados na busca
+                  data.results.forEach((item) => {
+                    // Itera sobre os resultados
+                    let li = document.createElement("li"); // Cria um elemento <li> para cada resultado
+                    li.classList.add("search-result-item"); // Adiciona uma classe para estilização
+
+                    let img = document.createElement("img"); // Cria um elemento <img> para exibir a imagem
+                    img.src = item.imagem_url || "{% static 'locadora/images/default.png' %}"; // Usa a imagem do resultado ou uma imagem padrão
+                    img.alt = `Imagem de ${item.titulo}`; // Define o texto alternativo da imagem
+                    img.classList.add("search-result-image"); // Adiciona uma classe CSS para estilizar a imagem
+
+                    let text = document.createElement("span"); // Cria um elemento <span> para exibir o título
+                    text.textContent = item.titulo; // Define o texto do título
+                    text.classList.add("search-result-text"); // Adiciona uma classe CSS para estilizar o texto
+
+                    li.appendChild(img); // Adiciona a imagem ao item de resultado
+                    li.appendChild(text); // Adiciona o texto ao item de resultado
+
+                    li.addEventListener("click", function () {
+                      window.location.href = `/noticia/${item.slug}/`; // Redireciona para a página de detalhes da notícia
+                    });
+
+                    resultsContainer.appendChild(li); // Adiciona o item de resultado ao contêiner
+                  });
+                } else {
+                  resultsContainer.innerHTML = '<li class="no-results">Nenhum resultado encontrado.</li>';
+                  // Exibe mensagem caso não haja resultados
+                }
+              });
+          } else {
+            document.getElementById("search-results").innerHTML = ""; // Limpa os resultados caso a consulta seja muito curta
+          }
+        });
+    </script>
+
+
+
+
+
+    <!-- Script necessário para o modo noturno -->
+    <script>
+      // Espera a página carregar completamente
+      window.onload = function() {
+        const toggleButton = document.getElementById('dark-mode-toggle');
+        const logo = document.getElementById('team-logo'); // Obtém o logo
+
+        // Verificar se o modo escuro está ativado previamente
+        if (localStorage.getItem('dark-mode') === 'true') {
+          document.body.classList.add('dark-mode');
+          logo.src = "{% get_media_prefix %}brasao_branco.png"; // Mudando para o brasão branco
+          toggleButton.innerHTML = "Escuro"; // Alterando o texto do botão
+        }
+
+        // Evento de clique para alternar entre modos (escuro/claro)
+        toggleButton.addEventListener('click', () => {
+          document.body.classList.toggle('dark-mode'); // Alterna a classe dark-mode no body
+          const isDarkMode = document.body.classList.contains('dark-mode');
+          
+          // Atualiza o estado do botão e do logo, e salva a preferência no localStorage
+          if (isDarkMode) {
+            toggleButton.innerHTML = "Escuro";
+            logo.src = "{% get_media_prefix %}brasao_branco.png"; // Mudando para o brasão branco
+            localStorage.setItem('dark-mode', 'true'); // Salva a preferência
+          } else {
+            toggleButton.innerHTML = "Claro";
+            logo.src = "{% get_media_prefix %}brasao.png"; // Mudando para o brasão original
+            localStorage.setItem('dark-mode', 'false'); // Salva a preferência
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

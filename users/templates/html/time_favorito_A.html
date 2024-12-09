@@ -1,0 +1,382 @@
+{% load custom_filters_users %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escolha seu time!</title>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/timea.css' %}" />
+
+    <!-- Bootstrap -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- CSS do Owl Carousel -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+    <style>
+        body{
+            background-color: black !important;
+        }
+
+        
+        .atlético-mg::before {
+            background-image: url("{% get_media_prefix %}fundos/serie_a/galo.jpg");
+        }
+
+      
+        .athletico-pr::before {
+            background-image: url("{% get_media_prefix %}fundos/serie_a/athletico.jpg");
+        }
+
+       
+        .bahia::before {
+            background-image: url("{% get_media_prefix %}fundos/serie_a/bahia.jpg");
+        }
+
+       
+        .botafogo::before {
+            background-image: url("{% get_media_prefix %}fundos/serie_a/botafogo.jpg");
+        }
+
+
+        .red-bull-bragantino::before {
+            background-image: url("{% get_media_prefix %}fundos/serie_a/braga.jpg");
+        }
+
+     
+        .corinthians::before {
+            background-image: url("{% get_media_prefix %}fundos/serie_a/gamba.jpg");
+        }
+
+       
+        .cruzeiro::before {
+            background-image: url("{% get_media_prefix %}fundos/serie_a/cruzeiro.jpg");
+        }
+
+        
+        .cuiabá::before {
+            background-image: url("{% get_media_prefix %}fundos/serie_a/cuiaba.jpg");
+        }
+
+
+        .flamengo::before {
+            background-image: url("{% get_media_prefix %}fundos/serie_a/fla.jpg"); 
+        }
+
+        
+        .fluminense::before {
+            background-image: url("{% get_media_prefix %}fundos/serie_a/flu.jpg");  
+        }
+
+       
+        .fortaleza::before {
+            background-image: url("{% get_media_prefix %}fundos/serie_a/fortaleza.jpg"); 
+        }
+
+        
+        .grêmio::before {
+            background-image: url("{% get_media_prefix %}fundos/serie_a/grebbbio.jpg");
+        }
+
+       
+        .internacional::before {
+            background-image: url("{% get_media_prefix %}fundos/serie_a/inter_colosso.jpg");
+        }
+
+        
+        .palmeiras::before {
+            background-image: url("{% get_media_prefix %}fundos/serie_a/palmeiras.jpg");
+        }
+
+        
+        .são-paulo::before {
+            background-image: url("{% get_media_prefix %}fundos/serie_a/sao_paulo_bambi.jpg");
+        }
+
+        
+        .vasco::before {
+            background-image: url("{% get_media_prefix %}fundos/serie_a/vasco.jpg");
+        }
+
+       
+        .juventude::before {
+            background-image: url("{% get_media_prefix %}fundos/serie_a/juventude.jpg");
+        }
+
+        
+        .criciúma::before {
+            background-image: url("{% get_media_prefix %}fundos/serie_a/criciuma.jpg");
+        }
+
+        
+        .vitória::before {
+            background-image: url("{% get_media_prefix %}fundos/serie_a/vitoria.jpg");
+        }
+
+        
+        .atlético-go::before {
+            background-image: url("{% get_media_prefix %}fundos/serie_a/atletico_go.jpg");
+        }
+    </style>
+</head>
+
+<body>
+    <div class="series_bar">
+        <input checked type="radio" name="serie" id="A" value="a">
+        <label for="A" id="serieA">Série A</label>
+        <input type="radio" name="serie" id="B" value="b">
+        <label onclick="loadContent('serieB')" for="B" id="serieB"><a href="{% url 'time_favorito' 'B' %}">Série B</a></label>
+        <input type="radio" name="serie" id="SEL" value="selecao">
+        <label onclick="loadContent('selecao')" for="SEL" id="selecao"><a href="{% url 'time_favorito' 'SEL' %}">Brasil</a></label>
+    </div>
+
+    <div id="escolha_seu_time">
+        <h1>Escolha seu time!</h1>
+    </div>
+
+    <div class="spinner-container" id="spinner">
+        <div class="spinner"></div>
+    </div>
+
+    <div class="carousel-wrap" id="carrossel-serie-A">
+        <div class="owl-carousel">
+            {% for categoria in categorias %}
+                {% if categoria.serie == 'A' %}
+                    <div class="item">
+                        <input type="radio" class="teste" id="{{ categoria.nome|lower }}" name="background" value="{{ categoria.nome|lower }}">
+                        <label style="cursor: pointer;" for="{{ categoria.nome|lower }}"><img src="{% get_media_prefix %}escudos/{{ categoria.nome_categoria|lower }}.png" alt="imagem-time"></label>
+                        <h2 class="nome_time">{{ categoria.nome }}</h2>
+                        <p class="descricao_time">{{ categoria.descricao }}</p>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <form method="POST">
+        {% csrf_token %}
+            <input type="hidden" name="descricao_ativa" id="categoria-selecionada">
+            <div id="submit">
+                <button type="button" class="btn btn-primary btn-lg" onclick="capturarDescricaoAtiva()">SELECIONAR</button>
+            </div>
+    </form>
+
+    <!-- JQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <!-- Owl Carousel -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+
+    <!-- Script do carrossel -->
+    <script>
+        $(document).ready(function () {
+            const $carousel = $('.owl-carousel');
+
+            $('.owl-carousel').owlCarousel({
+            loop: true,
+            margin: 10,
+            nav: true,
+            center: true,
+            dots: false,
+            drag: false,
+            touchDrag: false,
+            mouseDrag: false,
+            pullDrag: false,
+            responsive: {
+                0: {
+                    items: 1
+                },
+                600: {
+                    items: 3
+                },
+                1000: {
+                    items: 5
+                }
+            }
+        });
+
+        // Força o destaque do item inicial no carregamento
+        function highlightInitialItem() {
+            const $initialCenterItem = $('.owl-item.active.center');
+
+            $initialCenterItem.addClass('center-active');
+            $initialCenterItem.find('.nome_time').removeClass().addClass('nome_time active atlético-mg_nome');
+            $initialCenterItem.find('.descricao_time').removeClass().addClass('descricao_time active atlético-mg_descricao');
+
+
+            const nomeTime = $initialCenterItem.find('.nome_time').text(); // Conteúdo do h2.
+
+            // Encontra o input correspondente ao time central com o valor do h2
+            const $inputCorrespondente = $initialCenterItem.find('input[value="' + nomeTime.toLowerCase() + '"]');
+
+            // Adiciona a classe 'active' ao input ativo
+            $inputCorrespondente.addClass('active');
+        }
+
+        // Garante que o evento de inicialização aplique os estados corretamente
+        $carousel.on('initialized.owl.carousel', function () {
+            setTimeout(highlightInitialItem, 50); // Garante o carregamento do DOM
+        });
+
+        // Valor inicial para Atlético-MG
+        var valor_inicial = "atlético-mg";
+
+        // Substitui espaços por hífens no valor inicial para corresponder ao CSS
+        var valor_inicial_css = valor_inicial.replace(/\s+/g, '-');
+
+        // Remove todas as classes relacionadas aos times do <body> (caso necessário)
+        $('body').removeClass(function (index, className) {
+            return (className.match(/\batlético-mg|athletico-pr|bahia|botafogo|red-bull-bragantino|corinthians|cruzeiro|cuiabá|flamengo|fluminense|fortaleza|grêmio|internacional|palmeiras|são-paulo|vasco|juventude|criciúma|vitória|atlético-go\b/g) || []).join(' ');
+        });
+
+        // Adiciona a classe inicial ao <body>
+        $('body').addClass(valor_inicial_css);
+
+        // Declarando variável de escopo para armazenar nome do time antigo que foi executado na função abaixo
+        let time_antigo = valor_inicial_css
+
+        // Detectar quando a transição termina
+        $carousel.on('translated.owl.carousel', function () {
+            
+            $('.owl-item').removeClass('center-active');
+            $('.owl-item.center').addClass('center-active');
+            $('.nome_time, .descricao_time').removeClass('active');
+            $('.nome_time').removeClass(`${time_antigo}_nome`);
+            $('.descricao_time').removeClass(`${time_antigo}_descricao`);
+
+            // Identifica o item central atual
+            const $currentCenterItem = $('.owl-item.center');
+            const nomeTime = $currentCenterItem.find('.nome_time').text(); // Conteúdo do h2.
+
+            // Encontra o input correspondente ao time central com o valor do h2
+            const $inputCorrespondente = $currentCenterItem.find('input[value="' + nomeTime.toLowerCase() + '"]');
+
+            // Remover a classe active de todos os inputs
+            $('input[name="background"]').removeClass('active');
+            
+            // Adiciona a classe 'active' ao input ativo
+            $inputCorrespondente.addClass('active');
+
+            var valor_input = $inputCorrespondente.val();
+
+            // Substitui espaços por hífens no valor do input para corresponder ao CSS
+            var valor_input_css = valor_input.replace(/\s+/g, '-');
+
+
+            // Remover qualquer classe anterior no <body> e adicionar a nova
+            $('body').removeClass(function (index, className) {
+
+                return (className.match(/\batlético-mg|athletico-pr|bahia|botafogo|red-bull-bragantino|corinthians|cruzeiro|cuiabá|flamengo|fluminense|fortaleza|grêmio|internacional|palmeiras|são-paulo|vasco|juventude|criciúma|vitória|atlético-go|seleção|ceará|crb|amazonas|operário-pr|brusque|paysandu|chapecoense|ituano|mirassol|novorizontino|ponte-preta|sport|vila-nova|avaí|botafogo-sp|guarani|goiás|santos|coritiba|américa-mg\b/g) || []).join(' ');
+            
+            });
+
+            $('body').addClass(valor_input_css);
+
+            // Adiciona a classe 'active' e o nome do time somente ao nome e descrição do item central
+            $currentCenterItem.find('.nome_time').removeClass().addClass(`nome_time active ${valor_input_css}_nome`);
+            $currentCenterItem.find('.descricao_time').removeClass().addClass(`descricao_time active ${valor_input_css}_descricao`);
+
+
+            // Atualiza o time antigo para o próximo evento
+            time_antigo = valor_input_css;
+
+        });
+
+        setTimeout(highlightInitialItem, 200); // Garante o carregamento do DOM
+
+        });
+    </script>
+
+    <!-- Script de carregamento da página -->
+    <script>
+        function loadContent(page) {
+
+        const spinner = document.getElementById('spinner');
+    
+        spinner.style.display = 'flex';
+    
+        setTimeout(() => {
+            if (page === 'serieB') {
+            window.location.href = '{% url 'time_favorito' 'B' %}'; 
+
+            } else if (page === 'selecao') {
+            window.location.href = '{% url 'time_favorito' 'SEL' %}'; 
+
+            }
+        }, 10000);
+        }
+    </script>
+
+    <!-- Script de envio do form -->
+    <script>
+        function capturarDescricaoAtiva() {
+            // Seleciona o item ativo, que tem a classe 'active'
+            const itemAtivo = document.querySelector('.item .descricao_time.active');
+            
+            if (itemAtivo) {
+                // Captura o texto da descrição diretamente do item ativo
+                const descricaoAtiva = itemAtivo.textContent.trim();
+
+                // Define a descrição ativa no campo oculto
+                document.getElementById('categoria-selecionada').value = descricaoAtiva;
+
+                // Submete o formulário
+                document.querySelector('form').submit();
+            } else {
+                alert('Nenhum time ativo foi encontrado.');
+            }
+        }
+
+    </script>
+
+    <!-- Cooldown do botão do carrossel -->
+    <script>
+        const observer = new MutationObserver(() => {
+        const buttons_next = document.getElementsByClassName('owl-next');
+        Array.from(buttons_next).forEach(button => {
+
+            if (!button.dataset.cooldownAdded) {
+                button.addEventListener('click', () => {
+                    button.disabled = true;
+                    button.classList.add('disabled');
+
+                    setTimeout(() => {
+                        button.disabled = false;
+                        button.classList.remove('disabled');
+                    }, 400);
+                });
+                // Marcar o botão para evitar duplicação de eventos
+                button.dataset.cooldownAdded = true;
+            }
+        });
+
+        const buttons_prev = document.getElementsByClassName('owl-prev');
+        Array.from(buttons_prev).forEach(button => {
+
+            if (!button.dataset.cooldownAdded) {
+                button.addEventListener('click', () => {
+                    button.disabled = true;
+                    button.classList.add('disabled');
+
+                    setTimeout(() => {
+                        button.disabled = false;
+                        button.classList.remove('disabled');
+                    }, 400);
+                });
+                // Marcar o botão para evitar duplicação de eventos
+                button.dataset.cooldownAdded = true;
+            }
+        });
+        });
+
+        // Observar o documento para alterações no DOM
+        observer.observe(document.body, { childList: true, subtree: true });
+    </script>
+</body>
+</html>

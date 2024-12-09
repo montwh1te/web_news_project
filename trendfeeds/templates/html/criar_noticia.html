@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Nova Notícia</title>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/criar_noticias.css' %}" />
+
+</head>
+
+
+<body>
+
+  <!-- Menu Lateral -->
+  <div class="sidebar">
+
+    <!-- Menu Título  -->
+    <h3>Menu</h3>
+
+    <!-- Itens do menu, (links)  -->
+    <nav>
+      <a href="{% url 'pagina_funcionarios' %}">Início Funcionários</a>
+      <a href="{% url 'home' %}">Início do Site</a>
+      <a href="{% url 'pagina_noticias_funcionarios' %}">Lista De Notícias</a>
+      <a href="#" id="dark-mode-toggle">Claro</a>
+    </nav>
+
+    <!-- Botão de logout  -->
+    <a class="btn btn-logout" href="{% url 'logout' %}">Sair</a>
+
+
+    <!-- Botão para ativar a def do vies coletar_noticias()  -->
+    <form method="post" action="{% url 'coletar_noticias' %}">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-collect">Coletar Notícias</button>
+    </form>
+  
+  </div>
+    
+
+
+
+  <!-- Formulário para criar a notícia -->
+  <main class="content">
+    {% block content %}
+    <div class="container mt-5">
+      <h2>Criar Nova Notícia</h2>
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+          {{ form.as_p }}
+        <button type="submit" class="btn btn-primary mt-3">Criar Notícia</button>
+      </form>
+    </div>
+    {% endblock %}
+  </main>
+
+  
+
+
+  <!-- Script necessário para o modo noturno -->
+  <script>
+        // Espera a página carregar completamente
+        window.onload = function() {
+          const toggleButton = document.getElementById('dark-mode-toggle');
+  
+        
+          // Evento de clique para alternar entre modos (escuro/claro)
+          toggleButton.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode'); // Alterna a classe dark-mode no body
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            
+            // Atualiza o estado do botão e do logo, e salva a preferência no localStorage
+            if (isDarkMode) {
+              toggleButton.innerHTML = "Escuro";
+              localStorage.setItem('dark-mode', 'true'); // Salva a preferência
+            } else {
+              toggleButton.innerHTML = "Claro";
+              localStorage.setItem('dark-mode', 'false'); // Salva a preferência
+            }
+          });
+        }
+  </script>
+</body>
+</html>
+
