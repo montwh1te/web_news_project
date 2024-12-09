@@ -23,10 +23,13 @@
             {% endif %}
         }
 
+<<<<<<< HEAD
         .categoria-card-text{
             background-color: var(--categoria-color);
         }
 
+=======
+>>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
         .whatsapp-icon:hover, .instagram-icon:hover, .facebook-icon:hover, .twitter-icon:hover {
             opacity: 0.8;
         }
@@ -128,7 +131,11 @@
 
     <!-- HERO SECTION -->
     <section class="categoria-badge hero text-white text-center py-3 {% if categoria_nome|lower == 'outros' %}d-none{% endif %}">
+<<<<<<< HEAD
         <h1 class="display-4">{{ categoria_nome_exibicao|upper |default:"Notícia" }}</h1>
+=======
+        <h1 class="display-4">{% block main_title %}{{ categoria_nome_exibicao|upper |default:"Notícia" }}{% endblock main_title %}</h1>
+>>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
     </section>
 
 
@@ -199,6 +206,7 @@
                    
                     <h2 class="noticia-titulo">{% block second_title %}{% endblock second_title %}</h2>
 
+<<<<<<< HEAD
                     
 
 
@@ -281,6 +289,8 @@
                        
                     </div>
              
+=======
+>>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
 
                     <!-- CONTEÚDO DA NOTÍCIA -->
                    
@@ -289,6 +299,48 @@
                     </div>
 
 
+<<<<<<< HEAD
+=======
+
+
+                    <!-- FORMULÁRIO DE LIKE -->
+                    {% if request.user.is_authenticated %}
+                        <form id="likeForm" method="post" action="{% url 'atualizar_like' noticia.slug %}" class="d-flex align-items-center">
+                            {% csrf_token %}
+                            <label class="container like d-flex align-items-center">
+                                <input type="checkbox" id="likeCheckbox" data-url="{% url 'atualizar_like' noticia.slug %}" {% if usuario_curtiu %}checked{% endif %}>
+                                <svg id="Glyph" version="1.1" viewBox="0 0 32 32"><path d="M29.845,17.099l-2.489,8.725C26.989,27.105,25.804,28,24.473,28H11c-0.553,0-1-0.448-1-1V13c0-0.215,0.069-0.425,0.198-0.597l5.392-7.24C16.188,4.414,17.05,4,17.974,4C19.643,4,21,5.357,21,7.026V12h5.002c1.265,0,2.427,0.579,3.188,1.589C29.954,14.601,30.192,15.88,29.845,17.099z"></path><path d="M7,12H3c-0.553,0-1,0.448-1,1v14c0,0.552,0.447,1,1,1h4c0.553,0,1-0.448,1-1V13C8,12.448,7.553,12,7,12z"></path></svg>
+
+                            </label>
+                            <span class="likeCount" style="padding-right: 100%;">{{ noticia.like_count }}</span>
+                        </form>
+                    {% else %}
+                        <p>Faça login para curtir esta notícia.</p>
+                        <svg id="Glyph" version="1.1" viewBox="0 0 32 32"><path d="M29.845,17.099l-2.489,8.725C26.989,27.105,25.804,28,24.473,28H11c-0.553,0-1-0.448-1-1V13c0-0.215,0.069-0.425,0.198-0.597l5.392-7.24C16.188,4.414,17.05,4,17.974,4C19.643,4,21,5.357,21,7.026V12h5.002c1.265,0,2.427,0.579,3.188,1.589C29.954,14.601,30.192,15.88,29.845,17.099z"></path><path d="M7,12H3c-0.553,0-1,0.448-1,1v14c0,0.552,0.447,1,1,1h4c0.553,0,1-0.448,1-1V13C8,12.448,7.553,12,7,12z"></path></svg>
+                            <span class="likeCount" style="padding-right: 100%;">{{ noticia.like_count }}</span>
+                    {% endif %}
+
+
+
+
+                    <!-- Ícones de Redes Sociais -->
+                   <!-- Ícones de Redes Sociais -->
+                    <div class="social-icons ml-4 d-flex align-items-center" style="margin-left: 70% !important; margin-top: -4%;">
+                        <a href="https://wa.me/555191801651" target="_blank" class="mx-3 whatsapp-icon" style="font-size: 30px;">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                        <a href="https://www.instagram.com/bruno.diferente___/" target="_blank" class="mx-2 instagram-icon" style="font-size: 30px;">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" target="_blank" class="mx-2 facebook-icon" style="font-size: 30px;">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}" target="_blank" class="mx-2 twitter-icon" style="font-size: 30px;">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                    </div>
+
+>>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
                 </div>
             </div>
 
@@ -296,6 +348,7 @@
 
 
            
+<<<<<<< HEAD
             <!-- COMENTÁRIOS -->
             <p class="comentarios-title text-center mt-5 mb-4" style="font-size: 1.5rem; font-weight: bold; color: #333;">Comentários</p>
 
@@ -312,21 +365,49 @@
                             <div class="col-10">
                                 <h5 class="user-name mb-1" style="font-weight: 600; color: #555;">{{ comentario.usuario.username }}</h5>
                                 <p class="comment-text mb-0 text-muted">{{ comentario.comentario }}</p>
+=======
+           <!-- COMENTÁRIOS -->
+            <p class="comentarios" style="margin-top: 10%;">COMENTÁRIOS</p>
+            <div id="comentariosContainer" class="comentarios-container container mt-4">
+                {% if comentarios %}
+                    {% for comentario in comentarios %}
+                        <div class="row align-items-center mb-4 p-3 shadow-sm rounded border bg-light">
+                            <div class="col-2 text-center">
+                                <img class="usuario_foto" 
+                                    src="{{ comentario.usuario.foto.url}}" 
+                                    alt="Foto de {{ comentario.usuario.username }}" 
+                                    class="rounded-circle img-fluid" 
+                                    style="max-width: 80px; border-radius: 40px;">
+                            </div>
+                            <div class="col-10">
+                                <h5 class="mb-1">{{ comentario.usuario.username }}</h5>
+                                <p class="mb-0 text-muted">{{ comentario.comentario }}</p>
+>>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
 
                                 <!-- Botão para deletar comentário (visível apenas para superusuários) -->
                                 {% if request.user.is_superuser %}
                                     <form action="{% url 'deletar_comentario' comentario.id %}" method="POST" class="d-inline">
                                         {% csrf_token %}
+<<<<<<< HEAD
                                         <button type="submit" class="btn btn-sm btn-outline-danger mt-2">Deletar</button>
+=======
+                                        <button type="submit" class="btn btn-danger btn-sm mt-2">Deletar</button>
+>>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
                                     </form>
                                 {% endif %}
                             </div>
                         </div>
                     {% endfor %}
                 {% else %}
+<<<<<<< HEAD
                     <div class="row align-items-center mb-4 p-3 shadow-sm rounded bg-light">
                         <div class="col-12">
                             <p class="text-center text-muted">Nenhum comentário até agora.</p>
+=======
+                    <div class="row align-items-center mb-4 p-3 shadow-sm rounded border bg-light">
+                        <div class="col-12">
+                            <p>Nenhum comentário até agora.</p>
+>>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
                         </div>
                     </div>
                 {% endif %}
@@ -336,6 +417,7 @@
 
 
 
+<<<<<<< HEAD
            
            <!-- FORMULÁRIO DE COMENTÁRIO -->
            {% if request.user.is_authenticated %}
@@ -364,6 +446,20 @@
            </div>
        {% endif %}
        
+=======
+
+            <!-- FORMULÁRIO DE COMENTÁRIO -->
+            {% if request.user.is_authenticated %}
+                <form id="commentForm" method="post" action="{% url 'comentar_noticia' noticia.slug %}" class="d-flex">
+                    {% csrf_token %}
+                    <textarea name="comentario" id="comentarioTextarea" rows="1" class="form-control" placeholder="Deixe seu comentário..." required style="resize: none; border-radius: 20px; width: 80%;height: 60px; margin-top: 3%;"></textarea>
+                    <button type="submit" style="height: 53px; margin-top: 29px; border:none; background: transparent; width: 13%; margin-left: 1%; cursor: auto; outline: none;"><img style="width: 53%; rotate: 141deg; cursor: pointer;" src="{% get_media_prefix %}enviar.png" alt="botao_enviar"></button>
+                </form>
+            {% else %}
+                <textarea class="form-control" placeholder="Faça login para comentar..." disabled></textarea>
+                <button class="btn btn-primary" disabled>Enviar Comentário</button>
+            {% endif %}
+>>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
 
 
 
@@ -371,10 +467,16 @@
 
 
             <!-- NOTÍCIAS RELACIONADAS -->
+<<<<<<< HEAD
             {% if noticias_agrupadas %}
             <p class="mais_noticias  {% if categoria_nome|lower == 'outros' %}d-none{% endif %}" style="margin-top: 10%;margin-bottom: 5% !important;!i;!;margin-left: 2%;font-size: 2.5vh;font-weight: bold;color: #555555;" >NOTÍCIAS RELACIONADAS</p>
 
             <div id="noticiasCarrossel" class="carousel slide  {% if categoria_nome|lower == 'outros' %}d-none{% endif %}" data-ride="carousel" style="margin-top: 5%;">
+=======
+            <p class="mais_noticias" style="margin-top: 10%;">MAIS NOTÍCIAS</p>
+
+            <div id="noticiasCarrossel" class="carousel slide" data-ride="carousel" style="margin-top: 5%;">
+>>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
                     <!-- Carrossel de notícias -->
                 <ol class="carousel-indicators">
                     {% for grupo in noticias_agrupadas %}
@@ -396,10 +498,13 @@
                                         <img src="{% get_media_prefix %}/noticias/n_{{ noticia.id }}_0.jpg" 
                                             class="card-img-top noticia-imagem" 
                                             alt="Imagem da notícia" onerror="this.onerror=null; this.src='{% get_media_prefix %}SemImagem.png';">
+<<<<<<< HEAD
 
                                         <div class='categoria-card'>
                                             <p class='categoria-card-text'>{{categoria_nome}}</p>
                                         </div>
+=======
+>>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
                                         <div class="card-body">
                                             <h5 class="card-title">{% if noticia.titulo_bonito %}{{ noticia.titulo_bonito }}{% else %}{{noticia.descricao }}{% endif %}</h5>
                                             <p class="card-text">{{ noticia.descricao|slice:":150" }} ...</p>
@@ -416,6 +521,7 @@
                 </div>
 
             </div>
+<<<<<<< HEAD
             {% endif %}
 
             <!-- Lista de mais notícias -->
@@ -448,6 +554,8 @@
             </section>
             
             
+=======
+>>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
          
         </article>
     </main>
@@ -840,6 +948,7 @@
         
     </script>
     
+<<<<<<< HEAD
 
     <script>
         function formatText(command) {
@@ -848,5 +957,7 @@
         }
         
     </script>
+=======
+>>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
 </body>
 </html>

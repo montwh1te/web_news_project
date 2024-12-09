@@ -19,6 +19,7 @@ button {
   margin-right: 10%;
   background-color: #dddddd;
   height: 5%;
+<<<<<<< HEAD
   margin-top: 2%;
   display: flex;
   margin-left: 2%;
@@ -26,6 +27,16 @@ button {
 p {
   margin-bottom: 0rem !important;
 }
+=======
+  margin-top: 5%;
+  display: flex;
+  margin-left: 2%;
+}
+
+
+
+
+>>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
 
 /* ==================================
    Modo Escuro
@@ -41,6 +52,10 @@ p {
   color: inherit;
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
 body.dark-mode {
   background-color: #1a1a1a;
 }
@@ -131,6 +146,13 @@ body.dark-mode .fab {
   color: #353535;
 }
 
+<<<<<<< HEAD
+=======
+
+
+
+
+>>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
 /* ==================================
    Scrollbar
 ================================== */
@@ -159,6 +181,13 @@ body.dark-mode::-webkit-scrollbar-thumb {
   background: #777;
 }
 
+<<<<<<< HEAD
+=======
+
+
+
+
+>>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
 /* ==================================
    Navbar
 ================================== */
@@ -175,6 +204,13 @@ body.dark-mode::-webkit-scrollbar-thumb {
   color: #424242;
 }
 
+<<<<<<< HEAD
+=======
+
+
+
+
+>>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
 /* ==================================
    Hero Section
 ================================== */
@@ -186,9 +222,18 @@ body.dark-mode::-webkit-scrollbar-thumb {
 .hero h1 {
   font-size: 2rem;
   text-transform: uppercase;
+<<<<<<< HEAD
   font-weight: 500;
 }
 
+=======
+}
+
+
+
+
+
+>>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
 /* ==================================
    Notícias
 ================================== */
@@ -216,6 +261,7 @@ body.dark-mode::-webkit-scrollbar-thumb {
   object-fit: cover;
   width: 100%;
   margin-bottom: 15px;
+<<<<<<< HEAD
   margin-top: 5%;
 }
 .info-noticias {
@@ -287,6 +333,13 @@ body.dark-mode::-webkit-scrollbar-thumb {
     padding: 10px;
   }
 }
+=======
+}
+
+
+
+
+>>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
 
 /* ==================================
    Cards e Carrossel
@@ -351,6 +404,7 @@ body.dark-mode::-webkit-scrollbar-thumb {
   background-color: rgba(0, 0, 0, 0.8);
 }
 
+<<<<<<< HEAD
 .categoria-card-text {
   color: #ffff;
   width: 37%;
@@ -360,10 +414,16 @@ body.dark-mode::-webkit-scrollbar-thumb {
   margin-left: 7%;
   text-align: center;
 }
+=======
+
+
+
+>>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
 
 /* ==================================
    Comentários
 ================================== */
+<<<<<<< HEAD
 /* Estilo das cartas de comentário */
 .comment-card {
   background-color: #f9f9f9;
@@ -518,6 +578,29 @@ button.btn-primary:hover {
   font-size: 14px;
   font-family: Arial, sans-serif;
 }
+=======
+.comentarios-container {
+  max-width: 100%;
+  margin: auto;
+  padding: 25px;
+  background-color: #f3f3f3;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.comentario {
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.comentario:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+
+
+
+>>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
 
 /* ==================================
    Ferramentas e Botões
@@ -557,6 +640,7 @@ button.btn-primary:hover {
 
 svg {
   position: relative;
+<<<<<<< HEAD
   height: 25px;
   width: 35px;
   transition: all 0.3s;
@@ -565,12 +649,28 @@ svg {
 }
 
 i {
+=======
+  height: 35px;
+  width: 35px;
+  transition: all 0.3s;
+  fill: #e7e7e7;
+  cursor: pointer;
+  ; /* Cor padrão */
+}
+
+i{
+>>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
   position: relative;
   height: 35px;
   width: 35px;
   transition: all 0.3s;
   color: #e7e7e7;
+<<<<<<< HEAD
   cursor: pointer; /* Cor padrão */
+=======
+  cursor: pointer;
+  ; /* Cor padrão */
+>>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
 }
 
 svg:hover {
@@ -578,10 +678,17 @@ svg:hover {
 }
 
 .container input:checked ~ svg {
+<<<<<<< HEAD
   fill: #2196f3; /* Cor ao curtir */
 }
 
 input {
+=======
+  fill: #2196F3; /* Cor ao curtir */
+}
+
+input{
+>>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
   display: none;
 }
 #toolbar button:hover {
@@ -592,6 +699,13 @@ input {
   background-color: #e1e1e1;
 }
 
+<<<<<<< HEAD
+=======
+
+
+
+
+>>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
 /* ==================================
    Emoji Picker
 ================================== */
@@ -615,6 +729,13 @@ input {
   transition: transform 0.2s;
 }
 
+<<<<<<< HEAD
+=======
+
+
+
+
+>>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
 /* ==================================
    Responsividade
 ================================== */

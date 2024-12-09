@@ -11,8 +11,18 @@ import time
 # Para normalizar strings, removendo acentos e caracteres especiais.
 import unicodedata  
 
+<<<<<<< HEAD
 from datetime import datetime
 
+=======
+# Para manipulação e redimensionamento de imagens.
+from PIL import Image  
+
+from datetime import datetime
+
+
+
+>>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
 ''' **BIBLIOTECAS DE TERCEIROS**  '''
 # Importa a biblioteca `requests`, que é usada para fazer requisições HTTP em Python.
 import requests  
@@ -43,6 +53,10 @@ from selenium.common.exceptions import TimeoutException
 
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
 ''' **IMPORTAÇÕES DO DJANGO**  '''
 # Importa o módulo `django` para configurar o ambiente Django, útil quando o ambiente não está rodando via servidor padrão.
 import django  
@@ -247,6 +261,10 @@ def coletar_noticias():
 
                 # Lista de classes de elementos a serem removidos do conteúdo.
                 classes_para_remover = [
+<<<<<<< HEAD
+=======
+                    'content-unordered-list', 
+>>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
                     'content-publication-data__from', 
                     'next-article__wrapper-header-title',
                     'js-next-article-desktop-link', 
@@ -259,6 +277,7 @@ def coletar_noticias():
                     'ellipsis-overflowing-child', 
                     'shadow-video-flow-video-infoissued', 
                     'entitieslist-itemLink',
+<<<<<<< HEAD
                     'content-publication-data__updated',
                     'show-multicontent-playlist__label',
                     'content-publication-data__text',
@@ -272,6 +291,10 @@ def coletar_noticias():
                     'content-intertitle',
                     'content-text__container',
                     'next-article',
+=======
+                    'content-publication-data__updated'
+                    'show-multicontent-playlist__label'
+>>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
                 ]
 
                 # Remove o texto de elementos indesejados do conteúdo.
@@ -297,6 +320,10 @@ def coletar_noticias():
 
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
             ''' **SEÇÃO PARA FORMATAÇÃO DO TÍTULO DA NOTÍCIA** '''
 
             # Normaliza o título para remover acentuação e caracteres especiais.
@@ -355,17 +382,26 @@ def coletar_noticias():
             try:            
 
                  #pega a data atual para salvar no banco
+<<<<<<< HEAD
                 # Obtém a data e hora atuais
                 data_publicacao = timezone.now()
 
                 # Extrai apenas a hora e os minutos
                 hora_publicacao = data_publicacao.strftime("%H:%M")
 
+=======
+                data_publicacao = timezone.now()
+
+>>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
                 #o autor permanece desconhecido caso nao seja encontrado na noticia
                 autor_text = "Desconhecido"
 
                 try:
+<<<<<<< HEAD
                     autor_element = driver.find_element(By.CLASS_NAME, 'content-publication-data__from')
+=======
+                    autor_element = driver.find_element(By.CLASS_NAME, 'content-author__name')
+>>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
                     autor_text = autor_element.text
                 except:
                     pass
@@ -374,9 +410,14 @@ def coletar_noticias():
                     noticia_modelo, created = Noticias.objects.update_or_create(
                         titulo=titulo_truncado,
                         defaults={
+<<<<<<< HEAD
                             'titulo_bonito': title_text,
                             'data_publicacao': data_publicacao,
                             'hora_publicacao':  hora_publicacao,
+=======
+                            'titulo_bonito': titulo_noticia,
+                            'data_publicacao': data_publicacao,
+>>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
                             'descricao': preview_content,
                             'autor': autor_text,
                             'link': link_noticia
@@ -603,7 +644,11 @@ def coletar_noticias():
 {{% load static %}}
 
 {{% block title %}}{categoria.nome_categoria}{{% endblock title %}}
+<<<<<<< HEAD
 {{% block main_title %}}{categoria.nome}{{% endblock main_title %}}
+=======
+{{% block main_title %}}{categoria.nome_categoria}{{% endblock main_title %}}
+>>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
 {{% block id_time %}}{time_id}{{% endblock id_time %}}
 
 <div class="categoria-listagem">
@@ -678,6 +723,7 @@ def coletar_noticias():
 
 
 
+<<<<<<< HEAD
 def pegar_resumo(texto, limite_caracteres=100):
     '''
     Função que retorna o resumo de um texto com base em um limite de caracteres.
@@ -694,6 +740,19 @@ def pegar_resumo(texto, limite_caracteres=100):
         resumo = resumo.rsplit(' ', 1)[0]  # Remove a última palavra incompleta.
     
     return resumo.strip()
+=======
+def pegar_resumo(texto):
+    ''' 
+    Função que recebe um texto e retorna o resumo, que é a primeira linha do texto.
+    A primeira linha é definida como o trecho de texto antes da primeira quebra de linha.
+    '''
+    
+    # Divide o texto na primeira ocorrência de quebra de linha e retorna a primeira parte.
+    primeira_linha = texto.split('\n', 1)[0]  
+
+    # Remove espaços em branco no início e no final da primeira linha antes de retornar.
+    return primeira_linha.strip()  
+>>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
 
 
 
@@ -977,4 +1036,9 @@ def iniciar_scheduler():
     print("⏰ Scheduler iniciado.")
 
     # A função atualmente não faz nada, mas pode ser expandida no futuro com agendamentos de tarefas.
+<<<<<<< HEAD
     pass
+=======
+    pass
+
+>>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1

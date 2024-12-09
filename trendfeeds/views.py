@@ -202,6 +202,10 @@ def buscar_noticias(request):
 
 
 
+<<<<<<< HEAD
+=======
+''' Função que lida com a exibição da página de detalhes de uma notícia específica. '''
+>>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
 def detalhes_noticia(request, slug):
     # Obtém uma notícia específica com base no slug ou retorna erro 404.
     noticia = get_object_or_404(Noticias, slug=slug)    
@@ -220,6 +224,7 @@ def detalhes_noticia(request, slug):
 
     # Cria uma lista de IDs das notícias já selecionadas.
     ids_excluidos = [noticia.id] if noticia else []  
+<<<<<<< HEAD
 
     # Obtém todas as notícias que têm a mesma categoria da notícia atual, excluindo a própria notícia.
     noticias_com_mesma_categoria = Noticias.objects.filter(categorias=categoria).exclude(id__in=ids_excluidos).order_by('-data_publicacao')
@@ -235,6 +240,21 @@ def detalhes_noticia(request, slug):
     autor_primeira_parte = autor_parts[0].strip()
     autor_segunda_parte = autor_parts[1].strip() if len(autor_parts) > 1 else ""
 
+=======
+    # Se `ultima_noticia` não for `None`, adiciona o ID da última notícia à lista `ids_excluidos`. 
+    # Caso contrário, a lista será vazia ([]).
+    
+    
+    # Obtém todas as notícias, ordenadas por data de publicação.
+    todas_as_noticias = Noticias.objects.exclude(id__in=ids_excluidos).order_by('-data_publicacao')[1:11]
+    
+    # Agrupa as notícias em grupos de três para exibição.
+    noticias_agrupadas = [
+        todas_as_noticias[i:i + 3] for i in range(0, len(todas_as_noticias), 3)
+    ]
+   
+   
+>>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
 
     # Define o nome do template com base no slug da notícia.
     template_name = f'html/noticias/{noticia.slug}.html'
@@ -251,8 +271,11 @@ def detalhes_noticia(request, slug):
     # Obtém os comentários associados à notícia, ordenados por data de criação.
     comentarios = Comentario.objects.filter(noticia=noticia).order_by('-data_criacao')
 
+<<<<<<< HEAD
     noticias_restantes = Noticias.objects.exclude(id__in=ids_excluidos).order_by('-data_publicacao')[9:]
 
+=======
+>>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
     # Renderiza a página de detalhes da notícia com os dados fornecidos.
     return render(request, template_name, {
         'noticia': noticia,  
@@ -262,9 +285,12 @@ def detalhes_noticia(request, slug):
         'usuario_curtiu': usuario_curtiu,  
         'categoria_cor': categoria_cor, 
         'categoria_nome_exibicao': categoria_nome_exibicao,
+<<<<<<< HEAD
         'autor_primeira_parte': autor_primeira_parte,
         'autor_segunda_parte': autor_segunda_parte,
         'noticias_restantes' : noticias_restantes,
+=======
+>>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
     })
 
 
@@ -674,6 +700,21 @@ def deletar_noticia(request, noticia_id):
             print(f"✅ Imagem {caminho_arquivo} excluída com sucesso.")
 
 
+<<<<<<< HEAD
+=======
+
+    pasta_imagens_thumbs = os.path.join(settings.BASE_DIR, 'trendfeeds', 'media', 'thumbs')
+    prefixo_imagem_thumb = f"thumb_n_{noticia_id}_"
+
+
+      # Itera sobre os arquivos na pasta de imagens
+    for nome_arquivo in os.listdir(pasta_imagens_thumbs):
+        if nome_arquivo.startswith(prefixo_imagem_thumb):
+            caminho_arquivo = os.path.join(pasta_imagens_thumbs, nome_arquivo)
+            os.remove(caminho_arquivo)
+            print(f"✅ Imagem {caminho_arquivo} excluída com sucesso.")
+
+>>>>>>> 14d5c0173c95180a533e27988c634c59b03f33e1
  
     # Deleta a notícia (as relações na tabela intermediária CategoriaNoticias serão deletadas automaticamente se configuradas corretamente)
     noticia.delete()
