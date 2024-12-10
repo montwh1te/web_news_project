@@ -6,179 +6,178 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Login</title>
       <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-
-      {% load static %}
-      <link rel="stylesheet" href="{% static 'css/login.css' %}" />
       
+      {% load static %}
+      <link rel="stylesheet" href="{% static 'css/login.css' %}"/>
 </head>
-<div class="container" id="container">
-      <!-- Formulário de Cadastro -->
-      <div class="form-container sign-up-container">
+<body>
+    <div class="container" id="container">
+        <!-- Formulário de Cadastro -->
+        <div class="form-container sign-up-container">
 
-            <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <h1>Crie sua conta!</h1>
-            <div class="social-container">
-                  <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-                  <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-                  <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
-            </div>
-            <span>ou use seu email para se registrar</span>
+                <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <h1>Crie sua conta!</h1>
+                <div class="social-container">
+                    <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+                    <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+                <span>ou use seu email para se registrar</span>
 
-            <div >
-                  {{ form_register.first_name }} 
-                  {% for error in form_register.first_name.errors %}
-                      <div class="text-danger">{{ error }}</div>
-                  {% endfor %}
-            </div>
+                <div >
+                    {{ form_register.first_name }} 
+                    {% for error in form_register.first_name.errors %}
+                        <div class="text-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
 
-            <div >
-                  {{ form_register.last_name }}   <!-- Renderiza o campo de sobrenome -->
-                  {% for error in form_register.last_name.errors  %}
-                      <div class="text-danger">{{ error }}</div>
-                  {% endfor %}
-            </div>
+                <div >
+                    {{ form_register.last_name }}   <!-- Renderiza o campo de sobrenome -->
+                    {% for error in form_register.last_name.errors  %}
+                        <div class="text-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
 
-            <div >
-                  {{ form_register.username }}    <!-- Renderiza o campo de nome de usuário -->
-                  {% for error in form_register.username.errors  %}
-                      <div class="text-danger">{{ error }}</div>
-                  {% endfor %}
-            </div>
+                <div >
+                    {{ form_register.username }}    <!-- Renderiza o campo de nome de usuário -->
+                    {% for error in form_register.username.errors  %}
+                        <div class="text-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
 
-            <div>
-                  {{ form_register.email }}       <!-- Renderiza o campo de e-mail -->
-                  {% for error in form_register.email.errors %}
-                      <div class="text-danger">{{ error }}</div>
-                  {% endfor %}
-            </div>
+                <div>
+                    {{ form_register.email }}       <!-- Renderiza o campo de e-mail -->
+                    {% for error in form_register.email.errors %}
+                        <div class="text-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
 
-            <div>
-                  {{ form_register.senha }}       <!-- Renderiza o campo de e-mail -->
-                  {% for error in form_register.senha.errors %}
-                      <div class="text-danger">{{ error }}</div>
-                  {% endfor %}
-            </div>
+                <div>
+                    {{ form_register.senha }}       <!-- Renderiza o campo de e-mail -->
+                    {% for error in form_register.senha.errors %}
+                        <div class="text-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
 
-            <div>
-                  {{ form_register.confirmar_senha }}      <!-- Renderiza o campo de e-mail -->
-                  {% for error in form_register.confirmar_senha.errors %}
-                      <div class="text-danger">{{ error }}</div>
-                  {% endfor %}
-            </div>
+                <div>
+                    {{ form_register.confirmar_senha }}      <!-- Renderiza o campo de e-mail -->
+                    {% for error in form_register.confirmar_senha.errors %}
+                        <div class="text-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
 
-            <div style="width: 36%;">
-                  {{ form_register.foto }}    
-            </div>    
-    
-       
+                <div style="width: 36%;">
+                    {{ form_register.foto }}    
+                </div>    
+        
+        
 
-            {% if form_register.is_superuser %}
-                  <div style="display: flex; width: 40%; justify-content: space-around;"> 
+                {% if form_register.is_superuser %}
+                    <div style="display: flex; width: 40%; justify-content: space-around;"> 
 
-                        <label for="id_is_superuser" class="form-label">Superuser</label>
-                        <div class="custom-control custom-checkbox">
-                              {{ form_register.is_superuser }}  <!-- Renderiza o campo is_superuser -->
-                        </div>
+                            <label for="id_is_superuser" class="form-label">Superuser</label>
+                            <div class="custom-control custom-checkbox">
+                                {{ form_register.is_superuser }}  <!-- Renderiza o campo is_superuser -->
+                            </div>
 
-                        <label for="id_is_staff" class="form-label">Staff</label>
-                        <div class="custom-control custom-checkbox">
-                              {{ form_register.is_staff }}  <!-- Renderiza o campo is_staff -->
-                        </div>
-                  </div>
+                            <label for="id_is_staff" class="form-label">Staff</label>
+                            <div class="custom-control custom-checkbox">
+                                {{ form_register.is_staff }}  <!-- Renderiza o campo is_staff -->
+                            </div>
+                    </div>
+                        
+                {% endif %}
+
                     
-            {% endif %}
+                <button type="submit" name="register">Registrar</button>
+                </form>
+        
+        </div>
+    
+        <!-- Formulário de Login -->
+        <div class="form-container sign-in-container">
+            <form method="post">
+                {% csrf_token %}
+                <h1>Entre</h1>
+                <div class="social-container">
+                    <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+                    <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+                <span>ou use sua conta</span>
+    
+                <div>
+                    {{ form_login.username }}
+                    {% for error in form_login.username.errors %}
+                        <div class="text-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
+    
+                <div >
+                    {{ form_login.password }}
+                    {% for error in form_login.password.errors %}
+                        <div class="text-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
 
-                   
-            <button type="submit" name="register">Registrar</button>
+
+                {% if form_login.non_field_errors %}
+                <div class="form-group text-danger">
+                    {% for error in form_login.non_field_errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+    
+                <a href="#">Forgot your password?</a>
+                <button type="submit" name="login">Entrar</button>
             </form>
-     
-      </div>
-  
-      <!-- Formulário de Login -->
-      <div class="form-container sign-in-container">
-          <form method="post">
-              {% csrf_token %}
-              <h1>Entre</h1>
-              <div class="social-container">
-                  <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-                  <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-                  <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
-              </div>
-              <span>ou use sua conta</span>
-  
-              <div>
-                  {{ form_login.username }}
-                  {% for error in form_login.username.errors %}
-                      <div class="text-danger">{{ error }}</div>
-                  {% endfor %}
-              </div>
-  
-              <div >
-                  {{ form_login.password }}
-                  {% for error in form_login.password.errors %}
-                      <div class="text-danger">{{ error }}</div>
-                  {% endfor %}
-              </div>
+        </div>
+    
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <h1 class='preto'>Welcome Back!</h1>
+                    <p class='preto'>To keep connected with us please login with your personal info</p>
+                    <button class="ghost-2" id="signIn">Sign In</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h1>Hello, Friend!</h1>
+                    <p>Enter your personal details and start journey with us</p>
+                    <button class="ghost" id="signUp">Sign Up</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const signUpButton = document.getElementById('signUp');
+        const signInButton = document.getElementById('signIn');
+        const container = document.getElementById('container');
 
-
-              {% if form_login.non_field_errors %}
-              <div class="form-group text-danger">
-                  {% for error in form_login.non_field_errors %}
-                      <p>{{ error }}</p>
-                  {% endfor %}
-              </div>
-              {% endif %}
-  
-              <a href="#">Forgot your password?</a>
-              <button type="submit" name="login">Entrar</button>
-          </form>
-      </div>
-  
-      <div class="overlay-container">
-          <div class="overlay">
-              <div class="overlay-panel overlay-left">
-                  <h1 class='preto'>Welcome Back!</h1>
-                  <p class='preto'>To keep connected with us please login with your personal info</p>
-                  <button class="ghost-2" id="signIn">Sign In</button>
-              </div>
-              <div class="overlay-panel overlay-right">
-                  <h1>Hello, Friend!</h1>
-                  <p>Enter your personal details and start journey with us</p>
-                  <button class="ghost" id="signUp">Sign Up</button>
-              </div>
-          </div>
-      </div>
-  </div>
-  
-  <script>
-      const signUpButton = document.getElementById('signUp');
-      const signInButton = document.getElementById('signIn');
-      const container = document.getElementById('container');
-
-        // Verifica o valor no localStorage ao carregar a página
-      window.addEventListener('load', () => {
-            const userChoice = localStorage.getItem('click');
-            if (userChoice === 'true') {
+            // Verifica o valor no localStorage ao carregar a página
+        window.addEventListener('load', () => {
+                const userChoice = localStorage.getItem('click');
+                if (userChoice === 'true') {
+                container.classList.add("right-panel-active");
+                } else {
+                container.classList.remove("right-panel-active");
+                }
+        });
+    
+        signUpButton.addEventListener('click', () => {
             container.classList.add("right-panel-active");
-            } else {
+            localStorage.setItem('click', 'true'); // Salva a preferência
+
+        });
+    
+        signInButton.addEventListener('click', () => {
             container.classList.remove("right-panel-active");
-            }
-      });
-  
-      signUpButton.addEventListener('click', () => {
-          container.classList.add("right-panel-active");
-          localStorage.setItem('click', 'true'); // Salva a preferência
+            localStorage.setItem('click', 'false'); // Salva a preferência
 
-      });
-  
-      signInButton.addEventListener('click', () => {
-          container.classList.remove("right-panel-active");
-          localStorage.setItem('click', 'false'); // Salva a preferência
+        });
 
-      });
-
-  </script>
-  
-  </body>
-  </html>
+    </script>
+</body>
+</html>

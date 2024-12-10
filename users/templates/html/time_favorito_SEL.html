@@ -7,7 +7,7 @@
     <title>Escolha seu time!</title>
 
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/timesel.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/time_favorito_SEL.css' %}" />
 
     <!-- Bootstrap -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
@@ -21,7 +21,7 @@
 
     <style>
         body{
-            background-image:url("{% get_media_prefix %}fundos/selecao/selecao.jpg");
+            background-image:url("{% static "imagens/fundos/selecao/selecao.jpg" %}");
         }
     </style>
 </head>
@@ -37,10 +37,14 @@
     </div>
 
     {% for categoria in categorias %}
-        {% if categoria.serie == None %}
+        {% if categoria.nome_categoria == "selecao" %}
             <div class="item">
                 <input type="radio" class="teste" id="{{ categoria.nome|lower }}" name="background" value="{{ categoria.nome|lower }}">
-                <label style="cursor: pointer;" for="{{ categoria.nome|lower }}"><img rel="preload" src="{% get_media_prefix %}escudos/{{ categoria.nome_categoria|lower }}.png" alt="imagem-time"></label>
+                <label style="cursor: pointer;" for="{{ categoria.nome|lower }}">
+                    {% with "imagens/escudos/"|add:categoria.nome_categoria|lower|add:".png" as image_path %}
+                    <img src="{% static image_path %}" alt="imagem-time">
+                    {% endwith %}
+                </label>
                 <h2 class="nome_time">Seleção </h2>
                 <p class="descricao_time">{{ categoria.descricao }}</p>
             </div>

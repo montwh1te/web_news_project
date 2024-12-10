@@ -1,24 +1,18 @@
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
-
-# Caches
-*.cache
-*.log
+# Django stuff
+/staticfiles/
+/media/
 
 # Virtual environments
 venv/
 news_env/
 
-# Django stuff
-/staticfiles/
-*.pot
+# Python bytecode files
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+*.pyo
 
-# IDEs/Editors
-.idea/
-*.swp
-
-# Testing
-.coverage
-*.pytest_cache/
+# Caches
+*.cache
+*.log

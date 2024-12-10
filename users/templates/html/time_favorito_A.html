@@ -7,7 +7,7 @@
     <title>Escolha seu time!</title>
 
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/timea.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/time_favorito_A.css' %}" />
 
     <!-- Bootstrap -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
@@ -19,109 +19,104 @@
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
-    <style>
-        body{
-            background-color: black !important;
-        }
-
-        
+    <style>     
         .atlético-mg::before {
-            background-image: url("{% get_media_prefix %}fundos/serie_a/galo.jpg");
+            background-image: url("{% static "imagens/fundos/serie_a/galo.jpg" %}");
         }
 
       
         .athletico-pr::before {
-            background-image: url("{% get_media_prefix %}fundos/serie_a/athletico.jpg");
+            background-image: url("{% static "imagens/fundos/serie_a/athletico.jpg" %}");
         }
 
        
         .bahia::before {
-            background-image: url("{% get_media_prefix %}fundos/serie_a/bahia.jpg");
+            background-image: url("{% static "imagens/fundos/serie_a/bahia.jpg" %}");
         }
 
        
         .botafogo::before {
-            background-image: url("{% get_media_prefix %}fundos/serie_a/botafogo.jpg");
+            background-image: url("{% static "imagens/fundos/serie_a/botafogo.jpg" %}");
         }
 
 
         .red-bull-bragantino::before {
-            background-image: url("{% get_media_prefix %}fundos/serie_a/braga.jpg");
+            background-image: url("{% static "imagens/fundos/serie_a/braga.jpg" %}");
         }
 
      
         .corinthians::before {
-            background-image: url("{% get_media_prefix %}fundos/serie_a/gamba.jpg");
+            background-image: url("{% static "imagens/fundos/serie_a/gamba.jpg" %}");
         }
 
        
         .cruzeiro::before {
-            background-image: url("{% get_media_prefix %}fundos/serie_a/cruzeiro.jpg");
+            background-image: url("{% static "imagens/fundos/serie_a/cruzeiro.jpg" %}");
         }
 
         
         .cuiabá::before {
-            background-image: url("{% get_media_prefix %}fundos/serie_a/cuiaba.jpg");
+            background-image: url("{% static "imagens/fundos/serie_a/cuiaba.jpg" %}");
         }
 
 
         .flamengo::before {
-            background-image: url("{% get_media_prefix %}fundos/serie_a/fla.jpg"); 
+            background-image: url("{% static "imagens/fundos/serie_a/fla.jpg" %}"); 
         }
 
         
         .fluminense::before {
-            background-image: url("{% get_media_prefix %}fundos/serie_a/flu.jpg");  
+            background-image: url("{% static "imagens/fundos/serie_a/flu.jpg" %}");  
         }
 
        
         .fortaleza::before {
-            background-image: url("{% get_media_prefix %}fundos/serie_a/fortaleza.jpg"); 
+            background-image: url("{% static "imagens/fundos/serie_a/fortaleza.jpg" %}"); 
         }
 
         
         .grêmio::before {
-            background-image: url("{% get_media_prefix %}fundos/serie_a/grebbbio.jpg");
+            background-image: url("{% static "imagens/fundos/serie_a/grebbbio.jpg" %}");
         }
 
        
         .internacional::before {
-            background-image: url("{% get_media_prefix %}fundos/serie_a/inter_colosso.jpg");
+            background-image: url("{% static "imagens/fundos/serie_a/inter_colosso.jpg" %}");
         }
 
         
         .palmeiras::before {
-            background-image: url("{% get_media_prefix %}fundos/serie_a/palmeiras.jpg");
+            background-image: url("{% static "imagens/fundos/serie_a/palmeiras.jpg" %}");
         }
 
         
         .são-paulo::before {
-            background-image: url("{% get_media_prefix %}fundos/serie_a/sao_paulo_bambi.jpg");
+            background-image: url("{% static "imagens/fundos/serie_a/sao_paulo_bambi.jpg" %}");
         }
 
         
         .vasco::before {
-            background-image: url("{% get_media_prefix %}fundos/serie_a/vasco.jpg");
+            background-image: url("{% static "imagens/fundos/serie_a/vasco.jpg" %}");
         }
 
        
         .juventude::before {
-            background-image: url("{% get_media_prefix %}fundos/serie_a/juventude.jpg");
+            background-image: url("{% static "imagens/fundos/serie_a/juventude.jpg" %}");
         }
 
         
         .criciúma::before {
-            background-image: url("{% get_media_prefix %}fundos/serie_a/criciuma.jpg");
+            background-image: url("{% static "imagens/fundos/serie_a/criciuma.jpg" %}");
         }
 
         
         .vitória::before {
-            background-image: url("{% get_media_prefix %}fundos/serie_a/vitoria.jpg");
+            background-image: url("{% static "imagens/fundos/serie_a/vitoria.jpg" %}");
         }
 
         
         .atlético-go::before {
-            background-image: url("{% get_media_prefix %}fundos/serie_a/atletico_go.jpg");
+            background-image: url("{% static "imagens/fundos/serie_a/atletico_go.jpg" %}");
         }
     </style>
 </head>
@@ -150,7 +145,11 @@
                 {% if categoria.serie == 'A' %}
                     <div class="item">
                         <input type="radio" class="teste" id="{{ categoria.nome|lower }}" name="background" value="{{ categoria.nome|lower }}">
-                        <label style="cursor: pointer;" for="{{ categoria.nome|lower }}"><img src="{% get_media_prefix %}escudos/{{ categoria.nome_categoria|lower }}.png" alt="imagem-time"></label>
+                        <label style="cursor: pointer;" for="{{ categoria.nome|lower }}">
+                            {% with "imagens/escudos/"|add:categoria.nome_categoria|lower|add:".png" as image_path %}
+                            <img src="{% static image_path %}" alt="imagem-time">
+                            {% endwith %}
+                        </label>
                         <h2 class="nome_time">{{ categoria.nome }}</h2>
                         <p class="descricao_time">{{ categoria.descricao }}</p>
                     </div>

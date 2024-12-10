@@ -86,7 +86,7 @@
                 {% if request.user.foto %}
                     <img src="{{ request.user.foto.url }}" alt="Foto de {{ request.user.username }}" class="rounded-circle" style="width: 40px; height: 40px;" />
                 {% else %}
-                    <img src="{% get_media_prefix %}login.png" alt="Foto de {{ request.user.username }}" class="rounded-circle" style="width: 40px; height: 40px;" />
+                    <img src="{% static "imagens/login.png" %}" alt="Foto de {{ request.user.username }}" class="rounded-circle" style="width: 40px; height: 40px;" />
                 {% endif %}
                 </a>
                 
@@ -295,7 +295,7 @@
                 <form id="commentForm" method="post" action="{% url 'comentar_noticia' noticia.slug %}" class="d-flex">
                     {% csrf_token %}
                     <textarea name="comentario" id="comentarioTextarea" rows="1" class="form-control" placeholder="Deixe seu comentário..." required style="resize: none; border-radius: 20px; width: 80%;height: 60px; margin-top: 3%;"></textarea>
-                    <button type="submit" style="height: 53px; margin-top: 29px; border:none; background: transparent; width: 13%; margin-left: 1%; cursor: auto; outline: none;"><img style="width: 53%; rotate: 141deg; cursor: pointer;" src="{% get_media_prefix %}enviar.png" alt="botao_enviar"></button>
+                    <button type="submit" style="height: 53px; margin-top: 29px; border:none; background: transparent; width: 13%; margin-left: 1%; cursor: auto; outline: none;"><img style="width: 53%; rotate: 141deg; cursor: pointer;" src="{% static "imagens/enviar.png" %}" alt="botao_enviar"></button>
                 </form>
             {% else %}
                 <textarea class="form-control" placeholder="Faça login para comentar..." disabled></textarea>

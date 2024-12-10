@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
     {% load static %}
     {% load custom_filters %}
-    <link rel="stylesheet" href="{% static 'css/index_trendfeeds.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/index.css' %}" />
   </head>
   <body>
 
@@ -31,7 +31,7 @@
             <!-- Dropdown para seleção de times -->
             <li class="nav-item dropdown">
               <div class="nav-link dropdown-toggle d-flex align-items-center" id="dropdownTimes" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <img id="team-logo" src="{% get_media_prefix %}brasao.png" alt="Ícone do Time" style="width: 30px; height: 30px" />
+                <img id="team-logo" src="{% static "imagens/brasao.png" %}" alt="Ícone do Time" style="width: 30px; height: 30px" />
               </div>
               <div class="dropdown-menu p-4" style="width: 15vw" aria-labelledby="dropdownTimes">
 
@@ -47,7 +47,11 @@
                 <div id="serie-icons" class="d-flex flex-wrap justify-content-center align-items-center">
                   {% for categoria in categorias_serie_a %}
                   <a class="dropdown-item p-3 col-3" href="{% url 'exibir_categoria' categoria.nome_categoria|slugify %}">
-                    <img src="{% get_media_prefix %}escudos/{{ categoria.nome_categoria|lower }}.png" alt="{{ categoria.nome_categoria }}" style="width: 35px; height: 35px" />
+
+                    {% with "imagens/escudos/"|add:categoria.nome_categoria|lower|add:".png" as image_path %}
+                      <img src="{% static image_path %}" alt="{{ categoria.nome_categoria }}" style="width: 35px; height: 35px"/>
+                    {% endwith %}
+
                   </a>
                   {% endfor %}
                 </div>
@@ -72,7 +76,7 @@
 
         <!-- Barra de pesquisa -->
         <div class="search-container d-flex align-items-center">
-          <img id="lupa" src="{% get_media_prefix %}lupa.png" alt="lupa" style="width: 16px; height: 16px; margin-right: 8px" />
+          <img id="lupa" src="{% static "imagens/lupa.png" %}" alt="lupa" style="width: 16px; height: 16px; margin-right: 8px" />
           <input id="search-bar" class="form-control" type="search" placeholder="Pesquisar" aria-label="Pesquisar" style="padding-left: 40px" />
           <ul id="search-results"></ul>
         </div>
@@ -89,7 +93,7 @@
             {% if request.user.foto %}
               <img src="{{ request.user.foto.url }}" alt="Foto de {{ request.user.username }}" class="rounded-circle" style="width: 40px; height: 40px;" />
             {% else %}
-              <img src="{% get_media_prefix %}login.png" alt="Foto de {{ request.user.username }}" class="rounded-circle" style="width: 40px; height: 40px;" />
+              <img src="{% static "imagens/SemUsuario.jpg" %}" alt="Foto de {{ request.user.username }}" class="rounded-circle" style="width: 40px; height: 40px;"/>
             {% endif %}
           </a>
           
@@ -213,9 +217,15 @@
             <div class="card text-center shadow-sm p-3" style="max-width: 300px; width: 100%; border-radius: 8px">
               <div class="card-body">
                 <div class="d-flex align-items-center justify-content-center mb-3">
-                  <img src="{% get_media_prefix %}escudos/{{ jogo.time_mandante.nome_popular|slugify_with_underscore }}.png" alt="{{ jogo.time_mandante.nome_popular }}" class="img-fluid" style="width: 50px; height: 50px; border-radius: 50%" />
+                  {% with "imagens/escudos/"|add:jogo.time_mandante.nome_popular|slugify_with_underscore|add:".png" as image_path %}
+                    <img src="{% static image_path %}" alt="{{ jogo.time_mandante.nome_popular }}" class="img-fluid" style="width: 50px; height: 50px; border-radius: 50%" />
+                  {% endwith %}
                   {% if jogo.placar_numerico %}<div style="color: #6c757d !important;">{{ jogo.placar_numerico|safe }}</div>{% else %}<span>X</span>{% endif %}
-                  <img src="{% get_media_prefix %}escudos/{{ jogo.time_visitante.nome_popular|slugify_with_underscore }}.png" alt="{{ jogo.time_visitante.nome_popular }}" class="img-fluid" style="width: 50px; height: 50px; border-radius: 50%" />
+
+                  {% with "imagens/escudos/"|add:jogo.time_visitante.nome_popular|slugify_with_underscore|add:".png" as image_path %}
+                    <img src="{% static image_path %}" alt="{{ jogo.time_visitante.nome_popular }}" class="img-fluid" style="width: 50px; height: 50px; border-radius: 50%" />
+                  {% endwith %}
+
                 </div>
                 <div class="game-details text-muted">
                   <p class="mb-1"><strong>Data:</strong> {{ jogo.data_realizacao }}</p>
@@ -286,11 +296,9 @@
         const serieAContent = `
           {% for categoria in categorias_serie_a %}
           <a class="dropdown-item p-3 col-3" href="{% url 'exibir_categoria' categoria.nome_categoria|slugify %}">
-            <img
-              src="{% get_media_prefix %}escudos/{{ categoria.nome_categoria|lower }}.png"
-              alt="{{ categoria.nome_categoria }}"
-              style="width: 35px; height: 35px"
-            />
+            {% with "imagens/escudos/"|add:categoria.nome_categoria|lower|add:".png" as image_path %}
+              <img src="{% static image_path %}" alt="{{ categoria.nome_categoria }}" style="width: 35px; height: 35px"/>
+            {% endwith %}
           </a>
           {% endfor %}
         `;
@@ -298,11 +306,9 @@
         const serieBContent = `
           {% for categoria in categorias_serie_b %}
           <a class="dropdown-item p-3 col-3" href="{% url 'exibir_categoria' categoria.nome_categoria|slugify %}">
-            <img
-              src="{% get_media_prefix %}escudos/{{ categoria.nome_categoria|lower }}.png"
-              alt="{{ categoria.nome_categoria }}"
-              style="width: 35px; height: 35px"
-            />
+            {% with "imagens/escudos/"|add:categoria.nome_categoria|lower|add:".png" as image_path %}
+              <img src="{% static image_path %}" alt="{{ categoria.nome_categoria }}" style="width: 35px; height: 35px"/>
+            {% endwith %}
           </a>
           {% endfor %}
         `;
@@ -400,7 +406,7 @@
         // Verificar se o modo escuro está ativado previamente
         if (localStorage.getItem('dark-mode') === 'true') {
           document.body.classList.add('dark-mode');
-          logo.src = "{% get_media_prefix %}brasao_branco.png"; // Mudando para o brasão branco
+          logo.src = "{% static "imagens/brasao_branco.png" %}"; // Mudando para o brasão branco
           toggleButton.innerHTML = "Escuro"; // Alterando o texto do botão
         }
 
@@ -412,11 +418,11 @@
           // Atualiza o estado do botão e do logo, e salva a preferência no localStorage
           if (isDarkMode) {
             toggleButton.innerHTML = "Escuro";
-            logo.src = "{% get_media_prefix %}brasao_branco.png"; // Mudando para o brasão branco
+            logo.src = "{% static "imagens/brasao_branco.png" %}"; // Mudando para o brasão branco
             localStorage.setItem('dark-mode', 'true'); // Salva a preferência
           } else {
             toggleButton.innerHTML = "Claro";
-            logo.src = "{% get_media_prefix %}brasao.png"; // Mudando para o brasão original
+            logo.src = "{% static "imagens/brasao.png" %}"; // Mudando para o brasão original
             localStorage.setItem('dark-mode', 'false'); // Salva a preferência
           }
         });

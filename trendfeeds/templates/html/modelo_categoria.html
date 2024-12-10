@@ -75,7 +75,7 @@
             <!-- DIREITA: BARRA DE PESQUISA -->
             <div class="search-container d-flex align-items-center">
                     <!-- Cria o contêiner para a barra de pesquisa -->
-                <img src="{% get_media_prefix %}lupa.png" alt="lupa" style="width: 16px; height: 16px; margin-right: 8px;">
+                <img src="{% static "imagens/lupa.png" %}" alt="lupa" style="width: 16px; height: 16px; margin-right: 8px;">
                     <!-- Ícone de lupa ao lado da barra de pesquisa -->
                 <input id="search-bar" class="form-control" type="search" placeholder="Pesquisar" aria-label="Pesquisar" style="padding-left: 40px;">
                     <!-- Barra de pesquisa com placeholder -->
@@ -100,7 +100,7 @@
                 {% if request.user.foto %}
                     <img src="{{ request.user.foto.url }}" alt="Foto de {{ request.user.username }}" class="rounded-circle" style="width: 40px; height: 40px;" />
                 {% else %}
-                    <img src="{% get_media_prefix %}login.png" alt="Foto de {{ request.user.username }}" class="rounded-circle" style="width: 40px; height: 40px;" />
+                    <img src="{% static "imagens/login.png" %}" alt="Foto de {{ request.user.username }}" class="rounded-circle" style="width: 40px; height: 40px;" />
                 {% endif %}
                 </a>
                 
@@ -144,7 +144,10 @@
             <h1 class="display-9 mb-0 mr-4" style="text-transform: lowercase; font-size: 1.5rem;">{{ main_title}}</h1>
                 <!-- Título da categoria em letras minúsculas -->
             
-            <img src="{% get_media_prefix %}escudos/{{ main_title|lower }}.png" alt="{{ main_title|lower }}" style="width: 35px; height: 35px;">
+                {% with "imagens/escudos/"|add:main_title|lower|add:".png" as image_path %}
+                <img src="{% static image_path %}" alt="{{ main_title|lower }}" style="width: 35px; height: 35px;">
+                {% endwith %}
+
                 <!-- Ícone representando a categoria -->
         </div>
     </section>
@@ -220,17 +223,21 @@
                     <li class="card-item swiper-slide" style="width: 20% !important;">
                         <div class="card-link-jogos">
                             <div class="card-image d-flex align-items-center justify-content-center">
-                                <img src="{% get_media_prefix %}escudos/{{ jogo.time_mandante.nome_popular|slugify_with_underscore }}.png" 
-                                     alt="{{ jogo.time_mandante.nome_popular }}" 
-                                     style="width: 55px; height: 55px; border-radius: 50%; margin-right: 10px;" />
+
+                                {% with "imagens/escudos/"|add:jogo.time_mandante.nome_popular|slugify_with_underscore|add:".png" as image_path %}
+                                <img src="{% static image_path %}" alt="{{ jogo.time_mandante.nome_popular }}" style="width: 55px; height: 55px; border-radius: 50%; margin-right: 10px;"/>
+                                {% endwith %}
+
                                 {% if jogo.placar_numerico %}
                                 <div style="font-size: 1.2rem; color: #6c757d; font-weight: bold;">{{ jogo.placar_numerico|safe }}</div>
                                 {% else %}
                                 <span style="font-size: 1.2rem; color: #6c757d;">X</span>
                                 {% endif %}
-                                <img src="{% get_media_prefix %}escudos/{{ jogo.time_visitante.nome_popular|slugify_with_underscore }}.png" 
-                                     alt="{{ jogo.time_visitante.nome_popular }}" 
-                                     style="width: 55px; height: 55px; border-radius: 50%; margin-left: 10px;" />
+
+                                {% with "imagens/escudos/"|add:jogo.time_visitante.nome_popular|slugify_with_underscore|add:".png" as image_path %}
+                                <img src="{% static image_path %}" alt="{{ jogo.time_visitante.nome_popular }}" style="width: 55px; height: 55px; border-radius: 50%; margin-left: 10px;"/>
+                                {% endwith %}
+                                
                             </div>
                             <div class="game-details text-muted">
                                 <p class="mb-1" style="font-size: 0.9rem;"><strong>Data:</strong> {{ jogo.data_realizacao }}</p>

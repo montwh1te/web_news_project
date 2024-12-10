@@ -7,7 +7,7 @@
     <title>Escolha seu time!</title>
 
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/timeb.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/time_favorito_B.css' %}" />
 
     <!-- Bootstrap -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
@@ -20,108 +20,103 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
     <style>
-        body{
-            background-color: black !important;
-        }
-
-        
         .ceará::before {
-            background-image: url("{% get_media_prefix %}fundos/serie_b/ceara.jpg");
+            background-image: url("{% static "imagens/fundos/serie_b/ceara.jpg" %}");
         }
 
         
         .crb::before {
-            background-image: url("{% get_media_prefix %}fundos/serie_b/crb.jpg");
+            background-image: url("{% static "imagens/fundos/serie_b/crb.jpg" %}");
         }
 
         
         .amazonas::before {
-            background-image: url("{% get_media_prefix %}fundos/serie_b/amazonas.jpg");
+            background-image: url("{% static "imagens/fundos/serie_b/amazonas.jpg" %}");
         }
 
        
         .operário-pr::before {
-            background-image: url("{% get_media_prefix %}fundos/serie_b/operario.jpg");
+            background-image: url("{% static "imagens/fundos/serie_b/operario.jpg" %}");
         }
 
        
         .brusque::before {
-            background-image: url("{% get_media_prefix %}fundos/serie_b/brusque.jpg");
+            background-image: url("{% static "imagens/fundos/serie_b/brusque.jpg" %}");
         }
 
       
         .paysandu::before {
-            background-image: url("{% get_media_prefix %}fundos/serie_b/paysandu.jpg");
+            background-image: url("{% static "imagens/fundos/serie_b/paysandu.jpg" %}");
         }
 
        
         .chapecoense::before {
-            background-image: url("{% get_media_prefix %}fundos/serie_b/chape.jpg");
+            background-image: url("{% static "imagens/fundos/serie_b/chape.jpg" %}");
         }
 
        
         .ituano::before {
-            background-image: url("{% get_media_prefix %}fundos/serie_b/ituano.jpg");
+            background-image: url("{% static "imagens/fundos/serie_b/ituano.jpg" %}");
         }
 
       
         .mirassol::before {
-            background-image: url("{% get_media_prefix %}fundos/serie_b/mirassol.jpg");
+            background-image: url("{% static "imagens/fundos/serie_b/mirassol.jpg" %}");
         }
 
         
         .novorizontino::before {
-            background-image: url("{% get_media_prefix %}fundos/serie_b/novorizontino.jpg");
+            background-image: url("{% static "imagens/fundos/serie_b/novorizontino.jpg" %}");
         }
 
        
         .ponte-preta::before {
-            background-image: url("{% get_media_prefix %}fundos/serie_b/ponte_preta.jpg");
+            background-image: url("{% static "imagens/fundos/serie_b/ponte_preta.jpg" %}");
         }
 
        
         .sport::before {
-            background-image: url("{% get_media_prefix %}fundos/serie_b/sport.jpg");
+            background-image: url("{% static "imagens/fundos/serie_b/sport.jpg" %}");
         }
 
        
         .vila-nova::before {
-            background-image: url("{% get_media_prefix %}fundos/serie_b/vila_nova.jpg");
+            background-image: url("{% static "imagens/fundos/serie_b/vila_nova.jpg" %}");
         }
 
        
         .avaí::before {
-            background-image: url("{% get_media_prefix %}fundos/serie_b/avai.jpg");
+            background-image: url("{% static "imagens/fundos/serie_b/avai.jpg" %}");
         }
 
        
         .botafogo-sp::before {
-            background-image: url("{% get_media_prefix %}fundos/serie_b/botafogo_sp.jpg");
+            background-image: url("{% static "imagens/fundos/serie_b/botafogo_sp.jpg" %}");
         }
 
         
         .guarani::before {
-            background-image: url("{% get_media_prefix %}fundos/serie_b/guarani.jpg");
+            background-image: url("{% static "imagens/fundos/serie_b/guarani.jpg" %}");
         }
 
         
         .goiás::before {
-            background-image: url("{% get_media_prefix %}fundos/serie_b/goias.jpg");
+            background-image: url("{% static "imagens/fundos/serie_b/goias.jpg" %}");
         }
 
        
         .santos::before {
-            background-image: url("{% get_media_prefix %}fundos/serie_b/santos.jpg");
+            background-image: url("{% static "imagens/fundos/serie_b/santos.jpg" %}");
         }
 
         
         .coritiba::before {
-            background-image: url("{% get_media_prefix %}fundos/serie_b/coxa_doido.jpg");
+            background-image: url("{% static "imagens/fundos/serie_b/coxa_doido.jpg" %}");
         }
 
        
         .américa-mg::before {
-            background-image: url("{% get_media_prefix %}fundos/serie_b/america_mg.jpg");
+            background-image: url("{% static "imagens/fundos/serie_b/america_mg.jpg" %}");
         }
     </style>
 </head>
@@ -150,7 +145,11 @@
                 {% if categoria.serie == 'B' %}
                     <div class="item">
                         <input type="radio" class="teste" id="{{ categoria.nome|lower }}" name="background" value="{{ categoria.nome|lower }}">
-                        <label style="cursor: pointer;" for="{{ categoria.nome|lower }}"><img rel="preload" src="{% get_media_prefix %}escudos/{{ categoria.nome_categoria|lower }}.png" alt="imagem-time"></label>
+                        <label style="cursor: pointer;" for="{{ categoria.nome|lower }}">
+                            {% with "imagens/escudos/"|add:categoria.nome_categoria|lower|add:".png" as image_path %}
+                            <img src="{% static image_path %}" alt="imagem-time">
+                            {% endwith %}
+                        </label>
                         <h2 class="nome_time">{{ categoria.nome }}</h2>
                         <p class="descricao_time">{{ categoria.descricao }}</p>
                     </div>
