@@ -44,7 +44,8 @@ from django.contrib import messages
 # Para obter o modelo de usuário personalizado ou padrão usado pelo sistema.
 from django.contrib.auth import get_user_model  
 
-
+from django.template.loader import get_template
+from django.template.exceptions import TemplateDoesNotExist
 
 ''' **IMPORTAÇÕES DE MÓDULOS INTERNOS** '''
 # Importa os modelos definidos na aplicação para interagir com o banco de dados.
@@ -364,7 +365,7 @@ def buscar_proximos_jogos(time_id):
 
 
 
-''' Função que exibe a página de uma categoria específica (time), mostrando suas notícias. '''
+
 def exibir_categoria(request, nome_time):
     """
     Exibe as informações da categoria de um time (nome do time).
@@ -391,6 +392,23 @@ def exibir_categoria(request, nome_time):
     # Define o template dinâmico com base no nome do time
     template_name = f'html/categorias/index_{nome_time}.html'
 
+    # Verifica se o template existe
+    try:
+        get_template(template_name)
+    except TemplateDoesNotExist:
+        # Caso o template não exista, redireciona para a página inicial
+        return redirect('home')  # Substitua 'home' pela view correspondente
+
+    # Lista de rodadas a serem buscadas
+    rodadas = [34, 35, 36, 37, 38]  # Adicione aqui as rodadas desejadas
+
+    # Obtemos os jogos do time a partir da função obter_jogos_um_time_multiplas_rodadas
+    try:
+        proximos_jogos = obter_jogos_um_time(nome_time, rodadas)
+    except ValueError as e:
+        # Caso o time não seja encontrado, renderiza a página inicial com uma mensagem
+        return render(request, 'index.html', {'mensagem': str(e)})
+
     # Define o contexto para renderizar o template
     context = {
         'main_title': nome_time,
@@ -399,22 +417,10 @@ def exibir_categoria(request, nome_time):
         'ultima_noticia': ultima_noticia,
         'ultimas_tres_noticias': ultimas_tres_noticias,
         'categoria_cor': categoria_cor,
+        'proximos_jogos': proximos_jogos,
     }
 
-    # Lista de rodadas a serem buscadas
-    rodadas = [34, 35, 36, 37, 38,]  # Adicione aqui as rodadas desejadas
-
-    # Obtemos os jogos do time a partir da função obter_jogos_um_time_multiplas_rodadas
-    try:
-        proximos_jogos = obter_jogos_um_time(nome_time, rodadas)
-    except ValueError as e:
-        # Caso o time não seja encontrado, você pode capturar o erro e tratá-lo (por exemplo, mostrando uma mensagem).
-        return render(request, 'index.html', {'mensagem': str(e)})
-
-    # Adiciona os próximos jogos ao contexto
-    context['proximos_jogos'] = proximos_jogos
-
-    # Renderiza o template com as informações doF time
+    # Renderiza o template com as informações do time
     return render(request, template_name, context)
 
 

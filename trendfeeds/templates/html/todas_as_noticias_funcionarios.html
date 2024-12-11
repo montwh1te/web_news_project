@@ -77,7 +77,41 @@
             body.dark-mode p{
                   color: #bbbbbb;
             }
+            body.dark-mode .filtro-form {
+                background-color: #2b3035;
+                border: 1px solid #2b3035;
+            }
 
+            body.dark-mode .filtro-form select, .filtro-form input {
+                width: 100%;
+                padding: 8px 10px;
+                font-size: 14px;
+                border: 1px solid #000000;
+                border-radius: 4px;
+                background-color: #2c3136;
+                transition: border-color 0.3s, box-shadow 0.3s;
+                color: #dddd;
+            }
+
+            body.dark-mode .filtro-form input[type="text"] {
+                border: 1px solid #000000;
+                background-color: #2c3136;
+                color: #dddd;
+                
+            }
+
+            body.dark-mode h2{
+                color: #dddd !important;
+
+            }
+
+            body.dark-mode .filtro-form label {
+                font-weight: bold;
+                font-size: 14px;
+                color: #dddd;
+                margin-bottom: 5px;
+                display: block;
+            }
             /* Geral para os Cards */
             .card {
                 border: none;
@@ -436,6 +470,7 @@
                 padding: 10px;
                 border-radius: 8px;
                 transition: border-color 0.3s, box-shadow 0.3s;
+                background-color: transparent;
             }
             
             .filtro-form input[type="text"]:focus {

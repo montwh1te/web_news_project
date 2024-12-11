@@ -141,14 +141,8 @@
             <!-- Seção que destaca a categoria com cor personalizada -->
         
         <div class="d-flex align-items-center justify-content-center">
-            <h1 class="display-9 mb-0 mr-4" style="text-transform: lowercase; font-size: 1.5rem;">{{ main_title}}</h1>
-                <!-- Título da categoria em letras minúsculas -->
-            
-                {% with "imagens/escudos/"|add:main_title|lower|add:".png" as image_path %}
-                <img src="{% static image_path %}" alt="{{ main_title|lower }}" style="width: 35px; height: 35px;">
-                {% endwith %}
-
-                <!-- Ícone representando a categoria -->
+            <h1 class="display-9 mb-0 mr-4" style="text-transform: upper;font-size: 2rem;padding: 0.6%;font-weight: 500;">{{ main_title|upper }}</h1>
+          
         </div>
     </section>
 
