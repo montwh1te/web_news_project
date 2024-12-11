@@ -351,7 +351,7 @@ def coletar_noticias():
             times = { 
                      
             # Times Série A 
-            "atletico_mg": ["atleticomg", "galo"], "athletico_pr": ["atleticopr", "athletico", "furacao"], "bahia": ["bahia", "esquadrao", "esquadrao de aco"], "botafogo": ["botafogo", "fogao"], "bragantino": ["bragantino", "red bull bragantino", "massa bruta"], "corinthians": ["corinthians", "timao"], "cruzeiro": ["cruzeiro", "raposa"], "cuiaba": ["cuiaba", "dourado"], "flamengo": ["flamengo", "fla", "urubu"], "fluminense": ["fluminense", "flu", "tricolor das laranjeiras"], "fortaleza": ["fortaleza", "leao do pici"], "gremio": ["gremio", "tricolor gaucho", "imortal"], "internacional": ["inter", "colorado"], "palmeiras": ["palmeiras", "verdao"], "sao_paulo": ["sao paulo", "spfc", "tricolor paulista"], "vasco": ["vasco", "vascao", "gigante da colina"], "juventude": ["juventude", "juve"], "criciuma": ["criciuma", "tigre"], "vitoria": ["vitoria", "leao da barra"], "atletico_go": ["atleticogo", "dragao"], 
+            "atletico_mg": ["atleticomg", "galo"], "athletico_pr": ["atleticopr", "athletico", "furacao"], "bahia": ["bahia", "esquadrao", "esquadrao de aco"], "botafogo": ["botafogo", "fogao"], "bragantino": ["bragantino", "red bull bragantino", "massa bruta"], "corinthians": ["corinthians", "timao"], "cruzeiro": ["cruzeiro", "raposa"], "cuiaba": ["cuiaba", "dourado"], "flamengo": ["flamengo", "fla", "urubu"], "fluminense": ["fluminense", "flu", "tricolor das laranjeiras"], "fortaleza": ["fortaleza", "leao do pici"], "gremio": ["gremio", "tricolor gaucho", "imortal"], "internacional": ["inter", "colorado"], "palmeiras": ["palmeiras", "verdao"], "sao_paulo": ["sao paulo", "spfc", "tricolor paulista", "sao"], "vasco": ["vasco", "vascao", "gigante da colina"], "juventude": ["juventude", "juve"], "criciuma": ["criciuma", "tigre"], "vitoria": ["vitoria", "leao da barra"], "atletico_go": ["atleticogo", "dragao"], 
             
             # Seleção Brasileira 
             "selecao": ["selecao", "selecao brasileira", "canario", "canarinho"], 
@@ -757,13 +757,18 @@ def formatar_texto(arquivo_nome, imagens_elementos, novo_id_noticia):
         # Substitui linhas que começam e terminam com emojis por uma string vazia.
         text = emoji_pattern.sub('', text)
         
-        # Remove frases que começam com "Assista:" e terminam com ".".
         text = re.sub(r'Assista:.*?\.', '', text)
-        
-        # Remove frases que começam com "Veja" e terminam com "também".
-        text = re.sub(r'^Veja.*também$', '', text, flags=re.MULTILINE)
-        print("✅ Texto formatado com remoção de emojis, 'Assista:' e 'Veja...também'.")
-    
+        text = re.sub(r'^Assista:.*?sportv$', '', text, flags=re.MULTILINE)
+        text = re.sub(r'^Assista.*?\.$', '', text, flags=re.MULTILINE)
+        text = re.sub(r'^Assista: tudo sobre.*?no ge.*?$', '', text, flags=re.MULTILINE)
+        text = re.sub(r'^Assista: tudo sobre.*?sportv\.$', '', text, flags=re.MULTILINE)
+        text = re.sub(r'^Assista abaixo:.*?\.$', '', text, flags=re.MULTILINE)
+        text = re.sub(r'^@.*?\.$', '', text, flags=re.MULTILINE)
+        text = re.sub(r'^Veja.*?também$', '', text, flags=re.MULTILINE)
+        text = re.sub(r'^Mais notícias.*\.$', '', text, flags=re.MULTILINE)
+        text = re.sub(r'^Mais.*?:$', '', text, flags=re.MULTILINE)
+
+        print("✅ Texto formatado com remoção de emojis, 'Assista:' , 'Veja...também'. e 'Mais Sobre:...")
     # Adiciona imagens ao texto formatado.
     text = __adicionar_imagens(text, imagens_elementos, novo_id_noticia)
     
