@@ -765,8 +765,13 @@ def formatar_texto(arquivo_nome, imagens_elementos, novo_id_noticia):
         text = re.sub(r'^Assista abaixo:.*?\.$', '', text, flags=re.MULTILINE)
         text = re.sub(r'^@.*?\.$', '', text, flags=re.MULTILINE)
         text = re.sub(r'^Veja.*?também$', '', text, flags=re.MULTILINE)
+        text = re.sub(r'^Fonte*?.', '', text, flags=re.MULTILINE)
         text = re.sub(r'^Melhores momentos:*?.$', '', text, flags=re.MULTILINE)
         text = re.sub(r'^Mais notícias.*\.$', '', text, flags=re.MULTILINE)
+        text = re.sub(r'^Mais notícias*\.$', '', text, flags=re.MULTILINE)
+        text = re.sub(r'^Mais notícias*\.$', '', text, flags=re.MULTILINE)
+        text = re.sub(r'^A*?Direção.$', '', text, flags=re.MULTILINE)
+        text = re.sub(r'^globo*?.$', '', text, flags=re.MULTILINE)
         text = re.sub(r'^Mais.*?:$', '', text, flags=re.MULTILINE)
 
         print("✅ Texto formatado com remoção de emojis, 'Assista:' , 'Veja...também'. e 'Mais Sobre:...")
