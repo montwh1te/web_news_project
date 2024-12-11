@@ -7,7 +7,7 @@
 {% load static %}
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
-<link rel="stylesheet" href="{% static 'css/index.css' %}" />
+<link rel="stylesheet" href="{% static 'css/index_funcionarios.css' %}" />
       <style>
             /* Estilização para o menu lateral */
             .sidebar {
@@ -301,6 +301,148 @@
             }
             }
 
+            .collapse {
+                transition: height 0.3s ease, opacity 0.3s ease;
+            }
+            
+            .collapse.show {
+                opacity: 1;
+                height: auto;
+            }
+            
+            .collapse:not(.show) {
+                opacity: 0;
+                height: 0;
+                overflow: hidden;
+            }
+            
+            .categoria_info{
+                width: 47%;
+                padding-left: 3%;
+                padding-right: 3%;
+                color: #ffff;
+                text-align: center;
+                border-radius: 30px;
+                margin-bottom: 8%;
+                background-color: transparent;
+            }
+
+            /* Estilo do formulário de filtro */
+            .filtro-form {
+                background-color: #f8f9fa;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                padding: 20px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .filtro-form .form-row {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+
+            .filtro-form .form-group {
+                flex: 1;
+                min-width: 200px;
+            }
+
+            .filtro-form label {
+                font-weight: bold;
+                font-size: 14px;
+                color: #333;
+                margin-bottom: 5px;
+                display: block;
+            }
+
+            .filtro-form select,
+            .filtro-form input {
+                width: 100%;
+                padding: 8px 10px;
+                font-size: 14px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                transition: border-color 0.3s, box-shadow 0.3s;
+            }
+
+            .filtro-form select:focus,
+            .filtro-form input:focus {
+                border-color: #007bff;
+                box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+                outline: none;
+            }
+
+            .filtro-form .form-buttons {
+                text-align: start;
+                margin-top: 15px;
+            }
+
+            .filtro-form .btn {
+                padding: 8px 16px;
+                font-size: 14px;
+                border-radius: 5px;
+                transition: background-color 0.3s, box-shadow 0.3s;
+            }
+
+            .filtro-form .btn-primary {
+                background-color: #2c3137;
+                color: #fff;
+                border: none;
+                padding-left: 4%;
+                padding-right: 4%;
+            }
+
+            .filtro-form .btn-primary:hover {
+                background-color: #0056b3;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            }
+
+            .filtro-form .btn-secondary {
+                background-color: #6c757d;
+                color: #fff;
+                border: none;
+            }
+
+            .filtro-form .btn-secondary:hover {
+                background-color: #5a6268;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            }
+
+            /* Responsividade */
+            @media (max-width: 768px) {
+                .filtro-form .form-row {
+                    flex-direction: column;
+                    gap: 10px;
+                }
+
+                .filtro-form .form-buttons {
+                    text-align: center;
+                }
+
+                .filtro-form .btn {
+                    width: 100%;
+                }
+            }
+
+
+            
+
+
+
+
+
+            .filtro-form input[type="text"] {
+                border: 1px solid #ced4da;
+                padding: 10px;
+                border-radius: 8px;
+                transition: border-color 0.3s, box-shadow 0.3s;
+            }
+            
+            .filtro-form input[type="text"]:focus {
+                border-color: #007bff;
+                box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+                outline: none;
+            }
             
       </style>
 </head>
@@ -325,11 +467,51 @@
   
 
     <!-- Conteúdo Principal -->
-      <main class="main-content">
+        <main class="main-content">
+            <h2 class='gerenciar' style="color: #333;margin-bottom: 3%;/* text-align: center; */margin-top: 3%;margin-left: 15%;">Gerenciar Notícias </h2>
+
+            <div class="container">
+                <!-- Formulário de Filtros -->
+                {% load custom_filters %}
+
+                <form method="get" class="filtro-form mb-4">
+                    <div class="form-row">
+                        <!-- Filtro por Categoria -->
+                        <div class="form-group col-md-3">
+                            <label for="id_categoria">Categoria</label>
+                            {{ form.categoria }}
+                        </div>
+                
+                        <!-- Filtro por Autor -->
+                        <div class="form-group col-md-3">
+                            <label for="id_autor">Autor</label>
+                            {{ form.autor }}
+                        </div>
+                
+                        <!-- Filtro por Ordenação -->
+                        <div class="form-group col-md-3">
+                            <label for="id_ordenacao">Ordenar Por</label>
+                            {{ form.ordenacao }}
+                        </div>
+                
+                        <!-- Campo de Busca -->
+                        <div class="form-group col-md-3">
+                            <label for="id_busca">Buscar Notícia</label>
+                            {{ form.busca }}
+                        </div>
+                    </div>
+                
+                    <div class="form-buttons">
+                        <button type="submit" class="btn btn-primary">Filtrar</button>
+                        <a href="{% url 'pagina_noticias_funcionarios' %}" class="btn btn-secondary">Limpar Filtros</a>
+                    </div>
+                </form>
+            </div>
+            
+        
             
             <div class="container mt-5">
           
-            <h2 class='gerenciar' style="color: #333;margin-bottom: 5%;">Gerenciar Notícias </h2>
             <div class="row">
                   {% for noticia in noticias %}
                   <div class="col-12 col-md-6 col-lg-4 mb-4">
@@ -339,59 +521,71 @@
                                    onerror="this.onerror=null; this.src='{% get_media_prefix %}SemImagem.png';">
                           </div>
                           <div class="card-body d-flex flex-column">
+                                {% for categoria in noticia.categorias.all %}
+                                <p style="border: 2px solid {{categoria.cor}}; color: {{categoria.cor}};" class="categoria_info">{{categoria.nome_categoria}}</p>
+                                {% endfor %}
+
                               <h5 class="card-title text-truncate" title="{{ noticia.titulo }}">{{ noticia.titulo_bonito }}</h5>
                               <p class="card-text">{{ noticia.descricao|slice:":100" }}...</p>
                               <div class="mt-auto">
-                                  <div class="d-flex justify-content-center">
-                                      <a href="{% url 'detalhes_noticia' noticia.slug %}" class="btn btn-gradient">Editar</a>
-                                      <form action="{% url 'deletar_noticia' noticia.id %}" method="POST">
-                                          {% csrf_token %}
-                                          <button type="submit" class="btn btn-danger">Deletar</button>
-                                      </form>
-                                  </div>
+                                    <button class="btn btn-outline-secondary dropdown-toggle" data-toggle="collapse" data-target="#dropdown-{{ noticia.id }}">
+                                        Opções
+                                    </button>
+                                    <div id="dropdown-{{ noticia.id }}" class="collapse mt-2">
+                                        <div class="d-flex justify-content-center">
+                                            <a href="{% url 'detalhes_noticia' noticia.slug %}" class="btn btn-gradient">Editar</a>
+                                            <form action="{% url 'deletar_noticia' noticia.id %}" method="POST">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-danger">Deletar</button>
+                                            </form>
+                                        </div>
+                                    </div>
                               </div>
                           </div>
                       </div>
                   </div>
                   {% endfor %}
             </div>
-              
-              
-
-           
-      </main>
+        </main>
 
 
 
     <!-- Script necessário para o modo noturno -->
-      <script>
-            // Espera a página carregar completamente
-            window.onload = function() {
-            const toggleButton = document.getElementById('dark-mode-toggle');
+    <script>
+        // Espera a página carregar completamente
+        window.onload = function() {
+        const toggleButton = document.getElementById('dark-mode-toggle');
 
-            // Verificar se o modo escuro está ativado previamente
-            if (localStorage.getItem('dark-mode') === 'true') {
-            document.body.classList.add('dark-mode');
-            toggleButton.innerHTML = "Escuro"; // Alterando o texto do botão
-            }
+        // Verificar se o modo escuro está ativado previamente
+        if (localStorage.getItem('dark-mode') === 'true') {
+        document.body.classList.add('dark-mode');
+        toggleButton.innerHTML = "Escuro"; // Alterando o texto do botão
+        }
 
-            // Evento de clique para alternar entre modos (escuro/claro)
-            toggleButton.addEventListener('click', () => {
-            document.body.classList.toggle('dark-mode'); // Alterna a classe dark-mode no body
-            const isDarkMode = document.body.classList.contains('dark-mode');
-            
-            // Atualiza o estado do botão e do logo, e salva a preferência no localStorage
-            if (isDarkMode) {
-                  toggleButton.innerHTML = "Escuro";
-                  localStorage.setItem('dark-mode', 'true'); // Salva a preferência
-            } else {
-                  toggleButton.innerHTML = "Claro";
-                  localStorage.setItem('dark-mode', 'false'); // Salva a preferência
-            }
+        // Evento de clique para alternar entre modos (escuro/claro)
+        toggleButton.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode'); // Alterna a classe dark-mode no body
+        const isDarkMode = document.body.classList.contains('dark-mode');
+        
+        // Atualiza o estado do botão e do logo, e salva a preferência no localStorage
+        if (isDarkMode) {
+                toggleButton.innerHTML = "Escuro";
+                localStorage.setItem('dark-mode', 'true'); // Salva a preferência
+        } else {
+                toggleButton.innerHTML = "Claro";
+                localStorage.setItem('dark-mode', 'false'); // Salva a preferência
+        }
+        });
+        }
+    </script>
+
+    <script>
+        document.querySelectorAll('.dropdown-toggle').forEach(button => {
+            button.addEventListener('click', function() {
+                const target = document.querySelector(this.getAttribute('data-target'));
+                target.classList.toggle('show');
             });
-            }
-      </script>
-
-    
+        });
+    </script>
 </body>
 </html>

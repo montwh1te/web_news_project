@@ -55,7 +55,7 @@ from .utils import obter_tabela_brasileirao, obter_proximos_jogos, obter_jogos_u
 
 
 # Importa o formulário personalizado para criação e edição de notícias.
-from .forms import NoticiasForm  
+from .forms import NoticiasForm, FiltroNoticiasForm 
 
 
 
@@ -221,19 +221,21 @@ def detalhes_noticia(request, slug):
 
     # Cria uma lista de IDs das notícias já selecionadas.
     ids_excluidos = [noticia.id] if noticia else []  
-    # Se `ultima_noticia` não for `None`, adiciona o ID da última notícia à lista `ids_excluidos`. 
-    # Caso contrário, a lista será vazia ([]).
+
+    # Obtém todas as notícias que têm a mesma categoria da notícia atual, excluindo a própria notícia.
+    noticias_com_mesma_categoria = Noticias.objects.filter(categorias=categoria).exclude(id__in=ids_excluidos).order_by('-data_publicacao')
+
+    limite_noticias = noticias_com_mesma_categoria[:9]
     
-    
-    # Obtém todas as notícias, ordenadas por data de publicação.
-    todas_as_noticias = Noticias.objects.exclude(id__in=ids_excluidos).order_by('-data_publicacao')[1:11]
-    
-    # Agrupa as notícias em grupos de três para exibição.
+    # Agrupa as notícias da mesma categoria em grupos de três para exibição.
     noticias_agrupadas = [
-        todas_as_noticias[i:i + 3] for i in range(0, len(todas_as_noticias), 3)
+        limite_noticias[i:i + 3] for i in range(0, len(limite_noticias), 3)
     ]
-   
-   
+
+    autor_parts = noticia.autor.split("—")
+    autor_primeira_parte = autor_parts[0].strip()
+    autor_segunda_parte = autor_parts[1].strip() if len(autor_parts) > 1 else ""
+
 
     # Define o nome do template com base no slug da notícia.
     template_name = f'html/noticias/{noticia.slug}.html'
@@ -250,6 +252,8 @@ def detalhes_noticia(request, slug):
     # Obtém os comentários associados à notícia, ordenados por data de criação.
     comentarios = Comentario.objects.filter(noticia=noticia).order_by('-data_criacao')
 
+    noticias_restantes = Noticias.objects.exclude(id__in=ids_excluidos).order_by('-data_publicacao')[2:]
+
     # Renderiza a página de detalhes da notícia com os dados fornecidos.
     return render(request, template_name, {
         'noticia': noticia,  
@@ -259,8 +263,10 @@ def detalhes_noticia(request, slug):
         'usuario_curtiu': usuario_curtiu,  
         'categoria_cor': categoria_cor, 
         'categoria_nome_exibicao': categoria_nome_exibicao,
+        'autor_primeira_parte': autor_primeira_parte,
+        'autor_segunda_parte': autor_segunda_parte,
+        'noticias_restantes' : noticias_restantes,
     })
-
 
 
 
@@ -419,10 +425,40 @@ def exibir_categoria(request, nome_time):
 def pagina_noticias_funcionarios(request):
     # Obtém todas as notícias do banco de dados.
     noticias = Noticias.objects.all().order_by('-id')
+    noticias = Noticias.objects.prefetch_related('categorias')  # Carrega categorias relacionadas
+
+    form = FiltroNoticiasForm(request.GET or None)  # Preenche o formulário com os dados GET
+
+    # Aplica os filtros se o formulário for válido
+    if form.is_valid():
+        categoria = form.cleaned_data.get('categoria')
+        autor = form.cleaned_data.get('autor')
+        ordenacao = form.cleaned_data.get('ordenacao')
+        busca = form.cleaned_data.get('busca')
+
+        # Filtro por categoria
+        if categoria:
+            noticias = noticias.filter(categorias=categoria)
+
+        # Filtro por autor
+        if autor:
+            noticias = noticias.filter(autor__icontains=autor)
+
+        # Filtro por busca no título
+        if busca:
+            noticias = noticias.filter(titulo__icontains=busca)
+
+        # Ordenação
+        if ordenacao == 'mais_novo':
+            noticias = noticias.order_by('-id')
+        elif ordenacao == 'mais_velho':
+            noticias = noticias.order_by('id')
+
+
     
     # Renderiza a página de funcionários com as notícias obtidas.
     # O contexto passado inclui todas as notícias para exibição na página.
-    return render(request, 'html/todas_as_noticias_funcionarios.html', {'noticias': noticias})
+    return render(request, 'html/todas_as_noticias_funcionarios.html', {'noticias': noticias, 'form': form})
 
 
 
@@ -667,18 +703,6 @@ def deletar_noticia(request, noticia_id):
             os.remove(caminho_arquivo)
             print(f"✅ Imagem {caminho_arquivo} excluída com sucesso.")
 
-
-
-    pasta_imagens_thumbs = os.path.join(settings.BASE_DIR, 'trendfeeds', 'media', 'thumbs')
-    prefixo_imagem_thumb = f"thumb_n_{noticia_id}_"
-
-
-      # Itera sobre os arquivos na pasta de imagens
-    for nome_arquivo in os.listdir(pasta_imagens_thumbs):
-        if nome_arquivo.startswith(prefixo_imagem_thumb):
-            caminho_arquivo = os.path.join(pasta_imagens_thumbs, nome_arquivo)
-            os.remove(caminho_arquivo)
-            print(f"✅ Imagem {caminho_arquivo} excluída com sucesso.")
 
  
     # Deleta a notícia (as relações na tabela intermediária CategoriaNoticias serão deletadas automaticamente se configuradas corretamente)

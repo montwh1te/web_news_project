@@ -9,11 +9,11 @@
     {% load custom_filters %}
     <link rel="stylesheet" href="{% static 'css/index.css' %}" />
   </head>
-  <body>
+<body>
 
 
-    <!-- Cabeçalho -->
-    <header>
+  <!-- Cabeçalho -->
+  <header>
       <nav class="navbar navbar-expand-lg navbar-custom d-flex justify-content-sm-around">
 
         <!-- Logo e nome do site -->
@@ -28,10 +28,15 @@
         <div class="d-flex justify-content-center" id="navbarNav">
           <ul class="navbar-nav">
 
-            <!-- Dropdown para seleção de times -->
+
+
+            
+
+
+             <!-- Dropdown para seleção de times -->
             <li class="nav-item dropdown">
               <div class="nav-link dropdown-toggle d-flex align-items-center" id="dropdownTimes" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <img id="team-logo" src="{% static "imagens/brasao.png" %}" alt="Ícone do Time" style="width: 30px; height: 30px" />
+                <img id="team-logo" src="{% static "imagens/brasao.png" %}" alt="Ícone do Time" style="width: 30px; height: 30px"/>
               </div>
               <div class="dropdown-menu p-4" style="width: 15vw" aria-labelledby="dropdownTimes">
 
@@ -124,27 +129,28 @@
           
         </div>
       </nav>
-    </header>
+  </header>
 
 
 
 
-    <!-- Conteúdo principal -->
-    <main class="d-flex container-fluid justify-content-center">
-      <div class="row d-flex flex-nowrap justify-content-center noticias-recentes-banner-principal">
+  <!-- Conteúdo principal -->
+  <main class="d-flex container-fluid justify-content-center">
+    <div class="row d-flex flex-nowrap justify-content-center noticias-recentes-banner-principal">
 
-        <!-- Notícia principal -->
-        <div class="col-12 col-md-6 noticia-mais-recente">
+      <!-- Notícia principal -->
+      <div class="col-12 col-md-6 noticia-mais-recente">
+        <a href="{% if ultima_noticia.slug %}{% url 'detalhes_noticia' ultima_noticia.slug %}{% else %}#{% endif %}">
+          <img class="img-fluid imagem-principal-banner" src="{% get_media_prefix %}noticias/n_{{ ultima_noticia.id }}_0.jpg" alt="noticia-mais-recente" style="border-radius: 20px" onerror="this.onerror=null; this.src='{% get_media_prefix %}SemImagem.png';">
+        </a>
+        <div class="d-flex flex-column container-fluid justify-content-start descricao-noticia-mais-recente">
           <a href="{% if ultima_noticia.slug %}{% url 'detalhes_noticia' ultima_noticia.slug %}{% else %}#{% endif %}">
-            <img class="img-fluid imagem-principal-banner" src="{% get_media_prefix %}noticias/n_{{ ultima_noticia.id }}_0.jpg" alt="noticia-mais-recente" style="border-radius: 20px" onerror="this.onerror=null; this.src='{% get_media_prefix %}SemImagem.png';">
+            <p class="titulo-noticia-mais-recente">{% if ultima_noticia.titulo_bonito %}{{ ultima_noticia.titulo_bonito }}{% else %}{{ ultima_noticia.descricao }}{% endif %}</p>
+            <p class="resumo-noticia-mais-recente">{{ ultima_noticia.descricao|slice:":350" }} ...</p>
           </a>
-          <div class="d-flex flex-column container-fluid justify-content-start descricao-noticia-mais-recente">
-            <a href="{% if ultima_noticia.slug %}{% url 'detalhes_noticia' ultima_noticia.slug %}{% else %}#{% endif %}">
-              <p class="titulo-noticia-mais-recente">{% if ultima_noticia.titulo_bonito %}{{ ultima_noticia.titulo_bonito }}{% else %}{{ ultima_noticia.descricao }}{% endif %}</p>
-              <p class="resumo-noticia-mais-recente">{{ ultima_noticia.descricao|slice:":350" }} ...</p>
-            </a>
-          </div>
         </div>
+      </div>
+
 
 
 
@@ -246,7 +252,7 @@
 
 
 
-    <!-- Lista de mais notícias -->
+   <!-- Lista de mais notícias -->
     <section class="todas-noticias container-fluid mt-2" style="width: 80%; padding-top: 7%">
       <h3>Mais Notícias</h3>
       <div class="row">
@@ -263,6 +269,7 @@
         {% endfor %}
       </div>
     </section>
+
 
     
 
@@ -285,148 +292,152 @@
     
     
    <!-- Script necessário para alternar entre a Série A e Série B -->
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        // Seleciona os elementos necessários para alternar entre as séries
-        const serieARadio = document.getElementById("serie-a-radio");
-        const serieBRadio = document.getElementById("serie-b-radio");
-        const serieIcons = document.getElementById("serie-icons");
+   <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // Seleciona os elementos necessários para alternar entre as séries
+      const serieARadio = document.getElementById("serie-a-radio");
+      const serieBRadio = document.getElementById("serie-b-radio");
+      const serieIcons = document.getElementById("serie-icons");
 
-        // Conteúdo dinâmico para Série A e Série B
-        const serieAContent = `
-          {% for categoria in categorias_serie_a %}
-          <a class="dropdown-item p-3 col-3" href="{% url 'exibir_categoria' categoria.nome_categoria|slugify %}">
-            {% with "imagens/escudos/"|add:categoria.nome_categoria|lower|add:".png" as image_path %}
-              <img src="{% static image_path %}" alt="{{ categoria.nome_categoria }}" style="width: 35px; height: 35px"/>
-            {% endwith %}
-          </a>
-          {% endfor %}
-        `;
+      // Conteúdo dinâmico para Série A e Série B
+      const serieAContent = `
+        {% for categoria in categorias_serie_a %}
+        <a class="dropdown-item p-3 col-3" href="{% url 'exibir_categoria' categoria.nome_categoria|slugify %}">
+          <img
+            src="{% get_media_prefix %}escudos/{{ categoria.nome_categoria|lower }}.png"
+            alt="{{ categoria.nome_categoria }}"
+            style="width: 35px; height: 35px"
+          />
+        </a>
+        {% endfor %}
+      `;
 
-        const serieBContent = `
-          {% for categoria in categorias_serie_b %}
-          <a class="dropdown-item p-3 col-3" href="{% url 'exibir_categoria' categoria.nome_categoria|slugify %}">
-            {% with "imagens/escudos/"|add:categoria.nome_categoria|lower|add:".png" as image_path %}
-              <img src="{% static image_path %}" alt="{{ categoria.nome_categoria }}" style="width: 35px; height: 35px"/>
-            {% endwith %}
-          </a>
-          {% endfor %}
-        `;
+      const serieBContent = `
+        {% for categoria in categorias_serie_b %}
+        <a class="dropdown-item p-3 col-3" href="{% url 'exibir_categoria' categoria.nome_categoria|slugify %}">
+          <img
+            src="{% get_media_prefix %}escudos/{{ categoria.nome_categoria|lower }}.png"
+            alt="{{ categoria.nome_categoria }}"
+            style="width: 35px; height: 35px"
+          />
+        </a>
+        {% endfor %}
+      `;
 
-        // Função para alternar o conteúdo com base na seleção de Série A ou Série B
-        function toggleIcons() {
-          if (serieARadio.checked) {
-            serieIcons.innerHTML = serieAContent; // Carrega conteúdo da Série A
-          } else if (serieBRadio.checked) {
-            serieIcons.innerHTML = serieBContent; // Carrega conteúdo da Série B
-          }
+      // Função para alternar o conteúdo com base na seleção de Série A ou Série B
+      function toggleIcons() {
+        if (serieARadio.checked) {
+          serieIcons.innerHTML = serieAContent; // Carrega conteúdo da Série A
+        } else if (serieBRadio.checked) {
+          serieIcons.innerHTML = serieBContent; // Carrega conteúdo da Série B
         }
-
-        // Adiciona eventos de mudança nos botões de rádio para alternar as séries
-        serieARadio.addEventListener("change", toggleIcons);
-        serieBRadio.addEventListener("change", toggleIcons);
-
-        // Inicializa o conteúdo com o estado da seleção atual
-        toggleIcons();
-      });
-    </script>
-
-
-
-
-
-    <!-- Script necessário para a barra de pesquisas -->
-    <script>
-      document
-        .getElementById("search-bar")
-        .addEventListener("input", function () {
-          // Adiciona um evento ao campo de busca (search-bar) para capturar a entrada do usuário
-
-          let query = this.value; // Obtém o valor digitado no campo de busca
-
-          if (query.length > 1) {
-            // Verifica se o tamanho da consulta é maior que 1 caractere
-
-            fetch(`/buscar_noticias/?q=${query}`)
-              // Faz uma requisição para a URL "/buscar_noticias/" passando o parâmetro de busca
-              .then((response) => response.json())
-              // Processa a resposta JSON retornada pelo servidor
-              .then((data) => {
-                const resultsContainer = document.getElementById("search-results");
-                // Seleciona o contêiner onde os resultados da busca serão exibidos
-                resultsContainer.innerHTML = ""; // Limpa os resultados anteriores
-
-                if (data.results.length > 0) {
-                  // Verifica se há resultados na busca
-                  data.results.forEach((item) => {
-                    // Itera sobre os resultados
-                    let li = document.createElement("li"); // Cria um elemento <li> para cada resultado
-                    li.classList.add("search-result-item"); // Adiciona uma classe para estilização
-
-                    let img = document.createElement("img"); // Cria um elemento <img> para exibir a imagem
-                    img.src = item.imagem_url || "{% static 'locadora/images/default.png' %}"; // Usa a imagem do resultado ou uma imagem padrão
-                    img.alt = `Imagem de ${item.titulo}`; // Define o texto alternativo da imagem
-                    img.classList.add("search-result-image"); // Adiciona uma classe CSS para estilizar a imagem
-
-                    let text = document.createElement("span"); // Cria um elemento <span> para exibir o título
-                    text.textContent = item.titulo; // Define o texto do título
-                    text.classList.add("search-result-text"); // Adiciona uma classe CSS para estilizar o texto
-
-                    li.appendChild(img); // Adiciona a imagem ao item de resultado
-                    li.appendChild(text); // Adiciona o texto ao item de resultado
-
-                    li.addEventListener("click", function () {
-                      window.location.href = `/noticia/${item.slug}/`; // Redireciona para a página de detalhes da notícia
-                    });
-
-                    resultsContainer.appendChild(li); // Adiciona o item de resultado ao contêiner
-                  });
-                } else {
-                  resultsContainer.innerHTML = '<li class="no-results">Nenhum resultado encontrado.</li>';
-                  // Exibe mensagem caso não haja resultados
-                }
-              });
-          } else {
-            document.getElementById("search-results").innerHTML = ""; // Limpa os resultados caso a consulta seja muito curta
-          }
-        });
-    </script>
-
-
-
-
-
-    <!-- Script necessário para o modo noturno -->
-    <script>
-      // Espera a página carregar completamente
-      window.onload = function() {
-        const toggleButton = document.getElementById('dark-mode-toggle');
-        const logo = document.getElementById('team-logo'); // Obtém o logo
-
-        // Verificar se o modo escuro está ativado previamente
-        if (localStorage.getItem('dark-mode') === 'true') {
-          document.body.classList.add('dark-mode');
-          logo.src = "{% static "imagens/brasao_branco.png" %}"; // Mudando para o brasão branco
-          toggleButton.innerHTML = "Escuro"; // Alterando o texto do botão
-        }
-
-        // Evento de clique para alternar entre modos (escuro/claro)
-        toggleButton.addEventListener('click', () => {
-          document.body.classList.toggle('dark-mode'); // Alterna a classe dark-mode no body
-          const isDarkMode = document.body.classList.contains('dark-mode');
-          
-          // Atualiza o estado do botão e do logo, e salva a preferência no localStorage
-          if (isDarkMode) {
-            toggleButton.innerHTML = "Escuro";
-            logo.src = "{% static "imagens/brasao_branco.png" %}"; // Mudando para o brasão branco
-            localStorage.setItem('dark-mode', 'true'); // Salva a preferência
-          } else {
-            toggleButton.innerHTML = "Claro";
-            logo.src = "{% static "imagens/brasao.png" %}"; // Mudando para o brasão original
-            localStorage.setItem('dark-mode', 'false'); // Salva a preferência
-          }
-        });
       }
-    </script>
-  </body>
+
+      // Adiciona eventos de mudança nos botões de rádio para alternar as séries
+      serieARadio.addEventListener("change", toggleIcons);
+      serieBRadio.addEventListener("change", toggleIcons);
+
+      // Inicializa o conteúdo com o estado da seleção atual
+      toggleIcons();
+    });
+  </script>
+
+
+
+
+
+  <!-- Script necessário para a barra de pesquisas -->
+  <script>
+    document
+      .getElementById("search-bar")
+      .addEventListener("input", function () {
+        // Adiciona um evento ao campo de busca (search-bar) para capturar a entrada do usuário
+
+        let query = this.value; // Obtém o valor digitado no campo de busca
+
+        if (query.length > 1) {
+          // Verifica se o tamanho da consulta é maior que 1 caractere
+
+          fetch(`/buscar_noticias/?q=${query}`)
+            // Faz uma requisição para a URL "/buscar_noticias/" passando o parâmetro de busca
+            .then((response) => response.json())
+            // Processa a resposta JSON retornada pelo servidor
+            .then((data) => {
+              const resultsContainer = document.getElementById("search-results");
+              // Seleciona o contêiner onde os resultados da busca serão exibidos
+              resultsContainer.innerHTML = ""; // Limpa os resultados anteriores
+
+              if (data.results.length > 0) {
+                // Verifica se há resultados na busca
+                data.results.forEach((item) => {
+                  // Itera sobre os resultados
+                  let li = document.createElement("li"); // Cria um elemento <li> para cada resultado
+                  li.classList.add("search-result-item"); // Adiciona uma classe para estilização
+
+                  let img = document.createElement("img"); // Cria um elemento <img> para exibir a imagem
+                  img.src = item.imagem_url || "{% static 'locadora/images/default.png' %}"; // Usa a imagem do resultado ou uma imagem padrão
+                  img.alt = `Imagem de ${item.titulo}`; // Define o texto alternativo da imagem
+                  img.classList.add("search-result-image"); // Adiciona uma classe CSS para estilizar a imagem
+
+                  let text = document.createElement("span"); // Cria um elemento <span> para exibir o título
+                  text.textContent = item.titulo; // Define o texto do título
+                  text.classList.add("search-result-text"); // Adiciona uma classe CSS para estilizar o texto
+
+                  li.appendChild(img); // Adiciona a imagem ao item de resultado
+                  li.appendChild(text); // Adiciona o texto ao item de resultado
+
+                  li.addEventListener("click", function () {
+                    window.location.href = `/noticia/${item.slug}/`; // Redireciona para a página de detalhes da notícia
+                  });
+
+                  resultsContainer.appendChild(li); // Adiciona o item de resultado ao contêiner
+                });
+              } else {
+                resultsContainer.innerHTML = '<li class="no-results">Nenhum resultado encontrado.</li>';
+                // Exibe mensagem caso não haja resultados
+              }
+            });
+        } else {
+          document.getElementById("search-results").innerHTML = ""; // Limpa os resultados caso a consulta seja muito curta
+        }
+      });
+  </script>
+
+
+
+
+
+  <!-- Script necessário para o modo noturno -->
+  <script>
+    // Espera a página carregar completamente
+    window.onload = function() {
+      const toggleButton = document.getElementById('dark-mode-toggle');
+      const logo = document.getElementById('team-logo'); // Obtém o logo
+
+      // Verificar se o modo escuro está ativado previamente
+      if (localStorage.getItem('dark-mode') === 'true') {
+        document.body.classList.add('dark-mode');
+        logo.src = "{% get_media_prefix %}brasao_branco.png"; // Mudando para o brasão branco
+        toggleButton.innerHTML = "Escuro"; // Alterando o texto do botão
+      }
+
+      // Evento de clique para alternar entre modos (escuro/claro)
+      toggleButton.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode'); // Alterna a classe dark-mode no body
+        const isDarkMode = document.body.classList.contains('dark-mode');
+        
+        // Atualiza o estado do botão e do logo, e salva a preferência no localStorage
+        if (isDarkMode) {
+          toggleButton.innerHTML = "Escuro";
+          logo.src = "{% get_media_prefix %}brasao_branco.png"; // Mudando para o brasão branco
+          localStorage.setItem('dark-mode', 'true'); // Salva a preferência
+        } else {
+          toggleButton.innerHTML = "Claro";
+          logo.src = "{% get_media_prefix %}brasao.png"; // Mudando para o brasão original
+          localStorage.setItem('dark-mode', 'false'); // Salva a preferência
+        }
+      });
+    }
+  </script>
+</body>
 </html>

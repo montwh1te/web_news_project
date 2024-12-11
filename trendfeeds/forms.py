@@ -6,7 +6,7 @@ from django import forms
 
 ''' **IMPORTAÇÕES INTERNAS**  '''
 # Importa o modelo `Comentario` e `Noticias` do aplicativo atual para serem usados no formulário.
-from .models import Comentario, Noticias  
+from .models import Comentario, Noticias, Categoria 
 
 
 
@@ -71,3 +71,35 @@ class NoticiasForm(forms.ModelForm):
             'link': 'Link',
             'categorias': 'Categorias',
         }
+
+
+class FiltroNoticiasForm(forms.Form):
+    # Campos existentes
+    categoria = forms.ModelChoiceField(
+        queryset=Categoria.objects.all(),
+        required=False,
+        label="Categoria",
+        empty_label="Todas as Categorias"
+    )
+    autor = forms.CharField(
+        max_length=100,
+        required=False,
+        label="Autor",
+        widget=forms.TextInput(attrs={'placeholder': 'Autor'})
+    )
+    ordenacao = forms.ChoiceField(
+        choices=[
+            ('mais_novo', 'Mais Novo Primeiro'),
+            ('mais_velho', 'Mais Velho Primeiro')
+        ],
+        required=False,
+        label="Ordenar Por"
+    )
+
+    # Novo campo de busca
+    busca = forms.CharField(
+        max_length=255,
+        required=False,
+        label="Buscar Notícia",
+        widget=forms.TextInput(attrs={'placeholder': 'Digite o título...'})
+    )

@@ -11,17 +11,13 @@ import time
 # Para normalizar strings, removendo acentos e caracteres especiais.
 import unicodedata  
 
-# Para manipulação e redimensionamento de imagens.
-from PIL import Image  
-
 from datetime import datetime
-
 
 ''' **BIBLIOTECAS DE TERCEIROS**  '''
 # Importa a biblioteca `requests`, que é usada para fazer requisições HTTP em Python.
 import requests  
 
-# Importa o `webdriver` do Selenium, usado para controlar o navegador de forma automatizada.
+# Importa o `webdriver` do SFelenium, usado para controlar o navegador de forma automatizada.
 from selenium import webdriver  
 
 # Importa a classe `Service` do Selenium para configurar o caminho do driver do Chrome.
@@ -44,7 +40,6 @@ from colorama import Fore, Style, init
 
 # Importa a exceção `TimeoutException` do Selenium, que é levantada quando o tempo de espera de uma ação expira.
 from selenium.common.exceptions import TimeoutException
-
 
 
 
@@ -252,7 +247,6 @@ def coletar_noticias():
 
                 # Lista de classes de elementos a serem removidos do conteúdo.
                 classes_para_remover = [
-                    'content-unordered-list', 
                     'content-publication-data__from', 
                     'next-article__wrapper-header-title',
                     'js-next-article-desktop-link', 
@@ -265,8 +259,32 @@ def coletar_noticias():
                     'ellipsis-overflowing-child', 
                     'shadow-video-flow-video-infoissued', 
                     'entitieslist-itemLink',
-                    'content-publication-data__updated'
-                    'show-multicontent-playlist__label'
+                    'content-publication-data__updated',
+                    'show-multicontent-playlist__label',
+                    'content-publication-data__text',
+                    'content-head__title',
+                    'content-unordered-list',
+                    'show-multicontent-playlist',
+                    'shadow-video-flow',
+                    'mc-bottom',
+                    'content-text__container',
+                    'next-article',
+                    'mais-lidas-lista',
+                    'active-extra-styles',
+                    'content-intertitle',
+                    'podcast-container',
+                    'content-video',
+                    'content-text',
+                    'show-multicontent-playlist__label',
+                    'next-article__wrapper-header-title',
+                    'next-article-desktop-link',
+                    'entities__list-itemLink',
+                    'nextElement',
+                    'next-article-sticky',
+                    
+
+
+
                 ]
 
                 # Remove o texto de elementos indesejados do conteúdo.
@@ -289,7 +307,6 @@ def coletar_noticias():
                 driver.get(url_principal)
                 time.sleep(2)
                 continue
-
 
 
 
@@ -351,13 +368,17 @@ def coletar_noticias():
             try:            
 
                  #pega a data atual para salvar no banco
+                # Obtém a data e hora atuais
                 data_publicacao = timezone.now()
+
+                # Extrai apenas a hora e os minutos
+                hora_publicacao = data_publicacao.strftime("%H:%M")
 
                 #o autor permanece desconhecido caso nao seja encontrado na noticia
                 autor_text = "Desconhecido"
 
                 try:
-                    autor_element = driver.find_element(By.CLASS_NAME, 'content-author__name')
+                    autor_element = driver.find_element(By.CLASS_NAME, 'content-publication-data__from')
                     autor_text = autor_element.text
                 except:
                     pass
@@ -366,8 +387,9 @@ def coletar_noticias():
                     noticia_modelo, created = Noticias.objects.update_or_create(
                         titulo=titulo_truncado,
                         defaults={
-                            'titulo_bonito': titulo_noticia,
+                            'titulo_bonito': title_text,
                             'data_publicacao': data_publicacao,
+                            'hora_publicacao':  hora_publicacao,
                             'descricao': preview_content,
                             'autor': autor_text,
                             'link': link_noticia
@@ -594,7 +616,7 @@ def coletar_noticias():
 {{% load static %}}
 
 {{% block title %}}{categoria.nome_categoria}{{% endblock title %}}
-{{% block main_title %}}{categoria.nome_categoria}{{% endblock main_title %}}
+{{% block main_title %}}{categoria.nome}{{% endblock main_title %}}
 {{% block id_time %}}{time_id}{{% endblock id_time %}}
 
 <div class="categoria-listagem">
@@ -669,17 +691,22 @@ def coletar_noticias():
 
 
 
-def pegar_resumo(texto):
-    ''' 
-    Função que recebe um texto e retorna o resumo, que é a primeira linha do texto.
-    A primeira linha é definida como o trecho de texto antes da primeira quebra de linha.
+def pegar_resumo(texto, limite_caracteres=100):
     '''
+    Função que retorna o resumo de um texto com base em um limite de caracteres.
+    Se o texto for menor que o limite, retorna o texto inteiro.
+    '''
+    if not texto.strip():
+        return "Texto vazio ou inválido."
     
-    # Divide o texto na primeira ocorrência de quebra de linha e retorna a primeira parte.
-    primeira_linha = texto.split('\n', 1)[0]  
-
-    # Remove espaços em branco no início e no final da primeira linha antes de retornar.
-    return primeira_linha.strip()  
+    # Limita o texto ao número de caracteres especificado.
+    resumo = texto[:limite_caracteres]
+    
+    # Garante que não termine no meio de uma palavra.
+    if len(texto) > limite_caracteres and not resumo.endswith((' ', '.', ',', '!', '?')):
+        resumo = resumo.rsplit(' ', 1)[0]  # Remove a última palavra incompleta.
+    
+    return resumo.strip()
 
 
 
@@ -964,4 +991,3 @@ def iniciar_scheduler():
 
     # A função atualmente não faz nada, mas pode ser expandida no futuro com agendamentos de tarefas.
     pass
-

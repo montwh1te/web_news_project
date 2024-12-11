@@ -21,6 +21,7 @@ from users.models import Usuarios
 
 
 
+
 class Categoria(models.Model):
 
     # Campo para armazenar o nome completo da categoria (máximo de 50 caracteres).
@@ -55,6 +56,9 @@ class Noticias(models.Model):
 
     # Data de publicação da notícia, definida automaticamente ao criar o registro.
     data_publicacao = models.DateField(auto_now_add=True)
+
+    # Data de publicação da notícia, definida automaticamente ao criar o registro.
+    hora_publicacao = models.TimeField(auto_now_add=True, null=True)
 
     # Nome do autor da notícia, limitado a 100 caracteres.
     autor = models.CharField(max_length=100)
