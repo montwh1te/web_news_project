@@ -351,7 +351,7 @@ def coletar_noticias():
             times = { 
                      
             # Times Série A 
-            "atletico_mg": ["atleticomg", "galo"], "athletico_pr": ["atleticopr", "athletico", "furacao"], "bahia": ["bahia", "esquadrao", "esquadrao de aco"], "botafogo": ["botafogo", "fogao"], "bragantino": ["bragantino", "red bull bragantino", "massa bruta"], "corinthians": ["corinthians", "timao"], "cruzeiro": ["cruzeiro", "raposa"], "cuiaba": ["cuiaba", "dourado"], "flamengo": ["flamengo", "fla", "urubu"], "fluminense": ["fluminense", "flu", "tricolor das laranjeiras"], "fortaleza": ["fortaleza", "leao do pici"], "gremio": ["gremio", "tricolor gaucho", "imortal"], "internacional": ["inter", "colorado"], "palmeiras": ["palmeiras", "verdao"], "sao_paulo": ["sao paulo", "spfc", "tricolor paulista", "sao"], "vasco": ["vasco", "vascao", "gigante da colina"], "juventude": ["juventude", "juve"], "criciuma": ["criciuma", "tigre"], "vitoria": ["vitoria", "leao da barra"], "atletico_go": ["atleticogo", "dragao"], 
+            "atletico_mg": ["atleticomg", "galo"], "athletico_pr": ["atleticopr", "athletico", "furacao"], "bahia": ["bahia", "esquadrao", "esquadrao de aco"], "botafogo": ["botafogo", "fogao"], "bragantino": ["bragantino", "red bull bragantino", "massa bruta"], "corinthians": ["corinthians", "timao"], "cruzeiro": ["cruzeiro", "raposa"], "cuiaba": ["cuiaba", "dourado"], "flamengo": ["flamengo", "fla", "urubu"], "fluminense": ["fluminense", "flu", "tricolor das laranjeiras"], "fortaleza": ["fortaleza", "leao do pici"], "gremio": ["gremio", "tricolor gaucho", "imortal"], "internacional": ["inter", "colorado"], "palmeiras": ["palmeiras", "verdao"], "sao_paulo": ["sao_paulo", "spfc", "tricolor paulista", "sao paulo"], "vasco": ["vasco", "vascao", "gigante da colina"], "juventude": ["juventude", "juve"], "criciuma": ["criciuma", "tigre"], "vitoria": ["vitoria", "leao da barra"], "atletico_go": ["atleticogo", "dragao"], 
             
             # Seleção Brasileira 
             "selecao": ["selecao", "selecao brasileira", "canario", "canarinho"], 
@@ -765,6 +765,7 @@ def formatar_texto(arquivo_nome, imagens_elementos, novo_id_noticia):
         text = re.sub(r'^Assista abaixo:.*?\.$', '', text, flags=re.MULTILINE)
         text = re.sub(r'^@.*?\.$', '', text, flags=re.MULTILINE)
         text = re.sub(r'^Veja.*?também$', '', text, flags=re.MULTILINE)
+        text = re.sub(r'^Melhores momentos:*?.$', '', text, flags=re.MULTILINE)
         text = re.sub(r'^Mais notícias.*\.$', '', text, flags=re.MULTILINE)
         text = re.sub(r'^Mais.*?:$', '', text, flags=re.MULTILINE)
 
