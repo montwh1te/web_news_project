@@ -131,6 +131,37 @@ body.dark-mode .fab {
   color: #353535;
 }
 
+body.dark-mode .comment-card {
+  background-color: #000000 !important;
+  border: 1px solid #000000 !important;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1) !important;
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+
+body.dark-mode  .comment-card:hover {
+  background-color: #242424;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+body.dark-mode .comment-form {
+  background: #000000;
+  border: 1px solid #242424;
+  box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
+}
+body.dark-mode .comment-textarea {
+  background: #000000;
+  box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.1);
+  border: 1px solid #272727;
+}
+
+
+body.dark-mode  .news-card {
+  border: 1px solid #272727;
+  background-color: #000000;
+  box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.1);
+}
+
 /* ==================================
    Scrollbar
 ================================== */

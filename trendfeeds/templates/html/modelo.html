@@ -302,7 +302,7 @@
             <div id="comentariosContainer" class="comentarios-container container mt-4">
                 {% if comentarios %}
                     {% for comentario in comentarios %}
-                        <div class="comment-card row align-items-center mb-4 p-3 shadow-sm rounded bg-light">
+                        <div class="comment-card row align-items-center mb-4 p-3 rounded">
                             <div class="col-2 text-center">
                                 <img class="user-photo rounded-circle img-fluid" 
                                     src="{{ comentario.usuario.foto.url }}" 

@@ -16,6 +16,10 @@
   <header>
       <nav class="navbar navbar-expand-lg navbar-custom d-flex justify-content-sm-around">
 
+        <button class="navbar-toggler d-lg-none" type="button" id="menuToggle">
+          <span class="navbar-toggler-icon">☰</span>
+        </button>
+
         <!-- Logo e nome do site -->
         <div class="d-flex align-items-center">
           <a class="navbar-brand p-2 nome-site" href="#">site noticias</a>
@@ -36,27 +40,29 @@
              <!-- Dropdown para seleção de times -->
             <li class="nav-item dropdown">
               <div class="nav-link dropdown-toggle d-flex align-items-center" id="dropdownTimes" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <img id="team-logo" src="{% static "imagens/brasao.png" %}" alt="Ícone do Time" style="width: 30px; height: 30px"/>
+                <img id="team-logo" src="{% static 'imagens/brasao.png' %}" alt="Ícone do Time" class="img-fluid" style="width: 30px; height: 30px"/>
               </div>
-              <div class="dropdown-menu p-4" style="width: 15vw" aria-labelledby="dropdownTimes">
-
+              
+              <div class="dropdown-menu p-4" style="width: 100%; max-width: 300px" aria-labelledby="dropdownTimes">
                 <!-- Opções de Séries -->
-                <div class="d-flex justify-content-center mb-3">
-                  <input type="radio" id="serie-a-radio" name="serie" value="a" checked />
-                  <label for="serie-a-radio" class="mx-2">Série A</label>
-                  <input type="radio" id="serie-b-radio" name="serie" value="b" />
-                  <label for="serie-b-radio" class="mx-2">Série B</label>
+                <div class="d-flex flex-wrap justify-content-center mb-3">
+                  <div class="d-flex flex-column align-items-center mx-2">
+                    <input type="radio" id="serie-a-radio" name="serie" value="a" checked />
+                    <label for="serie-a-radio" class="text-center mt-1">Série A</label>
+                  </div>
+                  <div class="d-flex flex-column align-items-center mx-2">
+                    <input type="radio" id="serie-b-radio" name="serie" value="b" />
+                    <label for="serie-b-radio" class="text-center mt-1">Série B</label>
+                  </div>
                 </div>
                 
                 <!-- Ícones de times -->
                 <div id="serie-icons" class="d-flex flex-wrap justify-content-center align-items-center">
                   {% for categoria in categorias_serie_a %}
-                  <a class="dropdown-item p-3 col-3" href="{% url 'exibir_categoria' categoria.nome_categoria|slugify %}">
-
+                  <a class="dropdown-item p-2 col-4 col-sm-3 text-center" href="{% url 'exibir_categoria' categoria.nome_categoria|slugify %}">
                     {% with "imagens/escudos/"|add:categoria.nome_categoria|lower|add:".png" as image_path %}
-                      <img src="{% static image_path %}" alt="{{ categoria.nome_categoria }}" style="width: 35px; height: 35px"/>
+                      <img src="{% static image_path %}" alt="{{ categoria.nome_categoria }}" class="img-fluid" style="max-width: 35px; max-height: 35px"/>
                     {% endwith %}
-
                   </a>
                   {% endfor %}
                 </div>
@@ -129,6 +135,17 @@
           
         </div>
       </nav>
+
+
+
+      <div id="sideMenu" class="side-menu">
+        <button class="close-btn" id="closeMenu">×</button>
+        <ul class="nav flex-column">
+          <li class="nav-item"><a class="nav-link" href="#">Sobre</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Meu Perfil</a></li>
+          <li class="nav-item"><a class="nav-link text-danger" href="{% url 'logout' %}">Sair</a></li>
+        </ul>
+      </div>
   </header>
 
 
@@ -438,6 +455,24 @@
         }
       });
     }
+  </script>
+
+  <script>
+    // Elementos
+    const menuToggle = document.getElementById('menuToggle');
+    const sideMenu = document.getElementById('sideMenu');
+    const closeMenu = document.getElementById('closeMenu');
+
+    // Abrir o Menu
+    menuToggle.addEventListener('click', () => {
+      sideMenu.classList.add('open');
+    });
+
+    // Fechar o Menu
+    closeMenu.addEventListener('click', () => {
+      sideMenu.classList.remove('open');
+    });
+
   </script>
 </body>
 </html>
