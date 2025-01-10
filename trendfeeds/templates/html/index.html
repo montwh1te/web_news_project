@@ -43,7 +43,7 @@
                 <img id="team-logo" src="{% static 'imagens/brasao.png' %}" alt="Ícone do Time" class="img-fluid" style="width: 30px; height: 30px"/>
               </div>
               
-              <div class="dropdown-menu p-4" style="width: 100%; max-width: 300px" aria-labelledby="dropdownTimes">
+              <div class="dropdown-menu p-4" style="width: 500px;" aria-labelledby="dropdownTimes">
                 <!-- Opções de Séries -->
                 <div class="d-flex flex-wrap justify-content-center mb-3">
                   <div class="d-flex flex-column align-items-center mx-2">
@@ -220,8 +220,14 @@
                   <span style="font-size: 1.1rem; font-weight: bold; text-transform: capitalize;">{{ time.time.nome_popular }}</span>
                 </div>
               </td>
-              <td>{{ time.pontos }}</td><td>{{ time.jogos }}</td><td>{{ time.vitorias }}</td><td>{{ time.empates }}</td>
-              <td>{{ time.derrotas }}</td><td>{{ time.gols_pro }}</td><td>{{ time.gols_contra }}</td><td>{{ time.saldo_gols }}</td>
+              <td class='pontos'>{{ time.pontos }}</td>
+              <td class='pontos'>{{ time.jogos }}</td>
+              <td class='pontos'>{{ time.vitorias }}</td>
+              <td class='pontos'>{{ time.empates }}</td>
+              <td class='pontos'>{{ time.derrotas }}</td>
+              <td class='pontos'>{{ time.gols_pro }}</td>
+              <td class='pontos'>{{ time.gols_contra }}</td>
+              <td class='pontos'>{{ time.saldo_gols }}</td>
             </tr>
             {% endfor %}
           </tbody>
@@ -232,11 +238,11 @@
 
 
       <!-- Próximos jogos -->
-      <section class="container my-3 d-flex flex-nowrap" style="flex: 0 0 40%; padding-left: 15px">
+      <section class="proxims-jogos-section container my-3 d-flex flex-nowrap" style="flex: 0 0 40%; padding-left: 15px">
         <div class="row justify-content-center">
           {% if proximos_jogos %}
           {% for jogo in proximos_jogos %}
-          <div class="col-6 d-flex justify-content-center my-2">
+          <div class="col-6 d-flex justify-content-center my-2 caixa_proximos_jogos">
             <div class="card text-center shadow-sm p-3" style="max-width: 300px; width: 100%; border-radius: 8px">
               <div class="card-body">
                 <div class="d-flex align-items-center justify-content-center mb-3">

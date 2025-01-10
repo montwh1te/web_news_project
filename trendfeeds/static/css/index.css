@@ -831,7 +831,7 @@ span {
   position: fixed;
   top: 0;
   left: -100%;
-  width: 20%;
+  width: 100%;
   height: 100%;
   background: #f8f9fa;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
@@ -899,10 +899,9 @@ span {
   .noticias-recentes-div{
     display: flex !important;
     flex-wrap: wrap !important;
-    /* margin-bottom: 100% !important; */
     padding-bottom: 100% !important;
     width: 89%;
-    margin-left: 5%;
+    margin-left: 10%;
     border-radius: 0px !important;
     padding-bottom: 46% !important;
   }
@@ -910,13 +909,16 @@ span {
     min-width: 100% !important;
  
   }
+  .imagem-principal-banner{
+    margin-left: 5% !important;
+  }
   /* Navbar ajustada */
   .navbar {
     padding: 10px;
   }
   .caixa{
     width: 80%;
-    margin-top: 475% !important;
+    margin-top: 115vh !important;
   }
 
   .navbar-brand {
@@ -994,5 +996,133 @@ span {
     box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.222);
     margin-bottom: 10%;
 
+  }
+  .div-tabela-brasileiro table{
+    display: contents !important;
+    overflow-x: hidden;
+    white-space: nowrap;
+ 
+  }
+
+  .div-tabela-brasileiro {
+    overflow-x: auto; /* Permite rolagem horizontal se necessário */
+  }
+
+  .table {
+    display: block; /* Transforma a tabela em um bloco */
+  }
+
+  .table thead {
+    display: none; /* Oculta o cabeçalho da tabela */
+  }
+
+  .table tbody tr {
+    display: block; /* Cada linha da tabela vira um bloco */
+    margin-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+  }
+
+  .table tbody td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+  }
+
+  .table tbody td:before {
+    content: attr(data-label); /* Usa os atributos de dados para exibir o rótulo */
+    font-weight: bold;
+    text-transform: capitalize;
+    flex-shrink: 0;
+  }
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    white-space: nowrap; /* Evita quebra de texto nas células */
+  }
+ 
+
+  .div-tabela-brasileiro {
+    flex: 0 0 100% !important;
+    padding-right: 0px !important;
+    margin-top: 10%;
+  }
+
+  .table {
+    display: table; /* Mantém o layout de tabela */
+    width: 100%; /* Garante que a tabela ocupe toda a largura disponível */
+  }
+
+  .table td, .table th {
+    white-space: nowrap; /* Evita quebras de linha no conteúdo */
+  }
+
+  .pontos{
+    display: none !important;
+  }
+
+  .caixa_proximos_jogos {
+    max-width: 100% !important;
+    margin-left: -15% !important;
+  }
+
+  .noticia-card img {
+    width: 50% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    border-radius: 8px !important;
+  }
+
+  .todas-noticias p{
+    display: none !important;
+  }
+
+  .todas-noticias h5 {
+    font-size: 2vh !important;
+    color: #333;
+    font-weight: 500;
+    margin: 0 0 10px;
+  }
+}
+
+
+@media (max-width: 1050px) {
+  .caixa_proximos_jogos{
+    max-width: 100% !important;
+  }
+}
+
+@media (width: 375px) {
+  .caixa {
+    margin-top: 100vh !important;
+  }
+
+  .imagem-principal-banner {
+    margin-left: 10% !important;
+    width: 90% !important;
+  }
+
+
+}
+
+@media (width: 425px) {
+  .caixa {
+    margin-top: 88vh !important;
+  }
+}
+
+
+@media (max-width: 1200px) and (min-width: 1020px) {
+  .div-tabela-brasileiro{
+    flex: 0 0 114% !important;
+    padding-right: 15px !important;
+  }
+
+  .proxims-jogos-section{
+    flex: 0 0 100% !important;
+    padding-left: 15px;
+    display: flex !important;
+    flex-wrap: wrap !important;
   }
 }

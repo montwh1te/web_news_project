@@ -351,13 +351,34 @@ def coletar_noticias():
             times = { 
                      
             # Times Série A 
-            "atletico_mg": ["atleticomg", "galo"], "athletico_pr": ["atleticopr", "athletico", "furacao"], "bahia": ["bahia", "esquadrao", "esquadrao de aco"], "botafogo": ["botafogo", "fogao"], "bragantino": ["bragantino", "red bull bragantino", "massa bruta"], "corinthians": ["corinthians", "timao"], "cruzeiro": ["cruzeiro", "raposa"], "cuiaba": ["cuiaba", "dourado"], "flamengo": ["flamengo", "fla", "urubu"], "fluminense": ["fluminense", "flu", "tricolor das laranjeiras"], "fortaleza": ["fortaleza", "leao do pici"], "gremio": ["gremio", "tricolor gaucho", "imortal"], "internacional": ["inter", "colorado"], "palmeiras": ["palmeiras", "verdao"], "sao_paulo": ["sao_paulo", "spfc", "tricolor paulista", "sao paulo"], "vasco": ["vasco", "vascao", "gigante da colina"], "juventude": ["juventude", "juve"], "criciuma": ["criciuma", "tigre"], "vitoria": ["vitoria", "leao da barra"], "atletico_go": ["atleticogo", "dragao"], 
+            "atletico_mg": ["atleticomg", "galo"], 
+            "athletico_pr": ["atleticopr", "athletico", "furacao"], 
+            "bahia": ["bahia", "esquadrao", "esquadrao de aco"], 
+            "botafogo": ["botafogo", "fogao"], 
+            "bragantino": ["bragantino", "red bull bragantino", "massa bruta"], 
+            "corinthians": ["corinthians", "timao"], 
+            "cruzeiro": ["cruzeiro", "raposa"], 
+            "cuiaba": ["cuiaba", "dourado"], "flamengo": ["flamengo", "fla", "urubu"], 
+            "fluminense": ["fluminense", "flu", "tricolor das laranjeiras"], 
+            "fortaleza": ["fortaleza", "leao do pici"], 
+            "gremio": ["gremio", "tricolor gaucho", "imortal"], 
+            "internacional": ["inter", "colorado"], 
+            "palmeiras": ["palmeiras", "verdao"], 
+            "sao_paulo": ["sao_paulo", "spfc", "tricolor paulista", "sao-paulo", "sao paulo", "sao_paulo_", "saopaulo"],
+            "vasco": ["vasco", "vascao", "gigante da colina"], "juventude": ["juventude", "juve"], 
+            "criciuma": ["criciuma", "tigre"], 
+            "vitoria": ["vitoria", "leao da barra"], "atletico_go": ["atleticogo", "dragao"], 
             
             # Seleção Brasileira 
             "selecao": ["selecao", "selecao brasileira", "canario", "canarinho"], 
             
             # Times Série B
-            "ceara": ["ceara", "vozao"], "crb": ["crb"], "amazonas": ["amazonas", "onca pintada"], "operario_pr": ["operariopr", "operario", "fantasma"], "brusque": ["brusque", "maior do vale", "bruscao", "marreco"], "paysandu": ["paysandu", "papao"], "chapecoense": ["chapecoense", "chape"], "ituano": ["ituano", "galo de itu"], "mirassol": ["mirassol", "leao"], "novorizontino": ["novorizontino", "tigre do vale"], "ponte_preta": ["ponte preta", "macaca"], "sport": ["sport", "leao da ilha"], "vila_nova": ["vila nova", "tigre"], "avai": ["avai", "leao da ilha"], "botafogo_sp": ["botafogosp", "pantera"], "guarani": ["guarani", "bugre"], "goias": ["goias", "esmeraldino"], "santos": ["santos", "peixe"], "coritiba": ["coritiba", "coxa"], "america_mg": ["americamg", "coelho"], 
+            "ceara": ["ceara", "vozao"], "crb": ["crb"], 
+            "amazonas": ["amazonas", "onca pintada"], 
+            "operario_pr": ["operariopr", "operario", "fantasma"], 
+            "brusque": ["brusque", "maior do vale", "bruscao", "marreco"], 
+            "paysandu": ["paysandu", "papao"], "chapecoense": ["chapecoense", "chape"], 
+            "ituano": ["ituano", "galo de itu"], "mirassol": ["mirassol", "leao"], "novorizontino": ["novorizontino", "tigre do vale"], "ponte_preta": ["ponte preta", "macaca"], "sport": ["sport", "leao da ilha"], "vila_nova": ["vila nova", "tigre"], "avai": ["avai", "leao da ilha"], "botafogo_sp": ["botafogosp", "pantera"], "guarani": ["guarani", "bugre"], "goias": ["goias", "esmeraldino"], "santos": ["santos", "peixe"], "coritiba": ["coritiba", "coxa"], "america_mg": ["americamg", "coelho"], 
             }
 
 
