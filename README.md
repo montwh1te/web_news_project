@@ -1,4 +1,4 @@
-# Web News Project
+# Web News Project!
 
 ## Descrição
 
